@@ -1,0 +1,20 @@
+{
+  "name": "bondi-film",
+  "private": true,
+  "description": "Bondi's website video, made with Remotion. Website only; never part of the app.",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts BondiFilm out/bondi-film.mp4 --codec=h264 --crf=26 && remotion still src/index.ts BondiFilm out/bondi-film-poster.png --frame=470"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.530",
+    "@remotion/google-fonts": "^4.0.530",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "remotion": "4.0.530"
+  },
+  "devDependencies": {
+    "@types/react": "19.1.12",
+    "typescript": "5.9.2"
+  }
+}
