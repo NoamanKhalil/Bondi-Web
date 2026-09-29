@@ -145,10 +145,19 @@
   .warn .fix { justify-self: end; background: #3a3b40; border-radius: 7px; padding: 5px 11px; font-size: 12px; }
   .srv { display: grid; grid-template-columns: 1fr auto; gap: 1px 10px; padding: 9px 0; border-top: 1px solid #36373c; }
   .srv:first-child { border-top: 0; } .srv small { color: #9d9da5; } .srv .idle { color: #ff9f0a; }
+  .srv.k8s small { grid-column: 1 / -1; }
+  .soon { font-size: 10.5px; font-weight: 600; color: #2cc0de; background: rgba(44,192,222,.14); padding: 2px 7px; border-radius: 980px; margin-left: 4px; }
   .srv .btn { grid-row: 1 / span 2; grid-column: 2; align-self: center; background: #3a3b40; border-radius: 7px; padding: 4px 10px; font-size: 12px; }
   .hist svg { width: 100%; height: 140px; display: block; }
-  .vol { display: grid; grid-template-columns: 110px 1fr 44px; gap: 10px; align-items: center; padding: 6px 0; font-size: 12.5px; }
-  .vol input { width: 100%; accent-color: #e0305a; }
+  .sound-head { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #9d9da5; padding-bottom: 6px; border-bottom: 1px solid #36373c; }
+  .sound-head svg { width: 18px; height: 18px; }
+  .sound .vol { display: grid; grid-template-columns: 1fr 44px; grid-template-areas: "who val" "slider slider" "meter meter"; gap: 4px 10px; align-items: center; padding: 10px 0 4px; font-size: 12.5px; }
+  .sound .who { grid-area: who; display: inline-flex; align-items: center; gap: 8px; }
+  .sound .who i { width: 18px; height: 18px; border-radius: 5px; display: grid; place-items: center; font: 700 10px/1 var(--sans); color: #fff; font-style: normal; }
+  .sound .vol input { grid-area: slider; width: 100%; accent-color: #e0305a; }
+  .sound .vol .num { grid-area: val; text-align: right; }
+  .sound .meter { grid-area: meter; height: 3px; border-radius: 2px; background: #36373c; overflow: hidden; }
+  .sound .meter b { display: block; height: 100%; width: calc(var(--l) * 100%); background: linear-gradient(90deg, #5cc26a, #e0305a); border-radius: 2px; }
   .fan { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; font-size: 12.5px; }
   .fan input { width: 100%; accent-color: #4a90e2; }
   .guide h4 { margin: 0 0 6px; font-size: 14px; }
@@ -408,11 +417,13 @@
         <article class="tile w3">
           <p class="kicker">For developers</p>
           <h3>Finds the servers you forgot.</h3>
-          <p>Dev servers by project and port, local AI models, and Docker containers, with the memory each holds. Stop any of them in one click, after a confirmation.</p>
+          <p>Node.js, Vite, Next.js and other dev servers by project and port, Docker containers and local AI models, with the memory each holds. Stop any of them in one click, after a confirmation. Kubernetes is next.</p>
           <div class="vis app">
+            <div class="srv"><span>Node.js · api</span><small>localhost:4000 · 184.3 MB · active</small><span class="btn">Stop…</span></div>
             <div class="srv"><span>Vite · shop</span><small>localhost:5173 · 612.0 MB · <span class="idle">idle 3h 20m</span></small><span class="btn">Stop…</span></div>
+            <div class="srv"><span>postgres · Docker</span><small>container · 212.0 MB · port 5432</small><span class="btn">Stop…</span></div>
             <div class="srv"><span>LM Studio · Llama 3.1 8B</span><small>model loaded · 8.54 GB · idle</small><span class="btn">Unload…</span></div>
-            <div class="srv"><span>postgres (Docker)</span><small>container · 212.0 MB</small><span class="btn">Stop…</span></div>
+            <div class="srv k8s" style="opacity:.6"><span>web-7d9f · Kubernetes <span class="soon">Coming soon</span></span><small>pod · Running · default namespace</small></div>
           </div>
         </article>
 
@@ -437,9 +448,10 @@
           <p class="kicker">Sound</p>
           <h3>Every app, its own volume.</h3>
           <p>Turn a call up to 300% and a video down, without touching the rest.</p>
-          <div class="vis app">
-            <div class="vol"><span>zoom.us</span><input type="range" min="0" max="300" value="160" aria-label="zoom.us volume" data-vol><span class="num" data-volv>160%</span></div>
-            <div class="vol"><span>Music</span><input type="range" min="0" max="300" value="60" aria-label="Music volume" data-vol><span class="num" data-volv>60%</span></div>
+          <div class="vis app sound">
+            <div class="sound-head"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.6 7.4h2.5L9.8 4.3c.4-.3 1-.1 1 .4v10.6c0 .5-.6.7-1 .4l-3.7-3.1H3.6c-.6 0-1.1-.5-1.1-1.1V8.5c0-.6.5-1.1 1.1-1.1z" fill="#e0305a"/><path d="M13.6 7.6a3.4 3.4 0 010 4.8M15.9 5.3a6.6 6.6 0 010 9.4" fill="none" stroke="#e0305a" stroke-width="1.6" stroke-linecap="round"/></svg><span>MacBook Pro Speakers</span></div>
+            <div class="vol"><span class="who"><i style="background:#2d8cff">Z</i>zoom.us</span><input type="range" min="0" max="300" value="160" aria-label="zoom.us volume" data-vol><span class="num" data-volv>160%</span><span class="meter" aria-hidden="true"><b style="--l:.7"></b></span></div>
+            <div class="vol"><span class="who"><i style="background:#fa3e5c">M</i>Music</span><input type="range" min="0" max="300" value="60" aria-label="Music volume" data-vol><span class="num" data-volv>60%</span><span class="meter" aria-hidden="true"><b style="--l:.35"></b></span></div>
           </div>
         </article>
 
@@ -579,7 +591,11 @@
       + `<polygon points="0,${H} ${line} ${W},${H}" fill="#9b7ae0" opacity=".2"/><polyline points="${line}" fill="none" stroke="#9b7ae0" stroke-width="2"/>`
       + ['Mon', 'Wed', 'Fri', 'Sun'].map((d, i) => `<text x="${20 + i * 110}" y="${H - 6}" fill="#9d9da5" font-size="11">${d}</text>`).join('');
   }
-  $$('[data-vol]').forEach(r => r.addEventListener('input', () => { r.nextElementSibling.textContent = r.value + '%'; }));
+  $$('[data-vol]').forEach(r => r.addEventListener('input', () => {
+    r.nextElementSibling.textContent = r.value + '%';
+    const meter = r.parentElement.querySelector('.meter b');
+    if (meter) meter.style.setProperty('--l', Math.min(1, r.value / 230).toFixed(2));
+  }));
   $$('[data-icon]').forEach(b => b.addEventListener('click', () => $$('[data-icon]').forEach(x => x.setAttribute('aria-pressed', String(x === b)))));
 
   // Activity Monitor vs Bondi.
@@ -624,7 +640,7 @@
       gpu: '<path d="M10 3l7 3.5-7 3.5-7-3.5z"/><path d="M3 10l7 3.5 7-3.5M3 13.5L10 17l7-3.5"/>',
       neural: '<path d="M7 4a3 3 0 00-3 3 3 3 0 00-1 5.5A3 3 0 007 16h1V4zM13 4a3 3 0 013 3 3 3 0 011 5.5A3 3 0 0113 16h-1V4z"/>',
       battery: '<rect x="2.5" y="6.5" width="13" height="7" rx="2"/><path d="M17.5 9v2"/><rect x="4.5" y="8.5" width="6" height="3" fill="currentColor" stroke="none"/>',
-      sound: '<path d="M3 8h3l4-3.5v11L6 12H3z"/><path d="M13 7.5a3.5 3.5 0 010 5M15 5.5a6.5 6.5 0 010 9"/>',
+      sound: '<path d="M3.6 7.4h2.5L9.8 4.3c.4-.3 1-.1 1 .4v10.6c0 .5-.6.7-1 .4l-3.7-3.1H3.6c-.6 0-1.1-.5-1.1-1.1V8.5c0-.6.5-1.1 1.1-1.1z" fill="currentColor" stroke="none"/><path d="M13.6 7.6a3.4 3.4 0 010 4.8M15.9 5.3a6.6 6.6 0 010 9.4"/>',
       bluetooth: '<path d="M6 6.5l8 7L10 17V3l4 3.5-8 7"/>',
       stack: '<rect x="3" y="3.5" width="14" height="5" rx="1.5"/><rect x="3" y="11.5" width="14" height="5" rx="1.5"/><path d="M6 6h.5M6 14h.5"/>',
     };
@@ -753,10 +769,17 @@
           ${[['Music', 80], ['Google Chrome', 100], ['zoom.us', 140], ['Slack', 40]].map(([n, val], i) => `<div class="vol"><span class="w-app"><i style="background:${['#fa3e5c', '#e8453c', '#2d8cff', '#8a3f8f'][i]}">${n[0]}</i>${n}</span><input type="range" min="0" max="300" value="${val}" aria-label="${n} volume" data-vol><span data-volv>${val}%</span></div>`).join('')}</div>`,
       bluetooth: () => `<div class="w-card" style="--tint:${tint.bluetooth};min-height:0">${head('bluetooth', 'Bluetooth', '3 connected')}
           ${[['AirPods Pro', 'Left 80% · Right 75% · Case 60%'], ['Magic Keyboard', 'Battery 64%'], ['Magic Mouse', 'Battery 22%']].map(([n, d]) => `<div class="dev"><b>${n}</b><span class="w-sub">Connected</span><small>${d}</small></div>`).join('')}</div>`,
-      stack: () => `<div class="w-card" style="--tint:${tint.stack};min-height:0">${head('stack', 'Stack', '3 servers · 1 model · 2 containers')}
-          ${[['Vite · shop', 'localhost:5173 · 612.0 MB · idle 3h 20m'], ['Wrangler · Talim', 'localhost:8787 · 331.5 MB · active'], ['Next.js · site', 'localhost:3000 · 480.2 MB · active'],
-             ['LM Studio · Llama 3.1 8B', 'model loaded · 8.54 GB · working now'], ['postgres (Docker)', 'container · 212.0 MB'], ['redis (Docker)', 'container · 18.4 MB']]
-            .map(([n, d]) => `<div class="dev"><b>${n}</b><span class="w-sub">Stop…</span><small>${d}</small></div>`).join('')}</div>`,
+      stack: () => {
+        const group = (title, rows, note = '') => `<div class="w-h" style="font-size:12px;color:#9d9da5;margin-top:10px">${title}${note}</div>`
+          + rows.map(([n, d, action]) => `<div class="dev"><b>${n}</b><span class="w-sub">${action}</span><small>${d}</small></div>`).join('');
+        const soon = ' <span style="font-size:10.5px;font-weight:600;color:#2cc0de;background:rgba(44,192,222,.14);padding:2px 7px;border-radius:999px;margin-left:6px">Coming soon</span>';
+        return `<div class="w-card" style="--tint:${tint.stack};min-height:0">${head('stack', 'Stack', '4 servers · 3 containers · 1 model')}
+          ${group('Dev servers', [['Node.js · api', 'localhost:4000 · 184.3 MB · active', 'Stop…'], ['Vite · shop', 'localhost:5173 · 612.0 MB · <span style="color:#ff9f0a">idle 3h 20m</span>', 'Stop…'],
+                                  ['Next.js · site', 'localhost:3000 · 480.2 MB · active', 'Stop…'], ['Wrangler · Talim', 'localhost:8787 · 331.5 MB · active', 'Stop…']])}
+          ${group('Docker', [['postgres', 'container · 212.0 MB · port 5432', 'Stop…'], ['redis', 'container · 18.4 MB · port 6379', 'Stop…'], ['nginx', 'container · 9.6 MB · port 8080', 'Stop…']])}
+          ${group('Local AI', [['LM Studio · Llama 3.1 8B', 'model loaded · 8.54 GB · working now', 'Unload…']])}
+          <div style="opacity:.55">${group('Kubernetes', [['web-7d9f · default', 'pod · Running · 2 restarts', ''], ['worker-5c2b · default', 'pod · Running', '']], soon)}</div></div>`;
+      },
     };
 
     function section(k, title, big, sub, data, max, pair, side, stats, cols, cells, sort) {
