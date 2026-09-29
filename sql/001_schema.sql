@@ -60,7 +60,7 @@ CREATE TABLE licenses (
     plan                   VARCHAR(20)      NOT NULL DEFAULT 'full',
     price_tier             VARCHAR(20)      NOT NULL,     -- 'launch', 'regular' or 'comp' (given free)
     status                 ENUM('active', 'refunded', 'revoked') NOT NULL DEFAULT 'active',
-    max_activations        TINYINT UNSIGNED NOT NULL DEFAULT 3,   -- Macs at once
+    max_activations        TINYINT UNSIGNED NOT NULL DEFAULT 1,   -- Macs at once (1, owner 2026-09-29)
     paddle_transaction_id  VARCHAR(64)      NULL,         -- txn_…; NULL for comp licenses
     amount_cents           INT UNSIGNED     NULL,         -- what was paid, from Paddle
     currency               CHAR(3)          NULL,
