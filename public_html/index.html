@@ -124,6 +124,12 @@
   .tile h3 { font-size: 1.6rem; }
   .tile p { color: var(--soft); }
   .tile .vis { margin-top: auto; }
+  /* Real Bondi views, drawn by the app itself */
+  .shot { width: 100%; height: auto; border-radius: 18px; box-shadow: var(--shadow); }
+  .shot.narrow { max-width: 300px; justify-self: center; display: block; margin-inline: auto; }
+  .stack-shots { display: grid; gap: 10px; }
+  .menubar-strip { justify-self: end; background: #242427; border-radius: 10px; padding: 8px 14px; box-shadow: var(--shadow); }
+  .menubar-strip img { width: 104px; height: 22px; }
   /* visuals share the dark app surface so they read as Bondi */
   .app { background: #1c1d20; color: #f2f2f4; border-radius: 14px; padding: 14px; font: 13px/1.4 var(--sans); box-shadow: var(--shadow); }
   .app .dim { color: #9d9da5; }
@@ -378,107 +384,78 @@
         <article class="tile w4 big">
           <p class="kicker">Why is my Mac slow?</p>
           <h3>Ask once. Get the whole story.</h3>
-          <p>What's using your memory and CPU, anything idle holding memory, and what changed in the last hour, with the figures Bondi measured.</p>
-          <div class="vis app">
-            <div class="ai-line"><span class="spark">✦</span><span><b>Memory is running short.</b> Memory pressure is Elevated, with 60.20 GB of 64.00 GB used, and the CPU is 21% busy. macOS has moved 4.20 GB of memory to disk (swap), which is slower. Google Chrome is using 21.40 GB.</span></div>
-          </div>
+          <p>One click, and Bondi explains what's using your Mac, what's idle and holding memory, and what changed in the last hour. Apple's on-device model writes the opening; every figure is Bondi's.</p>
+          <div class="vis"><img class="shot" src="assets/features/why.png" width="404" height="93" loading="lazy" alt="Bondi's answer, written on this Mac: Everything is fine. Memory pressure is Normal, with 44.73 GB of 64.00 GB used. Google Chrome is using the most memory, 13.09 GB across 82 processes."></div>
         </article>
 
         <article class="tile w2">
           <p class="kicker">Apps, not processes</p>
-          <h3>966 processes. 39 apps.</h3>
-          <p>Every helper counts toward the app that started it.</p>
-          <div class="vis app" aria-hidden="true">
-            <div class="dots" data-dots></div>
-            <div class="grouped"><div><span>Google Chrome</span><b style="width:100%"></b><span class="dim num">12.23 GB</span></div><div><span>macOS</span><b style="width:72%"></b><span class="dim num">8.85 GB</span></div><div><span>VS Code</span><b style="width:35%"></b><span class="dim num">4.24 GB</span></div></div>
-          </div>
+          <h3>Chrome is one row.</h3>
+          <p>Every helper counts toward the app that started it, so the biggest app really looks biggest.</p>
+          <div class="vis"><img class="shot" src="assets/features/busiest.png" width="404" height="136" loading="lazy" alt="Busiest Right Now, by memory: Google Chrome 13.05 GB, macOS 8.76 GB, Visual Studio Code 4.33 GB."></div>
         </article>
 
         <article class="tile w3">
           <p class="kicker">Ask your history</p>
-          <h3>"What drained my battery yesterday?"</h3>
-          <p>Bondi reads 30 days of history on your Mac and answers with the numbers.</p>
-          <div class="vis app qa">
-            <div class="q">Which app used the most memory this week?</div>
-            <div class="a"><span style="color:#2cc0de">✦</span><span>Over the last 7 days, Google Chrome used the most memory, 10.18 GB on average, then macOS (5.81 GB) and Visual Studio Code (3.19 GB).</span></div>
-          </div>
+          <h3>"Which app used the most memory this week?"</h3>
+          <p>Bondi reads 30 days of history kept on your Mac, and answers with the numbers.</p>
+          <div class="vis"><img class="shot" src="assets/features/ask.png" width="588" height="177" loading="lazy" alt="Ask about your Mac: over the last 7 days, Google Chrome used the most memory, 10.57 GB on average, then macOS (6.32 GB) and Visual Studio Code (3.35 GB)."></div>
         </article>
 
         <article class="tile w3">
           <p class="kicker">Warnings</p>
           <h3>One cause. One fix. Always your call.</h3>
-          <p>When memory runs short or the CPU stays pinned, the menu bar tells you why and offers one fix. It asks before it does anything.</p>
-          <div class="vis app">
-            <div class="menubar"><span class="dim">Tue 15:32</span><span style="color:#ff9f0a">⚠︎ 92%</span><svg viewBox="0 0 22 22" fill="none" stroke="#f2f2f4" stroke-width="1.6" stroke-linecap="round"><path d="M5.34 16.66A8 8 0 1 1 16.66 16.66" stroke-opacity=".35"/><path d="M5.34 16.66A8 8 0 0 1 16.14 4.87"/><path d="M11 11L14 7.6"/><path d="M7.4 15c1.2-.7 2.4.7 3.6 0s2.4-.7 3.6 0"/></svg></div>
-            <div class="warn"><div class="banner"><b>Memory is critically low.</b><span>Bionic holds 21.49 GB with Qwen3.8 27B loaded.</span></div><span class="fix">Unload Qwen3.8 27B…</span></div>
-          </div>
+          <p>When memory runs short or the CPU stays pinned, the menu bar shows a warning and the popover names the cause with one fix. It asks before it does anything.</p>
+          <div class="vis stack-shots"><div class="menubar-strip"><img src="assets/features/menubar-warning.png" width="104" height="22" alt="The menu bar item showing a warning triangle and the memory figure."></div><img class="shot" src="assets/features/warning.png" width="404" height="110" loading="lazy" alt="Warning banner: Memory pressure is Elevated. Google Chrome is using 13.09 GB. Button: Quit Google Chrome."></div>
         </article>
 
         <article class="tile w3">
           <p class="kicker">For developers</p>
           <h3>Finds the servers you forgot.</h3>
-          <p>Node.js, Vite, Next.js and other dev servers by project and port, Docker containers and local AI models, with the memory each holds. Stop any of them in one click, after a confirmation. Kubernetes is next.</p>
-          <div class="vis app">
-            <div class="srv"><span>Node.js · api</span><small>localhost:4000 · 184.3 MB · active</small><span class="btn">Stop…</span></div>
-            <div class="srv"><span>Vite · shop</span><small>localhost:5173 · 612.0 MB · <span class="idle">idle 3h 20m</span></small><span class="btn">Stop…</span></div>
-            <div class="srv"><span>postgres · Docker</span><small>container · 212.0 MB · port 5432</small><span class="btn">Stop…</span></div>
-            <div class="srv"><span>LM Studio · Llama 3.1 8B</span><small>model loaded · 8.54 GB · idle</small><span class="btn">Unload…</span></div>
-            <div class="srv k8s" style="opacity:.6"><span>web-7d9f · Kubernetes <span class="soon">Coming soon</span></span><small>pod · Running · default namespace</small></div>
-          </div>
+          <p>Node.js, Vite, Next.js, Wrangler, Python and more, by project and port, plus Docker containers and local AI models, with the memory each holds. Kubernetes is next.</p>
+          <div class="vis"><img class="shot" src="assets/features/stack.png" width="404" height="248" loading="lazy" alt="Stack: 2 servers running in the Talim project, Python http.server on localhost:8420 using 14.0 MB and Wrangler on localhost:8787 using 461.0 MB."></div>
         </article>
 
         <article class="tile w3">
           <p class="kicker">30-day history</p>
           <h3>See yesterday. And last Tuesday.</h3>
           <p>Every chart goes from 10 minutes to 30 days, with the time your Mac slept shaded. Click any point to see what was running.</p>
-          <div class="vis app hist" aria-hidden="true"><svg viewBox="0 0 400 140" preserveAspectRatio="none" data-hist></svg></div>
+          <div class="vis"><img class="shot" src="assets/features/history.png" width="707" height="210" loading="lazy" alt="CPU over 24 hours on an Apple M1 Max: average 17%, peak 51%, with sleep periods shaded."></div>
         </article>
 
         <article class="tile w2">
           <p class="kicker">Menu bar</p>
           <h3>Always there. Barely there.</h3>
-          <p>One figure in the menu bar, the full picture one click away. Under 0.5% of one CPU core while it waits.</p>
-          <div class="vis gauge" aria-hidden="true">
-            <svg viewBox="0 0 180 110"><path d="M20 100a70 70 0 0 1 140 0" fill="none" stroke="var(--tile-2)" stroke-width="14" stroke-linecap="round"/><path d="M20 100a70 70 0 0 1 3.2-21" fill="none" stroke="var(--bondi)" stroke-width="14" stroke-linecap="round"/><text x="90" y="92" text-anchor="middle" font-size="30" font-weight="700" fill="currentColor">0.3%</text></svg>
-            <span class="num" style="color:var(--soft);font-size:.85rem">of one core, windows closed</span>
-          </div>
+          <p>Every metric one click away, and about 0.3% of one CPU core while it waits.</p>
+          <div class="vis"><img class="shot" src="assets/features/popover-top.png" width="400" height="235" loading="lazy" alt="The top of Bondi's popover: section tabs, a status line saying everything looks normal, and CPU and Memory cards."></div>
         </article>
 
         <article class="tile w2">
           <p class="kicker">Sound</p>
           <h3>Every app, its own volume.</h3>
-          <p>Turn a call up to 300% and a video down, without touching the rest.</p>
-          <div class="vis app sound">
-            <div class="sound-head"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.6 7.4h2.5L9.8 4.3c.4-.3 1-.1 1 .4v10.6c0 .5-.6.7-1 .4l-3.7-3.1H3.6c-.6 0-1.1-.5-1.1-1.1V8.5c0-.6.5-1.1 1.1-1.1z" fill="#e0305a"/><path d="M13.6 7.6a3.4 3.4 0 010 4.8M15.9 5.3a6.6 6.6 0 010 9.4" fill="none" stroke="#e0305a" stroke-width="1.6" stroke-linecap="round"/></svg><span>MacBook Pro Speakers</span></div>
-            <div class="vol"><span class="who"><i style="background:#2d8cff">Z</i>zoom.us</span><input type="range" min="0" max="300" value="160" aria-label="zoom.us volume" data-vol><span class="num" data-volv>160%</span><span class="meter" aria-hidden="true"><b style="--l:.7"></b></span></div>
-            <div class="vol"><span class="who"><i style="background:#fa3e5c">M</i>Music</span><input type="range" min="0" max="300" value="60" aria-label="Music volume" data-vol><span class="num" data-volv>60%</span><span class="meter" aria-hidden="true"><b style="--l:.35"></b></span></div>
-          </div>
+          <p>Choose the output and turn each app that's playing up to 300% or down, without touching the rest.</p>
+          <div class="vis"><img class="shot" src="assets/features/sound.png" width="404" height="79" loading="lazy" alt="Sound: the output, MacBook Pro Speakers, at 100%."></div>
         </article>
 
         <article class="tile w2">
           <p class="kicker">Fan boost</p>
           <h3>Cooler when you want it.</h3>
           <p>Speed the fans up for a long build. Never slower than Apple's own control, and back to Auto when you quit.</p>
-          <div class="vis app fan"><span class="dim">Auto</span><input type="range" min="0" max="100" value="45" aria-label="Fan boost"><span class="dim">Max</span></div>
+          <div class="vis"><img class="shot" src="assets/features/fans.png" width="404" height="84" loading="lazy" alt="Fans card with a slider from Auto to Max."></div>
         </article>
 
         <article class="tile w3">
           <p class="kicker">Process guide</p>
           <h3>"What is WindowServer?"</h3>
-          <p>Plain notes on 125 common macOS processes, one click from any row.</p>
-          <div class="vis app guide"><h4>WindowServer</h4><dl><dt>What it is</dt><dd>Draws everything on your screens: windows, the Dock, the menu bar and animations.</dd><dt>Can I stop it?</dt><dd>Leave it running: macOS needs it. Quitting it logs you out.</dd></dl></div>
+          <p>Plain notes on 125 common macOS processes, one click from any row, with what each is using right now.</p>
+          <div class="vis"><img class="shot narrow" src="assets/features/guide.png" width="348" height="295" loading="lazy" alt="WindowServer: what it is, why it gets busy, whether you can stop it, and what it is using right now: 1.0% of the CPU and 639.9 MB of memory."></div>
         </article>
 
         <article class="tile w3">
           <p class="kicker">Your Bondi</p>
           <h3>Three finishes. Or let it follow your Mac.</h3>
-          <p>Pick Light, Dark or Bondi Blue, or Automatic to match Light and Dark Mode.</p>
-          <div class="vis icons" role="group" aria-label="App icon">
-            <button type="button" aria-pressed="true" data-icon><span class="auto"><img src="assets/icon-white.png" alt=""><img src="assets/icon-black.png" alt=""></span>Automatic</button>
-            <button type="button" aria-pressed="false" data-icon><img src="assets/icon-white.png" alt="">Light</button>
-            <button type="button" aria-pressed="false" data-icon><img src="assets/icon-black.png" alt="">Dark</button>
-            <button type="button" aria-pressed="false" data-icon><img src="assets/icon-blue.png" alt="">Bondi Blue</button>
-          </div>
+          <p>Pick Light, Dark or Bondi Blue in Settings, or Automatic to match Light and Dark Mode.</p>
+          <div class="vis"><img class="shot" src="assets/features/icons.png" width="448" height="97" loading="lazy" alt="Settings, App icon: Automatic, Light, Dark and Bondi Blue."></div>
         </article>
 
       </div>
