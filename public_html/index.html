@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bondi for Mac</title>
+<meta name="description" content="Bondi groups your Mac's 1,000 processes into the apps you know and tells you, in plain English, what's slowing it down. On-device AI, nothing leaves your Mac.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ground: #eef6f8;
+    --surface: #ffffff;
+    --surface-2: #e2eff3;
+    --ink: #0a1d24;
+    --ink-soft: #3d5963;
+    --line: #cfe2e8;
+    --bondi: #0095b6;
+    --bondi-deep: #00708a;
+    --bondi-glass: rgba(0, 149, 182, 0.16);
+    --bondi-stripe: rgba(0, 149, 182, 0.10);
+    --on-bondi: #ffffff;
+    --shot-shadow: 0 30px 60px -20px rgba(10, 29, 36, 0.35), 0 12px 24px -12px rgba(10, 29, 36, 0.25);
+    --display: "Bricolage Grotesque", "Avenir Next", "Helvetica Neue", sans-serif;
+    --body: "IBM Plex Sans", -apple-system, "Helvetica Neue", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground: #06161b;
+      --surface: #0d242b;
+      --surface-2: #123039;
+      --ink: #e4f3f6;
+      --ink-soft: #9dbac3;
+      --line: #1d3d47;
+      --bondi: #2cc0de;
+      --bondi-deep: #5fd4ea;
+      --bondi-glass: rgba(44, 192, 222, 0.14);
+      --bondi-stripe: rgba(44, 192, 222, 0.08);
+      --on-bondi: #04161b;
+      --shot-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.7), 0 12px 24px -12px rgba(0, 0, 0, 0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground: #06161b;
+    --surface: #0d242b;
+    --surface-2: #123039;
+    --ink: #e4f3f6;
+    --ink-soft: #9dbac3;
+    --line: #1d3d47;
+    --bondi: #2cc0de;
+    --bondi-deep: #5fd4ea;
+    --bondi-glass: rgba(44, 192, 222, 0.14);
+    --bondi-stripe: rgba(44, 192, 222, 0.08);
+    --on-bondi: #04161b;
+    --shot-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.7), 0 12px 24px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding-inline: 20px;
+    background: var(--ground);
+    color: var(--ink);
+    font: 17px/1.6 var(--body);
+    -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: var(--bondi-deep); }
+  :focus-visible { outline: 3px solid var(--bondi); outline-offset: 3px; border-radius: 6px; }
+  .wrap { max-width: 1120px; margin: 0 auto; }
+
+  h1, h2, h3 { font-family: var(--display); letter-spacing: -0.02em; text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(2.6rem, 6vw, 4.6rem); line-height: 1.02; font-weight: 800; }
+  h2 { font-size: clamp(1.9rem, 4vw, 2.8rem); line-height: 1.08; font-weight: 700; }
+  h3 { font-size: 1.2rem; line-height: 1.25; font-weight: 700; letter-spacing: -0.01em; }
+  p { margin: 0; }
+  .lede { font-size: 1.2rem; color: var(--ink-soft); max-width: 34rem; }
+  .eyebrow { font: 500 0.78rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--bondi-deep); }
+
+  /* Header */
+  header.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 22px; }
+  .brand { display: flex; align-items: center; gap: 10px; font: 700 1.3rem/1 var(--display); color: var(--ink); text-decoration: none; }
+  .brand-mark { width: 26px; height: 26px; border-radius: 8px; background:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.28) 0 2px, transparent 2px 5px), var(--bondi); }
+  nav.links { display: flex; gap: 22px; font-size: 0.95rem; }
+  nav.links a { color: var(--ink-soft); text-decoration: none; }
+  nav.links a:hover { color: var(--ink); }
+
+  /* Buttons */
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .button { display: inline-flex; align-items: center; gap: 8px; padding: 14px 22px; border-radius: 12px; font: 600 1rem/1 var(--body); text-decoration: none; }
+  .button.primary { background: var(--bondi); color: var(--on-bondi); }
+  .button.primary:hover { background: var(--bondi-deep); }
+  .button.quiet { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
+  .fine { font-size: 0.88rem; color: var(--ink-soft); }
+
+  /* Hero */
+  .hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: 56px; align-items: center; padding-block: 40px 88px; }
+  .hero-copy { display: grid; gap: 26px; }
+  .shell {
+    position: relative; justify-self: center; width: min(100%, 440px);
+    padding: 36px 36px 0; border-radius: 36px 36px 28px 28px;
+    background:
+      repeating-linear-gradient(0deg, var(--bondi-stripe) 0 3px, transparent 3px 8px),
+      linear-gradient(160deg, var(--bondi-glass), transparent 70%);
+    border: 1px solid var(--line);
+  }
+  .shell img { border-radius: 18px 18px 0 0; box-shadow: var(--shot-shadow); }
+
+  /* Sentences */
+  .said { padding-block: 72px; display: grid; gap: 30px; }
+  .lines { display: grid; gap: 14px; }
+  .line {
+    display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: baseline;
+    padding: 18px 22px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line);
+    font-size: 1.08rem;
+  }
+  .line .spark { color: var(--bondi); font-size: 1.1rem; }
+  .line b { font-weight: 600; }
+  .line .num { font-family: var(--mono); font-size: 0.98em; color: var(--bondi-deep); }
+
+  /* Numbers */
+  .numbers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+  .numbers div { background: var(--surface); padding: 26px 22px; display: grid; gap: 6px; align-content: start; }
+  .numbers strong { font: 500 clamp(1.8rem, 3.5vw, 2.4rem)/1 var(--mono); color: var(--ink); font-variant-numeric: tabular-nums; }
+  .numbers span { color: var(--ink-soft); font-size: 0.95rem; }
+
+  /* Features */
+  section.block { padding-block: 88px; display: grid; gap: 40px; }
+  .section-head { display: grid; gap: 14px; max-width: 42rem; }
+  .features { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 34px 40px; }
+  .feature { display: grid; gap: 8px; align-content: start; }
+  .feature p { color: var(--ink-soft); font-size: 0.98rem; }
+  .feature .tag { font: 500 0.75rem/1 var(--mono); color: var(--bondi-deep); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* Window shots */
+  .window { border-radius: 14px; overflow: hidden; box-shadow: var(--shot-shadow); border: 1px solid var(--line); background: #1e1e1e; }
+  .window .bar { display: flex; gap: 8px; padding: 12px 14px; background: #2b2b2b; }
+  .window .bar i { width: 12px; height: 12px; border-radius: 50%; background: #5a5a5a; }
+  .window .bar i:nth-child(1) { background: #ff5f57; } .window .bar i:nth-child(2) { background: #febc2e; } .window .bar i:nth-child(3) { background: #28c840; }
+  .shots { display: grid; gap: 28px; }
+  .shots figcaption { margin-top: 12px; color: var(--ink-soft); font-size: 0.95rem; }
+  figure { margin: 0; }
+
+  /* Pricing */
+  .pricing { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: center; }
+  .price-card { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 34px; display: grid; gap: 18px; }
+  .price-row { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .price { font: 800 3.6rem/1 var(--display); letter-spacing: -0.03em; }
+  .was { font: 500 1.1rem/1 var(--mono); color: var(--ink-soft); text-decoration: line-through; }
+  .badge { font: 500 0.78rem/1 var(--mono); padding: 7px 10px; border-radius: 999px; background: var(--bondi-glass); color: var(--bondi-deep); letter-spacing: 0.04em; }
+  .price-card ul { margin: 0; padding-left: 20px; color: var(--ink-soft); display: grid; gap: 6px; }
+
+  /* FAQ */
+  .faq { display: grid; gap: 10px; max-width: 46rem; }
+  details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 22px; }
+  summary { cursor: pointer; font-weight: 600; }
+  details p { margin-top: 10px; color: var(--ink-soft); }
+
+  footer { padding-block: 48px 64px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 16px 32px; justify-content: space-between; color: var(--ink-soft); font-size: 0.92rem; }
+
+  @media (max-width: 900px) {
+    .hero, .pricing { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+    .features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .numbers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 560px) {
+    body { padding-inline: 16px; font-size: 16px; }
+    nav.links { display: none; }
+    .features { grid-template-columns: minmax(0, 1fr); }
+    .shell { padding: 22px 22px 0; }
+    section.block, .said { padding-block: 56px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .shell img { animation: rise 0.9s cubic-bezier(.2,.7,.2,1) both; }
+    @keyframes rise { from { transform: translateY(18px); } to { transform: none; } }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span>Bondi</a>
+    <nav class="links" aria-label="Sections">
+      <a href="#features">Features</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">For macOS 15 and later</p>
+        <h1>The AI that tells you why your Mac is slow.</h1>
+        <p class="lede">Activity Monitor shows you 1,000 cryptic processes. Bondi groups them into the apps you know, finds what's holding your memory, and says what's wrong in one plain sentence. Its AI runs on your Mac, not in the cloud.</p>
+        <div class="actions">
+          <a class="button primary" href="/buy/">Get Bondi for $6.99</a>
+          <a class="button quiet" href="#pricing">Free 7-day trial</a>
+        </div>
+        <p class="fine">Launch price for the first 250 buyers, then $29.99. One-time purchase, no subscription.</p>
+      </div>
+      <div class="shell">
+        <img src="assets/popover.png" width="400" height="775" alt="Bondi's menu bar window: a status line saying everything looks normal, cards for CPU at 14%, memory 45.1 GB of 64 GB, network, disk 222 GB free, GPU, Neural Engine, battery and fans, and the busiest apps: Google Chrome, Visual Studio Code and macOS.">
+      </div>
+    </section>
+
+    <section class="said" aria-labelledby="said-title">
+      <div class="section-head">
+        <p class="eyebrow">What Bondi says</p>
+        <h2 id="said-title">One sentence, with the real numbers.</h2>
+        <p class="lede">Bondi measures everything itself and writes the sentence around its own figures. The AI adds the plain-English part, so it can't invent a number.</p>
+      </div>
+      <div class="lines">
+        <p class="line"><span class="spark" aria-hidden="true">✦</span><span><b>Memory is critically low.</b> Bionic holds <span class="num">21.49 GB</span> with Qwen3.8 27B loaded.</span></p>
+        <p class="line"><span class="spark" aria-hidden="true">✦</span><span><b>A dev server is sitting idle.</b> Vite in shop has been idle for <span class="num">3h 20m</span> and holds <span class="num">612.0 MB</span>.</span></p>
+        <p class="line"><span class="spark" aria-hidden="true">✦</span><span><b>Your Mac is working hard.</b> Xcode is using <span class="num">61%</span> of the CPU.</span></p>
+        <p class="line"><span class="spark" aria-hidden="true">✦</span><span><b>Running on battery.</b> The battery is at <span class="num">23%</span> with <span class="num">1h 10m</span> left, and Google Chrome is using the most power, <span class="num">6.4 W</span>.</span></p>
+      </div>
+    </section>
+
+    <section id="privacy" aria-label="Bondi in numbers">
+      <div class="numbers">
+        <div><strong>~1,000</strong><span>processes, grouped into about 60 apps you recognise</span></div>
+        <div><strong>0.3%</strong><span>of one CPU core while Bondi's windows are closed</span></div>
+        <div><strong>30 days</strong><span>of history, kept only on your Mac</span></div>
+        <div><strong>0 bytes</strong><span>of usage data sent anywhere. No account, no analytics.</span></div>
+      </div>
+    </section>
+
+    <section class="block" id="features" aria-labelledby="features-title">
+      <div class="section-head">
+        <p class="eyebrow">Features</p>
+        <h2 id="features-title">Everything your Mac is doing, in words you already use.</h2>
+      </div>
+      <div class="features">
+        <div class="feature"><span class="tag">Apps, not processes</span><h3>See Chrome, not 60 helpers</h3><p>Every renderer, helper and background service is counted under the app it belongs to, with its real memory and CPU.</p></div>
+        <div class="feature"><span class="tag">On-device AI</span><h3>"Why is my Mac slow?"</h3><p>Ask, and Bondi answers from what it measured: the cause, what's idle, and what changed in the last hour.</p></div>
+        <div class="feature"><span class="tag">History</span><h3>Ask about yesterday</h3><p>"What drained my battery yesterday afternoon?" Bondi looks through 30 days of history and answers with the numbers.</p></div>
+        <div class="feature"><span class="tag">For developers</span><h3>Finds forgotten servers</h3><p>Idle dev servers, Docker containers and local AI models in LM Studio or Ollama, with the memory they're holding. Stop them in one click.</p></div>
+        <div class="feature"><span class="tag">Warnings</span><h3>One cause, one fix</h3><p>When memory runs short or the CPU stays pinned, the menu bar tells you what's responsible and offers one fix. It always asks first.</p></div>
+        <div class="feature"><span class="tag">Full picture</span><h3>Every metric that matters</h3><p>CPU per core, memory by type, GPU, Neural Engine, disk, network, battery, temperatures, and a fan boost when you need it.</p></div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="window-title">
+      <div class="section-head">
+        <p class="eyebrow">The main window</p>
+        <h2 id="window-title">When you want the whole story.</h2>
+        <p class="lede">Every section has 30 days of charts, the numbers Activity Monitor uses, and a table of apps you can expand into their processes.</p>
+      </div>
+      <div class="shots">
+        <figure>
+          <div class="window"><div class="bar" aria-hidden="true"><i></i><i></i><i></i></div>
+            <img src="assets/window-memory.png" width="1100" height="815" loading="lazy" alt="Bondi's Memory section: 45.3 GB of 64 GB used over 24 hours, memory pressure Normal, App Memory 38.56 GB, Wired 3.32 GB, Compressed 3.39 GB, Cached Files 16.81 GB, and apps sorted by memory with Google Chrome first at 12.84 GB.">
+          </div>
+          <figcaption>Memory: pressure, memory by type, and which apps are holding it.</figcaption>
+        </figure>
+        <figure>
+          <div class="window"><div class="bar" aria-hidden="true"><i></i><i></i><i></i></div>
+            <img src="assets/window-cpu.png" width="1100" height="815" loading="lazy" alt="Bondi's CPU section: 10% of an Apple M1 Max over 24 hours with 17% average and 51% peak, per-core bars for 2 efficiency and 8 performance cores, and apps sorted by CPU.">
+          </div>
+          <figcaption>CPU: the whole chip, every core, and each app's last hour.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="block" id="pricing" aria-labelledby="pricing-title">
+      <div class="pricing">
+        <div class="section-head">
+          <p class="eyebrow">Pricing</p>
+          <h2 id="pricing-title">Buy it once. Keep it.</h2>
+          <p class="lede">Try everything free for 7 days. Then one price, one Mac, no subscription. The on-device AI is included.</p>
+        </div>
+        <div class="price-card">
+          <div class="price-row"><span class="price">$6.99</span><span class="was">$29.99</span><span class="badge">First 250 buyers</span></div>
+          <ul>
+            <li>Every feature, with updates</li>
+            <li>One Mac; move it to another any time</li>
+            <li>On-device AI included</li>
+            <li>Payment, tax and receipt handled by Paddle</li>
+          </ul>
+          <div class="actions"><a class="button primary" href="/buy/">Get Bondi for $6.99</a></div>
+          <p class="fine">After the first 250 licenses, Bondi is $29.99.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="faq" aria-labelledby="faq-title">
+      <div class="section-head"><p class="eyebrow">Questions</p><h2 id="faq-title">Good to know</h2></div>
+      <div class="faq">
+        <details><summary>Does my data leave my Mac?</summary><p>No. Usage history stays in a file on your Mac, and the AI runs on your Mac. The only things Bondi sends are the license check and the update check.</p></details>
+        <details><summary>Which Macs does it run on?</summary><p>Any Mac with macOS 15 or later, Apple silicon or Intel. The AI uses Apple's on-device model where Apple Intelligence is available; other Macs can download a free, small open model from Settings.</p></details>
+        <details><summary>Will it slow my Mac down?</summary><p>No. With its windows closed Bondi uses about 0.3% of one CPU core. It only samples faster while you're looking at it.</p></details>
+        <details><summary>Can Bondi quit apps by itself?</summary><p>Never. Bondi suggests one fix at a time and asks before it quits, stops or unloads anything.</p></details>
+        <details><summary>What happens after the trial?</summary><p>The menu bar keeps showing your CPU for free. Everything else waits for a license.</p></details>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 Bondi · trybondi.app</span>
+    <span>Questions: support@trybondi.app</span>
+    <span>Bondi isn't affiliated with Apple. Mac and macOS are trademarks of Apple Inc.</span>
+  </footer>
+</div>
+</body>
+</html>
