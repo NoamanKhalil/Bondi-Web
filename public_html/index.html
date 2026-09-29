@@ -4,228 +4,213 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Bondi for Mac</title>
-<meta name="description" content="Bondi groups your Mac's 1,000 processes into the apps you know and tells you, in one plain sentence, what's slowing it down. On-device AI; nothing leaves your Mac.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<meta name="description" content="Bondi tells you why your Mac is slow, in one plain sentence, using Apple's on-device model. It groups 1,000 processes into the apps you know, finds what's holding your memory, and keeps 30 days of history. Nothing leaves your Mac.">
+<link rel="icon" type="image/png" href="assets/favicon.png">
 <style>
   :root {
-    --ground: #eef6f8;
-    --surface: #ffffff;
-    --surface-2: #e3f0f4;
-    --ink: #0a1d24;
-    --ink-soft: #3d5963;
-    --ink-faint: #6d8791;
-    --line: #cfe2e8;
+    --ground: #f5f5f7;
+    --band: #ffffff;
+    --tile: #ffffff;
+    --tile-2: #f5f5f7;
+    --ink: #1d1d1f;
+    --soft: #6e6e73;
+    --faint: #86868b;
+    --line: #d2d2d7;
     --bondi: #0095b6;
-    --bondi-deep: #00708a;
-    --bondi-glass: rgba(0, 149, 182, 0.14);
-    --bondi-stripe: rgba(0, 149, 182, 0.09);
+    --bondi-ink: #00708a;
+    --bondi-soft: rgba(0, 149, 182, 0.12);
     --on-bondi: #ffffff;
-    --attention: #c75a00;
-    --shadow: 0 30px 60px -24px rgba(10, 29, 36, 0.35), 0 12px 24px -12px rgba(10, 29, 36, 0.22);
-    /* The popover demo always looks like Bondi in dark mode, as in the film and screenshots. */
-    --app-ground: #1e1f22; --app-card: #2a2b2f; --app-line: #3a3b40; --app-ink: #f2f2f4; --app-soft: #a1a1a8;
-    --m-cpu: #4a90e2; --m-memory: #9b7ae0; --m-net: #8fcf4f; --m-disk: #f2a57c; --m-gpu: #e27aa0; --m-battery: #5cc26a; --m-stack: #2cc0de;
-    --display: "Bricolage Grotesque", "Avenir Next", "Helvetica Neue", sans-serif;
-    --body: "IBM Plex Sans", -apple-system, "Helvetica Neue", sans-serif;
-    --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    --attention: #bf5b00;
+    --glass: rgba(255, 255, 255, 0.72);
+    --shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.35), 0 8px 20px -12px rgba(0, 0, 0, 0.18);
+    --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, monospace;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       color-scheme: dark;
-      --ground: #06161b; --surface: #0d242b; --surface-2: #123039; --ink: #e4f3f6; --ink-soft: #9dbac3; --ink-faint: #6f8e97;
-      --line: #1d3d47; --bondi: #2cc0de; --bondi-deep: #5fd4ea; --bondi-glass: rgba(44, 192, 222, 0.14);
-      --bondi-stripe: rgba(44, 192, 222, 0.07); --on-bondi: #04161b; --attention: #ff9f0a;
-      --shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.7), 0 12px 24px -12px rgba(0, 0, 0, 0.5);
+      --ground: #000000; --band: #0b0b0c; --tile: #161617; --tile-2: #1d1d1f; --ink: #f5f5f7; --soft: #a1a1a6; --faint: #86868b;
+      --line: #2c2c2e; --bondi: #2cc0de; --bondi-ink: #5fd4ea; --bondi-soft: rgba(44, 192, 222, 0.14); --on-bondi: #031418;
+      --attention: #ff9f0a; --glass: rgba(22, 22, 23, 0.72);
+      --shadow: 0 30px 70px -24px rgba(0, 0, 0, 0.9), 0 12px 24px -12px rgba(0, 0, 0, 0.6);
     }
   }
   :root[data-theme="dark"] {
     color-scheme: dark;
-    --ground: #06161b; --surface: #0d242b; --surface-2: #123039; --ink: #e4f3f6; --ink-soft: #9dbac3; --ink-faint: #6f8e97;
-    --line: #1d3d47; --bondi: #2cc0de; --bondi-deep: #5fd4ea; --bondi-glass: rgba(44, 192, 222, 0.14);
-    --bondi-stripe: rgba(44, 192, 222, 0.07); --on-bondi: #04161b; --attention: #ff9f0a;
-    --shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.7), 0 12px 24px -12px rgba(0, 0, 0, 0.5);
+    --ground: #000000; --band: #0b0b0c; --tile: #161617; --tile-2: #1d1d1f; --ink: #f5f5f7; --soft: #a1a1a6; --faint: #86868b;
+    --line: #2c2c2e; --bondi: #2cc0de; --bondi-ink: #5fd4ea; --bondi-soft: rgba(44, 192, 222, 0.14); --on-bondi: #031418;
+    --attention: #ff9f0a; --glass: rgba(22, 22, 23, 0.72);
+    --shadow: 0 30px 70px -24px rgba(0, 0, 0, 0.9), 0 12px 24px -12px rgba(0, 0, 0, 0.6);
   }
 
   * { box-sizing: border-box; }
-  body { margin: 0; padding-inline: 20px; background: var(--ground); color: var(--ink); font: 17px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; background: var(--ground); color: var(--ink); font: 17px/1.47 var(--sans); letter-spacing: -0.012em; -webkit-font-smoothing: antialiased; }
   img, video { max-width: 100%; height: auto; display: block; }
-  a { color: var(--bondi-deep); }
-  :focus-visible { outline: 3px solid var(--bondi); outline-offset: 3px; border-radius: 6px; }
-  .wrap { max-width: 1140px; margin: 0 auto; }
-  h1, h2, h3 { font-family: var(--display); letter-spacing: -0.02em; text-wrap: balance; margin: 0; }
-  h1 { font-size: clamp(2.6rem, 6.4vw, 5rem); line-height: 1.0; font-weight: 800; }
-  h2 { font-size: clamp(1.9rem, 4vw, 2.9rem); line-height: 1.06; font-weight: 800; }
-  h3 { font-size: 1.18rem; line-height: 1.25; font-weight: 600; letter-spacing: -0.01em; }
+  a { color: var(--bondi-ink); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  :focus-visible { outline: 3px solid var(--bondi); outline-offset: 3px; border-radius: 8px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding-inline: 22px; }
+  .band { background: var(--band); }
+  h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; }
+  h1 { font-size: clamp(2.8rem, 7vw, 5rem); line-height: 1.05; font-weight: 700; letter-spacing: -0.035em; }
+  h2 { font-size: clamp(2.2rem, 5vw, 3.5rem); line-height: 1.07; font-weight: 700; letter-spacing: -0.03em; }
+  h3 { font-size: 1.5rem; line-height: 1.17; font-weight: 700; letter-spacing: -0.02em; }
   p { margin: 0; }
-  .lede { font-size: 1.18rem; color: var(--ink-soft); max-width: 36rem; }
-  .eyebrow { font: 500 0.78rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--bondi-deep); }
-  .num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .eyebrow { font-size: 1.2rem; font-weight: 600; color: var(--bondi-ink); letter-spacing: -0.01em; }
+  .sub { font-size: clamp(1.15rem, 2.2vw, 1.5rem); line-height: 1.33; color: var(--soft); font-weight: 500; letter-spacing: -0.02em; }
+  .center { text-align: center; margin-inline: auto; }
+  .num { font-variant-numeric: tabular-nums; }
 
-  /* Header: sticky, with the live launch counter */
-  header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; margin-inline: -20px; padding: 12px 20px;
-    background: color-mix(in srgb, var(--ground) 86%, transparent); backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px);
-    border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent); }
-  .top-inner { max-width: 1140px; margin: 0 auto; display: flex; align-items: center; gap: 28px; }
-  .brand { display: flex; align-items: center; gap: 10px; font: 800 1.25rem/1 var(--display); color: var(--ink); text-decoration: none; }
-  .brand-mark { width: 26px; height: 26px; border-radius: 8px; background: repeating-linear-gradient(0deg, rgba(255,255,255,0.3) 0 2px, transparent 2px 5px), var(--bondi); }
-  nav.links { display: flex; gap: 22px; font-size: 0.95rem; }
-  nav.links a { color: var(--ink-soft); text-decoration: none; }
-  nav.links a:hover { color: var(--ink); }
-  .top-right { margin-left: auto; display: flex; align-items: center; gap: 16px; }
-  .left { display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--ink-soft); white-space: nowrap; }
-  .left::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--attention); }
+  /* Navigation bar: glass, like Apple's own */
+  header.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--glass);
+    backdrop-filter: saturate(1.8) blur(20px); -webkit-backdrop-filter: saturate(1.8) blur(20px); border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent); }
+  .nav-inner { max-width: 1080px; margin: 0 auto; padding: 10px 22px; display: flex; align-items: center; gap: 26px; font-size: 0.8rem; }
+  .brand { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); font-weight: 600; font-size: 1rem; }
+  .brand img { width: 26px; height: 26px; }
+  nav.links { display: flex; gap: 24px; } nav.links a { color: var(--soft); } nav.links a:hover { color: var(--ink); text-decoration: none; }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+  .left { display: inline-flex; align-items: center; gap: 6px; color: var(--soft); white-space: nowrap; }
+  .left::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--attention); }
 
-  .button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 22px; border-radius: 12px; font: 600 1rem/1 var(--body); text-decoration: none; border: 0; cursor: pointer; }
-  .button.small { padding: 10px 16px; font-size: 0.92rem; border-radius: 10px; }
-  .button.primary { background: var(--bondi); color: var(--on-bondi); }
-  .button.primary:hover { background: var(--bondi-deep); }
-  .button.quiet { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
-  .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-  .facts { display: flex; flex-wrap: wrap; gap: 6px 14px; color: var(--ink-soft); font-size: 0.92rem; }
-  .facts span + span::before { content: "·"; margin-right: 14px; color: var(--ink-faint); }
-  .facts .hot { color: var(--attention); font-weight: 500; }
+  /* Pill buttons */
+  .pillbtn { display: inline-flex; align-items: center; justify-content: center; border-radius: 980px; padding: 11px 22px; font: 400 1.05rem/1.2 var(--sans); letter-spacing: -0.01em; border: 1px solid transparent; }
+  .pillbtn.primary { background: var(--bondi); color: var(--on-bondi); }
+  .pillbtn.primary:hover { background: var(--bondi-ink); text-decoration: none; }
+  .pillbtn.secondary { color: var(--bondi-ink); border-color: var(--bondi); }
+  .pillbtn.secondary:hover { background: var(--bondi-soft); text-decoration: none; }
+  .pillbtn.small { padding: 5px 13px; font-size: 0.78rem; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
 
   /* Hero */
-  .hero { padding-block: 64px 44px; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); gap: 26px 48px; align-items: center; }
-  .hero-copy { display: grid; gap: 26px; }
-  .hero-shot { justify-self: center; width: min(100%, 380px); padding: 28px 28px 0; border-radius: 32px 32px 24px 24px; border: 1px solid var(--line);
-    background: repeating-linear-gradient(0deg, var(--bondi-stripe) 0 3px, transparent 3px 8px), linear-gradient(160deg, var(--bondi-glass), transparent 70%);
-    max-height: 560px; overflow: hidden; }
-  .hero-shot img { border-radius: 16px 16px 0 0; box-shadow: var(--shadow); }
-  .pill { justify-self: start; display: inline-flex; align-items: center; gap: 10px; padding: 6px 14px 6px 6px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: 0.9rem; color: var(--ink-soft); text-decoration: none; }
-  .pill b { font: 500 0.72rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; padding: 6px 9px; border-radius: 999px; background: var(--bondi-glass); color: var(--bondi-deep); }
-  .hero h1 { max-width: 15ch; }
-  .film { margin-top: 12px; padding: 18px; border-radius: 30px; border: 1px solid var(--line);
-    background: repeating-linear-gradient(0deg, var(--bondi-stripe) 0 3px, transparent 3px 8px), linear-gradient(160deg, var(--bondi-glass), transparent 70%); }
-  .film video { width: 100%; aspect-ratio: 16 / 9; border-radius: 16px; background: #06161b; box-shadow: var(--shadow); }
+  .hero { padding-block: 80px 48px; display: grid; gap: 22px; justify-items: center; text-align: center; }
+  .hero-icon { width: 128px; height: 128px; filter: drop-shadow(0 18px 30px rgba(0, 149, 182, 0.35)); }
+  .hero h1 { max-width: 16ch; }
+  .hero .sub { max-width: 40rem; }
+  .facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px; color: var(--soft); font-size: 0.9rem; }
+  .facts span + span::before { content: "·"; margin-right: 12px; color: var(--faint); }
+  .facts .hot { color: var(--attention); }
 
-  section.block { padding-block: 96px; display: grid; gap: 40px; }
-  .section-head { display: grid; gap: 14px; max-width: 44rem; }
+  section.sec { padding-block: 110px; display: grid; gap: 52px; }
+  .sec-head { display: grid; gap: 14px; max-width: 46rem; }
+  .sec-head.center { justify-items: center; text-align: center; }
+
+  /* Apple's on-device model */
+  .intel { display: grid; gap: 52px; }
+  .flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; counter-reset: step; }
+  .step { background: var(--tile); border-radius: 22px; padding: 24px 22px; display: grid; gap: 10px; align-content: start; position: relative; min-height: 230px; }
+  .step::before { counter-increment: step; content: counter(step); font: 600 0.85rem/1 var(--mono); color: var(--bondi-ink); }
+  .step h3 { font-size: 1.2rem; }
+  .step p { color: var(--soft); font-size: 0.95rem; }
+  .step .viz { margin-top: auto; font: 500 0.82rem/1.45 var(--mono); color: var(--ink); background: var(--tile-2); border-radius: 12px; padding: 10px 12px; }
+  .step .viz em { font-style: normal; color: var(--bondi-ink); }
+  .step:not(:last-child)::after { content: "›"; position: absolute; right: -12px; top: 50%; transform: translateY(-50%); color: var(--faint); font-size: 1.4rem; }
+  .promise { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .promise div { background: var(--tile); border-radius: 22px; padding: 26px; display: grid; gap: 8px; }
+  .promise strong { font: 700 2.4rem/1 var(--display); letter-spacing: -0.03em; }
+  .promise span { color: var(--soft); }
+
+  /* On the white band, surfaces take the page grey so their edges show */
+  .band .step, .band .promise div, .band .compare { background: var(--tile-2); }
+  .band .step .viz, .band .list { background: var(--band); }
+
+  /* Bento grid: one tile per feature, each with its own visual */
+  .bento { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; }
+  .tile { background: var(--tile); border-radius: 28px; padding: 30px; display: grid; gap: 12px; align-content: start; overflow: hidden; min-height: 340px; }
+  .tile.w2 { grid-column: span 2; } .tile.w3 { grid-column: span 3; } .tile.w4 { grid-column: span 4; } .tile.w6 { grid-column: span 6; }
+  .tile .kicker { font-size: 0.95rem; font-weight: 600; color: var(--bondi-ink); }
+  .tile h3 { font-size: 1.6rem; }
+  .tile p { color: var(--soft); }
+  .tile .vis { margin-top: auto; }
+  /* visuals share the dark app surface so they read as Bondi */
+  .app { background: #1c1d20; color: #f2f2f4; border-radius: 14px; padding: 14px; font: 13px/1.4 var(--sans); box-shadow: var(--shadow); }
+  .app .dim { color: #9d9da5; }
+  .ai-line { display: grid; grid-template-columns: auto 1fr; gap: 8px; background: #1f3b45; border-radius: 12px; padding: 12px 14px; font-size: 14px; }
+  .ai-line .spark { color: #2cc0de; }
+  .dots { display: grid; grid-template-columns: repeat(40, 1fr); gap: 3px; }
+  .dots i { aspect-ratio: 1; border-radius: 50%; background: #45464c; }
+  .grouped { display: grid; gap: 8px; margin-top: 12px; }
+  .grouped div { display: grid; grid-template-columns: 110px 1fr 60px; gap: 10px; align-items: center; font-size: 12.5px; }
+  .grouped b { height: 7px; border-radius: 4px; background: #9b7ae0; display: block; }
+  .qa { display: grid; gap: 10px; }
+  .qa .q { justify-self: end; background: #2f7cf6; color: #fff; border-radius: 16px 16px 4px 16px; padding: 9px 13px; max-width: 85%; }
+  .qa .a { display: grid; grid-template-columns: auto 1fr; gap: 8px; background: #26272b; border-radius: 16px 16px 16px 4px; padding: 11px 13px; max-width: 95%; }
+  .menubar { display: flex; align-items: center; justify-content: flex-end; gap: 14px; background: rgba(40,40,44,.92); border-radius: 10px; padding: 6px 12px; font-size: 13px; }
+  .menubar svg { width: 16px; height: 16px; }
+  .warn { margin-top: 10px; display: grid; gap: 8px; }
+  .warn .banner { background: rgba(255,159,10,.14); border-radius: 10px; padding: 11px 12px; display: grid; gap: 4px; }
+  .warn .banner b { color: #ff9f0a; }
+  .warn .fix { justify-self: end; background: #3a3b40; border-radius: 7px; padding: 5px 11px; font-size: 12px; }
+  .srv { display: grid; grid-template-columns: 1fr auto; gap: 1px 10px; padding: 9px 0; border-top: 1px solid #36373c; }
+  .srv:first-child { border-top: 0; } .srv small { color: #9d9da5; } .srv .idle { color: #ff9f0a; }
+  .srv .btn { grid-row: 1 / span 2; grid-column: 2; align-self: center; background: #3a3b40; border-radius: 7px; padding: 4px 10px; font-size: 12px; }
+  .hist svg { width: 100%; height: 140px; display: block; }
+  .vol { display: grid; grid-template-columns: 110px 1fr 44px; gap: 10px; align-items: center; padding: 6px 0; font-size: 12.5px; }
+  .vol input { width: 100%; accent-color: #e0305a; }
+  .fan { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; font-size: 12.5px; }
+  .fan input { width: 100%; accent-color: #4a90e2; }
+  .guide h4 { margin: 0 0 6px; font-size: 14px; }
+  .guide dt { color: #9d9da5; font-size: 11px; font-weight: 600; margin-top: 8px; } .guide dd { margin: 2px 0 0; font-size: 12.5px; }
+  .gauge { display: grid; justify-items: center; gap: 4px; }
+  .gauge svg { width: 180px; height: 110px; }
+  .icons { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+  .icons button { border: 0; background: transparent; padding: 0; display: grid; justify-items: center; gap: 8px; color: var(--soft); font: 500 0.85rem/1 var(--sans); cursor: pointer; }
+  .icons img { width: 78px; height: 78px; border-radius: 18px; outline: 3px solid transparent; outline-offset: 3px; }
+  .icons button[aria-pressed="true"] { color: var(--ink); } .icons button[aria-pressed="true"] img { outline-color: var(--bondi); }
+  .icons .auto { width: 78px; height: 78px; border-radius: 18px; position: relative; overflow: hidden; outline: 3px solid transparent; outline-offset: 3px; }
+  .icons .auto img { position: absolute; inset: 0; outline: 0; border-radius: 0; }
+  .icons .auto img + img { clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+  .icons button[aria-pressed="true"] .auto { outline-color: var(--bondi); }
+
+  /* Film, compare, pricing, FAQ */
+  .film video { width: 100%; aspect-ratio: 16 / 9; border-radius: 28px; background: #06161b; box-shadow: var(--shadow); }
   .split { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 56px; align-items: center; }
-
-  /* The popover demo: Bondi's own layout, drawn in HTML */
-  .demo-stage { display: grid; justify-items: center; gap: 16px; }
-  .pop { width: min(100%, 420px); background: var(--app-ground); color: var(--app-ink); border-radius: 18px; padding: 12px; box-shadow: var(--shadow);
-    font: 13px/1.35 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; display: grid; gap: 10px; border: 1px solid #000; }
-  .pop-tabs { display: flex; gap: 2px; }
-  .pop-tabs button { flex: 1; height: 32px; border: 0; border-radius: 7px; background: transparent; color: var(--app-soft); cursor: pointer; display: grid; place-items: center; }
-  .pop-tabs button[aria-selected="true"] { background: #3a3b40; color: var(--app-ink); }
-  .pop-tabs svg { width: 17px; height: 17px; }
-  .status { background: #1f3b45; border-radius: 9px; padding: 10px 12px; display: grid; grid-template-columns: auto 1fr; gap: 4px 9px; }
-  .status .spark { color: var(--m-stack); }
-  .status a { grid-column: 2; font-size: 11.5px; color: #58a6ff; text-decoration: none; }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .card { background: var(--app-card); border: 1px solid var(--app-line); border-radius: 11px; padding: 10px 11px; display: grid; gap: 3px; min-height: 108px; align-content: start; }
-  .card .head { display: flex; justify-content: space-between; gap: 6px; font-size: 11px; font-weight: 600; color: var(--app-soft); }
-  .card .head span:last-child { font-weight: 400; }
-  .card .big { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
-  .card .big small { font-size: 14px; font-weight: 500; color: var(--app-soft); margin-left: 3px; }
-  .card .sub { font-size: 11px; color: var(--app-soft); }
-  .card svg.spark-line { width: 100%; height: 22px; margin-top: auto; }
-  .membar { display: flex; gap: 3px; align-items: center; margin-top: auto; }
-  .membar i { flex: 1; height: 7px; border-radius: 2px; background: #45464c; }
-  .membar i.on { background: var(--m-memory); }
-  .membar .swap { flex: 0 0 22px; height: 9px; border-radius: 3px; border: 1.5px solid #f2a200; margin-left: 4px;
-    background: repeating-linear-gradient(135deg, rgba(242,162,0,0.6) 0 2px, transparent 2px 4px); }
-  .fill { height: 6px; border-radius: 3px; background: #45464c; margin-top: auto; overflow: hidden; }
-  .fill i { display: block; height: 100%; border-radius: 3px; }
-  .busiest { background: var(--app-card); border: 1px solid var(--app-line); border-radius: 11px; padding: 10px 11px; display: grid; gap: 7px; }
-  .busiest .head { display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 600; color: var(--app-soft); }
-  .seg { display: inline-flex; background: #3a3b40; border-radius: 6px; padding: 1px; }
-  .seg button { border: 0; background: transparent; color: var(--app-ink); font: 500 10.5px/1 -apple-system, sans-serif; padding: 4px 8px; border-radius: 5px; cursor: pointer; }
-  .seg button[aria-pressed="true"] { background: #2f7cf6; color: #fff; }
-  .row { display: grid; grid-template-columns: 16px 1fr 70px 52px; align-items: center; gap: 8px; }
-  .row .dot { width: 14px; height: 14px; border-radius: 4px; }
-  .row .bar { height: 5px; border-radius: 3px; background: #45464c; overflow: hidden; }
-  .row .bar i { display: block; height: 100%; background: var(--m-cpu); border-radius: 3px; transition: width .6s ease; }
-  .row .val { text-align: right; font-variant-numeric: tabular-nums; }
-  .cores { display: flex; gap: 4px; height: 90px; align-items: flex-end; }
-  .cores div { flex: 1; background: #45464c; border-radius: 3px; position: relative; height: 100%; }
-  .cores i { position: absolute; left: 0; right: 0; bottom: 0; background: var(--m-cpu); border-radius: 3px; transition: height .6s ease; }
-  .server { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; padding: 9px 0; border-top: 1px solid var(--app-line); }
-  .server:first-of-type { border-top: 0; }
-  .server .name { font-weight: 600; }
-  .server .meta { font-size: 11px; color: var(--app-soft); }
-  .server .idle { color: #ff9f0a; }
-  .server button { grid-row: 1 / span 2; grid-column: 2; align-self: center; border: 0; border-radius: 6px; background: #3a3b40; color: var(--app-ink); font-size: 11px; padding: 5px 9px; cursor: pointer; }
-  .pop-foot { display: grid; grid-template-columns: 1fr 34px 34px; gap: 10px; }
-  .pop-foot span { background: #3a3b40; border-radius: 9px; height: 32px; display: grid; place-items: center; font-weight: 600; font-size: 12.5px; }
-  .demo-note { color: var(--ink-faint); font-size: 0.9rem; text-align: center; max-width: 30rem; }
-
-  /* Activity Monitor vs Bondi */
-  .compare { background: var(--surface); border: 1px solid var(--line); border-radius: 24px; padding: 16px; display: grid; gap: 12px; box-shadow: var(--shadow); }
+  .compare { background: var(--tile); border-radius: 28px; padding: 16px; display: grid; gap: 12px; }
   .compare-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .toggle { display: inline-flex; padding: 4px; border-radius: 12px; background: var(--surface-2); }
-  .toggle button { border: 0; background: transparent; padding: 8px 14px; border-radius: 9px; font: 500 0.92rem/1 var(--body); color: var(--ink-soft); cursor: pointer; }
-  .toggle button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
-  .count { font-size: 0.9rem; color: var(--ink-soft); }
-  .list { height: 420px; overflow: hidden; border-radius: 14px; background: var(--ground); mask-image: linear-gradient(black 78%, transparent); -webkit-mask-image: linear-gradient(black 78%, transparent); }
+  .toggle { display: inline-flex; padding: 3px; border-radius: 10px; background: var(--tile-2); }
+  .toggle button { border: 0; background: transparent; padding: 7px 14px; border-radius: 8px; font: 500 0.9rem/1 var(--sans); color: var(--soft); cursor: pointer; }
+  .toggle button[aria-pressed="true"] { background: var(--tile); color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,.16); }
+  .count { font-size: 0.9rem; color: var(--soft); }
+  .list { height: 420px; overflow: hidden; border-radius: 18px; background: var(--tile-2); mask-image: linear-gradient(black 78%, transparent); -webkit-mask-image: linear-gradient(black 78%, transparent); }
   .list .item { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding: 11px 16px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
-  .list .item small { display: block; color: var(--ink-faint); font-size: 0.8rem; }
-  .list .proc { font-family: var(--mono); font-size: 0.84rem; padding: 7px 16px; }
+  .list .item small { display: block; color: var(--faint); font-size: 0.8rem; }
+  .list .proc { font-family: var(--mono); font-size: 0.82rem; padding: 7px 16px; }
+  .price-card { background: var(--tile); border-radius: 28px; padding: 44px; display: grid; gap: 18px; justify-items: center; text-align: center; max-width: 560px; margin-inline: auto; }
+  .price { font: 700 4.5rem/1 var(--display); letter-spacing: -0.04em; }
+  .was { font-size: 1.1rem; color: var(--faint); text-decoration: line-through; }
+  .badge { font-size: 0.85rem; padding: 6px 12px; border-radius: 980px; background: var(--bondi-soft); color: var(--bondi-ink); }
+  .price-card ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; color: var(--soft); }
+  .faq { display: grid; gap: 0; max-width: 46rem; margin-inline: auto; width: 100%; }
+  details { border-bottom: 1px solid var(--line); padding: 20px 4px; }
+  summary { cursor: pointer; font-size: 1.1rem; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; color: var(--faint); font-weight: 400; font-size: 1.4rem; line-height: 1; }
+  details[open] summary::after { content: "−"; }
+  details p { margin-top: 10px; color: var(--soft); }
 
-  /* Sentences, numbers, features */
-  .lines { display: grid; gap: 12px; }
-  .line { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: baseline; padding: 18px 22px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); font-size: 1.06rem; }
-  .line .spark { color: var(--bondi); }
-  .line b { font-weight: 600; }
-  .line .num { color: var(--bondi-deep); font-size: 0.97em; }
-  .numbers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
-  .numbers div { background: var(--surface); padding: 26px 22px; display: grid; gap: 6px; align-content: start; }
-  .numbers strong { font: 500 clamp(1.7rem, 3.4vw, 2.3rem)/1 var(--mono); }
-  .numbers span { color: var(--ink-soft); font-size: 0.94rem; }
-  .features { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 34px 40px; }
-  .feature { display: grid; gap: 8px; align-content: start; }
-  .feature p { color: var(--ink-soft); font-size: 0.98rem; }
-  .feature .tag { font: 500 0.74rem/1 var(--mono); color: var(--bondi-deep); letter-spacing: 0.08em; text-transform: uppercase; }
+  footer { background: var(--band); color: var(--faint); font-size: 0.78rem; }
+  footer .wrap { padding-block: 34px 44px; display: grid; gap: 22px; }
+  .foot-cols { display: grid; grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr)); gap: 28px; }
+  .foot-cols h4 { margin: 0 0 10px; color: var(--ink); font-size: 0.8rem; font-weight: 600; }
+  .foot-cols ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .foot-cols a { color: var(--soft); } .foot-cols p { max-width: 22rem; margin-top: 10px; line-height: 1.5; }
+  .foot-line { border-top: 1px solid var(--line); padding-top: 16px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 22px; }
 
-  .window { border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--line); background: #1e1e1e; }
-  .window .bar { display: flex; gap: 8px; padding: 12px 14px; background: #2b2b2b; }
-  .window .bar i { width: 12px; height: 12px; border-radius: 50%; }
-  .window .bar i:nth-child(1) { background: #ff5f57; } .window .bar i:nth-child(2) { background: #febc2e; } .window .bar i:nth-child(3) { background: #28c840; }
-  .shots { display: grid; gap: 28px; }
-  figure { margin: 0; } figcaption { margin-top: 12px; color: var(--ink-soft); font-size: 0.95rem; }
-
-  .pricing { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: center; }
-  .price-card { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 34px; display: grid; gap: 18px; }
-  .price-row { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
-  .price { font: 800 3.6rem/1 var(--display); letter-spacing: -0.03em; }
-  .was { font: 500 1.1rem/1 var(--mono); color: var(--ink-soft); text-decoration: line-through; }
-  .badge { font: 500 0.78rem/1 var(--mono); padding: 7px 10px; border-radius: 999px; background: var(--bondi-glass); color: var(--bondi-deep); }
-  .price-card ul { margin: 0; padding-left: 20px; color: var(--ink-soft); display: grid; gap: 6px; }
-
-  .faq { display: grid; gap: 10px; max-width: 46rem; }
-  details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 22px; }
-  summary { cursor: pointer; font-weight: 600; }
-  details p { margin-top: 10px; color: var(--ink-soft); }
-
-  footer { margin-top: 40px; padding-block: 56px 72px; border-top: 1px solid var(--line); display: grid; gap: 40px; }
-  .foot-cols { display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr)); gap: 32px; }
-  .foot-cols h4 { margin: 0 0 12px; font: 600 0.95rem/1 var(--body); }
-  .foot-cols ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
-  .foot-cols a { color: var(--ink-soft); text-decoration: none; font-size: 0.94rem; }
-  .foot-cols a:hover { color: var(--ink); }
-  .foot-cols p { color: var(--ink-soft); font-size: 0.94rem; max-width: 22rem; margin-top: 12px; }
-  .legal-line { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; color: var(--ink-faint); font-size: 0.86rem; }
-
-  @media (max-width: 960px) {
+  @media (max-width: 1000px) {
     nav.links { display: none; }
-    .split, .pricing, .hero { grid-template-columns: minmax(0, 1fr); gap: 40px; }
-    .features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .numbers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); } .step:nth-child(2)::after { display: none; }
+    .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tile.w2, .tile.w3, .tile.w4 { grid-column: span 1; } .tile.w6, .tile.big { grid-column: span 2; }
+    .split { grid-template-columns: minmax(0, 1fr); } .promise { grid-template-columns: minmax(0, 1fr); }
     .foot-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
-  @media (max-width: 560px) {
-    body { padding-inline: 16px; font-size: 16px; }
-    header.top { margin-inline: -16px; padding-inline: 16px; }
-    .top-right .left { display: none; }
-    .features, .foot-cols { grid-template-columns: minmax(0, 1fr); }
-    section.block { padding-block: 64px; }
-    .film { padding: 10px; border-radius: 20px; }
+  @media (max-width: 640px) {
+    .nav-right .left { display: none; }
+    .flow, .bento { grid-template-columns: minmax(0, 1fr); } .tile.w6, .tile.big { grid-column: span 1; } .step::after { display: none; }
+    section.sec { padding-block: 72px; } .tile { padding: 24px; min-height: 0; } .price-card { padding: 30px; }
+    .foot-cols { grid-template-columns: minmax(0, 1fr); }
   }
-  @media (prefers-reduced-motion: reduce) { .row .bar i, .cores i { transition: none; } }
   /* The main-window demo: Bondi's own window, drawn in HTML (always dark, as Bondi looks in the film) */
   .appshow { display: grid; gap: 16px; padding-block: 8px 72px; }
   .win { --w-ground: #1c1d20; --w-card: #26272b; --w-card-2: #2e2f34; --w-line: #36373c; --w-ink: #f2f2f4; --w-soft: #9d9da5; --w-faint: #6c6c74;
@@ -299,41 +284,40 @@
     .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .win-body { padding: 12px; }
     .w-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
+  .demo-note { color: var(--faint); font-size: 0.9rem; text-align: center; max-width: 36rem; margin-inline: auto; }
+
 </style>
 </head>
 <body>
-<header class="top">
-  <div class="top-inner">
-    <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span>Bondi</a>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top"><img src="assets/icon-blue.png" width="26" height="26" alt="">Bondi</a>
     <nav class="links" aria-label="Sections">
+      <a href="#ai">On-device AI</a>
       <a href="#app">Try it</a>
-      <a href="#demo">Menu bar</a>
+      <a href="#features">Features</a>
       <a href="#compare">Compare</a>
-      <a href="#developers">Developers</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
     </nav>
-    <div class="top-right">
+    <div class="nav-right">
       <span class="left"><span><span data-left>250</span> left at $6.99</span></span>
-      <a class="button primary small" href="/buy/"><span>Get Bondi · $<span data-price>6.99</span></span></a>
+      <a class="pillbtn primary small" href="/buy/"><span>Buy · $<span data-price>6.99</span></span></a>
     </div>
   </div>
 </header>
 
-<div class="wrap" id="top">
-  <main>
+<main id="top">
+  <div class="wrap">
     <section class="hero">
-      <div class="hero-copy">
-      <a class="pill" href="#ask"><b>New</b> Ask about your Mac's last 30 days</a>
-      <h1>The AI that tells you why your Mac is slow.</h1>
-      <p class="lede">Activity Monitor lists 1,000 cryptic processes. Bondi groups them into the apps you know, finds what's quietly holding your memory, and says what's wrong in one plain sentence. The AI runs on your Mac, not in the cloud.</p>
-      <div class="actions">
-        <a class="button primary" href="/buy/"><span>Get Bondi for $<span data-price>6.99</span></span></a>
-        <a class="button quiet" href="#film">Watch the film</a>
+      <img class="hero-icon" src="assets/icon-blue.png" width="128" height="128" alt="Bondi's app icon: a speedometer with a wave, in Bondi Blue.">
+      <h1>Your Mac, explained.</h1>
+      <p class="sub">Bondi tells you why your Mac is slow in one plain sentence, written on your Mac by Apple's on-device model. Nothing leaves it.</p>
+      <div class="ctas">
+        <a class="pillbtn primary" href="/buy/"><span>Buy for $<span data-price>6.99</span></span></a>
+        <a class="pillbtn secondary" href="#app">Try it below</a>
       </div>
-      <p class="facts"><span class="hot"><span data-left>250</span> of 250 left at $6.99</span><span>then $29.99</span><span>One-time purchase</span><span>7-day free trial</span></p>
-      </div>
-      <div class="hero-shot"><img src="assets/popover.png" width="400" height="775" alt="Bondi's menu bar window: an AI line saying everything looks normal, cards for CPU, memory, network, disk, GPU, Neural Engine, battery and fans, and the busiest apps."></div>
+      <p class="facts"><span class="hot"><span data-left>250</span> of 250 left at $6.99</span><span>then $29.99</span><span>one-time purchase</span><span>7-day free trial</span><span>macOS 15 or later</span></p>
     </section>
 
     <section class="appshow" id="app" aria-label="Bondi's main window, running on made-up numbers">
@@ -349,86 +333,170 @@
       </div>
       <p class="demo-note">Click any tab. This is Bondi's window running on made-up numbers; on your Mac it reads the real ones, and they never leave it.</p>
     </section>
+  </div>
 
-    <section class="block" id="demo" aria-labelledby="demo-title">
-      <div class="split">
-        <div class="section-head">
-          <p class="eyebrow">Menu bar</p>
-          <h2 id="demo-title">Everything in the menu bar, one click away.</h2>
-          <p class="lede">Click the tabs. The popover shows how your Mac is doing, what's using it, and one sentence about what matters right now. The main window has the full detail and 30 days of charts.</p>
+  <div class="band">
+    <div class="wrap">
+      <section class="sec intel" id="ai" aria-labelledby="ai-title">
+        <div class="sec-head center">
+          <p class="eyebrow">On-device AI</p>
+          <h2 id="ai-title">Apple's on-device model. Bondi's numbers.</h2>
+          <p class="sub">On Macs with Apple Intelligence, Bondi writes with Apple's own on-device model: the one built into macOS, running on your Mac's Apple silicon. It never goes to the cloud, and it never gets to make up a number.</p>
         </div>
-        <div class="demo-stage">
-          <div class="pop" role="group" aria-label="Bondi popover demo">
-            <div class="pop-tabs" role="tablist" aria-label="Sections">
-              <button role="tab" aria-selected="true" data-tab="overview" aria-label="Overview"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="7.5"/><path d="M10 10l3.5-3.5" stroke-linecap="round"/></svg></button>
-              <button role="tab" aria-selected="false" data-tab="cpu" aria-label="CPU"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4.5" y="4.5" width="11" height="11" rx="2"/><rect x="8" y="8" width="4" height="4"/><path d="M8 2v2.5M12 2v2.5M8 15.5V18M12 15.5V18M2 8h2.5M2 12h2.5M15.5 8H18M15.5 12H18"/></svg></button>
-              <button role="tab" aria-selected="false" data-tab="memory" aria-label="Memory"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="6" width="15" height="8" rx="1.5"/><path d="M5 14v2.5M8.3 14v2.5M11.7 14v2.5M15 14v2.5M6 9h1M9.5 9h1M13 9h1"/></svg></button>
-              <button role="tab" aria-selected="false" data-tab="stack" aria-label="Stack"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3.5" width="14" height="5" rx="1.5"/><rect x="3" y="11.5" width="14" height="5" rx="1.5"/><path d="M6 6h.5M6 14h.5"/></svg></button>
-            </div>
-            <div class="status">
-              <span class="spark" aria-hidden="true">✦</span>
-              <span data-status>Everything looks normal. Google Chrome is using the most memory, 11.62 GB across 73 processes.</span>
-              <a href="#ask">Why is my Mac slow?</a>
-            </div>
-            <div data-panel="overview">
-              <div class="grid2">
-                <div class="card"><div class="head"><span style="color:var(--m-cpu)">CPU</span><span>load <span data-load>3.48</span></span></div><div class="big"><span data-cpu>14</span><small>%</small></div><div class="sub">User <span data-user>10.0</span>% · System <span data-sys>4.3</span>%</div><svg class="spark-line" viewBox="0 0 100 22" preserveAspectRatio="none"><polyline data-spark fill="none" stroke="var(--m-cpu)" stroke-width="1.6" points=""/></svg></div>
-                <div class="card"><div class="head"><span style="color:var(--m-memory)">Memory</span><span>Normal</span></div><div class="big"><span data-mem>45.1</span><small>GB</small></div><div class="sub">of 64 GB · 0.5 GB swap</div><div class="membar" data-membar aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><span class="swap"></span></div></div>
-                <div class="card"><div class="head"><span style="color:var(--m-net)">Network</span><span>active</span></div><div class="big"><span data-net>865</span><small>KB/s down</small></div><div class="sub"><span data-up>10</span> KB/s up</div></div>
-                <div class="card"><div class="head"><span style="color:var(--m-disk)">Disk</span><span>78% full</span></div><div class="big">222<small>GB free</small></div><div class="sub">of 995 GB</div><div class="fill"><i style="width:78%;background:var(--m-disk)"></i></div></div>
-              </div>
-            </div>
-            <div data-panel="cpu" hidden>
-              <div class="card"><div class="head"><span style="color:var(--m-cpu)">CPU</span><span>Apple M1 Max</span></div><div class="big"><span data-cpu>14</span><small>% of the whole chip</small></div>
-                <div class="cores" data-cores aria-label="Per-core load"><div><i></i></div><div><i></i></div><div><i></i></div><div><i></i></div><div><i></i></div><div><i></i></div><div><i></i></div><div><i></i></div><div><i></i></div><div><i></i></div></div>
-                <div class="sub">2 efficiency · 8 performance cores</div></div>
-            </div>
-            <div data-panel="memory" hidden>
-              <div class="card"><div class="head"><span style="color:var(--m-memory)">Memory</span><span>Pressure Normal</span></div><div class="big"><span data-mem>45.1</span><small>GB of 64 GB</small></div>
-                <div class="membar" data-membar aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><span class="swap"></span></div>
-                <div class="sub">App 38.56 GB · Wired 3.32 GB · Compressed 3.39 GB · Cached Files 16.81 GB</div></div>
-            </div>
-            <div data-panel="stack" hidden>
-              <div class="card" style="min-height:0">
-                <div class="head"><span style="color:var(--m-stack)">Stack</span><span>3 running</span></div>
-                <div class="server"><span class="name">Vite · shop</span><span class="meta">localhost:5173 · 612.0 MB · <span class="idle">idle 3h 20m</span></span><button type="button" data-stop>Stop…</button></div>
-                <div class="server"><span class="name">Wrangler · Talim</span><span class="meta">localhost:8787 · 331.5 MB · active</span><button type="button" data-stop>Stop…</button></div>
-                <div class="server"><span class="name">LM Studio · Llama 3.1 8B</span><span class="meta">model loaded · 8.54 GB · working now</span><button type="button" data-stop>Unload…</button></div>
-                <p class="sub" data-confirm hidden style="padding-top:8px">In Bondi, this asks first: "Stop Vite in shop? It frees about 612 MB." Nothing is ever stopped without your click.</p>
-              </div>
-            </div>
-            <div class="busiest">
-              <div class="head"><span>Busiest Right Now</span>
-                <span class="seg" role="group" aria-label="Rank by"><button aria-pressed="true" data-rank="cpu">CPU</button><button aria-pressed="false" data-rank="memory">Memory</button><button aria-pressed="false" data-rank="energy">Energy</button></span></div>
-              <div data-busiest></div>
-            </div>
-            <div class="pop-foot" aria-hidden="true"><span>Open Bondi</span><span>⚙︎</span><span>⏻</span></div>
+        <div class="flow" aria-label="How Bondi writes a sentence, in four steps">
+          <div class="step"><h3>Bondi measures</h3><p>Every figure is worked out in code from your Mac's own readings.</p><div class="viz">Chrome <em>12.23 GB</em><br>80 processes<br>pressure <em>Normal</em></div></div>
+          <div class="step"><h3>Bondi picks the point</h3><p>A problem, the disk, the battery, something idle, or all calm: Bondi decides what matters.</p><div class="viz">topic: <em>idle server</em><br>tone: <em>gentle note</em></div></div>
+          <div class="step"><h3>Apple's model writes</h3><p>The on-device model adds the plain English, on your Mac. The figures stay Bondi's.</p><div class="viz">"A dev server is sitting idle."</div></div>
+          <div class="step"><h3>Bondi checks it</h3><p>Wrong tone, wrong subject or any number: Bondi uses its own sentence instead.</p><div class="viz"><em>✓</em> A dev server is sitting idle. Vite in shop has been idle for 3h 20m and holds 612.0 MB.</div></div>
+        </div>
+        <div class="promise">
+          <div><strong>0 bytes</strong><span>of your data leave your Mac. The model runs on it, offline.</span></div>
+          <div><strong>0 numbers</strong><span>written by the AI. Bondi computes every figure and checks every sentence.</span></div>
+          <div><strong>No extra cost</strong><span>The AI is included. Macs without Apple Intelligence can download a small free model from Settings.</span></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section class="sec" id="features" aria-labelledby="features-title">
+      <div class="sec-head center">
+        <p class="eyebrow">Features</p>
+        <h2 id="features-title">Everything your Mac is doing. In words you already use.</h2>
+      </div>
+      <div class="bento">
+
+        <article class="tile w4 big">
+          <p class="kicker">Why is my Mac slow?</p>
+          <h3>Ask once. Get the whole story.</h3>
+          <p>What's using your memory and CPU, anything idle holding memory, and what changed in the last hour, with the figures Bondi measured.</p>
+          <div class="vis app">
+            <div class="ai-line"><span class="spark">✦</span><span><b>Memory is running short.</b> Memory pressure is Elevated, with 60.20 GB of 64.00 GB used, and the CPU is 21% busy. macOS has moved 4.20 GB of memory to disk (swap), which is slower. Google Chrome is using 21.40 GB.</span></div>
           </div>
-          <p class="demo-note">The numbers here are made up and drift on their own. Bondi's real ones are measured on your Mac and never leave it.</p>
-        </div>
+        </article>
+
+        <article class="tile w2">
+          <p class="kicker">Apps, not processes</p>
+          <h3>966 processes. 39 apps.</h3>
+          <p>Every helper counts toward the app that started it.</p>
+          <div class="vis app" aria-hidden="true">
+            <div class="dots" data-dots></div>
+            <div class="grouped"><div><span>Google Chrome</span><b style="width:100%"></b><span class="dim num">12.23 GB</span></div><div><span>macOS</span><b style="width:72%"></b><span class="dim num">8.85 GB</span></div><div><span>VS Code</span><b style="width:35%"></b><span class="dim num">4.24 GB</span></div></div>
+          </div>
+        </article>
+
+        <article class="tile w3">
+          <p class="kicker">Ask your history</p>
+          <h3>"What drained my battery yesterday?"</h3>
+          <p>Bondi reads 30 days of history on your Mac and answers with the numbers.</p>
+          <div class="vis app qa">
+            <div class="q">Which app used the most memory this week?</div>
+            <div class="a"><span style="color:#2cc0de">✦</span><span>Over the last 7 days, Google Chrome used the most memory, 10.18 GB on average, then macOS (5.81 GB) and Visual Studio Code (3.19 GB).</span></div>
+          </div>
+        </article>
+
+        <article class="tile w3">
+          <p class="kicker">Warnings</p>
+          <h3>One cause. One fix. Always your call.</h3>
+          <p>When memory runs short or the CPU stays pinned, the menu bar tells you why and offers one fix. It asks before it does anything.</p>
+          <div class="vis app">
+            <div class="menubar"><span class="dim">Tue 15:32</span><span style="color:#ff9f0a">⚠︎ 92%</span><svg viewBox="0 0 22 22" fill="none" stroke="#f2f2f4" stroke-width="1.6" stroke-linecap="round"><path d="M5.34 16.66A8 8 0 1 1 16.66 16.66" stroke-opacity=".35"/><path d="M5.34 16.66A8 8 0 0 1 16.14 4.87"/><path d="M11 11L14 7.6"/><path d="M7.4 15c1.2-.7 2.4.7 3.6 0s2.4-.7 3.6 0"/></svg></div>
+            <div class="warn"><div class="banner"><b>Memory is critically low.</b><span>Bionic holds 21.49 GB with Qwen3.8 27B loaded.</span></div><span class="fix">Unload Qwen3.8 27B…</span></div>
+          </div>
+        </article>
+
+        <article class="tile w3">
+          <p class="kicker">For developers</p>
+          <h3>Finds the servers you forgot.</h3>
+          <p>Dev servers by project and port, local AI models, and Docker containers, with the memory each holds. Stop any of them in one click, after a confirmation.</p>
+          <div class="vis app">
+            <div class="srv"><span>Vite · shop</span><small>localhost:5173 · 612.0 MB · <span class="idle">idle 3h 20m</span></small><span class="btn">Stop…</span></div>
+            <div class="srv"><span>LM Studio · Llama 3.1 8B</span><small>model loaded · 8.54 GB · idle</small><span class="btn">Unload…</span></div>
+            <div class="srv"><span>postgres (Docker)</span><small>container · 212.0 MB</small><span class="btn">Stop…</span></div>
+          </div>
+        </article>
+
+        <article class="tile w3">
+          <p class="kicker">30-day history</p>
+          <h3>See yesterday. And last Tuesday.</h3>
+          <p>Every chart goes from 10 minutes to 30 days, with the time your Mac slept shaded. Click any point to see what was running.</p>
+          <div class="vis app hist" aria-hidden="true"><svg viewBox="0 0 400 140" preserveAspectRatio="none" data-hist></svg></div>
+        </article>
+
+        <article class="tile w2">
+          <p class="kicker">Menu bar</p>
+          <h3>Always there. Barely there.</h3>
+          <p>One figure in the menu bar, the full picture one click away. Under 0.5% of one CPU core while it waits.</p>
+          <div class="vis gauge" aria-hidden="true">
+            <svg viewBox="0 0 180 110"><path d="M20 100a70 70 0 0 1 140 0" fill="none" stroke="var(--tile-2)" stroke-width="14" stroke-linecap="round"/><path d="M20 100a70 70 0 0 1 3.2-21" fill="none" stroke="var(--bondi)" stroke-width="14" stroke-linecap="round"/><text x="90" y="92" text-anchor="middle" font-size="30" font-weight="700" fill="currentColor">0.3%</text></svg>
+            <span class="num" style="color:var(--soft);font-size:.85rem">of one core, windows closed</span>
+          </div>
+        </article>
+
+        <article class="tile w2">
+          <p class="kicker">Sound</p>
+          <h3>Every app, its own volume.</h3>
+          <p>Turn a call up to 300% and a video down, without touching the rest.</p>
+          <div class="vis app">
+            <div class="vol"><span>zoom.us</span><input type="range" min="0" max="300" value="160" aria-label="zoom.us volume" data-vol><span class="num" data-volv>160%</span></div>
+            <div class="vol"><span>Music</span><input type="range" min="0" max="300" value="60" aria-label="Music volume" data-vol><span class="num" data-volv>60%</span></div>
+          </div>
+        </article>
+
+        <article class="tile w2">
+          <p class="kicker">Fan boost</p>
+          <h3>Cooler when you want it.</h3>
+          <p>Speed the fans up for a long build. Never slower than Apple's own control, and back to Auto when you quit.</p>
+          <div class="vis app fan"><span class="dim">Auto</span><input type="range" min="0" max="100" value="45" aria-label="Fan boost"><span class="dim">Max</span></div>
+        </article>
+
+        <article class="tile w3">
+          <p class="kicker">Process guide</p>
+          <h3>"What is WindowServer?"</h3>
+          <p>Plain notes on 125 common macOS processes, one click from any row.</p>
+          <div class="vis app guide"><h4>WindowServer</h4><dl><dt>What it is</dt><dd>Draws everything on your screens: windows, the Dock, the menu bar and animations.</dd><dt>Can I stop it?</dt><dd>Leave it running: macOS needs it. Quitting it logs you out.</dd></dl></div>
+        </article>
+
+        <article class="tile w3">
+          <p class="kicker">Your Bondi</p>
+          <h3>Three finishes. Or let it follow your Mac.</h3>
+          <p>Pick Light, Dark or Bondi Blue, or Automatic to match Light and Dark Mode.</p>
+          <div class="vis icons" role="group" aria-label="App icon">
+            <button type="button" aria-pressed="true" data-icon><span class="auto"><img src="assets/icon-white.png" alt=""><img src="assets/icon-black.png" alt=""></span>Automatic</button>
+            <button type="button" aria-pressed="false" data-icon><img src="assets/icon-white.png" alt="">Light</button>
+            <button type="button" aria-pressed="false" data-icon><img src="assets/icon-black.png" alt="">Dark</button>
+            <button type="button" aria-pressed="false" data-icon><img src="assets/icon-blue.png" alt="">Bondi Blue</button>
+          </div>
+        </article>
+
       </div>
     </section>
+  </div>
 
-    <section class="block" id="compare" aria-labelledby="compare-title">
-      <div class="split">
-        <div class="section-head">
-          <p class="eyebrow">Apps, not processes</p>
-          <h2 id="compare-title">966 rows, or 39 you recognise.</h2>
-          <p class="lede">A browser is dozens of helper processes. So is your code editor. Activity Monitor lists every one of them separately, so no single row looks big.</p>
-          <p class="lede">Bondi adds each helper to the app that started it. Chrome is one row with its real total, 12.23 GB across 80 processes, and "what's using my memory?" has a one-glance answer. Both lists are one real reading of the same Mac.</p>
-        </div>
-        <div class="compare">
-          <div class="compare-top">
-            <span class="toggle" role="group" aria-label="View"><button aria-pressed="false" data-view="am">Activity Monitor</button><button aria-pressed="true" data-view="bondi">Bondi</button></span>
-            <span class="count" data-count>39 apps</span>
+  <div class="band">
+    <div class="wrap">
+      <section class="sec" id="compare" aria-labelledby="compare-title">
+        <div class="split">
+          <div class="sec-head">
+            <p class="eyebrow">Apps, not processes</p>
+            <h2 id="compare-title">966 rows. Or 39 you recognise.</h2>
+            <p class="sub">A browser is dozens of helper processes, so no single row in Activity Monitor looks big. Bondi adds each one to the app that started it. Both lists here are one real reading of the same Mac.</p>
           </div>
-          <div class="list" data-list></div>
+          <div class="compare">
+            <div class="compare-top">
+              <span class="toggle" role="group" aria-label="View"><button aria-pressed="false" data-view="am">Activity Monitor</button><button aria-pressed="true" data-view="bondi">Bondi</button></span>
+              <span class="count" data-count>39 apps</span>
+            </div>
+            <div class="list" data-list></div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
+  </div>
 
-    <section class="block" id="film" aria-labelledby="film-title">
-      <div class="section-head">
+  <div class="wrap">
+    <section class="sec" id="film" aria-labelledby="film-title">
+      <div class="sec-head center">
         <p class="eyebrow">In 24 seconds</p>
         <h2 id="film-title">From a thousand processes to one plain sentence.</h2>
       </div>
@@ -438,135 +506,57 @@
       </div>
     </section>
 
-    <section class="block" id="ask" aria-labelledby="said-title">
-      <div class="section-head">
-        <p class="eyebrow">What Bondi says</p>
-        <h2 id="said-title">One sentence, with the real numbers.</h2>
-        <p class="lede">Bondi measures every figure and writes the sentence around it. The on-device AI only adds the plain-English part, so it can't invent a number. These are real lines from Bondi's tests.</p>
+    <section class="sec" id="pricing" aria-labelledby="pricing-title">
+      <div class="sec-head center">
+        <p class="eyebrow">Pricing</p>
+        <h2 id="pricing-title">Buy it once. Keep it.</h2>
+        <p class="sub">Try everything free for 7 days. Then one price, one Mac, no subscription.</p>
       </div>
-      <div class="lines">
-        <p class="line"><span class="spark" aria-hidden="true">✦</span><span><b>Memory is critically low.</b> Bionic holds <span class="num">21.49 GB</span> with Qwen3.8 27B loaded.</span></p>
-        <p class="line"><span class="spark" aria-hidden="true">✦</span><span><b>Your Mac is working hard.</b> Xcode is using <span class="num">61%</span> of the CPU.</span></p>
-        <p class="line"><span class="spark" aria-hidden="true">✦</span><span><b>Running on battery.</b> The battery is at <span class="num">23%</span> with <span class="num">1h 10m</span> left, and Google Chrome is using the most power, <span class="num">6.4 W</span>.</span></p>
-        <p class="line"><span class="spark" aria-hidden="true">✦</span><span><b>You asked:</b> "Which app used the most memory this week?" Over the last 7 days, Google Chrome used the most memory, <span class="num">10.18 GB</span> on average, then macOS (<span class="num">5.81 GB</span>) and Visual Studio Code (<span class="num">3.19 GB</span>).</span></p>
-      </div>
-    </section>
-
-    <section aria-label="Bondi in numbers">
-      <div class="numbers">
-        <div><strong>~1,000</strong><span>processes, grouped into about 60 apps you recognise</span></div>
-        <div><strong>0.3%</strong><span>of one CPU core while Bondi's windows are closed</span></div>
-        <div><strong>30 days</strong><span>of history, kept only on your Mac</span></div>
-        <div><strong>0 bytes</strong><span>of usage data sent anywhere. No account, no analytics.</span></div>
+      <div class="price-card">
+        <span class="badge"><span data-left>250</span> launch licenses left</span>
+        <div><span class="price">$<span data-price>6.99</span></span></div>
+        <span class="was" data-was>$29.99 after the first 250</span>
+        <ul><li>Every feature, with updates</li><li>On-device AI included</li><li>One Mac; move it whenever you like</li><li>Paddle handles payment, tax and your receipt</li></ul>
+        <a class="pillbtn primary" href="/buy/"><span>Buy for $<span data-price>6.99</span></span></a>
       </div>
     </section>
 
-    <section class="block" id="developers" aria-labelledby="dev-title">
-      <div class="section-head">
-        <p class="eyebrow">For developers</p>
-        <h2 id="dev-title">Finds the servers and models you forgot.</h2>
-        <p class="lede">A Vite server from last week. A 20 GB model still loaded in LM Studio. A Docker container nobody stopped. Bondi's Stack tab lists every dev server by project and port, every loaded local model, and every container, with the memory each holds and how long it's been idle. Stop any of them in one click, after a confirmation.</p>
-      </div>
-      <div class="features">
-        <div class="feature"><span class="tag">Dev servers</span><h3>By project and port</h3><p>Vite, Next.js, Rails, Django, Wrangler and more, found from their listening ports and grouped under the project folder they run in.</p></div>
-        <div class="feature"><span class="tag">Local AI</span><h3>Models holding memory</h3><p>LM Studio, Ollama and llama.cpp: which model is loaded, how big it is, and whether anything is using it right now.</p></div>
-        <div class="feature"><span class="tag">Docker</span><h3>Containers too</h3><p>Running containers and what they hold, read from Docker on your Mac and never sent anywhere.</p></div>
-      </div>
-    </section>
-
-    <section class="block" id="features" aria-labelledby="features-title">
-      <div class="section-head">
-        <p class="eyebrow">Everything else</p>
-        <h2 id="features-title">Every metric that matters, in words you already use.</h2>
-      </div>
-      <div class="features">
-        <div class="feature"><span class="tag">On-device AI</span><h3>"Why is my Mac slow?"</h3><p>One click answers from what Bondi measured: the likely cause, anything idle holding memory, and what changed in the last hour.</p></div>
-        <div class="feature"><span class="tag">History</span><h3>Ask about yesterday</h3><p>"What drained my battery yesterday afternoon?" Bondi looks through 30 days of history on your Mac and answers with the figures.</p></div>
-        <div class="feature"><span class="tag">Warnings</span><h3>One cause, one fix</h3><p>When memory runs short or the CPU stays pinned, the menu bar names what's responsible and offers one fix. It always asks first.</p></div>
-        <div class="feature"><span class="tag">Honest numbers</span><h3>Activity Monitor's terms</h3><p>App Memory, Wired, Compressed, Cached Files, memory pressure and % CPU, matching Activity Monitor within 5%.</p></div>
-        <div class="feature"><span class="tag">Hardware</span><h3>GPU, Neural Engine, fans</h3><p>Graphics and Neural Engine load, temperatures, battery health, and a fan boost that never runs slower than Apple's own control.</p></div>
-        <div class="feature"><span class="tag">Guide</span><h3>"What is this process?"</h3><p>Plain notes on 125 common macOS processes: what each does, why it gets busy, and whether stopping it helps.</p></div>
-      </div>
-    </section>
-
-    <section class="block" aria-labelledby="window-title">
-      <div class="section-head">
-        <p class="eyebrow">The main window</p>
-        <h2 id="window-title">When you want the whole story.</h2>
-        <p class="lede">Every section has charts from 10 minutes to 30 days, the figures Activity Monitor uses, and a table of apps you can open up into their processes.</p>
-      </div>
-      <div class="shots">
-        <figure>
-          <div class="window"><div class="bar" aria-hidden="true"><i></i><i></i><i></i></div>
-            <img src="assets/window-memory.png" width="1100" height="815" loading="lazy" alt="Bondi's Memory section: 45.3 GB of 64 GB used over 24 hours, memory pressure Normal, App Memory 38.56 GB, Wired 3.32 GB, Compressed 3.39 GB, Cached Files 16.81 GB, and apps sorted by memory with Google Chrome first at 12.84 GB."></div>
-          <figcaption>Memory: pressure, memory by type, and which apps are holding it.</figcaption>
-        </figure>
-        <figure>
-          <div class="window"><div class="bar" aria-hidden="true"><i></i><i></i><i></i></div>
-            <img src="assets/window-cpu.png" width="1100" height="815" loading="lazy" alt="Bondi's CPU section: 10% of an Apple M1 Max over 24 hours with a 17% average and 51% peak, per-core bars for 2 efficiency and 8 performance cores, and apps sorted by CPU."></div>
-          <figcaption>CPU: the whole chip, every core, and each app's last hour.</figcaption>
-        </figure>
-      </div>
-    </section>
-
-    <section class="block" id="pricing" aria-labelledby="pricing-title">
-      <div class="pricing">
-        <div class="section-head">
-          <p class="eyebrow">Pricing</p>
-          <h2 id="pricing-title">Buy it once. Keep it.</h2>
-          <p class="lede">Try everything free for 7 days. Then one price, one Mac, no subscription. The on-device AI is included.</p>
-        </div>
-        <div class="price-card">
-          <div class="price-row"><span class="price">$<span data-price>6.99</span></span><span class="was" data-was>$29.99</span><span class="badge"><span data-left>250</span> left at this price</span></div>
-          <ul>
-            <li>Every feature, with updates</li>
-            <li>One Mac; move it to another whenever you like</li>
-            <li>On-device AI included, nothing uploaded</li>
-            <li>Paddle handles payment, tax and your receipt</li>
-          </ul>
-          <div class="actions"><a class="button primary" href="/buy/"><span>Get Bondi for $<span data-price>6.99</span></span></a></div>
-          <p class="fine" style="color:var(--ink-soft);font-size:.9rem">The first 250 licenses are $6.99. After that, Bondi is $29.99.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="block" id="faq" aria-labelledby="faq-title">
-      <div class="section-head"><p class="eyebrow">Questions</p><h2 id="faq-title">Good to know</h2></div>
+    <section class="sec" id="faq" aria-labelledby="faq-title">
+      <div class="sec-head center"><h2 id="faq-title">Questions</h2></div>
       <div class="faq">
-        <details><summary>Does my data leave my Mac?</summary><p>No. Usage history stays in a file on your Mac, and the AI runs on your Mac. Bondi only contacts our server to check your trial or license, and to look for updates. See the <a href="/privacy/">privacy policy</a>.</p></details>
-        <details><summary>Which Macs does it run on?</summary><p>Any Mac with macOS 15 or later, Apple silicon or Intel. The AI uses Apple's on-device model where Apple Intelligence is available; other Macs can download a small free model from Bondi's Settings.</p></details>
-        <details><summary>Will it slow my Mac down?</summary><p>No. With its windows closed, Bondi uses about 0.3% of one CPU core. It only samples faster while you're looking at it.</p></details>
-        <details><summary>Can Bondi quit apps on its own?</summary><p>Never. Bondi suggests one fix at a time and asks before it quits, stops or unloads anything.</p></details>
+        <details><summary>Which AI does Bondi use?</summary><p>On Macs with Apple Intelligence (macOS 26, Apple silicon), Apple's on-device foundation model, built into macOS. Other Macs can download a small free open model (Qwen2.5 0.5B) from Bondi's Settings; nothing downloads unless you press Download. Either way it runs on your Mac.</p></details>
+        <details><summary>Does my data leave my Mac?</summary><p>No. History stays in a file on your Mac, and the AI runs on your Mac. Bondi only contacts our server to check your trial or license, and to look for updates. See the <a href="/privacy/">privacy policy</a>.</p></details>
+        <details><summary>Which Macs does it run on?</summary><p>Any Mac with macOS 15 or later, Apple silicon or Intel.</p></details>
+        <details><summary>Will it slow my Mac down?</summary><p>No. With its windows closed, Bondi uses about 0.3% of one CPU core, and the AI only works while you're looking.</p></details>
+        <details><summary>Can Bondi quit apps on its own?</summary><p>Never. It suggests one fix at a time and asks before it quits, stops or unloads anything.</p></details>
         <details><summary>What happens after the trial?</summary><p>The menu bar keeps showing your CPU for free. Everything else waits for a license.</p></details>
         <details><summary>Can I get a refund?</summary><p>Yes. See the <a href="/refunds/">refund policy</a>; Paddle, who handles the payment, issues it.</p></details>
       </div>
     </section>
-  </main>
+  </div>
+</main>
 
-  <footer>
+<footer>
+  <div class="wrap">
     <div class="foot-cols">
-      <div>
-        <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span>Bondi</a>
-        <p>Bondi runs entirely on your Mac. No account, no analytics, and its AI never uploads anything.</p>
-      </div>
-      <div><h4>Bondi</h4><ul><li><a href="#app">Try it</a></li><li><a href="#compare">Compare</a></li><li><a href="#developers">Developers</a></li><li><a href="#pricing">Pricing</a></li></ul></div>
+      <div><a class="brand" href="#top"><img src="assets/icon-blue.png" width="26" height="26" alt="">Bondi</a><p>Bondi runs entirely on your Mac. No account, no analytics, and its AI never uploads anything.</p></div>
+      <div><h4>Bondi</h4><ul><li><a href="#ai">On-device AI</a></li><li><a href="#app">Try it</a></li><li><a href="#features">Features</a></li><li><a href="#pricing">Pricing</a></li></ul></div>
       <div><h4>Support</h4><ul><li><a href="mailto:support@trybondi.app">support@trybondi.app</a></li><li><a href="#faq">Questions</a></li><li><a href="/buy/">Buy a license</a></li></ul></div>
       <div><h4>Legal</h4><ul><li><a href="/privacy/">Privacy</a></li><li><a href="/terms/">Terms</a></li><li><a href="/eula/">License agreement</a></li><li><a href="/refunds/">Refunds</a></li></ul></div>
     </div>
-    <div class="legal-line">
+    <div class="foot-line">
       <span>© 2026 Jabble Inc. Bondi for Mac is a trademark of Jabble Inc.</span>
-      <span>Mac and macOS are trademarks of Apple Inc. Bondi isn't affiliated with Apple.</span>
+      <span>Apple, Mac, macOS and Apple Intelligence are trademarks of Apple Inc. Bondi isn't made or endorsed by Apple.</span>
     </div>
-  </footer>
-</div>
+  </div>
+</footer>
 
 <script>
 (() => {
   const $ = (s, root = document) => root.querySelector(s);
   const $$ = (s, root = document) => [...root.querySelectorAll(s)];
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Live price and launch licenses left, from the license server (falls back to the launch offer).
+  // Live price and launch licenses left, from the license server.
   fetch('/api/offer').then(r => r.ok ? r.json() : null).then(offer => {
     if (!offer) return;
     $$('[data-price]').forEach(el => el.textContent = offer.price);
@@ -577,56 +567,20 @@
     }
   }).catch(() => {});
 
-  // Popover demo: tabs
-  $$('.pop-tabs button').forEach(tab => tab.addEventListener('click', () => {
-    $$('.pop-tabs button').forEach(t => t.setAttribute('aria-selected', String(t === tab)));
-    $$('[data-panel]').forEach(p => p.hidden = p.dataset.panel !== tab.dataset.tab);
-  }));
-  $$('[data-stop]').forEach(b => b.addEventListener('click', () => { $('[data-confirm]').hidden = false; }));
-
-  // Popover demo: made-up figures that drift, so it feels live.
-  const apps = [
-    { name: 'Google Chrome', color: '#e8453c', cpu: 6.8, memory: 11.62, energy: 1.9 },
-    { name: 'Visual Studio Code', color: '#2f7cf6', cpu: 1.9, memory: 4.07, energy: 0.8 },
-    { name: 'macOS', color: '#8e8e93', cpu: 1.7, memory: 8.67, energy: 0.5 },
-    { name: 'Slack', color: '#8a3f8f', cpu: 0.6, memory: 1.12, energy: 0.3 },
-    { name: 'Docker', color: '#1d91e6', cpu: 1.2, memory: 2.4, energy: 0.4 },
-  ];
-  let rank = 'cpu';
-  const unit = { cpu: v => v.toFixed(1) + '%', memory: v => v.toFixed(2) + ' GB', energy: v => v.toFixed(1) + ' W' };
-  const barColor = { cpu: 'var(--m-cpu)', memory: 'var(--m-memory)', energy: 'var(--m-battery)' };
-  const renderBusiest = () => {
-    const top = [...apps].sort((a, b) => b[rank] - a[rank]).slice(0, 3);
-    const lead = top[0][rank];
-    $('[data-busiest]').innerHTML = top.map(a => `<div class="row"><span class="dot" style="background:${a.color}"></span><span>${a.name}</span>`
-      + `<span class="bar"><i style="width:${Math.max(4, a[rank] / lead * 100)}%;background:${barColor[rank]}"></i></span><span class="val">${unit[rank](a[rank])}</span></div>`).join('');
-  };
-  $$('.seg button').forEach(b => b.addEventListener('click', () => {
-    rank = b.dataset.rank;
-    $$('.seg button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-    renderBusiest();
-  }));
-
-  let cpu = 14, mem = 45.1, net = 865;
-  const history = Array.from({ length: 30 }, () => 12 + Math.random() * 5);
-  const drift = (v, amount, lo, hi) => Math.min(hi, Math.max(lo, v + (Math.random() - 0.5) * amount));
-  const tick = () => {
-    cpu = drift(cpu, 5, 6, 38); mem = drift(mem, 0.4, 43, 48); net = drift(net, 400, 40, 2400);
-    history.push(cpu); history.shift();
-    apps.forEach(a => { a.cpu = drift(a.cpu, 1.2, 0.1, 18); a.memory = drift(a.memory, 0.05, 0.3, 14); a.energy = drift(a.energy, 0.3, 0.1, 4); });
-    $$('[data-cpu]').forEach(el => el.textContent = Math.round(cpu));
-    $$('[data-mem]').forEach(el => el.textContent = mem.toFixed(1));
-    $('[data-user]').textContent = (cpu * 0.7).toFixed(1);
-    $('[data-sys]').textContent = (cpu * 0.3).toFixed(1);
-    $('[data-net]').textContent = Math.round(net);
-    $('[data-spark]').setAttribute('points', history.map((v, i) => `${(i / 29) * 100},${22 - (v / 40) * 20}`).join(' '));
-    const filled = Math.round(mem / 8 * 10) / 10;
-    $$('[data-membar]').forEach(bar => $$('i', bar).forEach((seg, i) => seg.classList.toggle('on', i < Math.floor(filled))));
-    $$('[data-cores] i').forEach((core, i) => core.style.height = Math.round(i < 2 ? 40 + Math.random() * 45 : Math.max(2, cpu * (1.4 - i * 0.12) + Math.random() * 10)) + '%');
-    renderBusiest();
-  };
-  tick();
-  if (!reduced) setInterval(tick, 2000);
+  // Feature visuals
+  const dots = $('[data-dots]');
+  if (dots) dots.innerHTML = Array.from({ length: 120 }, (_, i) => `<i style="background:${i % 7 === 0 ? '#9b7ae0' : '#45464c'}"></i>`).join('');
+  const hist = $('[data-hist]');
+  if (hist) {
+    const W = 400, H = 140, n = 90; let y = 60; const pts = [];
+    for (let i = 0; i < n; i++) { y = Math.max(20, Math.min(120, y + (Math.random() - 0.5) * 22)); pts.push([i / (n - 1) * W, H - y]); }
+    const line = pts.map(p => p.map(v => v.toFixed(1)).join(',')).join(' ');
+    hist.innerHTML = `<rect x="120" y="0" width="70" height="${H}" fill="#ffffff" opacity=".06"/><rect x="300" y="0" width="60" height="${H}" fill="#ffffff" opacity=".06"/>`
+      + `<polygon points="0,${H} ${line} ${W},${H}" fill="#9b7ae0" opacity=".2"/><polyline points="${line}" fill="none" stroke="#9b7ae0" stroke-width="2"/>`
+      + ['Mon', 'Wed', 'Fri', 'Sun'].map((d, i) => `<text x="${20 + i * 110}" y="${H - 6}" fill="#9d9da5" font-size="11">${d}</text>`).join('');
+  }
+  $$('[data-vol]').forEach(r => r.addEventListener('input', () => { r.nextElementSibling.textContent = r.value + '%'; }));
+  $$('[data-icon]').forEach(b => b.addEventListener('click', () => $$('[data-icon]').forEach(x => x.setAttribute('aria-pressed', String(x === b)))));
 
   // Activity Monitor vs Bondi.
   // One real reading of a working Mac (MacBook Pro M1 Max, 64 GB, 2026-09-29): its biggest processes as
@@ -837,6 +791,7 @@
       setInterval(() => { statusIndex++; if (current === 'overview') render(); }, 6400);
     }
   })();
+
 </script>
 </body>
 </html>
