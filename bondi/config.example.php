@@ -28,6 +28,15 @@ return [
     'mail_from' => 'Bondi <support@trybondi.app>',
     'support_email' => 'support@trybondi.app',
 
+    // Send emails through that mailbox on Titan, so mail apps don't show "via" a Hostinger server.
+    // pass: the support@ mailbox password (hPanel → Emails). Empty sends from the web server instead.
+    'smtp' => [
+        'host' => 'smtp.titan.email',
+        'port' => 465,
+        'user' => 'support@trybondi.app',
+        'pass' => '',
+    ],
+
     // Admin page sign-in: a username you choose (not case-sensitive) and a password used nowhere else.
     'admin_username' => 'CHANGE-ME',
     'admin_password' => '',
