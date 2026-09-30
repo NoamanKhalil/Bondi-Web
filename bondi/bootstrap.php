@@ -4,6 +4,21 @@ declare(strict_types=1);
 
 date_default_timezone_set('UTC');
 
+// A crash (a typo in config.php, a missing file, no database) says which file and line, instead of a blank
+// 500 page. Only the file name and line: the error text itself could quote config.php, so it goes to the log.
+register_shutdown_function(static function (): void {
+    $error = error_get_last();
+    if ($error === null || !in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)) {
+        return;
+    }
+    if (!headers_sent()) {
+        http_response_code(500);
+        header('Content-Type: text/plain; charset=utf-8');
+    }
+    echo 'The Bondi server stopped at ' . basename(dirname($error['file'])) . '/' . basename($error['file'])
+        . " line {$error['line']}. The full message is in the PHP error log (hPanel → Advanced → PHP error logs).\n";
+});
+
 // Local tests point BONDI_CONFIG at their own throwaway settings; the live site always uses config.php.
 $configFile = getenv('BONDI_CONFIG') ?: __DIR__ . '/config.php';
 if (!is_file($configFile)) {
