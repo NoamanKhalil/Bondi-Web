@@ -3,7 +3,8 @@
 // Find a license by email, key ending or Paddle order; revoke or restore it; free a Mac; email the buyer a
 // new key; give a free license; see launch licenses left and Paddle notifications that failed; see and
 // download the website's update sign-ups.
-require dirname(__DIR__, 2) . '/bondi/bootstrap.php';
+// The private code lives beside public_html (best) or inside it as public_html/bondi, locked by its .htaccess.
+require is_file(dirname(__DIR__, 2) . '/bondi/bootstrap.php') ? dirname(__DIR__, 2) . '/bondi/bootstrap.php' : dirname(__DIR__) . '/bondi/bootstrap.php';
 
 session_set_cookie_params(['httponly' => true, 'samesite' => 'Strict', 'secure' => !empty($_SERVER['HTTPS'])]);
 session_name('bondi_admin');
@@ -28,19 +29,26 @@ $loggedIn = ($_SESSION['admin'] ?? false) === true;
 if (($_POST['do'] ?? '') === 'login') {
     if (!within_limit('admin-login:' . client_key(), 5, 900)) {
         $loginError = 'Too many attempts. Wait 15 minutes.';
-    } elseif (password_verify((string)($_POST['password'] ?? ''), (string)config('admin_password_hash'))) {
-        session_regenerate_id(true);
-        $_SESSION['admin'] = true;
-        go();
     } else {
-        $loginError = 'Wrong password.';
+        // Both are always checked, and a miss never says which one was wrong.
+        $username = strtolower(trim((string)config('admin_username', '')));
+        $userOk = $username !== '' && hash_equals($username, strtolower(trim((string)($_POST['username'] ?? ''))));
+        $passOk = password_verify((string)($_POST['password'] ?? ''), (string)config('admin_password_hash'));
+        if ($userOk && $passOk) {
+            session_regenerate_id(true);
+            $_SESSION['admin'] = true;
+            go();
+        }
+        $loginError = $username === '' ? 'Sign-in isn\'t set up: add admin_username to config.php.' : 'Wrong username or password.';
     }
 }
 if (!$loggedIn) {
     page_start('Sign in');
     echo '<form method="post" class="card narrow"><h1>Bondi admin</h1>';
     if (isset($loginError)) { echo '<p class="error">' . h($loginError) . '</p>'; }
-    echo '<input type="hidden" name="do" value="login"><input type="password" name="password" placeholder="Password" autofocus required>'
+    echo '<input type="hidden" name="do" value="login">'
+       . '<input name="username" placeholder="Username" autocomplete="username" autocapitalize="none" autofocus required>'
+       . '<input type="password" name="password" placeholder="Password" autocomplete="current-password" required>'
        . '<button>Sign in</button></form>';
     page_end();
 }
@@ -120,13 +128,13 @@ function dashboard(string $query, ?string $flash): never
     $signups = one('SELECT COUNT(*) AS total, SUM(created_at > NOW() - INTERVAL 7 DAY) AS week FROM signups');
 
     echo '<div class="stats">';
-    stat_box('Now selling at', '$' . $offer['price'] . ($offer['launch_remaining'] !== null ? ' · ' . $offer['launch_remaining'] . ' launch left' : ''));
-    stat_box('Launch licenses sold', (int)$launchSold . ' of 250');
-    stat_box('Active licenses', $counts['active'] ?? 0);
-    stat_box('Refunded / revoked', ($counts['refunded'] ?? 0) . ' / ' . ($counts['revoked'] ?? 0));
-    stat_box('Trials', (int)$trials['total'] . ' (' . (int)$trials['week'] . ' this week)');
-    stat_box('Update sign-ups', (int)$signups['total'] . ' (' . (int)$signups['week'] . ' this week)');
-    stat_box('Revenue (active, before Paddle fees)', $revenue ? implode(' + ', array_map(fn($r) => money((int)$r['cents'], $r['currency']), $revenue)) : '—');
+    stat_box('Now selling at', '$' . $offer['price'] . ($offer['launch_remaining'] !== null ? ' · ' . $offer['launch_remaining'] . ' launch left' : ''), 'price_tiers');
+    stat_box('Launch licenses sold', (int)$launchSold . ' of 250', 'licenses');
+    stat_box('Active licenses', $counts['active'] ?? 0, 'licenses');
+    stat_box('Refunded / revoked', ($counts['refunded'] ?? 0) . ' / ' . ($counts['revoked'] ?? 0), 'licenses');
+    stat_box('Trials started', (int)$trials['total'] . ' (' . (int)$trials['week'] . ' this week)', 'trials');
+    stat_box('Update sign-ups', (int)$signups['total'] . ' (' . (int)$signups['week'] . ' this week)', 'signups');
+    stat_box('Revenue (active, before Paddle fees)', $revenue ? implode(' + ', array_map(fn($r) => money((int)$r['cents'], $r['currency']), $revenue)) : '—', 'licenses');
     echo '</div>';
     if ($failed > 0) {
         echo '<p class="error">' . (int)$failed . ' Paddle notification(s) not processed. <a href="?webhooks">See them</a>.</p>';
@@ -134,10 +142,10 @@ function dashboard(string $query, ?string $flash): never
 
     echo '<form class="search"><input name="q" value="' . h($query) . '" placeholder="Email, last 4 of key, full key, or Paddle txn_…" autofocus><button>Search</button></form>';
     $rows = $query === '' ? recent_licenses() : search_licenses($query);
-    echo '<h2>' . ($query === '' ? 'Latest licenses' : 'Results') . '</h2>';
+    echo '<h2>' . ($query === '' ? 'Latest licenses' : 'Results') . table_tag('licenses', 'customers') . '</h2>';
     licenses_table($rows);
 
-    echo '<h2>Give a free license</h2><form method="post" class="inline">' . csrf_field()
+    echo '<h2>Give a free license' . table_tag('licenses', 'price tier: comp') . '</h2><form method="post" class="inline">' . csrf_field()
        . '<input type="hidden" name="do" value="comp"><input type="email" name="email" placeholder="Their email" required>'
        . '<label><input type="checkbox" name="send" value="1" checked> Email them the key</label><button>Create</button></form>';
     page_end();
@@ -166,13 +174,13 @@ function search_licenses(string $query): array
 function licenses_table(array $rows): void
 {
     if (!$rows) { echo '<p class="muted">None.</p>'; return; }
-    echo '<table><tr><th>#</th><th>Email</th><th>Key</th><th>Price</th><th>Paid</th><th>Status</th><th>Mac</th><th>Created</th></tr>';
+    echo '<table><tr><th>License #</th><th>Email</th><th>Key</th><th>Price tier</th><th>Paid</th><th>Status</th><th>On a Mac</th><th>Created</th></tr>';
     foreach ($rows as $row) {
         echo '<tr><td><a href="?license=' . (int)$row['id'] . '">' . (int)$row['id'] . '</a></td><td>' . h($row['email']) . '</td>'
            . '<td class="mono">••••' . h($row['key_last4']) . '</td><td>' . h($row['price_tier']) . '</td>'
            . '<td>' . money($row['amount_cents'] === null ? null : (int)$row['amount_cents'], $row['currency']) . '</td>'
            . '<td><span class="status ' . h($row['status']) . '">' . h($row['status']) . '</span></td>'
-           . '<td>' . ((int)$row['macs'] > 0 ? 'Active' : '—') . '</td><td>' . h($row['created_at']) . ' UTC</td></tr>';
+           . '<td>' . ((int)$row['macs'] > 0 ? 'Yes' : '—') . '</td><td>' . h($row['created_at']) . ' UTC</td></tr>';
     }
     echo '</table>';
 }
@@ -187,10 +195,10 @@ function license_page(int $id, ?string $flash): never
         echo '<p class="key">New key (shown once): <span class="mono">' . h($_SESSION['new_key']) . '</span></p>';
         unset($_SESSION['new_key']);
     }
-    echo '<div class="card"><h1>License #' . $id . ' <span class="status ' . h($license['status']) . '">' . h($license['status']) . '</span></h1>'
-       . '<p>' . h($license['email']) . ' · key ••••' . h($license['key_last4']) . ' · ' . h($license['price_tier'])
-       . ' · ' . money($license['amount_cents'] === null ? null : (int)$license['amount_cents'], $license['currency'])
-       . ' · Paddle ' . h($license['paddle_transaction_id'] ?? '—') . ' · created ' . h($license['created_at']) . ' UTC</p>';
+    echo '<div class="card"><h1>License #' . $id . ' <span class="status ' . h($license['status']) . '">' . h($license['status']) . '</span>' . table_tag('licenses', 'customers') . '</h1>'
+       . '<p>' . h($license['email']) . ' · key ••••' . h($license['key_last4']) . ' · price tier ' . h($license['price_tier'])
+       . ' · paid ' . money($license['amount_cents'] === null ? null : (int)$license['amount_cents'], $license['currency'])
+       . ' · Paddle transaction ' . h($license['paddle_transaction_id'] ?? '—') . ' · created ' . h($license['created_at']) . ' UTC</p>';
 
     echo '<div class="actions">';
     if ($license['status'] === 'active') {
@@ -201,7 +209,7 @@ function license_page(int $id, ?string $flash): never
     action($id, 'new_key', 'Email a new key', 'Email ' . $license['email'] . ' a new key? The old key stops working; the activated Mac keeps working.');
     echo '</div></div>';
 
-    echo '<h2>Macs</h2>';
+    echo '<h2>Macs' . table_tag('activations') . '</h2>';
     $macs = all('SELECT * FROM activations WHERE license_id = ? ORDER BY activated_at DESC', [$id]);
     if (!$macs) { echo '<p class="muted">Not activated on any Mac yet.</p>'; }
     else {
@@ -219,7 +227,7 @@ function license_page(int $id, ?string $flash): never
         echo '</table>';
     }
 
-    echo '<h2>Emails sent</h2>';
+    echo '<h2>Emails sent' . table_tag('email_log') . '</h2>';
     $emails = all('SELECT kind, sent_at FROM email_log WHERE license_id = ? ORDER BY id DESC', [$id]);
     echo $emails ? '<p>' . implode(' · ', array_map(fn($e) => h($e['kind']) . ' ' . h($e['sent_at']), $emails)) . '</p>' : '<p class="muted">None.</p>';
     page_end();
@@ -230,7 +238,7 @@ function signups_page(string $query, ?string $flash): never
     page_start('Update sign-ups');
     nav($flash);
     $total = (int)one('SELECT COUNT(*) AS n FROM signups')['n'];
-    echo '<h2>Update sign-ups <span class="muted">(' . $total . ')</span></h2>';
+    echo '<h2>Update sign-ups <span class="muted">(' . $total . ')</span>' . table_tag('signups') . '</h2>';
     $countries = all('SELECT COALESCE(country, \'?\') AS country, COUNT(*) AS n FROM signups GROUP BY country ORDER BY n DESC LIMIT 20');
     if ($countries) {
         echo '<p class="muted">By country: ' . implode(' · ', array_map(fn($c) => h($c['country']) . ' ' . (int)$c['n'], $countries)) . '</p>';
@@ -274,7 +282,7 @@ function webhooks_page(?string $flash): never
 {
     page_start('Paddle notifications');
     nav($flash);
-    echo '<h2>Paddle notifications (latest 100)</h2><p class="muted">Paddle retries failed ones by itself for a few days.</p>';
+    echo '<h2>Paddle notifications (latest 100)' . table_tag('webhook_events') . '</h2><p class="muted">Paddle retries failed ones by itself for a few days.</p>';
     $rows = all('SELECT event_id, event_type, received_at, processed_at, error FROM webhook_events ORDER BY received_at DESC LIMIT 100');
     echo '<table><tr><th>Received</th><th>Type</th><th>Event</th><th>Result</th></tr>';
     foreach ($rows as $row) {
@@ -294,14 +302,20 @@ function action(int $licenseId, string $do, string $label, string $question, str
        . '<button class="' . h($style) . '">' . h($label) . '</button></form>';
 }
 
-function stat_box(string $label, mixed $value): void
+function stat_box(string $label, mixed $value, string $table): void
 {
-    echo '<div class="stat"><div class="muted">' . h($label) . '</div><div class="value">' . h($value) . '</div></div>';
+    echo '<div class="stat"><div class="muted">' . h($label) . '</div><div class="value">' . h($value) . '</div>' . table_tag($table) . '</div>';
+}
+
+/** The database tables a section reads, so it can be matched to phpMyAdmin. */
+function table_tag(string ...$tables): string
+{
+    return ' <span class="tbl" title="Database table in phpMyAdmin">' . h(implode(' + ', $tables)) . '</span>';
 }
 
 function nav(?string $flash): void
 {
-    echo '<nav><a href="./">Licenses</a> <a href="?signups">Sign-ups</a> <a href="?webhooks">Paddle notifications</a>'
+    echo '<nav><a href="./">Licenses</a> <a href="?signups">Update sign-ups</a> <a href="?webhooks">Paddle notifications</a>'
        . '<form method="post">' . csrf_field() . '<input type="hidden" name="do" value="logout"><button class="link">Sign out</button></form></nav>';
     if ($flash !== null) { echo '<p class="flash">' . h($flash) . '</p>'; }
 }
@@ -330,6 +344,8 @@ button.danger { background:var(--danger); } button.small { padding:4px 10px; } b
 .muted { color:var(--muted); } .error { color:var(--danger); } .flash { background:var(--card); border-left:3px solid var(--accent); padding:10px 14px; border-radius:8px; }
 .key { background:var(--card); padding:12px 14px; border-radius:8px; border-left:3px solid var(--ok); }
 .mono { font-family:ui-monospace,Menlo,monospace; }
+.tbl { font:400 11px/1 ui-monospace,Menlo,monospace; color:var(--muted); border:1px solid var(--line); border-radius:6px; padding:2px 6px; margin-left:8px; vertical-align:middle; white-space:nowrap; }
+.stat .tbl { display:inline-block; margin:6px 0 0; }
 .status { font-size:12px; padding:2px 8px; border-radius:10px; border:1px solid currentColor; }
 .status.active { color:var(--ok); } .status.refunded { color:var(--warn); } .status.revoked { color:var(--danger); }
 </style></head><body><main>';

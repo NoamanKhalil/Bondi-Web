@@ -1,7 +1,8 @@
 <?php
 // Flow: BY-04 Checkout. Opened by Bondi (with ?claim=… so it can activate itself afterwards) or from
 // the website. Paddle's checkout opens over the page; Paddle handles payment, tax and the receipt.
-require dirname(__DIR__, 2) . '/bondi/bootstrap.php';
+// The private code lives beside public_html (best) or inside it as public_html/bondi, locked by its .htaccess.
+require is_file(dirname(__DIR__, 2) . '/bondi/bootstrap.php') ? dirname(__DIR__, 2) . '/bondi/bootstrap.php' : dirname(__DIR__) . '/bondi/bootstrap.php';
 
 $offer = current_offer();
 $claim = preg_match('/^[a-f0-9]{64}$/', (string)($_GET['claim'] ?? '')) ? hash('sha256', $_GET['claim']) : null;
