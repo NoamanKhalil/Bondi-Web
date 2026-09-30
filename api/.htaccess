@@ -1,0 +1,6 @@
+# Send /api/<action> to index.php (Hostinger runs Apache-compatible LiteSpeed).
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [QSA,L]
+# Paddle's signature header must reach PHP.
+SetEnvIf Paddle-Signature "(.*)" HTTP_PADDLE_SIGNATURE=$1
