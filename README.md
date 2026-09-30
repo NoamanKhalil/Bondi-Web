@@ -38,7 +38,8 @@ Paddle, emails license keys, activates one Mac per license, and has an admin pag
 5. **Settings.** In File Manager, open `bondi/`, copy `config.example.php` to `config.php`, and edit it:
    - `db`: the database name, user and password from step 2;
    - `admin_username`: the name you'll sign in to the admin page with;
-   - `admin_password_hash`: on your Mac, in Terminal, run
+   - `admin_password`: the admin page password, between the quotes (one you use nowhere else). To keep it
+     unreadable in the file instead, leave it empty and fill `admin_password_hash`: on your Mac, in Terminal, run
      `php -r 'echo password_hash(trim(fgets(STDIN)), PASSWORD_DEFAULT), PHP_EOL;'`, press Enter, type the
      password, press Enter again, and paste the line it prints (starts with `$2y$`);
    - leave `test_mode` as `false`.

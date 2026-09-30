@@ -33,13 +33,19 @@ if (($_POST['do'] ?? '') === 'login') {
         // Both are always checked, and a miss never says which one was wrong.
         $username = strtolower(trim((string)config('admin_username', '')));
         $userOk = $username !== '' && hash_equals($username, strtolower(trim((string)($_POST['username'] ?? ''))));
-        $passOk = password_verify((string)($_POST['password'] ?? ''), (string)config('admin_password_hash'));
+        // The password is written plainly in config.php (owner's choice), or as a hash if admin_password is empty.
+        $given = (string)($_POST['password'] ?? '');
+        $plain = (string)config('admin_password', '');
+        $hash = (string)config('admin_password_hash', '');
+        $passOk = $plain !== '' ? hash_equals($plain, $given) : ($hash !== '' && password_verify($given, $hash));
         if ($userOk && $passOk) {
             session_regenerate_id(true);
             $_SESSION['admin'] = true;
             go();
         }
-        $loginError = $username === '' ? 'Sign-in isn\'t set up: add admin_username to config.php.' : 'Wrong username or password.';
+        $loginError = $username === '' || ($plain === '' && $hash === '')
+            ? 'Sign-in isn\'t set up: add admin_username and admin_password to config.php.'
+            : 'Wrong username or password.';
     }
 }
 if (!$loggedIn) {
