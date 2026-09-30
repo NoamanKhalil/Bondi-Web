@@ -25,7 +25,7 @@ return [
     ],
 
     // Emails with license keys come from this address (create it in hPanel → Emails).
-    'mail_from' => 'Bondi <licenses@trybondi.app>',
+    'mail_from' => 'Bondi <support@trybondi.app>',
     'support_email' => 'support@trybondi.app',
 
     // Admin page password, stored as a hash. Make one on your Mac in Terminal:
