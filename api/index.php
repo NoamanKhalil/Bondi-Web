@@ -14,7 +14,8 @@
 //   POST paddle       Paddle's payment and refund notifications
 //   POST signup       the website's "Sign up for updates": name and email (plus the visitor's IP and country)
 
-require dirname(__DIR__, 2) . '/bondi/bootstrap.php';
+// The private code lives beside public_html (best) or inside it as public_html/bondi, locked by its .htaccess.
+require is_file(dirname(__DIR__, 2) . '/bondi/bootstrap.php') ? dirname(__DIR__, 2) . '/bondi/bootstrap.php' : dirname(__DIR__) . '/bondi/bootstrap.php';
 
 $path = trim((string)parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
 $action = $_GET['action'] ?? (preg_match('~(?:^|/)api/([a-z]+)$~', $path, $match) ? $match[1] : '');
