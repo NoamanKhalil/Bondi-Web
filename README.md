@@ -37,10 +37,12 @@ Paddle, emails license keys, activates one Mac per license, and has an admin pag
      `assets`, `privacy`, `terms`, `eula`, `refunds`).
 5. **Settings.** In File Manager, open `bondi/`, copy `config.example.php` to `config.php`, and edit it:
    - `db`: the database name, user and password from step 2;
+   - `admin_username`: the name you'll sign in to the admin page with;
    - `admin_password_hash`: on your Mac, in Terminal, run
-     `php -r 'echo password_hash("your password here", PASSWORD_DEFAULT), PHP_EOL;'` and paste the result;
+     `php -r 'echo password_hash(trim(fgets(STDIN)), PASSWORD_DEFAULT), PHP_EOL;'`, press Enter, type the
+     password, press Enter again, and paste the line it prints (starts with `$2y$`);
    - leave `test_mode` as `false`.
-   Never put `config.php` in git or in `public_html`.
+   Never put `config.php` in git, or anywhere in `public_html` except the locked `bondi/` folder.
 6. **Check.** Open `https://trybondi.app/api/offer`: it should show `"price":"6.99"` and
    `"launch_remaining":250`. Open `https://trybondi.app/admin/` and sign in.
 

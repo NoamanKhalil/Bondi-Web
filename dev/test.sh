@@ -29,7 +29,7 @@ cat > $T/config.php <<CONF
 return ['base_url' => '$BASE', 'db' => ['host' => 'localhost;unix_socket=$SOCK', 'name' => 'bondi', 'user' => 'bondi', 'pass' => 'test'],
   'paddle' => ['environment' => 'sandbox', 'api_key' => '', 'client_token' => 'test_token', 'webhook_secret' => '$SECRET'],
   'mail_from' => 'Bondi <licenses@example.com>', 'support_email' => 'support@example.com',
-  'admin_password_hash' => '$HASH', 'trial_days' => 7, 'test_mode' => true];
+  'admin_username' => 'owner', 'admin_password_hash' => '$HASH', 'trial_days' => 7, 'test_mode' => true];
 CONF
 BONDI_CONFIG=$T/config.php php -S 127.0.0.1:$PORT -t "$PWD/public_html" "$PWD/dev/router.php" >$T/php.log 2>&1 &
 PHP_PID=$!
@@ -110,8 +110,9 @@ expect "country from the CDN header wins over the time zone" "$ROWS" 'grace@exam
 # Admin page
 J=$T/cookies
 expect "admin needs a password" "$(curl -s -c $J -b $J $BASE/admin/)" 'Sign in'
-expect "wrong password refused" "$(curl -s -c $J -b $J -d 'do=login&password=nope' $BASE/admin/)" 'Wrong password'
-curl -s -c $J -b $J -d 'do=login&password=admin-test' $BASE/admin/ -o /dev/null
+expect "wrong password refused" "$(curl -s -c $J -b $J -d 'do=login&username=owner&password=nope' $BASE/admin/)" 'Wrong username or password'
+expect "wrong username refused" "$(curl -s -c $J -b $J -d 'do=login&username=someone&password=admin-test' $BASE/admin/)" 'Wrong username or password'
+curl -s -c $J -b $J -d 'do=login&username=owner&password=admin-test' $BASE/admin/ -o /dev/null
 DASH=$(curl -s -c $J -b $J $BASE/admin/)
 expect "admin dashboard" "$DASH" 'Launch licenses sold'
 expect "admin shows the failed notification" "$DASH" 'not processed'

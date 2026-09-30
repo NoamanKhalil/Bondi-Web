@@ -29,19 +29,26 @@ $loggedIn = ($_SESSION['admin'] ?? false) === true;
 if (($_POST['do'] ?? '') === 'login') {
     if (!within_limit('admin-login:' . client_key(), 5, 900)) {
         $loginError = 'Too many attempts. Wait 15 minutes.';
-    } elseif (password_verify((string)($_POST['password'] ?? ''), (string)config('admin_password_hash'))) {
-        session_regenerate_id(true);
-        $_SESSION['admin'] = true;
-        go();
     } else {
-        $loginError = 'Wrong password.';
+        // Both are always checked, and a miss never says which one was wrong.
+        $username = strtolower(trim((string)config('admin_username', '')));
+        $userOk = $username !== '' && hash_equals($username, strtolower(trim((string)($_POST['username'] ?? ''))));
+        $passOk = password_verify((string)($_POST['password'] ?? ''), (string)config('admin_password_hash'));
+        if ($userOk && $passOk) {
+            session_regenerate_id(true);
+            $_SESSION['admin'] = true;
+            go();
+        }
+        $loginError = $username === '' ? 'Sign-in isn\'t set up: add admin_username to config.php.' : 'Wrong username or password.';
     }
 }
 if (!$loggedIn) {
     page_start('Sign in');
     echo '<form method="post" class="card narrow"><h1>Bondi admin</h1>';
     if (isset($loginError)) { echo '<p class="error">' . h($loginError) . '</p>'; }
-    echo '<input type="hidden" name="do" value="login"><input type="password" name="password" placeholder="Password" autofocus required>'
+    echo '<input type="hidden" name="do" value="login">'
+       . '<input name="username" placeholder="Username" autocomplete="username" autocapitalize="none" autofocus required>'
+       . '<input type="password" name="password" placeholder="Password" autocomplete="current-password" required>'
        . '<button>Sign in</button></form>';
     page_end();
 }
