@@ -92,6 +92,7 @@
   .facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px; color: var(--soft); font-size: 0.9rem; }
   .facts span + span::before { content: "·"; margin-right: 12px; color: var(--faint); }
   .facts .hot { color: var(--attention); }
+  .hero-for { margin: 0 0 -6px; font-size: 1.3rem; font-weight: 600; letter-spacing: -0.01em; color: var(--bondi-ink); }
   .facts .launching { color: var(--bondi-ink); font-weight: 500; }
   .left.launching::before { background: var(--bondi); box-shadow: 0 0 0 3px var(--bondi-soft); }
   .pillbtn.soonbtn { background: var(--bondi-soft); color: var(--bondi-ink); cursor: default; }
@@ -203,10 +204,13 @@
   /* Film, compare, pricing, FAQ */
   .film video { width: 100%; aspect-ratio: 16 / 9; border-radius: 28px; background: #06161b; box-shadow: var(--shadow); }
   .split { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 56px; align-items: center; }
+  .stars { padding-bottom: 0; } .stars-note { margin: 14px 0 0; text-align: center; color: var(--faint); font-size: 0.9rem; }
   .compare { background: var(--tile); border-radius: 28px; padding: 16px; display: grid; gap: 12px; }
   .compare-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .toggle { display: inline-flex; padding: 3px; border-radius: 10px; background: var(--tile-2); }
   .toggle button { border: 0; background: transparent; padding: 7px 14px; border-radius: 8px; font: 500 0.9rem/1 var(--sans); color: var(--soft); cursor: pointer; }
+  .toggle button { display: inline-flex; align-items: center; gap: 7px; }
+  .toggle .tico { width: 20px; height: 20px; margin: -3px 0; }
   .toggle button[aria-pressed="true"] { background: var(--tile); color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,.16); }
   .count { font-size: 0.9rem; color: var(--soft); }
   .list { height: 420px; overflow: hidden; border-radius: 18px; background: var(--tile-2); mask-image: linear-gradient(black 78%, transparent); -webkit-mask-image: linear-gradient(black 78%, transparent); }
@@ -475,6 +479,7 @@
   <div class="wrap">
     <section class="hero">
       <img class="hero-icon" src="assets/icon-blue.png" width="128" height="128" alt="Bondi's app icon: a speedometer with a wave, in Bondi Blue.">
+      <p class="hero-for">Bondi for Apple Mac</p>
       <h1>Your Mac, explained.</h1>
       <p class="sub">Bondi tells you why your Mac is slow in one plain sentence, written on your Mac by Apple's on-device model. Nothing leaves it.</p>
       <div class="ctas">
@@ -699,6 +704,14 @@
 
   <div class="band">
     <div class="wrap">
+      <section class="sec stars" id="stars" aria-label="Film: 955 processes become 43 apps">
+        <div class="film">
+          <video src="assets/bondi-stars.mp4" poster="assets/bondi-stars-poster.jpg" autoplay muted loop playsinline width="1920" height="1080"
+                 aria-label="Every process on a real Mac drawn as a star: 955 of them. They pull together into the apps they belong to, and become 43 app icons, each with its process count: macOS 719, Google Chrome 80, Visual Studio Code 44 and more. It ends on Bondi for Apple Mac."></video>
+        </div>
+        <p class="stars-note">Every star is a real process from one reading of a working Mac, and each app gets exactly its own.</p>
+      </section>
+
       <section class="sec" id="compare" aria-labelledby="compare-title">
         <div class="split">
           <div class="sec-head">
@@ -708,7 +721,7 @@
           </div>
           <div class="compare">
             <div class="compare-top">
-              <span class="toggle" role="group" aria-label="View"><button aria-pressed="false" data-view="am">Activity Monitor</button><button aria-pressed="true" data-view="bondi">Bondi</button></span>
+              <span class="toggle" role="group" aria-label="View"><button aria-pressed="false" data-view="am"><img class="tico" src="assets/apps/activitymonitor.png" alt="">Activity Monitor</button><button aria-pressed="true" data-view="bondi"><img class="tico" src="assets/icon-blue.png" alt="">Bondi</button></span>
               <span class="count" data-count>39 apps</span>
             </div>
             <div class="list" data-list></div>
