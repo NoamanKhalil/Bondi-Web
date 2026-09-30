@@ -1,13 +1,13 @@
 import { AbsoluteFill, Easing, Img, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { groups, otherApps, otherProcesses, processNames, totalApps, totalProcesses } from "./constellation-data";
+import { groups, otherProcesses, processNames, totalApps, totalProcesses } from "./constellation-data";
 
 // Website film: every process on a real Mac as a star, pulled into the app it belongs to. The stars for
 // each app are exactly its process count from Bondi's engine, so the picture is the real grouping.
 
 export const CONSTELLATION_FPS = 30;
 export const CONSTELLATION_FRAMES = 15 * CONSTELLATION_FPS;
-const W = 1920;
-const H = 1080;
+/** The website's intro over the app window: no end card, it holds on the icons and the page fades it away. */
+export const INTRO_FRAMES = 10 * CONSTELLATION_FPS;
 
 const sans = '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif';
 const mono = 'ui-monospace, "SF Mono", Menlo, monospace';
@@ -22,22 +22,20 @@ type Node = { name: string; icon: string | null; processes: number; size: number
 
 const sizeFor = (processes: number) => 62 + 24 * Math.log2(Math.max(1, processes));
 
-const nodes: Node[] = (() => {
-  const list = [
-    ...groups.map((g) => ({ name: g.name, icon: g.icon as string | null, processes: g.processes })),
-    { name: `${otherApps} more`, icon: null, processes: otherProcesses },
-  ]
-    .map((g) => ({ ...g, size: sizeFor(g.processes) }))
+const layout = (W: number, H: number): Node[] => {
+  const list = groups
+    .map((g) => ({ name: g.name, icon: g.icon as string | null, processes: g.processes, size: sizeFor(g.processes) }))
     .sort((a, b) => b.size - a.size);
   const placed: Node[] = [];
   const cx = W / 2;
-  const cy = 648;
+  const cy = 300 + (H - 320) / 2;
+  const stretch = Math.max(1, (W - 140) / (H - 320)); // spiral as wide as the space
   list.forEach((g, rank) => {
     const r = g.size / 2 + (g.size > 150 ? 62 : 30); // room for the count (and name, on big icons) underneath
     for (let step = 0; step < 20000; step++) {
       const angle = step * 0.21 + rank * 0.9;
       const radius = step * 0.55;
-      const x = cx + Math.cos(angle) * radius * 1.85;
+      const x = cx + Math.cos(angle) * radius * stretch;
       const y = cy + Math.sin(angle) * radius;
       const inside = x - r > 70 && x + r < W - 70 && y - r > 300 && y + r < H - 20;
       const clear = placed.every((p) => Math.hypot(p.x - x, p.y - y) > r + p.size / 2 + (p.size > 150 ? 62 : 30));
@@ -48,13 +46,13 @@ const nodes: Node[] = (() => {
     }
   });
   return placed;
-})();
+};
 
 // MARK: Stars: one per process, each belonging to one app.
 
-type Star = { node: Node; sx: number; sy: number; tx: number; ty: number; delay: number; curve: number; size: number; phase: number };
+type Star = { node: Node | null; sx: number; sy: number; tx: number; ty: number; delay: number; curve: number; size: number; phase: number };
 
-const stars: Star[] = nodes.flatMap((node, n) =>
+const makeStars = (nodes: Node[], W: number, H: number): Star[] => nodes.flatMap((node, n): Star[] =>
   Array.from({ length: node.processes }, (_, i) => {
     const seed = `${n}-${i}`;
     const a = random(`a${seed}`) * Math.PI * 2;
@@ -71,10 +69,27 @@ const stars: Star[] = nodes.flatMap((node, n) =>
       phase: random(`p${seed}`) * Math.PI * 2,
     };
   }),
+).concat(
+  // The 11 background helpers without an icon (14 processes) are stars too; they fade out as the rest gather.
+  Array.from({ length: otherProcesses }, (_, i): Star => ({
+    node: null, sx: random(`ox${i}`) * W, sy: random(`oy${i}`) * H, tx: random(`ox${i}`) * W, ty: random(`oy${i}`) * H,
+    delay: 0, curve: 0, size: 1.6 + random(`os${i}`) * 2.6, phase: random(`op${i}`) * Math.PI * 2,
+  })),
 );
 
-// A few stars wear their real process name while they drift.
-const named = processNames.map((name, i) => ({ name, star: stars[Math.floor(random(`n${i}`) * stars.length)], start: 4 + (i % 12) * 5 }));
+type Scene = { W: number; H: number; nodes: Node[]; stars: Star[]; named: { name: string; star: Star; start: number }[] };
+const scenes = new Map<string, Scene>();
+const sceneFor = (W: number, H: number): Scene => {
+  const key = `${W}x${H}`;
+  if (!scenes.has(key)) {
+    const nodes = layout(W, H);
+    const stars = makeStars(nodes, W, H);
+    // A few stars wear their real process name while they drift.
+    const named = processNames.map((name, i) => ({ name, star: stars[Math.floor(random(`n${i}`) * stars.length)], start: 4 + (i % 12) * 5 }));
+    scenes.set(key, { W, H, nodes, stars, named });
+  }
+  return scenes.get(key)!;
+};
 
 // MARK: Timeline (frames at 30 fps)
 
@@ -85,13 +100,12 @@ const T = {
   swapHeadline: 170,
   countsStart: 214,
   outroStart: 340,
-  end: CONSTELLATION_FRAMES,
 };
 
-const Headline = ({ frame }: { frame: number }) => {
+const Headline = ({ frame, outro }: { frame: number; outro: number }) => {
   const count = Math.round(interpolate(frame, [8, 64], [0, totalProcesses], { ...clamp, easing: ease }));
   const first = interpolate(frame, [4, 22, T.swapHeadline - 14, T.swapHeadline], [0, 1, 1, 0], clamp);
-  const second = interpolate(frame, [T.swapHeadline, T.swapHeadline + 20, T.outroStart, T.outroStart + 14], [0, 1, 1, 0], clamp);
+  const second = interpolate(frame, [T.swapHeadline, T.swapHeadline + 20, outro, outro + 14], [0, 1, 1, 0], clamp);
   const line = (opacity: number, big: string, small: string, color: string) => (
     <div style={{ position: "absolute", left: 0, right: 0, top: 96, textAlign: "center", opacity,
                   transform: `translateY(${(1 - opacity) * 16}px)` }}>
@@ -110,9 +124,9 @@ const Headline = ({ frame }: { frame: number }) => {
   );
 };
 
-const Stars = ({ frame }: { frame: number }) => (
-  <svg width={W} height={H} style={{ position: "absolute", inset: 0 }}>
-    {stars.map((s, i) => {
+const Stars = ({ frame, scene }: { frame: number; scene: Scene }) => (
+  <svg width={scene.W} height={scene.H} style={{ position: "absolute", inset: 0 }}>
+    {scene.stars.map((s, i) => {
       const t = interpolate(frame, [T.gatherStart + s.delay, T.gatherStart + s.delay + T.gatherLength], [0, 1], { ...clamp, easing: inOut });
       // Curve the path sideways so the whole sky swirls in rather than sliding.
       const dx = s.tx - s.sx;
@@ -122,8 +136,8 @@ const Stars = ({ frame }: { frame: number }) => (
       const drift = (1 - t) * Math.sin(frame / 40 + s.phase) * 6;
       const x = s.sx + dx * t + (-dy / len) * bend + drift;
       const y = s.sy + dy * t + (dx / len) * bend;
-      const arrival = T.iconsStart + s.node.rank * 2.4;
-      const absorbed = interpolate(frame, [arrival + 4, arrival + 16], [1, 0], clamp);
+      const arrival = s.node ? T.iconsStart + s.node.rank * 2.4 : T.gatherStart + 10;
+      const absorbed = interpolate(frame, [arrival + 4, arrival + (s.node ? 16 : 50)], [1, 0], clamp);
       const twinkle = 0.45 + 0.55 * Math.abs(Math.sin(frame / 11 + s.phase));
       const opacity = twinkle * absorbed * interpolate(frame, [0, 14], [0, 1], clamp);
       if (opacity <= 0.01) return null;
@@ -133,9 +147,9 @@ const Stars = ({ frame }: { frame: number }) => (
   </svg>
 );
 
-const Names = ({ frame }: { frame: number }) => (
+const Names = ({ frame, scene }: { frame: number; scene: Scene }) => (
   <>
-    {named.map(({ name, star, start }, i) => {
+    {scene.named.map(({ name, star, start }, i) => {
       const opacity = interpolate(frame, [start, start + 10, start + 34, start + 46], [0, 0.75, 0.75, 0], clamp) *
         interpolate(frame, [T.gatherStart - 10, T.gatherStart], [1, 0], clamp);
       if (opacity <= 0) return null;
@@ -149,14 +163,14 @@ const Names = ({ frame }: { frame: number }) => (
   </>
 );
 
-const Icons = ({ frame, fps }: { frame: number; fps: number }) => (
+const Icons = ({ frame, fps, scene, outroStart }: { frame: number; fps: number; scene: Scene; outroStart: number }) => (
   <>
-    {nodes.map((node) => {
+    {scene.nodes.map((node) => {
       const arrival = T.iconsStart + node.rank * 2.4;
       const pop = spring({ frame: frame - arrival, fps, config: { damping: 13, stiffness: 120, mass: 0.7 } });
       const float = Math.sin((frame + node.rank * 17) / 34) * 4 * interpolate(frame, [arrival, arrival + 30], [0, 1], clamp);
-      const outro = interpolate(frame, [T.outroStart, T.outroStart + 26], [1, 0.08], { ...clamp, easing: ease });
-      const blur = interpolate(frame, [T.outroStart, T.outroStart + 26], [0, 6], clamp);
+      const outro = interpolate(frame, [outroStart, outroStart + 26], [1, 0.08], { ...clamp, easing: ease });
+      const blur = interpolate(frame, [outroStart, outroStart + 26], [0, 6], clamp);
       const glow = interpolate(frame, [arrival, arrival + 10, arrival + 40], [0, 0.9, 0.25], clamp);
       const counts = interpolate(frame, [T.countsStart + node.rank * 1.2, T.countsStart + node.rank * 1.2 + 14], [0, 1], clamp);
       const size = node.size;
@@ -166,15 +180,7 @@ const Icons = ({ frame, fps }: { frame: number; fps: number }) => (
                                       opacity: outro, filter: blur > 0 ? `blur(${blur}px)` : undefined, transform: `scale(${pop})` }}>
           <div style={{ position: "absolute", inset: -size * 0.18, borderRadius: "50%",
                         background: `radial-gradient(circle, rgba(44,192,222,${0.35 * glow}) 0%, transparent 65%)` }} />
-          {node.icon ? (
-            <Img src={staticFile(`icons/${node.icon}.png`)} style={{ position: "absolute", inset: 0, width: size, height: size }} />
-          ) : (
-            <div style={{ position: "absolute", inset: size * 0.1, borderRadius: size * 0.22, background: "linear-gradient(#3a3a3e, #1f1f22)",
-                          border: "1px solid rgba(255,255,255,.12)", display: "grid", placeItems: "center", fontFamily: sans,
-                          fontWeight: 600, fontSize: size * 0.26, color: "#d1d1d6" }}>
-              +{otherApps}
-            </div>
-          )}
+          <Img src={staticFile(`icons/${node.icon}.png`)} style={{ position: "absolute", inset: 0, width: size, height: size }} />
           <div style={{ position: "absolute", top: size - size * 0.04, left: "50%", transform: "translateX(-50%)", opacity: counts,
                         fontFamily: sans, fontSize: size > 150 ? 22 : 18, fontWeight: 600, color: "#f5f5f7", whiteSpace: "nowrap",
                         background: "rgba(44,44,48,.92)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 999,
@@ -205,18 +211,20 @@ const EndCard = ({ frame, fps }: { frame: number; fps: number }) => {
   );
 };
 
-export const Constellation = () => {
+export const Constellation = ({ endCard = true }: { endCard?: boolean }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  // Fade from and to black so the website's loop joins without a jump.
-  const fade = interpolate(frame, [0, 12, T.end - 16, T.end - 1], [0, 1, 1, 0], clamp);
+  const { fps, width, height, durationInFrames } = useVideoConfig();
+  const scene = sceneFor(width, height);
+  const outroStart = endCard ? T.outroStart : durationInFrames + 100; // the intro never reaches its outro
+  // The film fades from and to black so the website's loop joins without a jump; the intro only fades in.
+  const fade = interpolate(frame, endCard ? [0, 12, durationInFrames - 16, durationInFrames - 1] : [0, 12, 13, 14], endCard ? [0, 1, 1, 0] : [0, 1, 1, 1], clamp);
   return (
     <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 60%, #0b1a20 0%, #000 70%)", opacity: fade }}>
-      <Stars frame={frame} />
-      <Names frame={frame} />
-      <Icons frame={frame} fps={fps} />
-      <Headline frame={frame} />
-      <EndCard frame={frame} fps={fps} />
+      <Stars frame={frame} scene={scene} />
+      <Names frame={frame} scene={scene} />
+      <Icons frame={frame} fps={fps} scene={scene} outroStart={outroStart} />
+      <Headline frame={frame} outro={outroStart} />
+      {endCard && <EndCard frame={frame} fps={fps} />}
     </AbsoluteFill>
   );
 };

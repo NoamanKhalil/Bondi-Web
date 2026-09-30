@@ -5,7 +5,8 @@
   "scripts": {
     "studio": "remotion studio src/index.ts",
     "render": "remotion render src/index.ts BondiFilm out/bondi-film.mp4 --codec=h264 --crf=26 && remotion still src/index.ts BondiFilm out/bondi-film-poster.png --frame=470",
-    "render:stars": "remotion render src/index.ts Constellation out/bondi-stars.mp4 --codec=h264 --crf=24 && remotion still src/index.ts Constellation out/bondi-stars-poster.png --frame=280"
+    "render:stars": "remotion render src/index.ts Constellation out/bondi-stars.mp4 --codec=h264 --crf=24 && remotion still src/index.ts Constellation out/bondi-stars-poster.png --frame=280",
+    "render:intro": "remotion render src/index.ts ConstellationIntro out/bondi-intro.mp4 --codec=h264 --crf=24"
   },
   "dependencies": {
     "@remotion/cli": "4.0.530",

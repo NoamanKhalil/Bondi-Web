@@ -258,6 +258,14 @@
   .win { --w-ground: #1c1d20; --w-card: #26272b; --w-card-2: #2e2f34; --w-line: #36373c; --w-ink: #f2f2f4; --w-soft: #9d9da5; --w-faint: #6c6c74;
     background: var(--w-ground); color: var(--w-ink); border-radius: 18px; border: 1px solid #000; box-shadow: var(--shadow); overflow: hidden;
     font: 13px/1.35 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; }
+  .win { position: relative; }
+  /* Intro film over the window's content: plays once when the window comes into view, then fades away. */
+  .win-intro { position: absolute; left: 0; right: 0; bottom: 0; top: var(--win-bar-h, 56px); background: #000; z-index: 5; transition: opacity .8s ease; }
+  .win-intro video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .win-intro.done { opacity: 0; pointer-events: none; }
+  .intro-skip { position: absolute; right: 14px; bottom: 14px; border: 1px solid rgba(255,255,255,.18); background: rgba(40,40,44,.75); color: #f2f2f4; font: 500 12px/1 -apple-system, sans-serif; padding: 7px 12px; border-radius: 999px; cursor: pointer; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .intro-skip:hover { background: rgba(60,60,66,.85); }
+  .intro-replay { border: 0; background: none; padding: 0; margin-right: 6px; color: var(--bondi-ink); font: inherit; cursor: pointer; }
   .win-bar { display: grid; grid-template-columns: auto auto 1fr auto; align-items: center; gap: 14px; padding: 12px 16px; border-bottom: 1px solid #000; background: #232427; }
   .lights { display: flex; gap: 8px; } .lights i { width: 12px; height: 12px; border-radius: 50%; }
   .lights i:nth-child(1) { background: #ff5f57; } .lights i:nth-child(2) { background: #febc2e; } .lights i:nth-child(3) { background: #28c840; }
@@ -498,9 +506,14 @@
           <span class="win-tools" aria-hidden="true"><i>⌕</i><i>⚙︎</i></span>
         </div>
         <div class="win-body" data-wbody></div>
+        <div class="win-intro" data-intro hidden>
+          <video src="assets/bondi-intro.mp4" muted playsinline preload="auto" width="1440" height="1260"
+                 aria-label="Intro: 955 processes on a real Mac drawn as stars pull together into 43 apps, each shown with its app icon and process count."></video>
+          <button type="button" class="intro-skip" data-intro-skip>Skip intro</button>
+        </div>
         <div class="win-foot"><span>Bondi: <span data-v="self">0.3</span>% CPU, 104 MB</span><span>·</span><span>39 apps, <span data-v="procs">966</span> processes</span></div>
       </div>
-      <p class="demo-note">Click any tab. This is Bondi's window running on made-up numbers; on your Mac it reads the real ones, and they never leave it.</p>
+      <p class="demo-note"><button type="button" class="intro-replay" data-intro-replay hidden>▶ Replay intro</button> Click any tab. This is Bondi's window running on made-up numbers; on your Mac it reads the real ones, and they never leave it.</p>
     </section>
   </div>
 
@@ -823,6 +836,35 @@
     if (!offer) return;
     $$('[data-price]').forEach(el => el.textContent = offer.price);
   }).catch(() => {});
+
+  // Intro film over the app window: stars become apps, then the real, clickable window shows through.
+  const intro = $('[data-intro]'), introVideo = intro && $('video', intro), replay = $('[data-intro-replay]');
+  if (intro && introVideo && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const win = intro.closest('.win'), bar = $('.win-bar', win);
+    const fitBar = () => win.style.setProperty('--win-bar-h', bar.offsetHeight + 'px');
+    fitBar(); addEventListener('resize', fitBar);
+    const finish = () => {
+      if (intro.classList.contains('done')) return;
+      intro.classList.add('done');
+      introVideo.pause();
+      setTimeout(() => { if (intro.classList.contains('done')) intro.hidden = true; }, 850);
+      replay.hidden = false;
+    };
+    const play = () => {
+      intro.hidden = false; intro.classList.remove('done'); replay.hidden = true;
+      introVideo.currentTime = 0;
+      introVideo.play().catch(finish); // a browser that won't autoplay just shows the window
+    };
+    intro.hidden = false;
+    introVideo.addEventListener('ended', finish);
+    $('[data-intro-skip]').addEventListener('click', finish);
+    $('[data-wtabs]').addEventListener('click', finish, true);
+    replay.addEventListener('click', () => { play(); win.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+    const seen = new IntersectionObserver(entries => {
+      if (entries.some(e => e.isIntersecting)) { seen.disconnect(); play(); }
+    }, { threshold: 0.35 });
+    seen.observe(win);
+  }
 
   // Sign up for updates: name and email to the license server, with the browser's time zone for the
   // country when the server can't tell it from the IP.
