@@ -92,6 +92,16 @@
   .facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px; color: var(--soft); font-size: 0.9rem; }
   .facts span + span::before { content: "·"; margin-right: 12px; color: var(--faint); }
   .facts .hot { color: var(--attention); }
+  .facts .launching { color: var(--bondi-ink); font-weight: 500; }
+  .left.launching::before { background: var(--bondi); box-shadow: 0 0 0 3px var(--bondi-soft); }
+  .pillbtn.soonbtn { background: var(--bondi-soft); color: var(--bondi-ink); cursor: default; }
+  /* Launch plans: two steps on a line */
+  .steps { list-style: none; margin: 0 auto; padding: 0; max-width: 640px; display: grid; grid-template-columns: 1fr 1fr; gap: 0; position: relative; }
+  .steps::before { content: ""; position: absolute; top: 7px; left: 25%; right: 25%; height: 2px; background: linear-gradient(90deg, var(--bondi), var(--faint)); opacity: .5; }
+  .steps li { display: grid; justify-items: center; align-content: start; gap: 6px; text-align: center; padding-inline: 12px; }
+  .steps b { font-size: 1.25rem; letter-spacing: -0.01em; } .steps li > span:last-child { color: var(--soft); }
+  .step-dot { width: 16px; height: 16px; border-radius: 50%; background: var(--tile); border: 2px solid var(--faint); position: relative; z-index: 1; }
+  .step-dot.now { background: var(--bondi); border-color: var(--bondi); box-shadow: 0 0 0 5px var(--bondi-soft); }
 
   section.sec { padding-block: 110px; display: grid; gap: 52px; }
   .sec-head { display: grid; gap: 14px; max-width: 46rem; }
@@ -444,8 +454,8 @@
       <a href="#faq">FAQ</a>
     </nav>
     <div class="nav-right">
-      <span class="left"><span><span data-left>250</span> left at $6.99</span></span>
-      <a class="pillbtn primary small" href="/buy/"><span>Buy · $<span data-price>6.99</span></span></a>
+      <span class="left launching"><span>Beta launching soon</span></span>
+      <a class="pillbtn primary small" href="#launch"><span>Launch plans</span></a>
     </div>
   </div>
 </header>
@@ -457,10 +467,10 @@
       <h1>Your Mac, explained.</h1>
       <p class="sub">Bondi tells you why your Mac is slow in one plain sentence, written on your Mac by Apple's on-device model. Nothing leaves it.</p>
       <div class="ctas">
-        <a class="pillbtn primary" href="/buy/"><span>Buy for $<span data-price>6.99</span></span></a>
-        <a class="pillbtn secondary" href="#app">Try it below</a>
+        <a class="pillbtn primary" href="#app">Try it below</a>
+        <a class="pillbtn secondary" href="#launch">Launch plans</a>
       </div>
-      <p class="facts"><span class="hot"><span data-left>250</span> of 250 left at $6.99</span><span>then $29.99</span><span>one-time purchase</span><span>7-day free trial</span><span>macOS 15 or later</span></p>
+      <p class="facts"><span class="launching">Beta launching soon</span><span>Full launch soon after</span><span>macOS 15 or later</span></p>
     </section>
 
     <section class="appshow" id="app" aria-label="Bondi's main window, running on made-up numbers">
@@ -709,24 +719,37 @@
       </div>
     </section>
 
+    <section class="sec" id="launch" aria-labelledby="launch-title">
+      <div class="sec-head center">
+        <p class="eyebrow">Coming soon</p>
+        <h2 id="launch-title">Almost ready.</h2>
+        <p class="sub">Bondi is in its final round of testing on real Macs.</p>
+      </div>
+      <ol class="steps">
+        <li><span class="step-dot now"></span><b>Beta</b><span>Launching soon.</span></li>
+        <li><span class="step-dot"></span><b>Full launch</b><span>Soon after the beta, with the launch price below.</span></li>
+      </ol>
+    </section>
+
     <section class="sec" id="pricing" aria-labelledby="pricing-title">
       <div class="sec-head center">
         <p class="eyebrow">Pricing</p>
         <h2 id="pricing-title">Buy it once. Keep it.</h2>
-        <p class="sub">Try everything free for 7 days. Then one price, one Mac, no subscription.</p>
+        <p class="sub">At full launch: try everything free for 7 days. Then one price, one Mac, no subscription.</p>
       </div>
       <div class="price-card">
-        <span class="badge"><span data-left>250</span> launch licenses left</span>
+        <span class="badge">Launch price for the first 250</span>
         <div><span class="price">$<span data-price>6.99</span></span></div>
         <span class="was" data-was>$29.99 after the first 250</span>
         <ul><li>Every feature, with updates</li><li>On-device AI included</li><li>One Mac; move it whenever you like</li><li>Paddle handles payment, tax and your receipt</li></ul>
-        <a class="pillbtn primary" href="/buy/"><span>Buy for $<span data-price>6.99</span></span></a>
+        <span class="pillbtn soonbtn" aria-disabled="true">Available at full launch</span>
       </div>
     </section>
 
     <section class="sec" id="faq" aria-labelledby="faq-title">
       <div class="sec-head center"><h2 id="faq-title">Questions</h2></div>
       <div class="faq">
+        <details><summary>When can I get Bondi?</summary><p>The beta is launching soon, and the full launch follows soon after. You'll be able to buy a license at full launch.</p></details>
         <details><summary>Which AI does Bondi use?</summary><p>On Macs with Apple Intelligence (macOS 26, Apple silicon), Apple's on-device foundation model, built into macOS. Other Macs can download a small free open model (Qwen2.5 0.5B) from Bondi's Settings; nothing downloads unless you press Download. Either way it runs on your Mac.</p></details>
         <details><summary>Does my data leave my Mac?</summary><p>No. History stays in a file on your Mac, and the AI runs on your Mac. Bondi only contacts our server to check your trial or license, and to look for updates. See the <a href="/privacy/">privacy policy</a>.</p></details>
         <details><summary>Which Macs does it run on?</summary><p>Any Mac with macOS 15 or later, Apple silicon or Intel.</p></details>
@@ -743,8 +766,8 @@
   <div class="wrap">
     <div class="foot-cols">
       <div><a class="brand" href="#top"><img src="assets/icon-blue.png" width="26" height="26" alt="">Bondi</a><p>Bondi runs entirely on your Mac. No account, no analytics, and its AI never uploads anything.</p></div>
-      <div><h4>Bondi</h4><ul><li><a href="#ai">On-device AI</a></li><li><a href="#app">Try it</a></li><li><a href="#features">Features</a></li><li><a href="#pricing">Pricing</a></li></ul></div>
-      <div><h4>Support</h4><ul><li><a href="mailto:support@trybondi.app">support@trybondi.app</a></li><li><a href="#faq">Questions</a></li><li><a href="/buy/">Buy a license</a></li></ul></div>
+      <div><h4>Bondi</h4><ul><li><a href="#ai">On-device AI</a></li><li><a href="#app">Try it</a></li><li><a href="#features">Features</a></li><li><a href="#launch">Launch plans</a></li><li><a href="#pricing">Pricing</a></li></ul></div>
+      <div><h4>Support</h4><ul><li><a href="mailto:support@trybondi.app">support@trybondi.app</a></li><li><a href="#faq">Questions</a></li><li><a href="#launch">Launch plans</a></li></ul></div>
       <div><h4>Legal</h4><ul><li><a href="/privacy/">Privacy</a></li><li><a href="/terms/">Terms</a></li><li><a href="/eula/">License agreement</a></li><li><a href="/refunds/">Refunds</a></li></ul></div>
     </div>
     <div class="foot-line">
@@ -763,11 +786,6 @@
   fetch('/api/offer').then(r => r.ok ? r.json() : null).then(offer => {
     if (!offer) return;
     $$('[data-price]').forEach(el => el.textContent = offer.price);
-    if (offer.launch_remaining === null) {
-      $$('.left, .badge, .facts .hot, [data-was]').forEach(el => el.hidden = true);
-    } else {
-      $$('[data-left]').forEach(el => el.textContent = offer.launch_remaining);
-    }
   }).catch(() => {});
 
   $$('[data-vol]').forEach(r => r.addEventListener('input', () => {
