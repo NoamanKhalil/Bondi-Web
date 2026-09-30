@@ -1,5 +1,5 @@
-import { AbsoluteFill, Easing, Img, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { groups, otherProcesses, processNames, totalApps, totalProcesses } from "./constellation-data";
+import { AbsoluteFill, Easing, Img, interpolate, interpolateColors, random, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import { groups, iconHues, otherProcesses, processNames, totalApps, totalProcesses } from "./constellation-data";
 
 // Website film: every process on a real Mac as a star, pulled into the app it belongs to. The stars for
 // each app are exactly its process count from Bondi's engine, so the picture is the real grouping.
@@ -12,6 +12,8 @@ export const INTRO_FRAMES = 10 * CONSTELLATION_FPS;
 const sans = '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif';
 const mono = 'ui-monospace, "SF Mono", Menlo, monospace';
 const bondi = "#2cc0de";
+/** Two hex digits of alpha for a 0–1 opacity, to append to a #rrggbb colour. */
+const alpha = (a: number) => Math.round(Math.max(0, Math.min(1, a)) * 255).toString(16).padStart(2, "0");
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const ease = Easing.bezier(0.22, 0.8, 0.2, 1);
 const inOut = Easing.bezier(0.6, 0, 0.25, 1);
@@ -142,7 +144,10 @@ const Stars = ({ frame, scene }: { frame: number; scene: Scene }) => (
       const opacity = twinkle * absorbed * interpolate(frame, [0, 14], [0, 1], clamp);
       if (opacity <= 0.01) return null;
       const r = s.size * (1 + t * 0.4);
-      return <circle key={i} cx={x} cy={y} r={r} fill={t > 0.02 ? "#bff3ff" : "#ffffff"} opacity={opacity} />;
+      // White while scattered; each star takes on its app's colour as it arrives.
+      const hue = s.node?.icon ? iconHues[s.node.icon] ?? "#ffffff" : "#ffffff";
+      const fill = interpolateColors(t, [0, 0.35, 1], ["#ffffff", "#ffffff", hue]);
+      return <circle key={i} cx={x} cy={y} r={r} fill={fill} opacity={opacity} />;
     })}
   </svg>
 );
@@ -171,15 +176,18 @@ const Icons = ({ frame, fps, scene, outroStart }: { frame: number; fps: number; 
       const float = Math.sin((frame + node.rank * 17) / 34) * 4 * interpolate(frame, [arrival, arrival + 30], [0, 1], clamp);
       const outro = interpolate(frame, [outroStart, outroStart + 26], [1, 0.08], { ...clamp, easing: ease });
       const blur = interpolate(frame, [outroStart, outroStart + 26], [0, 6], clamp);
-      const glow = interpolate(frame, [arrival, arrival + 10, arrival + 40], [0, 0.9, 0.25], clamp);
+      const glow = interpolate(frame, [arrival, arrival + 10, arrival + 40], [0, 1, 0.75], clamp);
+      const hue = iconHues[node.icon ?? ""] ?? bondi;
       const counts = interpolate(frame, [T.countsStart + node.rank * 1.2, T.countsStart + node.rank * 1.2 + 14], [0, 1], clamp);
       const size = node.size;
       if (pop <= 0.001) return null;
       return (
         <div key={node.name} style={{ position: "absolute", left: node.x - size / 2, top: node.y - size / 2 + float, width: size, height: size,
                                       opacity: outro, filter: blur > 0 ? `blur(${blur}px)` : undefined, transform: `scale(${pop})` }}>
-          <div style={{ position: "absolute", inset: -size * 0.18, borderRadius: "50%",
-                        background: `radial-gradient(circle, rgba(44,192,222,${0.35 * glow}) 0%, transparent 65%)` }} />
+          {/* The app's own colour, pooled under its icon: bright as the stars land, then a steady soft glow. */}
+          <div style={{ position: "absolute", left: -size * 0.3, right: -size * 0.3, top: size * 0.25, bottom: -size * 0.4, borderRadius: "50%",
+                        background: `radial-gradient(ellipse at 50% 50%, ${hue}${alpha(0.85 * glow)} 0%, ${hue}${alpha(0.35 * glow)} 40%, transparent 72%)`,
+                        filter: `blur(${size * 0.08}px)` }} />
           <Img src={staticFile(`icons/${node.icon}.png`)} style={{ position: "absolute", inset: 0, width: size, height: size }} />
           <div style={{ position: "absolute", top: size - size * 0.04, left: "50%", transform: "translateX(-50%)", opacity: counts,
                         fontFamily: sans, fontSize: size > 150 ? 22 : 18, fontWeight: 600, color: "#f5f5f7", whiteSpace: "nowrap",
@@ -211,7 +219,7 @@ const EndCard = ({ frame, fps }: { frame: number; fps: number }) => {
   );
 };
 
-export const Constellation = ({ endCard = true }: { endCard?: boolean }) => {
+export const Constellation = ({ endCard = true, background }: { endCard?: boolean; background?: string }) => {
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
   const scene = sceneFor(width, height);
@@ -219,7 +227,7 @@ export const Constellation = ({ endCard = true }: { endCard?: boolean }) => {
   // The film fades from and to black so the website's loop joins without a jump; the intro only fades in.
   const fade = interpolate(frame, endCard ? [0, 12, durationInFrames - 16, durationInFrames - 1] : [0, 12, 13, 14], endCard ? [0, 1, 1, 0] : [0, 1, 1, 1], clamp);
   return (
-    <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 60%, #0b1a20 0%, #000 70%)", opacity: fade }}>
+    <AbsoluteFill style={{ background: background ?? "radial-gradient(ellipse at 50% 60%, #0b1a20 0%, #000 70%)", opacity: fade }}>
       <Stars frame={frame} scene={scene} />
       <Names frame={frame} scene={scene} />
       <Icons frame={frame} fps={fps} scene={scene} outroStart={outroStart} />

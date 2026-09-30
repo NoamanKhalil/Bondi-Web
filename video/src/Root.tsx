@@ -8,6 +8,6 @@ export const Root = () => (
     <Composition id="Constellation" component={Constellation} durationInFrames={CONSTELLATION_FRAMES} fps={CONSTELLATION_FPS}
                  width={1920} height={1080} />
     <Composition id="ConstellationIntro" component={Constellation} durationInFrames={INTRO_FRAMES} fps={CONSTELLATION_FPS}
-                 width={1440} height={1260} defaultProps={{ endCard: false }} />
+                 width={1440} height={1260} defaultProps={{ endCard: false, background: "#232427" }} />
   </>
 );

@@ -258,9 +258,9 @@
   .win { --w-ground: #1c1d20; --w-card: #26272b; --w-card-2: #2e2f34; --w-line: #36373c; --w-ink: #f2f2f4; --w-soft: #9d9da5; --w-faint: #6c6c74;
     background: var(--w-ground); color: var(--w-ink); border-radius: 18px; border: 1px solid #000; box-shadow: var(--shadow); overflow: hidden;
     font: 13px/1.35 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; }
-  .win { position: relative; }
+  .win { position: relative; max-width: 920px; margin-inline: auto; width: 100%; }
   /* Intro film over the window's content: plays once when the window comes into view, then fades away. */
-  .win-intro { position: absolute; left: 0; right: 0; bottom: 0; top: var(--win-bar-h, 56px); background: #000; z-index: 5; transition: opacity .8s ease; }
+  .win-intro { position: absolute; left: 0; right: 0; bottom: 0; top: var(--win-bar-h, 56px); background: #232427; z-index: 5; transition: opacity .8s ease; }
   .win-intro video { width: 100%; height: 100%; object-fit: cover; display: block; }
   .win-intro.done { opacity: 0; pointer-events: none; }
   .intro-skip { position: absolute; right: 14px; bottom: 14px; border: 1px solid rgba(255,255,255,.18); background: rgba(40,40,44,.75); color: #f2f2f4; font: 500 12px/1 -apple-system, sans-serif; padding: 7px 12px; border-radius: 999px; cursor: pointer; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
@@ -276,7 +276,7 @@
   .win-tabs button .label { display: none; }
   .win-tabs button[aria-selected="true"] { background: color-mix(in srgb, var(--tint) 22%, #2f3034); color: var(--tint); }
   .win-tabs button[aria-selected="true"] .label { display: inline; }
-  .win-tools { display: flex; gap: 8px; } .win-tools i { width: 28px; height: 28px; border-radius: 50%; background: #2f3034; display: grid; place-items: center; font-style: normal; color: var(--w-soft); }
+  .win-tools { display: flex; gap: 8px; } .win-tools i { width: 34px; height: 34px; border-radius: 50%; background: #2f3034; border: 1px solid #3c3d42; display: grid; place-items: center; font-style: normal; color: #c7c7cc; box-sizing: border-box; }
   .win-body { padding: 18px; display: grid; gap: 18px; min-height: 560px; align-content: start; }
   .win-foot { display: flex; gap: 8px; padding: 8px 16px; font-size: 11.5px; color: var(--w-faint); border-top: 1px solid #000; background: #202124; }
   .w-h { font-size: 15px; font-weight: 600; }
@@ -503,7 +503,7 @@
           <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
           <span class="win-title">Bondi</span>
           <div class="win-tabs" role="tablist" aria-label="Sections" data-wtabs></div>
-          <span class="win-tools" aria-hidden="true"><i>⌕</i><i>⚙︎</i></span>
+          <span class="win-tools" aria-hidden="true"><i title="Search"><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8.6" cy="8.6" r="5.6"/><path d="M12.8 12.8l4.4 4.4"/></svg></i><i title="Settings"><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M16.28 8.33 L18.18 8.60 L18.18 11.40 L16.28 11.67 L15.62 13.26 L16.78 14.79 L14.79 16.78 L13.26 15.62 L11.67 16.28 L11.40 18.18 L8.60 18.18 L8.33 16.28 L6.74 15.62 L5.21 16.78 L3.22 14.79 L4.38 13.26 L3.72 11.67 L1.82 11.40 L1.82 8.60 L3.72 8.33 L4.38 6.74 L3.22 5.21 L5.21 3.22 L6.74 4.38 L8.33 3.72 L8.60 1.82 L11.40 1.82 L11.67 3.72 L13.26 4.38 L14.79 3.22 L16.78 5.21 L15.62 6.74Z"/><circle cx="10" cy="10" r="2.6"/></svg></i></span>
         </div>
         <div class="win-body" data-wbody></div>
         <div class="win-intro" data-intro hidden>
