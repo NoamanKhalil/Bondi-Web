@@ -285,7 +285,9 @@
   .win-tabs button[aria-selected="true"] .label { display: inline; }
   .win-tools { display: flex; gap: 8px; } .win-tools i { width: 34px; height: 34px; border-radius: 50%; background: #2f3034; border: 1px solid #3c3d42; display: grid; place-items: center; font-style: normal; color: #c7c7cc; box-sizing: border-box; }
   .win-body { padding: 18px; display: grid; gap: 18px; min-height: 560px; align-content: start; }
-  .win-foot { display: flex; gap: 8px; padding: 8px 16px; font-size: 11.5px; color: var(--w-faint); border-top: 1px solid #000; background: #202124; }
+  .win-foot { display: flex; gap: 8px; padding: 8px 16px; font-size: 11.5px; color: var(--w-faint); border-top: 1px solid rgba(255, 255, 255, .06); background: #000; }
+  /* The same backdrop as the intro film (radial-gradient(ellipse at 50% 60%, #0b1a20, #000 70%)), so the app sits where the film was. */
+  .win .win-body { background: radial-gradient(ellipse at 50% 60%, #0b1a20 0%, #000 70%); }
   .w-h { font-size: 15px; font-weight: 600; }
   .w-status { background: #1f3b45; border-radius: 10px; padding: 12px 14px; display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; font-size: 14px; }
   .w-status .spark { color: #2cc0de; } .w-status small { grid-column: 2; color: #58a6ff; font-size: 12px; }
@@ -306,14 +308,15 @@
   .w-membar .swap { flex: 0 0 26px; height: 10px; border-radius: 3px; border: 1.5px solid #f2a200; margin-left: 5px; background: repeating-linear-gradient(135deg, rgba(242,162,0,.6) 0 2px, transparent 2px 4px); }
   .w-fill { height: 7px; border-radius: 4px; background: #45464c; margin-top: auto; overflow: hidden; } .w-fill i { display: block; height: 100%; border-radius: 4px; background: var(--tint); }
   .rings { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 10px; }
+  @media (min-width: 940px) { .win .rings { grid-template-columns: repeat(4, minmax(0, 1fr)); } .win .ring-card { grid-template-columns: 62px minmax(0, 1fr); gap: 6px 10px; padding: 11px; } .win .ring-card svg { width: 62px; height: 62px; } }
+  @media (min-width: 1180px) { .win .ring-card { grid-template-columns: 76px minmax(0, 1fr); gap: 6px 12px; padding: 12px 13px; } .win .ring-card svg { width: 76px; height: 76px; } }
   .ring-card { background: var(--w-card); border: 1px solid var(--w-line); border-radius: 12px; padding: 12px 13px; display: grid; grid-template-columns: 96px 1fr; gap: 6px 14px; align-items: center; }
   .ring-card .head { grid-column: 1 / -1; font-size: 11.5px; font-weight: 600; color: var(--tint); }
   .ring-card svg { width: 96px; height: 96px; }
   .ring-card ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 11.5px; }
-  .ring-card li { display: grid; grid-template-columns: 8px 1fr auto; gap: 7px; align-items: center; color: var(--w-soft); }
+  .ring-card li { display: grid; grid-template-columns: 8px minmax(0, 1fr) auto; gap: 7px; align-items: center; color: var(--w-soft); }
+  .ring-card li span:nth-child(2) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .ring-card li i { width: 8px; height: 8px; border-radius: 50%; } .ring-card li span:last-child { color: var(--w-ink); font-variant-numeric: tabular-nums; }
-  .w-ask { display: flex; gap: 8px; } .w-ask span { flex: 1; background: #202124; border: 1px solid var(--w-line); border-radius: 8px; padding: 8px 10px; color: var(--w-soft); }
-  .w-ask b { background: #2f7cf6; color: #fff; border-radius: 8px; padding: 8px 14px; font-weight: 500; }
   .hero-row { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr); gap: 10px; }
   .hero-card { background: var(--w-card); border: 1px solid var(--w-line); border-radius: 12px; padding: 14px; display: grid; grid-template-columns: 170px 1fr; gap: 14px; min-height: 220px; }
   .hero-card .hl { display: grid; align-content: space-between; }
@@ -1267,10 +1270,13 @@
     const views = {
       overview: () => {
         const [lead, rest] = statusLines[statusIndex % statusLines.length];
+        const byMem = [...apps].sort((a, b) => b.mem - a.mem), byCpu = [...apps].sort((a, b) => b.cpu - a.cpu), byEn = [...apps].sort((a, b) => b.en - a.en);
+        const top = (list, key, cols, fmt) => list.slice(0, 4).map((a, i) => [a.n, a[key], cols[i], fmt(a[key])]);
+        const memTotal = byMem.reduce((s, a) => s + a.mem, 0), cpuTotal = byCpu.reduce((s, a) => s + a.cpu, 0) || 1, enTotal = byEn.reduce((s, a) => s + a.en, 0);
+        const purple = ['#9b7ae0', '#b69bf0', '#7d5cc9', '#cbb8f5'], blue = ['#4a90e2', '#74aaf0', '#3471bd', '#a6c8f5'], green = ['#5cc26a', '#86d68f', '#3f9b4c', '#b3e6b8'];
+        const types = [['App', 38.56, '#9b7ae0', '38.56 GB'], ['Wired', 3.32, '#e8793a', '3.32 GB'], ['Compressed', 3.39, '#5cc26a', '3.39 GB'], ['Cached Files', 16.81, '#6e6e76', '16.81 GB']];
         return `
           <div class="w-status"><span class="spark">✦</span><span><b>${lead}</b>${rest}</span><small>Why is my Mac slow?</small></div>
-          <div class="w-h">Ask about your Mac</div>
-          <div class="w-ask"><span>What drained my battery yesterday afternoon?</span><b>Ask</b></div>
           <div class="w-h">At a glance</div>
           <div class="w-grid">
             <div class="w-card" style="--tint:${tint.cpu}">${head('cpu', 'CPU', 'load 3.48')}<div class="w-big">${Math.round(v.cpu)}<small>%</small></div><div class="w-sub">User ${f1(v.cpu * 0.7)}% · System ${f1(v.cpu * 0.3)}%</div><div class="w-chart">${area(series.cpu, 100, 200, 30, tint.cpu)}</div></div>
@@ -1280,6 +1286,13 @@
             <div class="w-card" style="--tint:${tint.gpu}">${head('gpu', 'GPU')}<div class="w-big">${Math.round(v.gpu)}<small>%</small></div><div class="w-sub">M1 Max · 24 cores</div><div class="w-chart">${area(series.gpu, 100, 200, 30, tint.gpu)}</div></div>
             <div class="w-card" style="--tint:${tint.neural}">${head('neural', 'Neural Engine', v.ane > 0.05 ? 'Working' : 'Idle')}<div class="w-big">${f2(v.ane)}<small>W</small></div><div class="w-sub">16 cores · 11 TOPS</div><div class="w-chart">${area(series.ane, 1.5, 200, 30, tint.neural)}</div></div>
             <div class="w-card wide" style="--tint:${tint.battery}">${head('battery', 'Battery', '3h 31m left')}<div class="w-big">${Math.round(v.batt)}<small>%</small></div><div class="w-sub">Drawing 11.8 W</div><div class="w-fill"><i style="width:${v.batt}%"></i></div></div>
+          </div>
+          <div class="w-h">Right now</div>
+          <div class="rings">
+            <div class="ring-card"><div class="head" style="color:${tint.memory}">Memory by type</div>${ring(types, 64, Math.round(v.mem / 64 * 100) + '%', 'in use')}${legend(types)}</div>
+            <div class="ring-card"><div class="head" style="color:${tint.memory}">Memory by app</div>${ring(top(byMem, 'mem', purple, gb), memTotal, f1(memTotal) + ' GB', 'all apps')}${legend(top(byMem, 'mem', purple, gb))}</div>
+            <div class="ring-card"><div class="head" style="color:${tint.cpu}">CPU by app</div>${ring(top(byCpu, 'cpu', blue, x => f1(x) + '%'), cpuTotal, Math.round(v.cpu) + '%', 'in use')}${legend(top(byCpu, 'cpu', blue, x => f1(x) + '%'))}</div>
+            <div class="ring-card"><div class="head" style="color:${tint.battery}">Power by app</div>${ring(top(byEn, 'en', green, x => f1(x) + ' W'), enTotal, f1(enTotal) + ' W', 'all apps')}${legend(top(byEn, 'en', green, x => f1(x) + ' W'))}</div>
           </div>`;
       },
       cpu: () => section('cpu', 'CPU', Math.round(v.cpu) + '<small>%</small>', 'Apple M1 Max', series.cpu, 100, ['Average', '17%', 'Peak', '51%'],
@@ -1341,7 +1354,12 @@
 
     let current = 'overview';
     tabsEl.innerHTML = tabs.map(([k, label, col]) => `<button role="tab" aria-selected="${k === current}" data-t="${k}" style="--tint:${col}" aria-label="${label}">${svg(k)}<span class="label">${label}</span></button>`).join('');
-    const render = () => { body.innerHTML = views[current](); bindLive(); };
+    const render = () => {
+      body.innerHTML = views[current]();
+      bindLive();
+      // On smaller screens the Overview can be taller than 16:9; every tab then keeps its height, so the window doesn't jump.
+      if (current === 'overview' && body.offsetHeight > 0) body.style.minHeight = body.offsetHeight + 'px';
+    };
     const bindLive = () => $$('[data-vol]', body).forEach(r => { const paint = () => r.style.setProperty('--p', r.value / 3 + '%'); paint(); r.addEventListener('input', () => { paint(); r.nextElementSibling.textContent = r.value + '%'; }); });
     $$('button', tabsEl).forEach(b => b.addEventListener('click', () => {
       current = b.dataset.t;

@@ -1,0 +1,242 @@
+{
+  "date": "2026-09-29",
+  "groups": [
+    {
+      "hue": "#8c8c8c",
+      "icon": "macos",
+      "name": "macOS",
+      "processes": 719
+    },
+    {
+      "hue": "#d8cf5d",
+      "icon": "chrome",
+      "name": "Google Chrome",
+      "processes": 80
+    },
+    {
+      "hue": "#129bde",
+      "icon": "vscode",
+      "name": "Visual Studio Code",
+      "processes": 44
+    },
+    {
+      "hue": "#61bcd8",
+      "icon": "bionic",
+      "name": "Bionic",
+      "processes": 10
+    },
+    {
+      "hue": "#cccccc",
+      "icon": "textedit",
+      "name": "TextEdit",
+      "processes": 10
+    },
+    {
+      "hue": "#fedd42",
+      "icon": "notes",
+      "name": "Notes",
+      "processes": 9
+    },
+    {
+      "hue": "#1da3ef",
+      "icon": "docker",
+      "name": "Docker",
+      "processes": 9
+    },
+    {
+      "hue": "#3ba0f9",
+      "icon": "mail",
+      "name": "Mail",
+      "processes": 8
+    },
+    {
+      "hue": "#6a8fec",
+      "icon": "iphonemirroring",
+      "name": "iPhone Mirroring",
+      "processes": 7
+    },
+    {
+      "hue": "#6eaafc",
+      "icon": "preview",
+      "name": "Preview",
+      "processes": 6
+    },
+    {
+      "hue": "#40d867",
+      "icon": "messages",
+      "name": "Messages",
+      "processes": 5
+    },
+    {
+      "hue": "#04affd",
+      "icon": "finder",
+      "name": "Finder",
+      "processes": 3
+    },
+    {
+      "hue": "#61d8a4",
+      "icon": "activitymonitor",
+      "name": "Activity Monitor",
+      "processes": 3
+    },
+    {
+      "hue": "#42c3d8",
+      "icon": "bondi",
+      "name": "Bondi",
+      "processes": 3
+    },
+    {
+      "hue": "#fe6378",
+      "icon": "news",
+      "name": "News",
+      "processes": 3
+    },
+    {
+      "hue": "#feb514",
+      "icon": "home",
+      "name": "Home",
+      "processes": 2
+    },
+    {
+      "hue": "#9b61d8",
+      "icon": "journal",
+      "name": "Journal",
+      "processes": 2
+    },
+    {
+      "hue": "#3b9ed8",
+      "icon": "weather",
+      "name": "Weather",
+      "processes": 2
+    },
+    {
+      "hue": "#06d877",
+      "icon": "findmy",
+      "name": "Find My",
+      "processes": 2
+    },
+    {
+      "hue": "#d86165",
+      "icon": "voicememos",
+      "name": "Voice Memos",
+      "processes": 2
+    },
+    {
+      "hue": "#8c8c8c",
+      "icon": "terminal",
+      "name": "Terminal",
+      "processes": 1
+    },
+    {
+      "hue": "#18adf7",
+      "icon": "onedrive",
+      "name": "OneDrive",
+      "processes": 1
+    },
+    {
+      "hue": "#0ab1da",
+      "icon": "stocks",
+      "name": "Stocks",
+      "processes": 1
+    },
+    {
+      "hue": "#fe595a",
+      "icon": "calendar",
+      "name": "Calendar",
+      "processes": 1
+    },
+    {
+      "hue": "#a661d8",
+      "icon": "shortcuts",
+      "name": "Shortcuts",
+      "processes": 1
+    },
+    {
+      "hue": "#a961d8",
+      "icon": "podcasts",
+      "name": "Podcasts",
+      "processes": 1
+    },
+    {
+      "hue": "#d8ba52",
+      "icon": "photos",
+      "name": "Photos",
+      "processes": 1
+    },
+    {
+      "hue": "#4b9ff0",
+      "icon": "safari",
+      "name": "Safari",
+      "processes": 1
+    },
+    {
+      "hue": "#d86179",
+      "icon": "reminders",
+      "name": "Reminders",
+      "processes": 1
+    },
+    {
+      "hue": "#f8a001",
+      "icon": "clock",
+      "name": "Clock",
+      "processes": 1
+    },
+    {
+      "hue": "#feca0c",
+      "icon": "tips",
+      "name": "Tips",
+      "processes": 1
+    },
+    {
+      "hue": "#afafaf",
+      "icon": "settings",
+      "name": "System Settings",
+      "processes": 1
+    }
+  ],
+  "machine": "MacBook Pro (M1 Max, 64 GB)",
+  "otherApps": 11,
+  "otherProcesses": 14,
+  "processNames": [
+    "Google Chrome Helper (Renderer)",
+    "mds_stores",
+    "WindowServer",
+    "Code Helper (Plugin)",
+    "kernel_task",
+    "Google Chrome Helper (GPU)",
+    "mdworker_shared",
+    "com.apple.WebKit.WebContent",
+    "photoanalysisd",
+    "coreaudiod",
+    "Code Helper (Renderer)",
+    "cloudd",
+    "bird",
+    "launchd",
+    "trustd",
+    "nsurlsessiond",
+    "fseventsd",
+    "Dock",
+    "ControlCenter",
+    "mediaanalysisd",
+    "sharingd",
+    "distnoted",
+    "cfprefsd",
+    "airportd",
+    "bluetoothd",
+    "powerd",
+    "WallpaperAgent",
+    "NotificationCenter",
+    "chronod",
+    "com.apple.geod",
+    "Code Helper (GPU)",
+    "syspolicyd",
+    "XprotectService",
+    "corespotlightd",
+    "apsd",
+    "com.docker.backend",
+    "Mail Web Content",
+    "Messages Helper"
+  ],
+  "totalApps": 43,
+  "totalProcesses": 955
+}

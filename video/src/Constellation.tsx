@@ -6,8 +6,6 @@ import { groups, iconHues, otherProcesses, processNames, totalApps, totalProcess
 
 export const CONSTELLATION_FPS = 30;
 export const CONSTELLATION_FRAMES = 15 * CONSTELLATION_FPS;
-/** The website's intro over the app window: no end card, it holds on the icons and the page fades it away. */
-export const INTRO_FRAMES = 10 * CONSTELLATION_FPS;
 /** The window video: the whole film at 60 fps for smoother motion. It starts on a full sky (no fade from
  *  black, so its first frame works as the poster) and holds on the end card; the page does the fades. */
 export const WINDOW_FPS = 60;
