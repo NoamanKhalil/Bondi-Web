@@ -1,67 +1,59 @@
-# Every push to main goes live on trybondi.app (Hostinger), over SSH:
-#   public_html/  ->  domains/trybondi.app/public_html/
-#   bondi/        ->  domains/trybondi.app/public_html/bondi/   (locked by bondi/.htaccess)
-# config.php is never uploaded or touched: it lives only on the server (and on the owner's Mac).
-# Nothing on the server is ever deleted, so files removed from git stay there until removed by hand.
+# Every push to main rebuilds the `live` branch, and Hostinger deploys `live` into public_html by itself
+# (hPanel's GitHub connection, set to the `live` branch).
 #
-# Needs four repository secrets (GitHub → Settings → Secrets and variables → Actions):
-#   HOSTINGER_SSH_HOST, HOSTINGER_SSH_PORT, HOSTINGER_SSH_USER  (hPanel → Advanced → SSH Access)
-#   HOSTINGER_SSH_KEY  (the private half of a key whose public half is added in that same hPanel page)
+# `live` is shaped exactly like the server's public_html:
+#   public_html/*  ->  the top of `live`
+#   bondi/         ->  bondi/   (locked on the server by bondi/.htaccess)
+# sql/, dev/, video/ and the notes never reach the server. config.php is never in git, so a deploy never
+# replaces it: it stays the one file edited by hand in File Manager.
 
-name: Deploy to Hostinger
+name: Publish the live branch
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 concurrency:
-  group: deploy
+  group: publish-live
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Check every PHP file for syntax errors
-        run: |
-          find public_html bondi -name '*.php' -print0 | xargs -0 -n1 php -l > /dev/null
+        run: find public_html bondi -name '*.php' -print0 | xargs -0 -n1 php -l > /dev/null
 
-      - name: Set up SSH
+      - name: Build what the server gets
+        run: |
+          SITE="$RUNNER_TEMP/site"
+          mkdir -p "$SITE/bondi"
+          cp -a public_html/. "$SITE/"
+          cp -a bondi/. "$SITE/bondi/"
+          rm -f "$SITE/bondi/config.php" "$SITE/bondi/mail.log"
+          find "$SITE" \( -name '.DS_Store' -o -name '_*.html' \) -delete
+
+      - name: Commit it to the live branch
         env:
-          SSH_KEY: ${{ secrets.HOSTINGER_SSH_KEY }}
-          SSH_HOST: ${{ secrets.HOSTINGER_SSH_HOST }}
-          SSH_PORT: ${{ secrets.HOSTINGER_SSH_PORT }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mkdir -p ~/.ssh
-          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -p "$SSH_PORT" "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
-
-      - name: Upload the website and the license server
-        env:
-          SSH_HOST: ${{ secrets.HOSTINGER_SSH_HOST }}
-          SSH_PORT: ${{ secrets.HOSTINGER_SSH_PORT }}
-          SSH_USER: ${{ secrets.HOSTINGER_SSH_USER }}
-        run: |
-          SSH="ssh -i ~/.ssh/deploy_key -p $SSH_PORT"
-          DEST="$SSH_USER@$SSH_HOST:domains/trybondi.app/public_html"
-          rsync -rlptz --itemize-changes -e "$SSH" \
-            --exclude '.DS_Store' --exclude '_*.html' \
-            public_html/ "$DEST/"
-          rsync -rlptz --itemize-changes -e "$SSH" \
-            --exclude '.DS_Store' --exclude 'config.php' --exclude 'mail.log' \
-            bondi/ "$DEST/bondi/"
-
-      - name: Check the live site answers
-        run: |
-          for path in "" api/offer admin/ buy/; do
-            code=$(curl -s -o /dev/null -w '%{http_code}' "https://trybondi.app/$path")
-            echo "/$path -> $code"
-            [ "$code" = 200 ] || exit 1
-          done
-          code=$(curl -s -o /dev/null -w '%{http_code}' https://trybondi.app/bondi/config.php)
-          echo "/bondi/config.php -> $code (must be 403)"
-          [ "$code" = 403 ] || exit 1
+          cd "$RUNNER_TEMP/site"
+          git init -q -b live
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote add origin "https://x-access-token:$TOKEN@github.com/$GITHUB_REPOSITORY.git"
+          # Build on top of the previous live commit, so Hostinger only ever fast-forwards.
+          if git fetch -q --depth=1 origin live; then git reset -q --soft FETCH_HEAD; fi
+          git add -A
+          if git rev-parse -q --verify HEAD > /dev/null && git diff --cached --quiet HEAD; then
+            echo "Nothing changed for the server."; exit 0
+          fi
+          git commit -q -m "Publish ${GITHUB_SHA::7}: $(git -C "$GITHUB_WORKSPACE" log -1 --format=%s)"
+          git push -q origin live
+          git log --stat -1 | head -40

@@ -48,10 +48,11 @@ Paddle, emails license keys, activates one Mac per license, and has an admin pag
 
 ## Deploy
 
-Pushing to `main` on GitHub deploys by itself (`.github/workflows/deploy.yml`): it checks the PHP, copies
-`public_html/` to the live `public_html/` and `bondi/` to `public_html/bondi/` over SSH, then checks the
-live pages answer and that `bondi/config.php` is blocked. It never uploads or changes `config.php` (edit
-that one in File Manager) and never deletes files on the server. Watch a run under GitHub → Actions.
+Pushing to `main` on GitHub deploys by itself. `.github/workflows/deploy.yml` checks the PHP, then rebuilds
+the `live` branch shaped exactly like the server's `public_html` (the website at the top, `bondi/` beside
+it); hPanel's GitHub connection deploys `live`. `sql/`, `dev/`, `video/` and these notes never reach the
+server, and `config.php` is never in git, so it stays the one file you edit by hand in File Manager.
+Watch a run under GitHub → Actions.
 
 ## Connect Paddle (sandbox first)
 
