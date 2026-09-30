@@ -3,7 +3,8 @@
 // Find a license by email, key ending or Paddle order; revoke or restore it; free a Mac; email the buyer a
 // new key; give a free license; see launch licenses left and Paddle notifications that failed; see and
 // download the website's update sign-ups.
-require dirname(__DIR__, 2) . '/bondi/bootstrap.php';
+// The private code lives beside public_html (best) or inside it as public_html/bondi, locked by its .htaccess.
+require is_file(dirname(__DIR__, 2) . '/bondi/bootstrap.php') ? dirname(__DIR__, 2) . '/bondi/bootstrap.php' : dirname(__DIR__) . '/bondi/bootstrap.php';
 
 session_set_cookie_params(['httponly' => true, 'samesite' => 'Strict', 'secure' => !empty($_SERVER['HTTPS'])]);
 session_name('bondi_admin');

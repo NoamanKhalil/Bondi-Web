@@ -16,7 +16,7 @@ Paddle, emails license keys, activates one Mac per license, and has an admin pag
 
 | Part | On Hostinger | What it is |
 | --- | --- | --- |
-| `bondi/` | `domains/trybondi.app/bondi/` (next to `public_html`, not inside it) | The program and its settings; can't be opened from the web |
+| `bondi/` | `domains/trybondi.app/bondi/` (next to `public_html`), or `public_html/bondi/` if the host wants everything inside it: its `.htaccess` locks it | The program and its settings; can't be opened from the web |
 | `public_html/api/` | `public_html/api/` | The API the app and Paddle talk to |
 | `public_html/admin/` | `public_html/admin/` | Admin page (password) |
 | `public_html/buy/` | `public_html/buy/` | Buy page that opens Paddle's checkout, and the thank-you page |

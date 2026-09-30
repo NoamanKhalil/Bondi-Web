@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 date_default_timezone_set('UTC');
 
-$configFile = __DIR__ . '/config.php';
+// Local tests point BONDI_CONFIG at their own throwaway settings; the live site always uses config.php.
+$configFile = getenv('BONDI_CONFIG') ?: __DIR__ . '/config.php';
 if (!is_file($configFile)) {
     http_response_code(500);
     header('Content-Type: text/plain; charset=utf-8');

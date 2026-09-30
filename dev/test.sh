@@ -9,13 +9,13 @@ SOCK=$T/mysql.sock
 PORT=8099
 BASE=http://127.0.0.1:$PORT
 SECRET=pdl_ntfset_test_secret
+PHP_PID=
 cleanup() {
   kill $PHP_PID 2>/dev/null
   mysqladmin -uroot --socket=$SOCK shutdown 2>/dev/null
-  rm -rf "$T" bondi/config.php bondi/mail.log
+  rm -rf "$T" bondi/mail.log
 }
 trap cleanup EXIT
-[ -f bondi/config.php ] && { echo "bondi/config.php exists; move it away before testing"; exit 1; }
 
 mysqld --initialize-insecure --datadir=$T/data --log-error=$T/init.log >/dev/null 2>&1
 mysqld --datadir=$T/data --socket=$SOCK --port=33098 --mysqlx=OFF --log-error=$T/err.log --pid-file=$T/pid >/dev/null 2>&1 &
@@ -24,14 +24,14 @@ mysql -uroot --socket=$SOCK -e "create database bondi; create user 'bondi'@'loca
 for f in sql/001_schema.sql sql/002_one_mac_per_license.sql sql/003_checkout_claims.sql sql/004_signups.sql; do mysql -uroot --socket=$SOCK bondi < $f; done
 mysql -uroot --socket=$SOCK bondi -e "update price_tiers set paddle_price_id='pri_launch' where tier='launch'; update price_tiers set paddle_price_id='pri_regular' where tier='regular';"
 HASH=$(php -r 'echo password_hash("admin-test", PASSWORD_DEFAULT);')
-cat > bondi/config.php <<CONF
+cat > $T/config.php <<CONF
 <?php
 return ['base_url' => '$BASE', 'db' => ['host' => 'localhost;unix_socket=$SOCK', 'name' => 'bondi', 'user' => 'bondi', 'pass' => 'test'],
   'paddle' => ['environment' => 'sandbox', 'api_key' => '', 'client_token' => 'test_token', 'webhook_secret' => '$SECRET'],
   'mail_from' => 'Bondi <licenses@example.com>', 'support_email' => 'support@example.com',
   'admin_password_hash' => '$HASH', 'trial_days' => 7, 'test_mode' => true];
 CONF
-php -S 127.0.0.1:$PORT -t "$PWD/public_html" "$PWD/dev/router.php" >$T/php.log 2>&1 &
+BONDI_CONFIG=$T/config.php php -S 127.0.0.1:$PORT -t "$PWD/public_html" "$PWD/dev/router.php" >$T/php.log 2>&1 &
 PHP_PID=$!
 sleep 1
 

@@ -1,0 +1,9 @@
+# Nothing in this folder may be opened from the web: it holds the database password and Paddle keys.
+# Needed when the host requires everything inside public_html (public_html/bondi); harmless elsewhere.
+<IfModule mod_authz_core.c>
+  Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+  Order allow,deny
+  Deny from all
+</IfModule>
