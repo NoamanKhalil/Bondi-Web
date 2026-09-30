@@ -1,4 +1,15 @@
-# Bondi license server
+# Bondi-Web
+
+Everything for **trybondi.app**: the website, the license server, and the website films. The Mac app is in
+its own repo, [TryBondi](https://github.com/NoamanKhalil/TryBondi), kept next to this one on disk.
+
+- `public_html/`: the website and the license API, admin and buy pages (see the table below)
+- `bondi/`, `sql/`: the license server's private code and database setup
+- `video/`: the website films (Remotion). Refresh, render and publish them with `npm run reading`,
+  `npm run render:all` and `npm run assets` in `video/`; details in `.claude/skills/website-video/SKILL.md`
+- `dev/`: local tests
+
+## License server
 
 Runs on Hostinger with PHP and MySQL; nothing else to install. It starts and checks trials, sells through
 Paddle, emails license keys, activates one Mac per license, and has an admin page for revoking keys.
@@ -74,6 +85,6 @@ Update sign-ups: name, email, IP address, country and time zone.
 
 ## Test it locally
 
-`server/dev/test.sh` starts a throwaway MySQL and PHP's built-in server on your Mac, runs 51 checks
+`dev/test.sh` starts a throwaway MySQL and PHP's built-in server on your Mac, runs 51 checks
 (trial, checkout, a signed fake Paddle payment, one Mac per license, recovery, refund, admin revoke and
 restore, update sign-ups), and removes everything afterwards. It needs Homebrew's `mysql` and `php`.

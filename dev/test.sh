@@ -1,7 +1,7 @@
 #!/bin/bash
 # Local end-to-end test of the license server: a throwaway MySQL, PHP's built-in server, and fake
 # Paddle notifications signed like the real ones. Nothing is sent anywhere; test mode writes emails to
-# bondi/mail.log. Everything is removed at the end. Usage: server/dev/test.sh
+# bondi/mail.log. Everything is removed at the end. Usage: dev/test.sh
 set -u
 cd "$(dirname "$0")/.."
 T=$(mktemp -d)

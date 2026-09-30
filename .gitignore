@@ -1,0 +1,12 @@
+.DS_Store
+
+# License server settings: passwords and Paddle keys. Only bondi/config.example.php is committed.
+bondi/config.php
+bondi/mail.log
+
+# Website video (Remotion): dependencies and render output
+video/node_modules/
+video/out/
+
+# Local test pages
+public_html/_*.html
