@@ -71,11 +71,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             session_destroy();
             go();
         case 'revoke':
-            run("UPDATE licenses SET status = 'revoked', status_changed_at = CURRENT_TIMESTAMP WHERE id = ?", [$licenseId]);
-            go("license=$licenseId", 'Revoked. Bondi locks on that Mac at its next check (within a day).');
         case 'restore':
-            run("UPDATE licenses SET status = 'active', status_changed_at = CURRENT_TIMESTAMP WHERE id = ?", [$licenseId]);
-            go("license=$licenseId", 'Restored.');
+            // From the licenses list, go back to that list (and its search); otherwise to the license's page.
+            $back = (string)($_POST['back'] ?? '');
+            $back = preg_match('/^(list|q=[^&]*)$/', $back) ? ($back === 'list' ? '' : $back) : "license=$licenseId";
+            if ($_POST['do'] === 'revoke') {
+                run("UPDATE licenses SET status = 'revoked', status_changed_at = CURRENT_TIMESTAMP WHERE id = ? AND status = 'active'", [$licenseId]);
+                go($back, "License #$licenseId revoked. Bondi locks on that Mac at its next check (within a day).");
+            }
+            run("UPDATE licenses SET status = 'active', status_changed_at = CURRENT_TIMESTAMP WHERE id = ? AND status <> 'active'", [$licenseId]);
+            go($back, "License #$licenseId restored.");
         case 'deactivate':
             run('UPDATE activations SET deactivated_at = CURRENT_TIMESTAMP WHERE id = ? AND deactivated_at IS NULL',
                 [(int)($_POST['activation'] ?? 0)]);
@@ -97,6 +102,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $_SESSION['new_key'] = $key; // shown once on the next page
             go("license=$newId", 'Free license created' . (!empty($_POST['send']) ? ' and emailed.' : '.'));
+        case 'news_test':
+        case 'news_send':
+            $subject = trim((string)($_POST['subject'] ?? ''));
+            $message = trim((string)($_POST['message'] ?? ''));
+            $query = trim((string)($_POST['q'] ?? ''));
+            $_SESSION['news_draft'] = ['subject' => $subject, 'message' => $message]; // kept until it's all sent
+            $back = 'signups' . ($query === '' ? '' : '&q=' . rawurlencode($query));
+            if ($subject === '' || $message === '') {
+                go($back, 'Write a subject and a message first.');
+            }
+            if ($_POST['do'] === 'news_test') {
+                $first = signups_matching($query)[0]['name'] ?? 'there';
+                $mail = update_email($first, $subject, $message);
+                $ok = send_mail((string)config('support_email'), '[Test] ' . $mail['subject'], $mail['text'], $mail['html'], email_images());
+                go($back, $ok ? 'Test sent to ' . config('support_email') . " (with {name} as \"$first\")." : 'The test could not be sent.');
+            }
+            // Each message is logged as it goes, so pressing Send again with the same words skips everyone
+            // who already has it and carries on with the rest.
+            $campaign = 'update-' . substr(sha1($subject . "\n" . $message), 0, 12);
+            $sentBefore = array_flip(array_column(all('SELECT email FROM email_log WHERE kind = ?', [$campaign]), 'email'));
+            $todo = array_values(array_filter(signups_matching($query), fn($r) => !isset($sentBefore[$r['email']])));
+            ignore_user_abort(true);
+            set_time_limit(0);
+            $started = microtime(true);
+            $sent = $failed = 0;
+            foreach ($todo as $row) {
+                if (microtime(true) - $started > 40) {
+                    break; // stays well inside the host's time limit; the rest go on the next press
+                }
+                $mail = update_email($row['name'], $subject, $message);
+                $unsubscribe = 'List-Unsubscribe: <mailto:' . config('support_email') . '?subject=unsubscribe>';
+                if (send_mail($row['email'], $mail['subject'], $mail['text'], $mail['html'], email_images(), [$unsubscribe])) {
+                    run('INSERT INTO email_log (email, kind, license_id) VALUES (?, ?, NULL)', [$row['email'], $campaign]);
+                    $sent++;
+                } else {
+                    $failed++;
+                }
+            }
+            $left = count($todo) - $sent;
+            if ($left === 0) {
+                unset($_SESSION['news_draft']);
+            }
+            go($back, "Sent to $sent " . ($sent === 1 ? 'person' : 'people') . '.'
+                . ($failed ? " $failed could not be sent." : '')
+                . ($left > 0 ? " $left still to go: press Send again (same subject and message) to carry on." : ''));
         case 'delete_signup':
             $row = one('SELECT email FROM signups WHERE id = ?', [(int)($_POST['signup'] ?? 0)]);
             run('DELETE FROM signups WHERE id = ?', [(int)($_POST['signup'] ?? 0)]);
@@ -180,13 +230,20 @@ function search_licenses(string $query): array
 function licenses_table(array $rows): void
 {
     if (!$rows) { echo '<p class="muted">None.</p>'; return; }
-    echo '<table><tr><th>License #</th><th>Email</th><th>Key</th><th>Price tier</th><th>Paid</th><th>Status</th><th>On a Mac</th><th>Created</th></tr>';
+    $back = isset($_GET['q']) && $_GET['q'] !== '' ? 'q=' . rawurlencode((string)$_GET['q']) : 'list';
+    echo '<table><tr><th>License #</th><th>Email</th><th>Key</th><th>Price tier</th><th>Paid</th><th>Status</th><th>On a Mac</th><th>Created</th><th></th></tr>';
     foreach ($rows as $row) {
         echo '<tr><td><a href="?license=' . (int)$row['id'] . '">' . (int)$row['id'] . '</a></td><td>' . h($row['email']) . '</td>'
            . '<td class="mono">••••' . h($row['key_last4']) . '</td><td>' . h($row['price_tier']) . '</td>'
            . '<td>' . money($row['amount_cents'] === null ? null : (int)$row['amount_cents'], $row['currency']) . '</td>'
            . '<td><span class="status ' . h($row['status']) . '">' . h($row['status']) . '</span></td>'
-           . '<td>' . ((int)$row['macs'] > 0 ? 'Yes' : '—') . '</td><td>' . h($row['created_at']) . ' UTC</td></tr>';
+           . '<td>' . ((int)$row['macs'] > 0 ? 'Yes' : '—') . '</td><td>' . h($row['created_at']) . ' UTC</td><td>';
+        if ($row['status'] === 'active') {
+            action((int)$row['id'], 'revoke', 'Revoke', 'Revoke license #' . $row['id'] . ' (' . $row['email'] . ')? Bondi stops working on its Mac at the next check.', 'small danger', $back);
+        } elseif ($row['status'] === 'revoked') {
+            action((int)$row['id'], 'restore', 'Restore', 'Make license #' . $row['id'] . ' (' . $row['email'] . ') active again?', 'small', $back);
+        }
+        echo '</td></tr>';
     }
     echo '</table>';
 }
@@ -251,10 +308,9 @@ function signups_page(string $query, ?string $flash): never
     }
     echo '<form class="search"><input type="hidden" name="signups" value="1"><input name="q" value="' . h($query) . '" placeholder="Name, email or country code" autofocus>'
        . '<button>Search</button></form><p><a href="?signups&csv">Download all as CSV</a></p>';
-    $rows = $query === ''
-        ? all('SELECT * FROM signups ORDER BY id DESC LIMIT 500')
-        : all('SELECT * FROM signups WHERE email LIKE ? OR name LIKE ? OR country = ? ORDER BY id DESC LIMIT 500',
-              ['%' . strtolower(trim($query)) . '%', '%' . trim($query) . '%', strtoupper(trim($query))]);
+    $matching = signups_matching($query);
+    $rows = array_slice($matching, 0, 500);
+    if ($matching) { write_to_signups($query, count($matching)); }
     if (!$rows) { echo '<p class="muted">None.</p>'; page_end(); }
     echo '<table><tr><th>Name</th><th>Email</th><th>Country</th><th>IP</th><th>Signed up</th><th></th></tr>';
     foreach ($rows as $row) {
@@ -267,6 +323,37 @@ function signups_page(string $query, ?string $flash): never
     }
     echo '</table>';
     page_end();
+}
+
+/** Everyone on the sign-up list, or those whose name, email or country matches the search; newest first. */
+function signups_matching(string $query): array
+{
+    $query = trim($query);
+    return $query === ''
+        ? all('SELECT * FROM signups ORDER BY id DESC')
+        : all('SELECT * FROM signups WHERE email LIKE ? OR name LIKE ? OR country = ? ORDER BY id DESC',
+              ['%' . strtolower($query) . '%', '%' . $query . '%', strtoupper($query)]);
+}
+
+function write_to_signups(string $query, int $count): void
+{
+    $draft = $_SESSION['news_draft'] ?? ['subject' => '', 'message' => ''];
+    $who = $query === '' ? "everyone on the list ($count)" : "the $count shown by this search";
+    $label = 'Send to ' . $count . ($count === 1 ? ' person' : ' people');
+    echo '<details class="card compose"' . ($draft['subject'] !== '' ? ' open' : '') . '><summary>Write to ' . h($who) . '</summary>'
+       . '<form method="post">' . csrf_field() . '<input type="hidden" name="q" value="' . h($query) . '">'
+       . '<input name="subject" placeholder="Subject" value="' . h($draft['subject']) . '" required>'
+       . '<textarea name="message" rows="9" placeholder="Hi {name},&#10;&#10;Your message. A blank line starts a new paragraph; links work as they are." required>' . h($draft['message']) . '</textarea>'
+       . '<p class="muted">{name} becomes each person\'s name. Every email ends with why they got it and how to stop (reply "unsubscribe"; then remove them below). '
+       . 'Sent from ' . h((string)config('support_email')) . '.</p>'
+       . '<div class="actions"><button name="do" value="news_test" formnovalidate class="secondary">Send me a test</button>'
+       . '<button name="do" value="news_send" onclick="return confirm(' . h(json_encode("Email $who now?")) . ')">' . h($label) . '</button></div>'
+       . '</form>';
+    $past = all("SELECT kind, COUNT(*) AS n, MIN(sent_at) AS first FROM email_log WHERE kind LIKE 'update-%' GROUP BY kind ORDER BY first DESC LIMIT 10");
+    if ($past) {
+        echo '<p class="muted past">Sent before: ' . implode(' · ', array_map(fn($p) => h($p['first']) . ' UTC to ' . (int)$p['n'], $past)) . '</p>';
+    }
+    echo '</details>';
 }
 
 function signups_csv(): never
@@ -301,10 +388,11 @@ function webhooks_page(?string $flash): never
 
 // MARK: Pieces
 
-function action(int $licenseId, string $do, string $label, string $question, string $style = ''): void
+function action(int $licenseId, string $do, string $label, string $question, string $style = '', string $back = ''): void
 {
     echo '<form method="post" onsubmit="return confirm(' . h(json_encode($question)) . ')">' . csrf_field()
        . '<input type="hidden" name="do" value="' . h($do) . '"><input type="hidden" name="license" value="' . $licenseId . '">'
+       . ($back === '' ? '' : '<input type="hidden" name="back" value="' . h($back) . '">')
        . '<button class="' . h($style) . '">' . h($label) . '</button></form>';
 }
 
@@ -350,6 +438,11 @@ button.danger { background:var(--danger); } button.small { padding:4px 10px; } b
 .muted { color:var(--muted); } .error { color:var(--danger); } .flash { background:var(--card); border-left:3px solid var(--accent); padding:10px 14px; border-radius:8px; }
 .key { background:var(--card); padding:12px 14px; border-radius:8px; border-left:3px solid var(--ok); }
 .mono { font-family:ui-monospace,Menlo,monospace; }
+textarea { font:inherit; padding:8px 10px; border:1px solid var(--line); border-radius:8px; background:var(--card); color:var(--text); resize:vertical; }
+.compose { margin:16px 0; } .compose summary { cursor:pointer; font-weight:600; color:var(--accent); }
+.compose form { display:grid; gap:10px; margin-top:14px; } .compose p { margin:0; } .compose .past { margin-top:12px; }
+button.secondary { background:none; color:var(--accent); border:1px solid var(--accent); }
+td form { margin:0; }
 .tbl { font:400 11px/1 ui-monospace,Menlo,monospace; color:var(--muted); border:1px solid var(--line); border-radius:6px; padding:2px 6px; margin-left:8px; vertical-align:middle; white-space:nowrap; }
 .stat .tbl { display:inline-block; margin:6px 0 0; }
 .status { font-size:12px; padding:2px 8px; border-radius:10px; border:1px solid currentColor; }

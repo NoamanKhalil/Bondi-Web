@@ -10,16 +10,16 @@
 function send_key_email(string $email, string $key, string $kind, ?int $licenseId): void
 {
     $mail = key_email($key, $kind);
-    $icon = (string)file_get_contents(dirname(__DIR__) . '/mail-icon.png');
-    send_mail($email, $mail['subject'], $mail['text'], $mail['html'], ['bondi-icon@trybondi.app' => $icon]);
+    send_mail($email, $mail['subject'], $mail['text'], $mail['html'], email_images());
     run('INSERT INTO email_log (email, kind, license_id) VALUES (?, ?, ?)', [$email, $kind, $licenseId]);
 }
 
 /**
- * Sends one email: plain text, plus HTML when given, plus PNG images the HTML shows as cid:<id>.
+ * Sends one email: plain text, plus HTML when given, plus PNG images the HTML shows as cid:<id>, plus any
+ * extra headers (such as List-Unsubscribe).
  * Returns false only when nothing could send it.
  */
-function send_mail(string $to, string $subject, string $text, ?string $html = null, array $images = []): bool
+function send_mail(string $to, string $subject, string $text, ?string $html = null, array $images = [], array $extraHeaders = []): bool
 {
     if (config('test_mode')) {
         file_put_contents(dirname(__DIR__) . '/mail.log', "To: $to\nSubject: $subject\n\n$text\n----\n", FILE_APPEND);
@@ -53,7 +53,7 @@ function send_mail(string $to, string $subject, string $text, ?string $html = nu
         'Reply-To: ' . config('support_email'),
         'MIME-Version: 1.0',
         "Content-Type: $type",
-    ], $headers);
+    ], $headers, $extraHeaders);
 
     if ((string)config('smtp.pass', '') !== '') {
         try {
@@ -157,37 +157,9 @@ function key_email(string $key, string $kind): array
           . "Questions: $support\n";
 
     $e = static fn(string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
-    $font = "-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',Helvetica,Arial,sans-serif";
+    $font = EMAIL_FONT;
     $mono = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
-    $html = <<<HTML
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light dark">
-<meta name="supported-color-schemes" content="light dark">
-<title>{$e($subject)}</title>
-<style>
-  @media (prefers-color-scheme: dark) {
-    .page { background:#131315 !important; }
-    .card { background:#1e1e1e !important; border-color:rgba(255,255,255,.08) !important; }
-    .ink { color:#f2f2f2 !important; }
-    .soft { color:#a1a1a6 !important; }
-    .key { background:rgba(255,255,255,.05) !important; border-color:rgba(255,255,255,.1) !important; color:#5fd4ea !important; }
-    .rule { border-color:rgba(255,255,255,.08) !important; }
-    .link { color:#5fd4ea !important; }
-  }
-  @media (max-width:520px) { .pad { padding:28px 22px !important; } .key { font-size:15px !important; letter-spacing:0 !important; padding:14px 10px !important; } }
-</style>
-</head>
-<body class="page" style="margin:0;padding:0;background:#f5f5f7;">
-<div style="display:none;max-height:0;overflow:hidden;opacity:0;">Your Bondi license key: {$e($key)}</div>
-<table role="presentation" class="page" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f5f5f7;">
-<tr><td align="center" style="padding:40px 12px;">
-  <table role="presentation" class="card" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px;background:#ffffff;border:1px solid rgba(0,0,0,.06);border-radius:18px;">
-  <tr><td class="pad" style="padding:40px 40px 32px;font-family:$font;">
-    <img src="cid:bondi-icon@trybondi.app" width="56" height="56" alt="Bondi" style="display:block;border:0;width:56px;height:56px;border-radius:13px;">
+    $inner = <<<HTML
     <h1 class="ink" style="margin:24px 0 10px;font-size:26px;line-height:1.15;font-weight:700;letter-spacing:-.02em;color:#1d1d1f;">{$e($heading)}</h1>
     <p class="soft" style="margin:0 0 28px;font-size:16px;line-height:1.5;color:#6e6e73;">{$e($intro)}</p>
 
@@ -205,6 +177,79 @@ function key_email(string $key, string $kind): array
     <p class="soft" style="margin:0 0 12px;font-size:14px;line-height:1.5;color:#6e6e73;">{$e($oneMac)}</p>
     <p class="soft" style="margin:0 0 12px;font-size:14px;line-height:1.5;color:#6e6e73;">{$e($keep)}</p>
     <p class="soft" style="margin:0;font-size:14px;line-height:1.5;color:#6e6e73;">Questions? <a class="link" href="mailto:{$e($support)}" style="color:#0e86a6;text-decoration:none;">{$e($support)}</a></p>
+HTML;
+
+    return ['subject' => $subject, 'text' => $text, 'html' => email_html($subject, "Your Bondi license key: $key", $inner)];
+}
+
+/**
+ * A note to one update sign-up, written on the admin page. {name} in the subject or message becomes their name.
+ * Blank lines start new paragraphs; web addresses become links. Returns ['subject', 'text', 'html'].
+ */
+function update_email(string $name, string $subject, string $message): array
+{
+    $e = static fn(string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+    $subject = str_replace('{name}', $name, $subject);
+    $message = trim(str_replace(["\r\n", '{name}'], ["\n", $name], $message));
+    $support = (string)config('support_email');
+    $why = "You're getting this because you signed up for Bondi updates at trybondi.app. "
+         . "To stop them, reply with \"unsubscribe\".";
+
+    $paragraphs = '';
+    foreach (preg_split('/\n\s*\n/', $message) as $paragraph) {
+        $html = nl2br($e(trim($paragraph)), false);
+        $html = preg_replace('~https?://[^\s<>"\']+[^\s<>"\'.,;:!?)]~', '<a class="link" href="$0" style="color:#0e86a6;text-decoration:none;">$0</a>', $html);
+        $paragraphs .= '<p class="ink" style="margin:0 0 16px;font-size:16px;line-height:1.55;color:#1d1d1f;">' . $html . '</p>';
+    }
+    $inner = <<<HTML
+    <h1 class="ink" style="margin:24px 0 18px;font-size:24px;line-height:1.2;font-weight:700;letter-spacing:-.02em;color:#1d1d1f;">{$e($subject)}</h1>
+    $paragraphs
+    <hr class="rule" style="margin:28px 0 20px;border:0;border-top:1px solid rgba(0,0,0,.08);">
+    <p class="soft" style="margin:0;font-size:13px;line-height:1.5;color:#6e6e73;">{$e($why)} Questions? <a class="link" href="mailto:{$e($support)}" style="color:#0e86a6;text-decoration:none;">{$e($support)}</a></p>
+HTML;
+    $text = "$message\n\n--\n$why\nQuestions: $support\n";
+    $preview = mb_substr(preg_replace('/\s+/', ' ', $message), 0, 120);
+
+    return ['subject' => $subject, 'text' => $text, 'html' => email_html($subject, $preview, $inner)];
+}
+
+const EMAIL_FONT = "-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',Helvetica,Arial,sans-serif";
+
+/** Bondi's email page around $inner: icon, card, footer; light and dark, phone width. */
+function email_html(string $title, string $preview, string $inner): string
+{
+    $e = static fn(string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+    $font = EMAIL_FONT;
+    return <<<HTML
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark">
+<title>{$e($title)}</title>
+<style>
+  @media (prefers-color-scheme: dark) {
+    .page { background:#131315 !important; }
+    .card { background:#1e1e1e !important; border-color:rgba(255,255,255,.08) !important; }
+    .ink { color:#f2f2f2 !important; }
+    .soft { color:#a1a1a6 !important; }
+    .key { background:rgba(255,255,255,.05) !important; border-color:rgba(255,255,255,.1) !important; color:#5fd4ea !important; }
+    .rule { border-color:rgba(255,255,255,.08) !important; }
+    .link { color:#5fd4ea !important; }
+  }
+  @media (max-width:520px) { .pad { padding:28px 22px !important; } .key { font-size:15px !important; letter-spacing:0 !important; padding:14px 10px !important; } }
+</style>
+</head>
+<body class="page" style="margin:0;padding:0;background:#f5f5f7;">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;">{$e($preview)}</div>
+<table role="presentation" class="page" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f5f5f7;">
+<tr><td align="center" style="padding:40px 12px;">
+  <table role="presentation" class="card" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px;background:#ffffff;border:1px solid rgba(0,0,0,.06);border-radius:18px;">
+  <tr><td class="pad" style="padding:40px 40px 32px;font-family:$font;">
+    <img src="cid:bondi-icon@trybondi.app" width="56" height="56" alt="Bondi" style="display:block;border:0;width:56px;height:56px;border-radius:13px;">
+$inner
   </td></tr>
   </table>
   <p class="soft" style="margin:20px 0 0;font-family:$font;font-size:12px;line-height:1.5;color:#6e6e73;">Bondi for Apple Mac · Jabble Inc. · <a class="link" href="https://trybondi.app" style="color:#0e86a6;text-decoration:none;">trybondi.app</a></p>
@@ -213,6 +258,10 @@ function key_email(string $key, string $kind): array
 </body>
 </html>
 HTML;
+}
 
-    return ['subject' => $subject, 'text' => $text, 'html' => $html];
+/** The Bondi icon that email_html() shows, to pass to send_mail(). */
+function email_images(): array
+{
+    return ['bondi-icon@trybondi.app' => (string)file_get_contents(dirname(__DIR__) . '/mail-icon.png')];
 }

@@ -2,6 +2,7 @@
 # Local end-to-end test of the license server: a throwaway MySQL, PHP's built-in server, and fake
 # Paddle notifications signed like the real ones. Nothing is sent anywhere; test mode writes emails to
 # bondi/mail.log. Everything is removed at the end. Usage: dev/test.sh
+# SNAP=<folder> dev/test.sh also saves the admin pages there as HTML, to look at.
 set -u
 cd "$(dirname "$0")/.."
 T=$(mktemp -d)
@@ -118,20 +119,37 @@ expect "admin shows the failed notification" "$DASH" 'not processed'
 CSRF=$(echo "$DASH" | grep -o 'name="csrf" value="[a-f0-9]*"' | head -1 | sed 's/.*value="//;s/"//')
 expect "admin search by email" "$(curl -s -c $J -b $J "$BASE/admin/?q=ctm_1")" 'test+ctm_1@example.com'
 expect "admin refuses a forged form" "$(curl -s -c $J -b $J -L -d "do=restore&license=1&csrf=wrong" $BASE/admin/)" 'form expired'
-expect "admin restores" "$(curl -s -c $J -b $J -L -d "do=restore&license=1&csrf=$CSRF" $BASE/admin/)" 'Restored'
+expect "admin restores" "$(curl -s -c $J -b $J -L -d "do=restore&license=1&csrf=$CSRF" $BASE/admin/)" 'License #1 restored'
 expect "restored license works" "$(post check "{\"token\":\"$TOKEN2\",\"device_hash\":\"$DEV2\"}")" '"status":"active"'
-expect "admin revokes" "$(curl -s -c $J -b $J -L -d "do=revoke&license=1&csrf=$CSRF" $BASE/admin/)" 'Revoked'
+expect "admin revokes" "$(curl -s -c $J -b $J -L -d "do=revoke&license=1&csrf=$CSRF" $BASE/admin/)" 'License #1 revoked'
 expect "revoked license locks" "$(post check "{\"token\":\"$TOKEN2\",\"device_hash\":\"$DEV2\"}")" '"status":"revoked"'
 COMP=$(curl -s -c $J -b $J -L -d "do=comp&email=friend@example.com&send=1&csrf=$CSRF" $BASE/admin/)
 expect "admin gives a free license" "$COMP" 'New key (shown once)'
 expect "free license emailed" "$(cat bondi/mail.log)" 'To: friend@example.com'
+COMPID=$(mysql -uroot --socket=$SOCK bondi -N -e "select l.id from licenses l join customers c on c.id=l.customer_id where c.email='friend@example.com'")
+expect "licenses list has a revoke button per row" "$(curl -s -c $J -b $J $BASE/admin/)" 'value="revoke"'
+LISTED=$(curl -s -c $J -b $J -L -d "do=revoke&license=$COMPID&back=list&csrf=$CSRF" $BASE/admin/)
+expect "revoke from the list stays on the list" "$LISTED" "License #$COMPID revoked.*Latest licenses"
+expect "revoked row offers restore" "$LISTED" 'value="restore"'
 
 expect "admin lists sign-ups" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'grace@example.com'
 expect "admin sign-ups by country" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'By country: .*DE 1'
 expect "admin sign-ups CSV" "$(curl -s -c $J -b $J "$BASE/admin/?signups&csv")" '"Ada L.",ada@example.com,IN,timezone,Asia/Calcutta,127.0.0.1'
+NEWS="subject=Beta%20for%20{name}&message=Hi%20{name},%0A%0ASee%20https://trybondi.app&q="
+expect "sign-ups page can write to everyone" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'Write to everyone on the list'
+expect "test email goes to support" "$(curl -s -c $J -b $J -L -d "do=news_test&$NEWS&csrf=$CSRF" $BASE/admin/)" 'Test sent to support@example.com'
+expect "test email is marked" "$(cat bondi/mail.log)" 'Subject: \[Test\] Beta for'
+expect "update emails sent" "$(curl -s -c $J -b $J -L -d "do=news_send&$NEWS&csrf=$CSRF" $BASE/admin/)" 'Sent to 2 people'
+expect "update email uses their name" "$(cat bondi/mail.log)" 'Subject: Beta for Ada L.'
+expect "update email says how to stop" "$(cat bondi/mail.log)" 'reply with "unsubscribe"'
+expect "sending again skips who already has it" "$(curl -s -c $J -b $J -L -d "do=news_send&$NEWS&csrf=$CSRF" $BASE/admin/)" 'Sent to 0 people'
 GRACE=$(mysql -uroot --socket=$SOCK bondi -N -e "select id from signups where email='grace@example.com'")
 expect "admin removes a sign-up" "$(curl -s -c $J -b $J -L -d "do=delete_signup&signup=$GRACE&csrf=$CSRF" $BASE/admin/)" 'Removed grace@example.com'
 
+if [ -n "${SNAP:-}" ]; then
+  curl -s -c $J -b $J $BASE/admin/ > "$SNAP/admin-licenses.html"
+  curl -s -c $J -b $J "$BASE/admin/?signups" > "$SNAP/admin-signups.html"
+fi
 grep -iE "fatal|warning|deprecated" $T/php.log | head -5
 echo "$PASS passed, $FAILS failed"
 exit $FAILS
