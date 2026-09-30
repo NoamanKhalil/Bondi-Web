@@ -36,6 +36,10 @@ return [
     // Trial length in days (owner decision: 7).
     'trial_days' => 7,
 
+    // Update sign-ups: which request header holds the visitor's real IP when the site is behind a CDN
+    // (Cloudflare: 'HTTP_CF_CONNECTING_IP'). null uses the connecting address, right on plain Hostinger.
+    'client_ip_header' => null,
+
     // Testing only: emails go to mail.log instead of being sent, and customer emails aren't looked up
     // at Paddle. Must be false on the live server.
     'test_mode' => false,

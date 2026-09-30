@@ -12,6 +12,7 @@
 //   POST deactivate   free this Mac's license, to move it to another Mac
 //   POST recover      email a new key to the buyer's address
 //   POST paddle       Paddle's payment and refund notifications
+//   POST signup       the website's "Sign up for updates": name and email (plus the visitor's IP and country)
 
 require dirname(__DIR__, 2) . '/bondi/bootstrap.php';
 
@@ -29,6 +30,7 @@ try {
         'deactivate' => deactivate(),
         'recover' => recover(),
         'paddle' => paddle(),
+        'signup' => signup(),
         default => fail('not_found', 'Unknown API call.', 404),
     };
 } catch (Throwable $error) {
@@ -194,4 +196,30 @@ function paddle(): never
         error_log('Bondi Paddle event ' . $eventId . ': ' . $error->getMessage());
         fail('processing', 'Will retry.', 500); // Paddle retries; the event is processed again then
     }
+}
+
+function signup(): never
+{
+    require_post();
+    $done = ['status' => 'ok', 'message' => 'Thanks. We\'ll email you when the beta opens.'];
+    // A field people can't see: bots fill it in. They get the same answer and nothing is saved.
+    if (trim((string)(input()['website'] ?? '')) !== '') {
+        json_out($done);
+    }
+    $name = trim(preg_replace('/\s+/u', ' ', (string)(input()['name'] ?? '')) ?? '');
+    $email = strtolower(trim((string)(input()['email'] ?? '')));
+    if ($name === '' || mb_strlen($name) > 100) {
+        fail('name', 'Enter your name.');
+    }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 254) {
+        fail('email', 'Enter a valid email address.');
+    }
+    limit_or_fail('signup:' . client_key(), 10, 3600);
+    $timeZone = mb_substr(trim((string)(input()['time_zone'] ?? '')), 0, 64) ?: null;
+    [$country, $source] = signup_country($timeZone);
+    run('INSERT INTO signups (email, name, ip, country, country_source, time_zone) VALUES (?, ?, ?, ?, ?, ?)
+         ON DUPLICATE KEY UPDATE name = VALUES(name), ip = VALUES(ip), country = VALUES(country),
+             country_source = VALUES(country_source), time_zone = VALUES(time_zone), updated_at = CURRENT_TIMESTAMP',
+        [$email, $name, signup_ip(), $country, $source, $timeZone]);
+    json_out($done);
 }

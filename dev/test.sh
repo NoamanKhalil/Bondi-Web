@@ -21,7 +21,7 @@ mysqld --initialize-insecure --datadir=$T/data --log-error=$T/init.log >/dev/nul
 mysqld --datadir=$T/data --socket=$SOCK --port=33098 --mysqlx=OFF --log-error=$T/err.log --pid-file=$T/pid >/dev/null 2>&1 &
 for i in $(seq 1 30); do mysql -uroot --socket=$SOCK -e 'select 1' >/dev/null 2>&1 && break; sleep 1; done
 mysql -uroot --socket=$SOCK -e "create database bondi; create user 'bondi'@'localhost' identified by 'test'; grant all on bondi.* to 'bondi'@'localhost';"
-for f in sql/001_schema.sql sql/002_one_mac_per_license.sql sql/003_checkout_claims.sql; do mysql -uroot --socket=$SOCK bondi < $f; done
+for f in sql/001_schema.sql sql/002_one_mac_per_license.sql sql/003_checkout_claims.sql sql/004_signups.sql; do mysql -uroot --socket=$SOCK bondi < $f; done
 mysql -uroot --socket=$SOCK bondi -e "update price_tiers set paddle_price_id='pri_launch' where tier='launch'; update price_tiers set paddle_price_id='pri_regular' where tier='regular';"
 HASH=$(php -r 'echo password_hash("admin-test", PASSWORD_DEFAULT);')
 cat > bondi/config.php <<CONF
@@ -95,6 +95,18 @@ expect "refund reopens a launch slot" "$(curl -s $BASE/api/offer)" '"launch_rema
 UNKNOWN='{"event_id":"evt_3","event_type":"transaction.completed","data":{"id":"txn_2","customer_id":"ctm_2","items":[{"price":{"id":"pri_mystery"}}]}}'
 expect "unknown price kept for retry" "$(paddle "$UNKNOWN")" '"error":"processing"'
 
+# Website sign-ups
+expect "sign-up saved" "$(post signup '{"name":"Ada Lovelace","email":"Ada@Example.com","time_zone":"America/Toronto"}')" '"status":"ok"'
+expect "sign-up needs a name" "$(post signup '{"name":"  ","email":"x@example.com"}')" '"error":"name"'
+expect "sign-up needs a real email" "$(post signup '{"name":"X","email":"not-an-email"}')" '"error":"email"'
+expect "bots filling the hidden field are ignored" "$(post signup '{"name":"Bot","email":"bot@example.com","website":"spam"}')" '"status":"ok"'
+curl -s -X POST "$BASE/api/signup" -H 'Content-Type: application/json' -H 'CF-IPCountry: DE' -d '{"name":"Grace","email":"grace@example.com","time_zone":"Asia/Calcutta"}' >/dev/null
+post signup '{"name":"Ada L.","email":"ada@example.com","time_zone":"Asia/Calcutta"}' >/dev/null
+ROWS=$(mysql -uroot --socket=$SOCK bondi -N -e "select concat_ws('|', email, name, ip, ifnull(country,'-'), ifnull(country_source,'-')) from signups order by email")
+expect "one row per email, name updated, email lowercased" "$ROWS" 'ada@example.com|Ada L.|127.0.0.1|IN|timezone'
+expect "country from the CDN header wins over the time zone" "$ROWS" 'grace@example.com|Grace|127.0.0.1|DE|ip'
+[ "$(echo "$ROWS" | wc -l | tr -d ' ')" = "2" ] && { PASS=$((PASS+1)); echo "ok   bot not saved"; } || { FAILS=$((FAILS+1)); echo "FAIL rows: $ROWS"; }
+
 # Admin page
 J=$T/cookies
 expect "admin needs a password" "$(curl -s -c $J -b $J $BASE/admin/)" 'Sign in'
@@ -113,6 +125,12 @@ expect "revoked license locks" "$(post check "{\"token\":\"$TOKEN2\",\"device_ha
 COMP=$(curl -s -c $J -b $J -L -d "do=comp&email=friend@example.com&send=1&csrf=$CSRF" $BASE/admin/)
 expect "admin gives a free license" "$COMP" 'New key (shown once)'
 expect "free license emailed" "$(cat bondi/mail.log)" 'To: friend@example.com'
+
+expect "admin lists sign-ups" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'grace@example.com'
+expect "admin sign-ups by country" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'By country: .*DE 1'
+expect "admin sign-ups CSV" "$(curl -s -c $J -b $J "$BASE/admin/?signups&csv")" '"Ada L.",ada@example.com,IN,timezone,Asia/Calcutta,127.0.0.1'
+GRACE=$(mysql -uroot --socket=$SOCK bondi -N -e "select id from signups where email='grace@example.com'")
+expect "admin removes a sign-up" "$(curl -s -c $J -b $J -L -d "do=delete_signup&signup=$GRACE&csrf=$CSRF" $BASE/admin/)" 'Removed grace@example.com'
 
 grep -iE "fatal|warning|deprecated" $T/php.log | head -5
 echo "$PASS passed, $FAILS failed"

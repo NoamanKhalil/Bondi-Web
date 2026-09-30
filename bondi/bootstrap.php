@@ -20,6 +20,7 @@ require __DIR__ . '/lib/ratelimit.php';
 require __DIR__ . '/lib/paddle.php';
 require __DIR__ . '/lib/mail.php';
 require __DIR__ . '/lib/licenses.php';
+require __DIR__ . '/lib/signups.php';
 
 /** A setting from config.php, e.g. config('paddle.api_key'). */
 function config(string $path, mixed $default = null): mixed

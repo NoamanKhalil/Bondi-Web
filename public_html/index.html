@@ -101,6 +101,17 @@
   .steps li { display: grid; justify-items: center; align-content: start; gap: 6px; text-align: center; padding-inline: 12px; }
   .steps b { font-size: 1.25rem; letter-spacing: -0.01em; } .steps li > span:last-child { color: var(--soft); }
   .step-dot { width: 16px; height: 16px; border-radius: 50%; background: var(--tile); border: 2px solid var(--faint); position: relative; z-index: 1; }
+  .signup { margin: 56px auto 0; max-width: 640px; background: var(--tile); border-radius: 28px; padding: 36px 40px; display: grid; gap: 10px; text-align: center; }
+  .signup h3 { margin: 0; font-size: 1.6rem; letter-spacing: -0.02em; } .signup .soft { margin: 0; color: var(--soft); }
+  .signup-fields { display: grid; grid-template-columns: 1fr 1.3fr auto; gap: 10px; margin-top: 10px; }
+  .signup input { font: inherit; font-size: 1rem; padding: 11px 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--ground); color: var(--ink); min-width: 0; width: 100%; box-sizing: border-box; }
+  .signup input:focus { outline: 3px solid var(--bondi-soft); border-color: var(--bondi); }
+  .signup input[aria-invalid="true"] { border-color: var(--attention); }
+  .signup button { border: 0; cursor: pointer; } .signup button[disabled] { opacity: .6; cursor: default; }
+  .signup-msg { margin: 0; min-height: 1.4em; font-weight: 500; } .signup-msg.ok { color: var(--bondi-ink); } .signup-msg.err { color: var(--attention); }
+  .signup .fine { margin: 4px 0 0; font-size: 0.8rem; color: var(--faint); }
+  .vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @media (max-width: 640px) { .signup { padding: 28px 20px; } .signup-fields { grid-template-columns: 1fr; } }
   .step-dot.now { background: var(--bondi); border-color: var(--bondi); box-shadow: 0 0 0 5px var(--bondi-soft); }
 
   section.sec { padding-block: 110px; display: grid; gap: 52px; }
@@ -455,7 +466,7 @@
     </nav>
     <div class="nav-right">
       <span class="left launching"><span>Beta launching soon</span></span>
-      <a class="pillbtn primary small" href="#launch"><span>Launch plans</span></a>
+      <a class="pillbtn primary small" href="#signup"><span>Get updates</span></a>
     </div>
   </div>
 </header>
@@ -468,7 +479,7 @@
       <p class="sub">Bondi tells you why your Mac is slow in one plain sentence, written on your Mac by Apple's on-device model. Nothing leaves it.</p>
       <div class="ctas">
         <a class="pillbtn primary" href="#app">Try it below</a>
-        <a class="pillbtn secondary" href="#launch">Launch plans</a>
+        <a class="pillbtn secondary" href="#signup">Get updates</a>
       </div>
       <p class="facts"><span class="launching">Beta launching soon</span><span>Full launch soon after</span><span>macOS 15 or later</span></p>
     </section>
@@ -729,6 +740,18 @@
         <li><span class="step-dot now"></span><b>Beta</b><span>Launching soon.</span></li>
         <li><span class="step-dot"></span><b>Full launch</b><span>Soon after the beta, with the launch price below.</span></li>
       </ol>
+      <form class="signup" id="signup" data-signup novalidate>
+        <h3>Sign up for updates</h3>
+        <p class="soft">Hear when the beta opens and when Bondi launches.</p>
+        <div class="signup-fields">
+          <label><span class="vh">Name</span><input name="name" autocomplete="name" placeholder="Name" maxlength="100" required></label>
+          <label><span class="vh">Email</span><input name="email" type="email" autocomplete="email" placeholder="Email" maxlength="254" required></label>
+          <label class="vh" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
+          <button class="pillbtn primary" type="submit">Sign up</button>
+        </div>
+        <p class="signup-msg" role="status" aria-live="polite" data-signup-msg></p>
+        <p class="fine">We keep your name, email, IP address and country only to email you about Bondi. Ask <a href="mailto:support@trybondi.app">support@trybondi.app</a> to remove them anytime. <a href="/privacy/">Privacy policy</a></p>
+      </form>
     </section>
 
     <section class="sec" id="pricing" aria-labelledby="pricing-title">
@@ -749,7 +772,7 @@
     <section class="sec" id="faq" aria-labelledby="faq-title">
       <div class="sec-head center"><h2 id="faq-title">Questions</h2></div>
       <div class="faq">
-        <details><summary>When can I get Bondi?</summary><p>The beta is launching soon, and the full launch follows soon after. You'll be able to buy a license at full launch.</p></details>
+        <details><summary>When can I get Bondi?</summary><p>The beta is launching soon, and the full launch follows soon after. You'll be able to buy a license at full launch. <a href="#signup">Sign up for updates</a> to hear first.</p></details>
         <details><summary>Which AI does Bondi use?</summary><p>On Macs with Apple Intelligence (macOS 26, Apple silicon), Apple's on-device foundation model, built into macOS. Other Macs can download a small free open model (Qwen2.5 0.5B) from Bondi's Settings; nothing downloads unless you press Download. Either way it runs on your Mac.</p></details>
         <details><summary>Does my data leave my Mac?</summary><p>No. History stays in a file on your Mac, and the AI runs on your Mac. Bondi only contacts our server to check your trial or license, and to look for updates. See the <a href="/privacy/">privacy policy</a>.</p></details>
         <details><summary>Which Macs does it run on?</summary><p>Any Mac with macOS 15 or later, Apple silicon or Intel.</p></details>
@@ -787,6 +810,37 @@
     if (!offer) return;
     $$('[data-price]').forEach(el => el.textContent = offer.price);
   }).catch(() => {});
+
+  // Sign up for updates: name and email to the license server, with the browser's time zone for the
+  // country when the server can't tell it from the IP.
+  const signup = $('[data-signup]');
+  if (signup) signup.addEventListener('submit', async event => {
+    event.preventDefault();
+    const msg = $('[data-signup-msg]'), button = $('button', signup), fields = signup.elements;
+    const say = (text, ok) => { msg.textContent = text; msg.className = 'signup-msg ' + (ok ? 'ok' : 'err'); };
+    const name = fields.name.value.trim(), email = fields.email.value.trim();
+    fields.name.setAttribute('aria-invalid', String(!name));
+    fields.email.setAttribute('aria-invalid', String(!fields.email.checkValidity() || !email));
+    if (!name) { say('Enter your name.'); fields.name.focus(); return; }
+    if (!email || !fields.email.checkValidity()) { say('Enter a valid email address.'); fields.email.focus(); return; }
+    button.disabled = true; say('');
+    let timeZone = '';
+    try { timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+    try {
+      const response = await fetch('/api/signup', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, time_zone: timeZone, website: fields.website.value }) });
+      const answer = await response.json().catch(() => ({}));
+      if (response.ok) {
+        say(`Thanks, ${name}. We'll email you when the beta opens.`, true);
+        signup.querySelector('.signup-fields').hidden = true;
+      } else {
+        say(answer.message || "Couldn't sign you up just now. Try again in a minute.");
+      }
+    } catch (e) {
+      say("Couldn't sign you up just now. Try again in a minute.");
+    }
+    button.disabled = false;
+  });
 
   $$('[data-vol]').forEach(r => r.addEventListener('input', () => {
     r.nextElementSibling.textContent = r.value + '%';

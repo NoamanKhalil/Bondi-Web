@@ -1,7 +1,8 @@
 <?php
 // Bondi license admin, at https://trybondi.app/admin/. One password (its hash is in config.php).
 // Find a license by email, key ending or Paddle order; revoke or restore it; free a Mac; email the buyer a
-// new key; give a free license; see launch licenses left and Paddle notifications that failed.
+// new key; give a free license; see launch licenses left and Paddle notifications that failed; see and
+// download the website's update sign-ups.
 require dirname(__DIR__, 2) . '/bondi/bootstrap.php';
 
 session_set_cookie_params(['httponly' => true, 'samesite' => 'Strict', 'secure' => !empty($_SERVER['HTTPS'])]);
@@ -82,6 +83,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $_SESSION['new_key'] = $key; // shown once on the next page
             go("license=$newId", 'Free license created' . (!empty($_POST['send']) ? ' and emailed.' : '.'));
+        case 'delete_signup':
+            $row = one('SELECT email FROM signups WHERE id = ?', [(int)($_POST['signup'] ?? 0)]);
+            run('DELETE FROM signups WHERE id = ?', [(int)($_POST['signup'] ?? 0)]);
+            go('signups', 'Removed ' . ($row['email'] ?? 'that sign-up') . ' from the list.');
     }
     go();
 }
@@ -95,6 +100,8 @@ if (isset($_GET['license'])) {
     license_page((int)$_GET['license'], $flash);
 } elseif (isset($_GET['webhooks'])) {
     webhooks_page($flash);
+} elseif (isset($_GET['signups'])) {
+    isset($_GET['csv']) ? signups_csv() : signups_page((string)($_GET['q'] ?? ''), $flash);
 } else {
     dashboard((string)($_GET['q'] ?? ''), $flash);
 }
@@ -110,6 +117,7 @@ function dashboard(string $query, ?string $flash): never
     $launchSold = one("SELECT COUNT(*) AS n FROM licenses WHERE price_tier = 'launch' AND status = 'active'")['n'];
     $revenue = all("SELECT currency, SUM(amount_cents) AS cents FROM licenses WHERE status = 'active' AND amount_cents > 0 GROUP BY currency");
     $failed = one('SELECT COUNT(*) AS n FROM webhook_events WHERE processed_at IS NULL')['n'];
+    $signups = one('SELECT COUNT(*) AS total, SUM(created_at > NOW() - INTERVAL 7 DAY) AS week FROM signups');
 
     echo '<div class="stats">';
     stat_box('Now selling at', '$' . $offer['price'] . ($offer['launch_remaining'] !== null ? ' · ' . $offer['launch_remaining'] . ' launch left' : ''));
@@ -117,6 +125,7 @@ function dashboard(string $query, ?string $flash): never
     stat_box('Active licenses', $counts['active'] ?? 0);
     stat_box('Refunded / revoked', ($counts['refunded'] ?? 0) . ' / ' . ($counts['revoked'] ?? 0));
     stat_box('Trials', (int)$trials['total'] . ' (' . (int)$trials['week'] . ' this week)');
+    stat_box('Update sign-ups', (int)$signups['total'] . ' (' . (int)$signups['week'] . ' this week)');
     stat_box('Revenue (active, before Paddle fees)', $revenue ? implode(' + ', array_map(fn($r) => money((int)$r['cents'], $r['currency']), $revenue)) : '—');
     echo '</div>';
     if ($failed > 0) {
@@ -216,6 +225,51 @@ function license_page(int $id, ?string $flash): never
     page_end();
 }
 
+function signups_page(string $query, ?string $flash): never
+{
+    page_start('Update sign-ups');
+    nav($flash);
+    $total = (int)one('SELECT COUNT(*) AS n FROM signups')['n'];
+    echo '<h2>Update sign-ups <span class="muted">(' . $total . ')</span></h2>';
+    $countries = all('SELECT COALESCE(country, \'?\') AS country, COUNT(*) AS n FROM signups GROUP BY country ORDER BY n DESC LIMIT 20');
+    if ($countries) {
+        echo '<p class="muted">By country: ' . implode(' · ', array_map(fn($c) => h($c['country']) . ' ' . (int)$c['n'], $countries)) . '</p>';
+    }
+    echo '<form class="search"><input type="hidden" name="signups" value="1"><input name="q" value="' . h($query) . '" placeholder="Name, email or country code" autofocus>'
+       . '<button>Search</button></form><p><a href="?signups&csv">Download all as CSV</a></p>';
+    $rows = $query === ''
+        ? all('SELECT * FROM signups ORDER BY id DESC LIMIT 500')
+        : all('SELECT * FROM signups WHERE email LIKE ? OR name LIKE ? OR country = ? ORDER BY id DESC LIMIT 500',
+              ['%' . strtolower(trim($query)) . '%', '%' . trim($query) . '%', strtoupper(trim($query))]);
+    if (!$rows) { echo '<p class="muted">None.</p>'; page_end(); }
+    echo '<table><tr><th>Name</th><th>Email</th><th>Country</th><th>IP</th><th>Signed up</th><th></th></tr>';
+    foreach ($rows as $row) {
+        $source = $row['country_source'] === 'timezone' ? ' <span class="muted" title="From the browser\'s time zone: ' . h($row['time_zone']) . '">(time zone)</span>' : '';
+        echo '<tr><td>' . h($row['name']) . '</td><td>' . h($row['email']) . '</td><td>' . h($row['country'] ?? '—') . $source . '</td>'
+           . '<td class="mono">' . h($row['ip']) . '</td><td>' . h($row['created_at']) . ' UTC</td><td>'
+           . '<form method="post" onsubmit="return confirm(' . h(json_encode('Remove ' . $row['email'] . ' from the list?')) . ')">' . csrf_field()
+           . '<input type="hidden" name="do" value="delete_signup"><input type="hidden" name="signup" value="' . (int)$row['id'] . '">'
+           . '<button class="small danger">Remove</button></form></td></tr>';
+    }
+    echo '</table>';
+    page_end();
+}
+
+function signups_csv(): never
+{
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename="bondi-signups-' . gmdate('Y-m-d') . '.csv"');
+    $out = fopen('php://output', 'w');
+    fputcsv($out, ['name', 'email', 'country', 'country_source', 'time_zone', 'ip', 'created_at_utc', 'updated_at_utc'], ',', '"', '');
+    foreach (all('SELECT * FROM signups ORDER BY id') as $row) {
+        // A leading = + - @ would run as a formula in Excel or Numbers, so it gets a ' in front.
+        $safe = fn($value) => is_string($value) && preg_match('/^[=+\-@]/', $value) ? "'" . $value : $value;
+        fputcsv($out, array_map($safe, [$row['name'], $row['email'], $row['country'], $row['country_source'], $row['time_zone'],
+                                          $row['ip'], $row['created_at'], $row['updated_at']]), ',', '"', '');
+    }
+    exit;
+}
+
 function webhooks_page(?string $flash): never
 {
     page_start('Paddle notifications');
@@ -247,7 +301,7 @@ function stat_box(string $label, mixed $value): void
 
 function nav(?string $flash): void
 {
-    echo '<nav><a href="./">Licenses</a> <a href="?webhooks">Paddle notifications</a>'
+    echo '<nav><a href="./">Licenses</a> <a href="?signups">Sign-ups</a> <a href="?webhooks">Paddle notifications</a>'
        . '<form method="post">' . csrf_field() . '<input type="hidden" name="do" value="logout"><button class="link">Sign out</button></form></nav>';
     if ($flash !== null) { echo '<p class="flash">' . h($flash) . '</p>'; }
 }
