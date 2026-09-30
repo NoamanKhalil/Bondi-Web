@@ -8,6 +8,10 @@ export const CONSTELLATION_FPS = 30;
 export const CONSTELLATION_FRAMES = 15 * CONSTELLATION_FPS;
 /** The website's intro over the app window: no end card, it holds on the icons and the page fades it away. */
 export const INTRO_FRAMES = 10 * CONSTELLATION_FPS;
+/** The window video: the whole film at 60 fps for smoother motion. It starts on a full sky (no fade from
+ *  black, so its first frame works as the poster) and holds on the end card; the page does the fades. */
+export const WINDOW_FPS = 60;
+export const WINDOW_FRAMES = 15 * WINDOW_FPS;
 
 const sans = '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif';
 const mono = 'ui-monospace, "SF Mono", Menlo, monospace';
@@ -126,7 +130,7 @@ const Headline = ({ frame, outro }: { frame: number; outro: number }) => {
   );
 };
 
-const Stars = ({ frame, scene }: { frame: number; scene: Scene }) => (
+const Stars = ({ frame, scene, fadeIn }: { frame: number; scene: Scene; fadeIn: boolean }) => (
   <svg width={scene.W} height={scene.H} style={{ position: "absolute", inset: 0 }}>
     {scene.stars.map((s, i) => {
       const t = interpolate(frame, [T.gatherStart + s.delay, T.gatherStart + s.delay + T.gatherLength], [0, 1], { ...clamp, easing: inOut });
@@ -141,7 +145,7 @@ const Stars = ({ frame, scene }: { frame: number; scene: Scene }) => (
       const arrival = s.node ? T.iconsStart + s.node.rank * 2.4 : T.gatherStart + 10;
       const absorbed = interpolate(frame, [arrival + 4, arrival + (s.node ? 16 : 50)], [1, 0], clamp);
       const twinkle = 0.45 + 0.55 * Math.abs(Math.sin(frame / 11 + s.phase));
-      const opacity = twinkle * absorbed * interpolate(frame, [0, 14], [0, 1], clamp);
+      const opacity = twinkle * absorbed * (fadeIn ? interpolate(frame, [0, 14], [0, 1], clamp) : 1);
       if (opacity <= 0.01) return null;
       const r = s.size * (1 + t * 0.4);
       // White while scattered; each star takes on its app's colour as it arrives.
@@ -219,20 +223,25 @@ const EndCard = ({ frame, fps }: { frame: number; fps: number }) => {
   );
 };
 
-export const Constellation = ({ endCard = true, background }: { endCard?: boolean; background?: string }) => {
-  const frame = useCurrentFrame();
+type Props = { endCard?: boolean; background?: string; fadeFromBlack?: boolean; fadeToBlack?: boolean };
+
+export const Constellation = ({ endCard = true, background, fadeFromBlack = true, fadeToBlack = endCard }: Props) => {
   const { fps, width, height, durationInFrames } = useVideoConfig();
+  // The timeline is written in frames at 30 fps; at 60 fps each frame is half a step, so motion is smoother.
+  const frame = useCurrentFrame() * CONSTELLATION_FPS / fps;
+  const length = durationInFrames * CONSTELLATION_FPS / fps;
   const scene = sceneFor(width, height);
-  const outroStart = endCard ? T.outroStart : durationInFrames + 100; // the intro never reaches its outro
-  // The film fades from and to black so the website's loop joins without a jump; the intro only fades in.
-  const fade = interpolate(frame, endCard ? [0, 12, durationInFrames - 16, durationInFrames - 1] : [0, 12, 13, 14], endCard ? [0, 1, 1, 0] : [0, 1, 1, 1], clamp);
+  const outroStart = endCard ? T.outroStart : length + 100; // the intro never reaches its outro
+  const fadeIn = fadeFromBlack ? interpolate(frame, [0, 12], [0, 1], clamp) : 1;
+  const fadeOut = fadeToBlack ? interpolate(frame, [length - 16, length - 1], [1, 0], clamp) : 1;
+  const fade = fadeIn * fadeOut;
   return (
     <AbsoluteFill style={{ background: background ?? "radial-gradient(ellipse at 50% 60%, #0b1a20 0%, #000 70%)", opacity: fade }}>
-      <Stars frame={frame} scene={scene} />
+      <Stars frame={frame} scene={scene} fadeIn={fadeFromBlack} />
       <Names frame={frame} scene={scene} />
-      <Icons frame={frame} fps={fps} scene={scene} outroStart={outroStart} />
+      <Icons frame={frame} fps={CONSTELLATION_FPS} scene={scene} outroStart={outroStart} />
       <Headline frame={frame} outro={outroStart} />
-      {endCard && <EndCard frame={frame} fps={fps} />}
+      {endCard && <EndCard frame={frame} fps={CONSTELLATION_FPS} />}
     </AbsoluteFill>
   );
 };
