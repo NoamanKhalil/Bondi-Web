@@ -29,7 +29,8 @@ cat > $T/config.php <<CONF
 return ['base_url' => '$BASE', 'db' => ['host' => 'localhost;unix_socket=$SOCK', 'name' => 'bondi', 'user' => 'bondi', 'pass' => 'test'],
   'paddle' => ['environment' => 'sandbox', 'api_key' => '', 'client_token' => 'test_token', 'webhook_secret' => '$SECRET'],
   'mail_from' => 'Bondi <licenses@example.com>', 'support_email' => 'support@example.com',
-  'admin_username' => 'owner', 'admin_password' => 'admin-test', 'trial_days' => 7, 'test_mode' => true];
+  'admin_username' => 'owner', 'admin_password' => 'admin-test', 'trial_days' => 7, 'test_mode' => true,
+  'client_ip_header' => 'HTTP_X_TEST_IP'];
 CONF
 BONDI_CONFIG=$T/config.php php -S 127.0.0.1:$PORT -t "$PWD/public_html" "$PWD/dev/router.php" >$T/php.log 2>&1 &
 PHP_PID=$!
@@ -133,8 +134,8 @@ expect "revoke from the list stays on the list" "$LISTED" "License #$COMPID revo
 expect "revoked row offers restore" "$LISTED" 'value="restore"'
 
 expect "admin lists sign-ups" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'grace@example.com'
-expect "admin sign-ups by country" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'By country: .*DE 1'
-expect "admin sign-ups CSV" "$(curl -s -c $J -b $J "$BASE/admin/?signups&csv")" '"Ada L.",ada@example.com,IN,timezone,Asia/Calcutta,127.0.0.1'
+expect "admin sign-ups by country" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'By country: .*Germany 1'
+expect "admin sign-ups CSV" "$(curl -s -c $J -b $J "$BASE/admin/?signups&csv")" '"Ada L.",ada@example.com,IN,India,timezone,Asia/Calcutta,127.0.0.1'
 NEWS="subject=Beta%20for%20{name}&message=Hi%20{name},%0A%0ASee%20https://trybondi.app&q="
 expect "sign-ups page can write to everyone" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'Write to everyone on the list'
 expect "test email goes to support" "$(curl -s -c $J -b $J -L -d "do=news_test&$NEWS&csrf=$CSRF" $BASE/admin/)" 'Test sent to support@example.com'
@@ -145,6 +146,16 @@ expect "update email says how to stop" "$(cat bondi/mail.log)" 'reply with "unsu
 expect "sending again skips who already has it" "$(curl -s -c $J -b $J -L -d "do=news_send&$NEWS&csrf=$CSRF" $BASE/admin/)" 'Sent to 0 people'
 GRACE=$(mysql -uroot --socket=$SOCK bondi -N -e "select id from signups where email='grace@example.com'")
 expect "admin removes a sign-up" "$(curl -s -c $J -b $J -L -d "do=delete_signup&signup=$GRACE&csrf=$CSRF" $BASE/admin/)" 'Removed grace@example.com'
+
+# Country from the visitor's IP address, looked up in bondi/ip-country-*.bin
+LOOKUPS=$(php -r 'function config($p, $d = null) { return $d; } require "bondi/lib/signups.php";
+  foreach (["8.8.8.8", "81.2.69.160", "2001:4860:4860::8888", "::ffff:8.8.8.8", "127.0.0.1", "10.1.2.3", "::1", "nonsense"] as $ip) echo $ip, "=", ip_country($ip) ?? "none", " ";')
+expect "IP lookups (v4, v6, mapped, private)" "$LOOKUPS" '8.8.8.8=US 81.2.69.160=GB 2001:4860:4860::8888=US ::ffff:8.8.8.8=US 127.0.0.1=none 10.1.2.3=none ::1=none nonsense=none'
+curl -s -X POST "$BASE/api/signup" -H 'Content-Type: application/json' -H 'X-Test-IP: 81.2.69.160' -d '{"name":"Brit","email":"brit@example.com","time_zone":"Asia/Tokyo"}' >/dev/null
+expect "sign-up country comes from the IP before the time zone" "$(mysql -uroot --socket=$SOCK bondi -N -e "select concat_ws('|', ip, country, country_source) from signups where email='brit@example.com'")" '81.2.69.160|GB|ip'
+mysql -uroot --socket=$SOCK bondi -e "insert into signups (email, name, ip, country, country_source, time_zone) values ('old@example.com', 'Old', '8.8.8.8', 'JP', 'timezone', 'Asia/Tokyo')"
+expect "admin shows country names" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'United Kingdom'
+expect "older sign-ups get their IP's country" "$(mysql -uroot --socket=$SOCK bondi -N -e "select concat_ws('|', country, country_source) from signups where email='old@example.com'")" 'US|ip'
 
 if [ -n "${SNAP:-}" ]; then
   curl -s -c $J -b $J $BASE/admin/ > "$SNAP/admin-licenses.html"

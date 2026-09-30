@@ -31,7 +31,7 @@ The owner reviews the site as a private claude.ai artifact: **https://claude.ai/
 ## Product rules that apply to the site
 
 - **Real numbers only.** Figures, app lists and films come from real readings of the owner's Mac (Bondi's engine, `--dump-engine` in the app's Debug build). Where something is an example (demo rows), say so.
-- **Privacy:** no analytics, no tracking, no third-party lookups of visitors. The sign-up form stores name, email, IP and country (from a CDN header or the browser's time zone) and the privacy policy says so. Keep the policy in step with anything new the site collects.
+- **Privacy:** no analytics, no tracking, no third-party lookups of visitors. The sign-up form stores name, email, IP and country (from the IP via `bondi/ip-country-*.bin`, refreshed with `php dev/update-ip-country.php`; else the browser's time zone) and the privacy policy says so. Keep the policy in step with anything new the site collects.
 - **Pre-launch:** "Beta launching soon, full launch soon after." No buy buttons until the owner says so. Price: $6.99 for the first 250, then $29.99; 1 Mac per license; 7-day trial (at launch). Paddle is the merchant of record.
 - Legal pages are drafts; "[company mailing address]" still needs Jabble Inc.'s address, and a lawyer should review them.
 - Don't copy any asset, text or layout detail from Vitals or any other app. Wording "Bondi for Apple Mac" is the owner's choice.
