@@ -261,11 +261,37 @@
   /* Wider than the page column; each tab shows all of itself, with nothing to scroll inside. */
   .win { position: relative; --win-w: min(1240px, calc(100vw - 44px)); width: var(--win-w); margin-left: calc((100% - var(--win-w)) / 2); box-sizing: border-box; }
   .win .win-body { min-height: 0; }
-  /* Intro film over the window's content: plays once when the window comes into view, then fades away. */
-  .win-intro { position: absolute; left: 0; right: 0; bottom: 0; top: var(--win-bar-h, 56px); background: #232427; z-index: 5; transition: opacity .8s ease; }
-  .win-intro video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* Intro over the window's content, drawn live in the page (so its colour is the app's own #232427 in
+     every browser): stars become apps once the window is 60% in view, then it fades to the clickable window. */
+  .win-intro { position: absolute; left: 0; right: 0; bottom: 0; top: calc(var(--win-bar-h, 56px) - 1px); background: #232427; z-index: 5; overflow: hidden;
+    transition: opacity 1.6s cubic-bezier(.45, 0, .25, 1); }
   .win-intro.done { opacity: 0; pointer-events: none; }
-  .intro-skip { position: absolute; right: 14px; bottom: 14px; border: 1px solid rgba(255,255,255,.18); background: rgba(40,40,44,.75); color: #f2f2f4; font: 500 12px/1 -apple-system, sans-serif; padding: 7px 12px; border-radius: 999px; cursor: pointer; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .win-intro.skip { transition-duration: .7s; }
+  .intro-content { position: absolute; inset: 0; opacity: .22; transition: opacity 1.6s cubic-bezier(.33, 0, .2, 1); }
+  .win-intro.playing .intro-content { opacity: 1; }
+  .intro-content canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .intro-stage { position: absolute; left: 0; top: 0; transform-origin: 0 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif; }
+  .intro-stage .hl { position: absolute; left: 0; right: 0; top: 96px; text-align: center; opacity: 0; transform: translateY(16px);
+    transition: opacity .7s cubic-bezier(.22, .8, .2, 1), transform .7s cubic-bezier(.22, .8, .2, 1); }
+  .intro-stage .hl.on { opacity: 1; transform: none; }
+  .intro-stage .hl b { display: block; font-weight: 700; font-size: 92px; letter-spacing: -0.035em; color: #f5f5f7; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .intro-stage .hl span { display: block; font-weight: 500; font-size: 32px; color: #a1a1a6; margin-top: 10px; letter-spacing: -0.01em; }
+  .intro-stage .pname { position: absolute; font: 24px ui-monospace, "SF Mono", Menlo, monospace; color: #8e8e93; white-space: nowrap; opacity: 0; }
+  .intro-stage .ic { position: absolute; transform: scale(0); transition: transform .75s cubic-bezier(.34, 1.56, .64, 1); }
+  .intro-stage .ic.in { transform: scale(1); }
+  .intro-stage .ic .fl { position: absolute; inset: 0; animation: introFloat 4.4s ease-in-out infinite alternate; animation-delay: var(--fd); }
+  @keyframes introFloat { from { transform: translateY(-4px); } to { transform: translateY(4px); } }
+  .intro-stage .ic .glow { position: absolute; left: -30%; right: -30%; top: 25%; bottom: -40%; border-radius: 50%; opacity: 0; filter: blur(var(--blur));
+    background: radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--hue) 85%, transparent) 0%, color-mix(in srgb, var(--hue) 35%, transparent) 40%, transparent 72%);
+    transition: opacity .5s ease; }
+  .intro-stage .ic.in .glow { opacity: .8; }
+  .intro-stage .ic img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .intro-stage .ic .cnt { position: absolute; left: 50%; top: 96%; transform: translateX(-50%); white-space: nowrap; font-weight: 600; font-size: 18px; color: #f5f5f7;
+    background: rgba(44, 44, 48, .92); border: 1px solid rgba(255, 255, 255, .1); border-radius: 999px; padding: 1px 8px; font-variant-numeric: tabular-nums;
+    opacity: 0; transition: opacity .45s ease; }
+  .intro-stage .ic.big .cnt { font-size: 22px; padding: 3px 12px; }
+  .intro-stage .ic.counted .cnt { opacity: 1; }
+  .intro-skip { position: absolute; right: 14px; top: 12px; border: 1px solid rgba(255,255,255,.18); background: rgba(40,40,44,.75); color: #f2f2f4; font: 500 12px/1 -apple-system, sans-serif; padding: 7px 12px; border-radius: 999px; cursor: pointer; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
   .intro-skip:hover { background: rgba(60,60,66,.85); }
   .intro-replay { border: 0; background: none; padding: 0; margin-right: 6px; color: var(--bondi-ink); font: inherit; cursor: pointer; }
   .win-bar { display: grid; grid-template-columns: auto auto 1fr auto; align-items: center; gap: 14px; padding: 12px 16px; border-bottom: 1px solid #000; background: #232427; }
@@ -510,8 +536,11 @@
         </div>
         <div class="win-body" data-wbody></div>
         <div class="win-intro" data-intro hidden>
-          <video src="assets/bondi-intro.mp4" muted playsinline preload="auto" width="2080" height="1000"
-                 aria-label="Intro: 955 processes on a real Mac drawn as stars pull together into 43 apps, each shown with its app icon and process count."></video>
+          <div class="intro-content" data-intro-content role="img"
+               aria-label="Intro: 955 processes on a real Mac, drawn as stars, pull together into 43 apps, each shown with its app icon and process count.">
+            <canvas data-intro-stars></canvas>
+            <div class="intro-stage" data-intro-stage></div>
+          </div>
           <button type="button" class="intro-skip" data-intro-skip>Skip intro</button>
         </div>
         <div class="win-foot"><span>Bondi: <span data-v="self">0.3</span>% CPU, 104 MB</span><span>·</span><span>39 apps, <span data-v="procs">966</span> processes</span></div>
@@ -840,34 +869,119 @@
     $$('[data-price]').forEach(el => el.textContent = offer.price);
   }).catch(() => {});
 
-  // Intro film over the app window: stars become apps, then the real, clickable window shows through.
-  const intro = $('[data-intro]'), introVideo = intro && $('video', intro), replay = $('[data-intro-replay]');
-  if (intro && introVideo && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const win = intro.closest('.win'), bar = $('.win-bar', win);
-    const fitBar = () => win.style.setProperty('--win-bar-h', bar.offsetHeight + 'px');
-    fitBar(); addEventListener('resize', fitBar);
-    const finish = () => {
+  // Intro over the app window: every process on a real Mac (one reading by Bondi's engine: 955 processes,
+  // 43 apps) as a star, pulled into its app. Same scene as the website film, drawn live so its background is
+  // exactly the app's colour. Starts when the window is 60% in view; skipped with Reduce Motion or on phones.
+  (() => {
+    const intro = $('[data-intro]');
+    if (!intro) return;
+    const win = intro.closest('.win'), bar = $('.win-bar', win), replay = $('[data-intro-replay]');
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || win.clientWidth < 700) return;
+    const APPS = [["macOS","macos",719,"#8c8c8c"],["Google Chrome","chrome",80,"#d8cf5d"],["Visual Studio Code","vscode",44,"#129bde"],["Bionic","bionic",10,"#61bcd8"],["TextEdit","textedit",10,"#cccccc"],["Notes","notes",9,"#fedd42"],["Docker","docker",9,"#1da3ef"],["Mail","mail",8,"#3ba0f9"],["iPhone Mirroring","iphonemirroring",7,"#6a8fec"],["Preview","preview",6,"#6eaafc"],["Messages","messages",5,"#40d867"],["Finder","finder",3,"#04affd"],["Activity Monitor","activitymonitor",3,"#61d8a4"],["Bondi","bondi",3,"#42c3d8"],["News","news",3,"#fe6378"],["Home","home",2,"#feb514"],["Journal","journal",2,"#9b61d8"],["Weather","weather",2,"#3b9ed8"],["Find My","findmy",2,"#06d877"],["Voice Memos","voicememos",2,"#d86165"],["Terminal","terminal",1,"#8c8c8c"],["OneDrive","onedrive",1,"#18adf7"],["Stocks","stocks",1,"#0ab1da"],["Calendar","calendar",1,"#fe595a"],["Shortcuts","shortcuts",1,"#a661d8"],["Podcasts","podcasts",1,"#a961d8"],["Photos","photos",1,"#d8ba52"],["Safari","safari",1,"#4b9ff0"],["Reminders","reminders",1,"#d86179"],["Clock","clock",1,"#f8a001"],["Tips","tips",1,"#feca0c"],["System Settings","settings",1,"#afafaf"]];
+    const NAMES = ["Google Chrome Helper (Renderer)", "mds_stores", "WindowServer", "Code Helper (Plugin)", "kernel_task", "Google Chrome Helper (GPU)", "mdworker_shared", "com.apple.WebKit.WebContent", "photoanalysisd", "coreaudiod", "Code Helper (Renderer)", "cloudd", "bird", "launchd", "trustd", "nsurlsessiond", "fseventsd", "Dock", "ControlCenter", "mediaanalysisd", "sharingd", "distnoted", "cfprefsd", "airportd", "bluetoothd", "powerd", "WallpaperAgent", "NotificationCenter", "chronod", "com.apple.geod", "Code Helper (GPU)", "syspolicyd", "XprotectService", "corespotlightd", "apsd", "com.docker.backend", "Mail Web Content", "Messages Helper"];
+    const TOTAL = 955, APP_COUNT = 43, OTHER = 14; // OTHER: processes of 11 background helpers with no icon
+    const T = { gather: 78, gatherLength: 92, icons: 158, swap: 170, counts: 214, end: 300 }; // film frames, 30 a second
+    const canvas = $('canvas', intro), ctx = canvas.getContext('2d'), stage = $('[data-intro-stage]', intro);
+    const seeded = seed => () => { seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    const bezier = (x1, y1, x2, y2) => x => { let lo = 0, hi = 1, u = x; for (let i = 0; i < 22; i++) { u = (lo + hi) / 2; const bx = 3 * (1 - u) * (1 - u) * u * x1 + 3 * (1 - u) * u * u * x2 + u * u * u; if (bx < x) lo = u; else hi = u; } return 3 * (1 - u) * (1 - u) * u * y1 + 3 * (1 - u) * u * u * y2 + u * u * u; };
+    const ease = bezier(.22, .8, .2, 1), inOut = bezier(.6, 0, .25, 1);
+    const range = (x, a, b) => Math.max(0, Math.min(1, (x - a) / (b - a)));
+    const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+    let scene = null, raf = 0, startedAt = 0, playing = false;
+
+    const build = () => {
+      const W = 2080, k = intro.clientWidth / W, H = Math.round(intro.clientHeight / k);
+      const rnd = seeded(20260929);
+      const size = p => 62 + 24 * Math.log2(Math.max(1, p));
+      const nodes = [], cx = W / 2, cy = 300 + (H - 320) / 2, stretch = Math.max(1, (W - 140) / (H - 320));
+      APPS.map(([name, icon, p, hue]) => ({ name, icon, p, hue, s: size(p) })).sort((a, b) => b.s - a.s).forEach((g, rank) => {
+        const pad = s => s > 150 ? 62 : 30, r = g.s / 2 + pad(g.s);
+        for (let step = 0; step < 20000; step++) {
+          const angle = step * 0.21 + rank * 0.9, radius = step * 0.55;
+          const x = cx + Math.cos(angle) * radius * stretch, y = cy + Math.sin(angle) * radius;
+          if (x - r > 70 && x + r < W - 70 && y - r > 300 && y + r < H - 20 && nodes.every(n => Math.hypot(n.x - x, n.y - y) > r + n.s / 2 + pad(n.s))) {
+            nodes.push({ ...g, x, y, rank }); return;
+          }
+        }
+      });
+      const stars = [];
+      nodes.forEach(n => { for (let i = 0; i < n.p; i++) {
+        const a = rnd() * Math.PI * 2, d = Math.sqrt(rnd()) * n.s * 0.36;
+        stars.push({ n, sx: rnd() * W, sy: rnd() * H, tx: n.x + Math.cos(a) * d, ty: n.y + Math.sin(a) * d, delay: rnd() * 42, curve: (rnd() - .5) * 420, size: 1.6 + rnd() * 2.6, phase: rnd() * 6.283, rgb: hex(n.hue) });
+      } });
+      for (let i = 0; i < OTHER; i++) { const x = rnd() * W, y = rnd() * H; stars.push({ n: null, sx: x, sy: y, tx: x, ty: y, delay: 0, curve: 0, size: 1.6 + rnd() * 2.6, phase: rnd() * 6.283, rgb: [255, 255, 255] }); }
+      const named = NAMES.map((name, i) => ({ name, star: stars[Math.floor(rnd() * stars.length)], start: 4 + (i % 12) * 5 }));
+
+      stage.style.width = W + 'px'; stage.style.height = H + 'px'; stage.style.transform = `scale(${k})`;
+      stage.innerHTML = '<div class="hl" data-h1><b>0 processes.</b><span>What Activity Monitor lists on this Mac.</span></div>'
+        + `<div class="hl" data-h2><b>${APP_COUNT} apps you know.</b><span>Bondi puts every process under the app that started it.</span></div>`
+        + named.map(({ name, star }) => `<div class="pname" style="left:${star.sx + 10}px;top:${star.sy - 12}px">${name}</div>`).join('')
+        + nodes.map(n => `<div class="ic${n.s > 150 ? ' big' : ''}" style="left:${n.x - n.s / 2}px;top:${n.y - n.s / 2}px;width:${n.s}px;height:${n.s}px;--hue:${n.hue};--blur:${(n.s * .08).toFixed(1)}px">`
+          + `<div class="fl" style="--fd:${-(n.rank * 0.57) % 4.4}s"><i class="glow"></i><img src="assets/stars/${n.icon}.png" alt=""><span class="cnt">${n.s > 150 ? `${n.name} · ${n.p}` : n.p}</span></div></div>`).join('');
+      const dpr = Math.min(2, devicePixelRatio || 1);
+      canvas.width = Math.round(intro.clientWidth * dpr); canvas.height = Math.round(intro.clientHeight * dpr);
+      scene = { W, H, k, dpr, nodes, stars, named, icons: $$('.ic', stage), names: $$('.pname', stage), h1: $('[data-h1]', stage), h2: $('[data-h2]', stage) };
+    };
+
+    // One frame of the scene at film frame f (the same maths as the Remotion film).
+    const draw = f => {
+      const { stars, k, dpr, nodes, icons, names, named, h1, h2 } = scene;
+      ctx.setTransform(k * dpr, 0, 0, k * dpr, 0, 0);
+      ctx.clearRect(0, 0, scene.W, scene.H);
+      for (const s of stars) {
+        const t = inOut(range(f, T.gather + s.delay, T.gather + s.delay + T.gatherLength));
+        const dx = s.tx - s.sx, dy = s.ty - s.sy, len = Math.hypot(dx, dy) || 1, bend = Math.sin(Math.PI * t) * s.curve;
+        const x = s.sx + dx * t + (-dy / len) * bend + (1 - t) * Math.sin(f / 40 + s.phase) * 6, y = s.sy + dy * t + (dx / len) * bend;
+        const arrival = s.n ? T.icons + s.n.rank * 2.4 : T.gather + 10;
+        const alpha = (0.45 + 0.55 * Math.abs(Math.sin(f / 11 + s.phase))) * (1 - range(f, arrival + 4, arrival + (s.n ? 16 : 50)));
+        if (alpha <= 0.01) continue;
+        const mix = range(t, 0.35, 1), [r, g, b] = s.rgb;
+        ctx.fillStyle = `rgba(${Math.round(255 + (r - 255) * mix)},${Math.round(255 + (g - 255) * mix)},${Math.round(255 + (b - 255) * mix)},${alpha.toFixed(3)})`;
+        ctx.beginPath(); ctx.arc(x, y, s.size * (1 + t * 0.4), 0, 6.283); ctx.fill();
+      }
+      named.forEach(({ start }, i) => { names[i].style.opacity = (Math.min(range(f, start, start + 10), 1 - range(f, start + 34, start + 46)) * 0.75 * (1 - range(f, T.gather - 10, T.gather))).toFixed(3); });
+      h1.querySelector('b').textContent = `${Math.round(ease(range(f, 8, 64)) * TOTAL).toLocaleString('en-US')} processes.`;
+      h1.classList.toggle('on', f >= 4 && f < T.swap);
+      h2.classList.toggle('on', f >= T.swap);
+      nodes.forEach((n, i) => {
+        icons[i].classList.toggle('in', f >= T.icons + n.rank * 2.4);
+        icons[i].classList.toggle('counted', f >= T.counts + n.rank * 1.2);
+      });
+    };
+
+    const tick = now => {
+      const f = (now - startedAt) / 1000 * 30;
+      draw(f);
+      if (f >= T.end) { finish(false); return; }
+      raf = requestAnimationFrame(tick);
+    };
+    const finish = skipped => {
       if (intro.classList.contains('done')) return;
+      cancelAnimationFrame(raf); playing = false;
+      intro.classList.toggle('skip', skipped);
       intro.classList.add('done');
-      introVideo.pause();
-      setTimeout(() => { if (intro.classList.contains('done')) intro.hidden = true; }, 850);
+      setTimeout(() => { if (intro.classList.contains('done')) intro.hidden = true; }, skipped ? 750 : 1650);
       replay.hidden = false;
     };
     const play = () => {
-      intro.hidden = false; intro.classList.remove('done'); replay.hidden = true;
-      introVideo.currentTime = 0;
-      introVideo.play().catch(finish); // a browser that won't autoplay just shows the window
+      intro.hidden = false; intro.classList.remove('done', 'skip', 'playing'); replay.hidden = true;
+      build(); draw(0);
+      requestAnimationFrame(() => { intro.classList.add('playing'); startedAt = performance.now(); playing = true; raf = requestAnimationFrame(tick); });
     };
-    intro.hidden = false;
-    introVideo.addEventListener('ended', finish);
-    $('[data-intro-skip]').addEventListener('click', finish);
-    $('[data-wtabs]').addEventListener('click', finish, true);
+    const fitBar = () => win.style.setProperty('--win-bar-h', bar.offsetHeight + 'px');
+    fitBar(); addEventListener('resize', fitBar);
+    // Before it starts: the window shows a faint, still sky, so the UI doesn't flash first.
+    intro.hidden = false; build(); draw(0);
+    $('[data-intro-skip]').addEventListener('click', () => finish(true));
+    $('[data-wtabs]').addEventListener('click', () => finish(true), true);
     replay.addEventListener('click', () => { play(); win.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+    // 60% of the window in view (or 60% of the screen filled by it, on short screens).
     const seen = new IntersectionObserver(entries => {
-      if (entries.some(e => e.isIntersecting)) { seen.disconnect(); play(); }
-    }, { threshold: 0.35 });
+      const e = entries[entries.length - 1];
+      if (e.intersectionRatio >= 0.6 || e.intersectionRect.height >= innerHeight * 0.6) { seen.disconnect(); play(); }
+    }, { threshold: Array.from({ length: 21 }, (_, i) => i / 20) });
     seen.observe(win);
-  }
+  })();
 
   // Sign up for updates: name and email to the license server, with the browser's time zone for the
   // country when the server can't tell it from the IP.
