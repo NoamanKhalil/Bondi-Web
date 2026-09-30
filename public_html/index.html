@@ -258,9 +258,9 @@
   .win { --w-ground: #1c1d20; --w-card: #26272b; --w-card-2: #2e2f34; --w-line: #36373c; --w-ink: #f2f2f4; --w-soft: #9d9da5; --w-faint: #6c6c74;
     background: var(--w-ground); color: var(--w-ink); border-radius: 18px; border: 1px solid #000; box-shadow: var(--shadow); overflow: hidden;
     font: 13px/1.35 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; }
-  /* Wider than the page column, and a fixed height that scrolls inside, like a real Mac window. */
+  /* Wider than the page column; each tab shows all of itself, with nothing to scroll inside. */
   .win { position: relative; --win-w: min(1240px, calc(100vw - 44px)); width: var(--win-w); margin-left: calc((100% - var(--win-w)) / 2); box-sizing: border-box; }
-  .win .win-body { height: 560px; min-height: 0; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #4a4b50 transparent; }
+  .win .win-body { min-height: 0; }
   /* Intro film over the window's content: plays once when the window comes into view, then fades away. */
   .win-intro { position: absolute; left: 0; right: 0; bottom: 0; top: var(--win-bar-h, 56px); background: #232427; z-index: 5; transition: opacity .8s ease; }
   .win-intro video { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -328,6 +328,7 @@
   .w-table svg { width: 110px; height: 16px; display: inline-block; vertical-align: middle; }
   .w-scroll { overflow-x: auto; }
   .vol { display: grid; grid-template-columns: 150px 1fr 48px; gap: 12px; align-items: center; padding: 8px 0; border-top: 1px solid var(--w-line); }
+  .stack-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; } @media (max-width: 760px) { .stack-cols { grid-template-columns: 1fr; } }
   .dev { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 10px 0; border-top: 1px solid var(--w-line); } .dev small { color: var(--w-soft); }
   @media (max-width: 760px) {
     .win-bar { grid-template-columns: auto 1fr; } .win-title, .win-tools { display: none; }
@@ -1254,11 +1255,6 @@
     const views = {
       overview: () => {
         const [lead, rest] = statusLines[statusIndex % statusLines.length];
-        const byMem = [...apps].sort((a, b) => b.mem - a.mem), byCpu = [...apps].sort((a, b) => b.cpu - a.cpu), byEn = [...apps].sort((a, b) => b.en - a.en);
-        const top = (list, key, cols, fmt) => list.slice(0, 4).map((a, i) => [a.n, a[key], cols[i], fmt(a[key])]);
-        const memTotal = byMem.reduce((s, a) => s + a.mem, 0), cpuTotal = byCpu.reduce((s, a) => s + a.cpu, 0) || 1, enTotal = byEn.reduce((s, a) => s + a.en, 0);
-        const purple = ['#9b7ae0', '#b69bf0', '#7d5cc9', '#cbb8f5'], blue = ['#4a90e2', '#74aaf0', '#3471bd', '#a6c8f5'], green = ['#5cc26a', '#86d68f', '#3f9b4c', '#b3e6b8'];
-        const types = [['App', 38.56, '#9b7ae0', '38.56 GB'], ['Wired', 3.32, '#e8793a', '3.32 GB'], ['Compressed', 3.39, '#5cc26a', '3.39 GB'], ['Cached Files', 16.81, '#6e6e76', '16.81 GB']];
         return `
           <div class="w-status"><span class="spark">✦</span><span><b>${lead}</b>${rest}</span><small>Why is my Mac slow?</small></div>
           <div class="w-h">Ask about your Mac</div>
@@ -1272,13 +1268,6 @@
             <div class="w-card" style="--tint:${tint.gpu}">${head('gpu', 'GPU')}<div class="w-big">${Math.round(v.gpu)}<small>%</small></div><div class="w-sub">M1 Max · 24 cores</div><div class="w-chart">${area(series.gpu, 100, 200, 30, tint.gpu)}</div></div>
             <div class="w-card" style="--tint:${tint.neural}">${head('neural', 'Neural Engine', v.ane > 0.05 ? 'Working' : 'Idle')}<div class="w-big">${f2(v.ane)}<small>W</small></div><div class="w-sub">16 cores · 11 TOPS</div><div class="w-chart">${area(series.ane, 1.5, 200, 30, tint.neural)}</div></div>
             <div class="w-card wide" style="--tint:${tint.battery}">${head('battery', 'Battery', '3h 31m left')}<div class="w-big">${Math.round(v.batt)}<small>%</small></div><div class="w-sub">Drawing 11.8 W</div><div class="w-fill"><i style="width:${v.batt}%"></i></div></div>
-          </div>
-          <div class="w-h">Right now</div>
-          <div class="rings">
-            <div class="ring-card"><div class="head" style="color:${tint.memory}">Memory by type</div>${ring(types, 64, Math.round(v.mem / 64 * 100) + '%', 'in use')}${legend(types)}</div>
-            <div class="ring-card"><div class="head" style="color:${tint.memory}">Memory by app</div>${ring(top(byMem, 'mem', purple, gb), memTotal, f1(memTotal) + ' GB', 'all apps')}${legend(top(byMem, 'mem', purple, gb))}</div>
-            <div class="ring-card"><div class="head" style="color:${tint.cpu}">CPU by app</div>${ring(top(byCpu, 'cpu', blue, x => f1(x) + '%'), cpuTotal, Math.round(v.cpu) + '%', 'in use')}${legend(top(byCpu, 'cpu', blue, x => f1(x) + '%'))}</div>
-            <div class="ring-card"><div class="head" style="color:${tint.battery}">Power by app</div>${ring(top(byEn, 'en', green, x => f1(x) + ' W'), enTotal, f1(enTotal) + ' W', 'all apps')}${legend(top(byEn, 'en', green, x => f1(x) + ' W'))}</div>
           </div>`;
       },
       cpu: () => section('cpu', 'CPU', Math.round(v.cpu) + '<small>%</small>', 'Apple M1 Max', series.cpu, 100, ['Average', '17%', 'Peak', '51%'],
@@ -1316,18 +1305,20 @@
           + rows.map(([n, d, action]) => `<div class="dev"><b>${n}</b><span class="w-sub">${action}</span><small>${d}</small></div>`).join('');
         const soon = ' <span style="font-size:10.5px;font-weight:600;color:#2cc0de;background:rgba(44,192,222,.14);padding:2px 7px;border-radius:999px;margin-left:6px">Coming soon</span>';
         return `<div class="w-card" style="--tint:${tint.stack};min-height:0">${head('stack', 'Stack', '4 servers · 3 containers · 1 model')}
+          <div class="stack-cols"><div>
           ${group('Dev servers', [['Node.js · api', 'localhost:4000 · 184.3 MB · active', 'Stop…'], ['Vite · shop', 'localhost:5173 · 612.0 MB · <span style="color:#ff9f0a">idle 3h 20m</span>', 'Stop…'],
                                   ['Next.js · site', 'localhost:3000 · 480.2 MB · active', 'Stop…'], ['Wrangler · Talim', 'localhost:8787 · 331.5 MB · active', 'Stop…']])}
           ${group('Docker', [['postgres', 'container · 212.0 MB · port 5432', 'Stop…'], ['redis', 'container · 18.4 MB · port 6379', 'Stop…'], ['nginx', 'container · 9.6 MB · port 8080', 'Stop…']])}
+          </div><div>
           ${group('Local AI', [['LM Studio · Llama 3.1 8B', 'model loaded · 8.54 GB · working now', 'Unload…']])}
-          <div style="opacity:.55">${group('Kubernetes', [['web-7d9f · default', 'pod · Running · 2 restarts', ''], ['worker-5c2b · default', 'pod · Running', '']], soon)}</div></div>`;
+          <div style="opacity:.55">${group('Kubernetes', [['web-7d9f · default', 'pod · Running · 2 restarts', ''], ['worker-5c2b · default', 'pod · Running', '']], soon)}</div></div></div></div>`;
       },
     };
 
     function section(k, title, big, sub, data, max, pair, side, stats, cols, cells, sort) {
       const ranges = ['10 min', '1 h', '24 h', '7 d', '30 d'].map((r, i) => `<span class="${i === 2 ? 'on' : ''}">${r}</span>`).join('');
       const table = cols ? `<div class="w-scroll"><table class="w-table"><thead><tr><th>App Name</th>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>`
-        + [...apps].sort(sort).map(a => `<tr><td>${appCell(a)}</td>${cells(a).map(c => `<td>${c}</td>`).join('')}</tr>`).join('') + '</tbody></table></div>' : '';
+        + [...apps].sort(sort).slice(0, 4).map(a => `<tr><td>${appCell(a)}</td>${cells(a).map(c => `<td>${c}</td>`).join('')}</tr>`).join('') + '</tbody></table></div>' : '';
       return `<div class="hero-row">
           <div class="hero-card" style="--tint:${tint[k]}"><div class="hl">${head(k, title)}<div><div class="w-big">${big}</div><div class="w-sub">${sub}</div></div>
             <div class="w-sub">${pair[0]} <b style="color:#f2f2f4">${pair[1]}</b> · ${pair[2]} <b style="color:#f2f2f4">${pair[3]}</b></div></div>
@@ -1338,7 +1329,12 @@
 
     let current = 'overview';
     tabsEl.innerHTML = tabs.map(([k, label, col]) => `<button role="tab" aria-selected="${k === current}" data-t="${k}" style="--tint:${col}" aria-label="${label}">${svg(k)}<span class="label">${label}</span></button>`).join('');
-    const render = () => { body.innerHTML = views[current](); bindLive(); };
+    const render = () => {
+      body.innerHTML = views[current]();
+      bindLive();
+      // The window keeps the Overview's height on every tab, so it doesn't jump when you switch.
+      if (current === 'overview' && body.offsetHeight > 0) body.style.minHeight = body.offsetHeight + 'px';
+    };
     const bindLive = () => $$('[data-vol]', body).forEach(r => { const paint = () => r.style.setProperty('--p', r.value / 3 + '%'); paint(); r.addEventListener('input', () => { paint(); r.nextElementSibling.textContent = r.value + '%'; }); });
     $$('button', tabsEl).forEach(b => b.addEventListener('click', () => {
       current = b.dataset.t;
