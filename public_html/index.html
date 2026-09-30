@@ -258,7 +258,9 @@
   .win { --w-ground: #1c1d20; --w-card: #26272b; --w-card-2: #2e2f34; --w-line: #36373c; --w-ink: #f2f2f4; --w-soft: #9d9da5; --w-faint: #6c6c74;
     background: var(--w-ground); color: var(--w-ink); border-radius: 18px; border: 1px solid #000; box-shadow: var(--shadow); overflow: hidden;
     font: 13px/1.35 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; }
-  .win { position: relative; max-width: 920px; margin-inline: auto; width: 100%; }
+  /* Wider than the page column, and a fixed height that scrolls inside, like a real Mac window. */
+  .win { position: relative; --win-w: min(1240px, calc(100vw - 44px)); width: var(--win-w); margin-left: calc((100% - var(--win-w)) / 2); box-sizing: border-box; }
+  .win .win-body { height: 560px; min-height: 0; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #4a4b50 transparent; }
   /* Intro film over the window's content: plays once when the window comes into view, then fades away. */
   .win-intro { position: absolute; left: 0; right: 0; bottom: 0; top: var(--win-bar-h, 56px); background: #232427; z-index: 5; transition: opacity .8s ease; }
   .win-intro video { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -507,7 +509,7 @@
         </div>
         <div class="win-body" data-wbody></div>
         <div class="win-intro" data-intro hidden>
-          <video src="assets/bondi-intro.mp4" muted playsinline preload="auto" width="1440" height="1260"
+          <video src="assets/bondi-intro.mp4" muted playsinline preload="auto" width="2080" height="1000"
                  aria-label="Intro: 955 processes on a real Mac drawn as stars pull together into 43 apps, each shown with its app icon and process count."></video>
           <button type="button" class="intro-skip" data-intro-skip>Skip intro</button>
         </div>
