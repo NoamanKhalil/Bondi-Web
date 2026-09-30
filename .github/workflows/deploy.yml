@@ -1,0 +1,67 @@
+# Every push to main goes live on trybondi.app (Hostinger), over SSH:
+#   public_html/  ->  domains/trybondi.app/public_html/
+#   bondi/        ->  domains/trybondi.app/public_html/bondi/   (locked by bondi/.htaccess)
+# config.php is never uploaded or touched: it lives only on the server (and on the owner's Mac).
+# Nothing on the server is ever deleted, so files removed from git stay there until removed by hand.
+#
+# Needs four repository secrets (GitHub → Settings → Secrets and variables → Actions):
+#   HOSTINGER_SSH_HOST, HOSTINGER_SSH_PORT, HOSTINGER_SSH_USER  (hPanel → Advanced → SSH Access)
+#   HOSTINGER_SSH_KEY  (the private half of a key whose public half is added in that same hPanel page)
+
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check every PHP file for syntax errors
+        run: |
+          find public_html bondi -name '*.php' -print0 | xargs -0 -n1 php -l > /dev/null
+
+      - name: Set up SSH
+        env:
+          SSH_KEY: ${{ secrets.HOSTINGER_SSH_KEY }}
+          SSH_HOST: ${{ secrets.HOSTINGER_SSH_HOST }}
+          SSH_PORT: ${{ secrets.HOSTINGER_SSH_PORT }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "$SSH_PORT" "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Upload the website and the license server
+        env:
+          SSH_HOST: ${{ secrets.HOSTINGER_SSH_HOST }}
+          SSH_PORT: ${{ secrets.HOSTINGER_SSH_PORT }}
+          SSH_USER: ${{ secrets.HOSTINGER_SSH_USER }}
+        run: |
+          SSH="ssh -i ~/.ssh/deploy_key -p $SSH_PORT"
+          DEST="$SSH_USER@$SSH_HOST:domains/trybondi.app/public_html"
+          rsync -rlptz --itemize-changes -e "$SSH" \
+            --exclude '.DS_Store' --exclude '_*.html' \
+            public_html/ "$DEST/"
+          rsync -rlptz --itemize-changes -e "$SSH" \
+            --exclude '.DS_Store' --exclude 'config.php' --exclude 'mail.log' \
+            bondi/ "$DEST/bondi/"
+
+      - name: Check the live site answers
+        run: |
+          for path in "" api/offer admin/ buy/; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "https://trybondi.app/$path")
+            echo "/$path -> $code"
+            [ "$code" = 200 ] || exit 1
+          done
+          code=$(curl -s -o /dev/null -w '%{http_code}' https://trybondi.app/bondi/config.php)
+          echo "/bondi/config.php -> $code (must be 403)"
+          [ "$code" = 403 ] || exit 1

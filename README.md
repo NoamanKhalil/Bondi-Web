@@ -46,6 +46,13 @@ Paddle, emails license keys, activates one Mac per license, and has an admin pag
 6. **Check.** Open `https://trybondi.app/api/offer`: it should show `"price":"6.99"` and
    `"launch_remaining":250`. Open `https://trybondi.app/admin/` and sign in.
 
+## Deploy
+
+Pushing to `main` on GitHub deploys by itself (`.github/workflows/deploy.yml`): it checks the PHP, copies
+`public_html/` to the live `public_html/` and `bondi/` to `public_html/bondi/` over SSH, then checks the
+live pages answer and that `bondi/config.php` is blocked. It never uploads or changes `config.php` (edit
+that one in File Manager) and never deletes files on the server. Watch a run under GitHub → Actions.
+
 ## Connect Paddle (sandbox first)
 
 1. **Product.** Catalog → Products → New product "Bondi"; add two one-time prices, $6.99 and $29.99.
