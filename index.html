@@ -1,0 +1,1423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bondi for Mac: why your Mac is slow, in plain English</title>
+<meta name="description" content="Bondi tells you why your Mac is slow in one plain sentence, written on your Mac by Apple's on-device model. It groups every process into the apps you know.">
+<link rel="canonical" href="https://trybondi.app/">
+<meta name="google-site-verification" content="5aiz_Pur5Jb3oPWaS-5uEnBHIr1YnhyW1ZOQaunmEI0" />
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Bondi">
+<meta property="og:url" content="https://trybondi.app/">
+<meta property="og:title" content="Bondi for Mac: your Mac, explained">
+<meta property="og:description" content="Why your Mac is slow, in one plain sentence, written on your Mac by Apple's on-device model. Beta launching soon.">
+<meta property="og:image" content="https://trybondi.app/assets/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="43 apps you know: Bondi puts every process under the app that started it.">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@graph": [
+  {"@type": "Organization", "@id": "https://trybondi.app/#org", "name": "Jabble Inc.", "url": "https://trybondi.app/",
+   "logo": "https://trybondi.app/assets/icon-blue.png", "email": "support@trybondi.app"},
+  {"@type": "WebSite", "@id": "https://trybondi.app/#site", "name": "Bondi", "url": "https://trybondi.app/", "publisher": {"@id": "https://trybondi.app/#org"}}
+]}
+</script>
+<style>
+  :root {
+    --ground: #f5f5f7;
+    --band: #ffffff;
+    --tile: #ffffff;
+    --tile-2: #f5f5f7;
+    --ink: #1d1d1f;
+    --soft: #6e6e73;
+    --faint: #86868b;
+    --line: #d2d2d7;
+    --bondi: #0095b6;
+    --bondi-ink: #00708a;
+    --bondi-soft: rgba(0, 149, 182, 0.12);
+    --on-bondi: #ffffff;
+    --attention: #bf5b00;
+    --glass: rgba(255, 255, 255, 0.72);
+    --shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.35), 0 8px 20px -12px rgba(0, 0, 0, 0.18);
+    --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground: #131315; --band: #131315; --tile: #161617; --tile-2: #1d1d1f; --ink: #f5f5f7; --soft: #a1a1a6; --faint: #86868b;
+      --line: #2c2c2e; --bondi: #2cc0de; --bondi-ink: #5fd4ea; --bondi-soft: rgba(44, 192, 222, 0.14); --on-bondi: #031418;
+      --attention: #ff9f0a; --glass: rgba(22, 22, 23, 0.72);
+      --shadow: 0 30px 70px -24px rgba(0, 0, 0, 0.9), 0 12px 24px -12px rgba(0, 0, 0, 0.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground: #131315; --band: #131315; --tile: #161617; --tile-2: #1d1d1f; --ink: #f5f5f7; --soft: #a1a1a6; --faint: #86868b;
+    --line: #2c2c2e; --bondi: #2cc0de; --bondi-ink: #5fd4ea; --bondi-soft: rgba(44, 192, 222, 0.14); --on-bondi: #031418;
+    --attention: #ff9f0a; --glass: rgba(22, 22, 23, 0.72);
+    --shadow: 0 30px 70px -24px rgba(0, 0, 0, 0.9), 0 12px 24px -12px rgba(0, 0, 0, 0.6);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 56px; } /* sections land below the sticky header */
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; background: var(--ground); color: var(--ink); font: 17px/1.47 var(--sans); letter-spacing: -0.012em; -webkit-font-smoothing: antialiased; }
+  img, video { max-width: 100%; height: auto; display: block; }
+  a { color: var(--bondi-ink); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  :focus-visible { outline: 3px solid var(--bondi); outline-offset: 3px; border-radius: 8px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding-inline: 22px; }
+  .band { background: var(--band); }
+  h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; }
+  h1 { font-size: clamp(2.8rem, 7vw, 5rem); line-height: 1.05; font-weight: 700; letter-spacing: -0.035em; }
+  h2 { font-size: clamp(2.2rem, 5vw, 3.5rem); line-height: 1.07; font-weight: 700; letter-spacing: -0.03em; }
+  h3 { font-size: 1.5rem; line-height: 1.17; font-weight: 700; letter-spacing: -0.02em; }
+  p { margin: 0; }
+  .eyebrow { font-size: 1.2rem; font-weight: 600; color: var(--bondi-ink); letter-spacing: -0.01em; }
+  .sub { font-size: clamp(1.15rem, 2.2vw, 1.5rem); line-height: 1.33; color: var(--soft); font-weight: 500; letter-spacing: -0.02em; }
+  .center { text-align: center; margin-inline: auto; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  /* Navigation bar: glass, like Apple's own */
+  header.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--glass);
+    backdrop-filter: saturate(1.8) blur(20px); -webkit-backdrop-filter: saturate(1.8) blur(20px); border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent); }
+  .nav-inner { max-width: 1080px; margin: 0 auto; padding: 10px 22px; display: flex; align-items: center; gap: 26px; font-size: 0.8rem; }
+  .brand { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); font-weight: 600; font-size: 1rem; }
+  .brand img { width: 26px; height: 26px; }
+  nav.links { display: flex; gap: 24px; } nav.links a { color: var(--soft); } nav.links a:hover { color: var(--ink); text-decoration: none; }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+  .left { display: inline-flex; align-items: center; gap: 6px; color: var(--soft); white-space: nowrap; }
+  .left::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--attention); }
+
+  /* Pill buttons */
+  .pillbtn { display: inline-flex; align-items: center; justify-content: center; border-radius: 980px; padding: 11px 22px; font: 400 1.05rem/1.2 var(--sans); letter-spacing: -0.01em; border: 1px solid transparent; }
+  .pillbtn.primary { background: var(--bondi); color: var(--on-bondi); }
+  .pillbtn.primary:hover { background: var(--bondi-ink); text-decoration: none; }
+  .pillbtn.secondary { color: var(--bondi-ink); border-color: var(--bondi); }
+  .pillbtn.secondary:hover { background: var(--bondi-soft); text-decoration: none; }
+  .pillbtn.small { padding: 5px 13px; font-size: 0.78rem; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+
+  /* Hero */
+  .hero { padding-block: 80px 48px; display: grid; gap: 22px; justify-items: center; text-align: center; }
+  .hero-icon { width: 128px; height: 128px; filter: drop-shadow(0 18px 30px rgba(0, 149, 182, 0.35)); }
+  .hero h1 { max-width: 16ch; }
+  .hero .sub { max-width: 40rem; }
+  .facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px; color: var(--soft); font-size: 0.9rem; }
+  .facts span + span::before { content: "·"; margin-right: 12px; color: var(--faint); }
+  .facts .hot { color: var(--attention); }
+  .hero-for { margin: 0 0 -6px; font-size: 1.3rem; font-weight: 600; letter-spacing: -0.01em; color: var(--bondi-ink); }
+  .facts .launching { color: var(--bondi-ink); font-weight: 500; }
+  .left.launching::before { background: var(--bondi); box-shadow: 0 0 0 3px var(--bondi-soft); }
+  .pillbtn.soonbtn { background: var(--bondi-soft); color: var(--bondi-ink); cursor: default; }
+  /* Launch plans: two steps on a line */
+  .steps { list-style: none; margin: 0 auto; padding: 0; max-width: 640px; display: grid; grid-template-columns: 1fr 1fr; gap: 0; position: relative; }
+  .steps::before { content: ""; position: absolute; top: 7px; left: 25%; right: 25%; height: 2px; background: linear-gradient(90deg, var(--bondi), var(--faint)); opacity: .5; }
+  .steps li { display: grid; justify-items: center; align-content: start; gap: 6px; text-align: center; padding-inline: 12px; }
+  .steps b { font-size: 1.25rem; letter-spacing: -0.01em; } .steps li > span:last-child { color: var(--soft); }
+  .step-dot { width: 16px; height: 16px; border-radius: 50%; background: var(--tile); border: 2px solid var(--faint); position: relative; z-index: 1; }
+  .signup { margin: 56px auto 0; max-width: 640px; background: var(--tile); border-radius: 28px; padding: 36px 40px; display: grid; gap: 10px; text-align: center; }
+  .signup h3 { margin: 0; font-size: 1.6rem; letter-spacing: -0.02em; } .signup .soft { margin: 0; color: var(--soft); }
+  .signup-fields { display: grid; grid-template-columns: 1fr 1.3fr auto; gap: 10px; margin-top: 10px; }
+  .signup input { font: inherit; font-size: 1rem; padding: 11px 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--ground); color: var(--ink); min-width: 0; width: 100%; box-sizing: border-box; }
+  .signup input:focus { outline: 3px solid var(--bondi-soft); border-color: var(--bondi); }
+  .signup input[aria-invalid="true"] { border-color: var(--attention); }
+  .signup button { border: 0; cursor: pointer; } .signup button[disabled] { opacity: .6; cursor: default; }
+  .signup-msg { margin: 0; min-height: 1.4em; font-weight: 500; } .signup-msg.ok { color: var(--bondi-ink); } .signup-msg.err { color: var(--attention); }
+  .signup .fine { margin: 4px 0 0; font-size: 0.8rem; color: var(--faint); }
+  .vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @media (max-width: 640px) { .signup { padding: 28px 20px; } .signup-fields { grid-template-columns: 1fr; } }
+  .step-dot.now { background: var(--bondi); border-color: var(--bondi); box-shadow: 0 0 0 5px var(--bondi-soft); }
+
+  section.sec { padding-block: 110px; display: grid; gap: 52px; }
+  .sec-head { display: grid; gap: 14px; max-width: 46rem; }
+  .sec-head.center { justify-items: center; text-align: center; }
+
+  /* Apple's on-device model */
+  .intel { display: grid; gap: 52px; }
+  .flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; counter-reset: step; }
+  .step { background: var(--tile); border-radius: 22px; padding: 24px 22px; display: grid; gap: 10px; align-content: start; position: relative; min-height: 230px; }
+  .step::before { counter-increment: step; content: counter(step); font: 600 0.85rem/1 var(--mono); color: var(--bondi-ink); }
+  .step h3 { font-size: 1.2rem; }
+  .step p { color: var(--soft); font-size: 0.95rem; }
+  .step .viz { margin-top: auto; font: 500 0.82rem/1.45 var(--mono); color: var(--ink); background: var(--tile-2); border-radius: 12px; padding: 10px 12px; }
+  .step .viz em { font-style: normal; color: var(--bondi-ink); }
+  .step:not(:last-child)::after { content: "›"; position: absolute; right: -12px; top: 50%; transform: translateY(-50%); color: var(--faint); font-size: 1.4rem; }
+  .promise { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .promise div { background: var(--tile); border-radius: 22px; padding: 26px; display: grid; gap: 8px; }
+  .promise strong { font: 700 2.4rem/1 var(--display); letter-spacing: -0.03em; }
+  .promise span { color: var(--soft); }
+
+  /* On the white band, surfaces take the page grey so their edges show */
+  .band .step, .band .promise div, .band .compare { background: var(--tile-2); }
+  .band .step .viz, .band .list { background: var(--band); }
+
+  /* Bento grid: one tile per feature, each with its own visual */
+  .bento { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; }
+  .tile { background: var(--tile); border-radius: 28px; padding: 30px; display: grid; gap: 12px; align-content: start; overflow: hidden; min-height: 340px; }
+  .tile.w2 { grid-column: span 2; } .tile.w3 { grid-column: span 3; } .tile.w4 { grid-column: span 4; } .tile.w6 { grid-column: span 6; }
+  .tile .kicker { font-size: 0.95rem; font-weight: 600; color: var(--bondi-ink); }
+  .tile h3 { font-size: 1.6rem; }
+  .tile p { color: var(--soft); }
+  .tile .vis { margin-top: auto; }
+  /* Real Bondi views, drawn by the app itself */
+  .shot { width: 100%; height: auto; border-radius: 18px; box-shadow: var(--shadow); }
+  .shot.narrow { max-width: 300px; justify-self: center; display: block; margin-inline: auto; }
+  .stack-shots { display: grid; gap: 10px; }
+  .menubar-strip { justify-self: end; background: #242427; border-radius: 10px; padding: 8px 14px; box-shadow: var(--shadow); }
+  .menubar-strip img { width: 104px; height: 22px; }
+  /* visuals share the dark app surface so they read as Bondi */
+  .app { background: #1c1d20; color: #f2f2f4; border-radius: 14px; padding: 14px; font: 13px/1.4 var(--sans); box-shadow: var(--shadow); }
+  .app .dim { color: #9d9da5; }
+  .ai-line { display: grid; grid-template-columns: auto 1fr; gap: 8px; background: #1f3b45; border-radius: 12px; padding: 12px 14px; font-size: 14px; }
+  .ai-line .spark { color: #2cc0de; }
+  .dots { display: grid; grid-template-columns: repeat(40, 1fr); gap: 3px; }
+  .dots i { aspect-ratio: 1; border-radius: 50%; background: #45464c; }
+  .grouped { display: grid; gap: 8px; margin-top: 12px; }
+  .grouped div { display: grid; grid-template-columns: 110px 1fr 60px; gap: 10px; align-items: center; font-size: 12.5px; }
+  .grouped b { height: 7px; border-radius: 4px; background: #9b7ae0; display: block; }
+  .qa { display: grid; gap: 10px; }
+  .qa .q { justify-self: end; background: #2f7cf6; color: #fff; border-radius: 16px 16px 4px 16px; padding: 9px 13px; max-width: 85%; }
+  .qa .a { display: grid; grid-template-columns: auto 1fr; gap: 8px; background: #26272b; border-radius: 16px 16px 16px 4px; padding: 11px 13px; max-width: 95%; }
+  .menubar { display: flex; align-items: center; justify-content: flex-end; gap: 14px; background: rgba(40,40,44,.92); border-radius: 10px; padding: 6px 12px; font-size: 13px; }
+  .menubar svg { width: 16px; height: 16px; }
+  .warn { margin-top: 10px; display: grid; gap: 8px; }
+  .warn .banner { background: rgba(255,159,10,.14); border-radius: 10px; padding: 11px 12px; display: grid; gap: 4px; }
+  .warn .banner b { color: #ff9f0a; }
+  .warn .fix { justify-self: end; background: #3a3b40; border-radius: 7px; padding: 5px 11px; font-size: 12px; }
+  .srv { display: grid; grid-template-columns: 1fr auto; gap: 1px 10px; padding: 9px 0; border-top: 1px solid #36373c; }
+  .srv:first-child { border-top: 0; } .srv small { color: #9d9da5; } .srv .idle { color: #ff9f0a; }
+  .srv.k8s small { grid-column: 1 / -1; }
+  .soon { font-size: 10.5px; font-weight: 600; color: #2cc0de; background: rgba(44,192,222,.14); padding: 2px 7px; border-radius: 980px; margin-left: 4px; }
+  .srv .btn { grid-row: 1 / span 2; grid-column: 2; align-self: center; background: #3a3b40; border-radius: 7px; padding: 4px 10px; font-size: 12px; }
+  .hist svg { width: 100%; height: 140px; display: block; }
+  .sound-head { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #9d9da5; padding-bottom: 6px; border-bottom: 1px solid #36373c; }
+  .sound-head svg { width: 18px; height: 18px; }
+  .sound .vol { display: grid; grid-template-columns: 1fr 44px; grid-template-areas: "who val" "slider slider" "meter meter"; gap: 4px 10px; align-items: center; padding: 10px 0 4px; font-size: 12.5px; }
+  .sound .who { grid-area: who; display: inline-flex; align-items: center; gap: 8px; }
+  .sound .who i { width: 18px; height: 18px; border-radius: 5px; display: grid; place-items: center; font: 700 10px/1 var(--sans); color: #fff; font-style: normal; }
+  .sound .vol input { grid-area: slider; width: 100%; accent-color: #e0305a; }
+  .sound .vol .num { grid-area: val; text-align: right; }
+  .sound .meter { grid-area: meter; height: 3px; border-radius: 2px; background: #36373c; overflow: hidden; }
+  .sound .meter b { display: block; height: 100%; width: calc(var(--l) * 100%); background: linear-gradient(90deg, #5cc26a, #e0305a); border-radius: 2px; }
+  .fan { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; font-size: 12.5px; }
+  .fan input { width: 100%; accent-color: #4a90e2; }
+  .guide h4 { margin: 0 0 6px; font-size: 14px; }
+  .guide dt { color: #9d9da5; font-size: 11px; font-weight: 600; margin-top: 8px; } .guide dd { margin: 2px 0 0; font-size: 12.5px; }
+  .gauge { display: grid; justify-items: center; gap: 4px; }
+  .gauge svg { width: 180px; height: 110px; }
+  .icons { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+  .icons button { border: 0; background: transparent; padding: 0; display: grid; justify-items: center; gap: 8px; color: var(--soft); font: 500 0.85rem/1 var(--sans); cursor: pointer; }
+  .icons img { width: 78px; height: 78px; border-radius: 18px; outline: 3px solid transparent; outline-offset: 3px; }
+  .icons button[aria-pressed="true"] { color: var(--ink); } .icons button[aria-pressed="true"] img { outline-color: var(--bondi); }
+  .icons .auto { width: 78px; height: 78px; border-radius: 18px; position: relative; overflow: hidden; outline: 3px solid transparent; outline-offset: 3px; }
+  .icons .auto img { position: absolute; inset: 0; outline: 0; border-radius: 0; }
+  .icons .auto img + img { clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+  .icons button[aria-pressed="true"] .auto { outline-color: var(--bondi); }
+
+  /* Film, compare, pricing, FAQ */
+  .film video { width: 100%; aspect-ratio: 16 / 9; border-radius: 28px; background: #06161b; box-shadow: var(--shadow); }
+  .split { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 56px; align-items: center; }
+  .stars { padding-bottom: 0; } .stars-note { margin: 14px 0 0; text-align: center; color: var(--faint); font-size: 0.9rem; }
+  .compare { background: var(--tile); border-radius: 28px; padding: 16px; display: grid; gap: 12px; }
+  .compare-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .toggle { display: inline-flex; padding: 3px; border-radius: 10px; background: var(--tile-2); }
+  .toggle button { border: 0; background: transparent; padding: 7px 14px; border-radius: 8px; font: 500 0.9rem/1 var(--sans); color: var(--soft); cursor: pointer; }
+  .toggle button { display: inline-flex; align-items: center; gap: 7px; }
+  .toggle .tico { width: 20px; height: 20px; margin: -3px 0; }
+  .toggle button[aria-pressed="true"] { background: var(--tile); color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,.16); }
+  .count { font-size: 0.9rem; color: var(--soft); }
+  .list { height: 420px; overflow: hidden; border-radius: 18px; background: var(--tile-2); mask-image: linear-gradient(black 78%, transparent); -webkit-mask-image: linear-gradient(black 78%, transparent); }
+  .list .item { display: grid; grid-template-columns: 22px 1fr auto; gap: 12px; align-items: center; padding: 11px 16px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+  .list .item .ai { width: 22px; height: 22px; color: var(--soft); }
+  .list .proc .ai { width: 16px; height: 16px; }
+  .list .item small { display: block; color: var(--faint); font-size: 0.8rem; }
+  .list .proc { font-family: var(--mono); font-size: 0.82rem; padding: 7px 16px; }
+  .price-card { background: var(--tile); border-radius: 28px; padding: 44px; display: grid; gap: 18px; justify-items: center; text-align: center; max-width: 560px; margin-inline: auto; }
+  .price { font: 700 4.5rem/1 var(--display); letter-spacing: -0.04em; }
+  .was { font-size: 1.1rem; color: var(--faint); text-decoration: line-through; }
+  .badge { font-size: 0.85rem; padding: 6px 12px; border-radius: 980px; background: var(--bondi-soft); color: var(--bondi-ink); }
+  .price-card ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; color: var(--soft); }
+  .faq { display: grid; gap: 0; max-width: 46rem; margin-inline: auto; width: 100%; }
+  details { border-bottom: 1px solid var(--line); padding: 20px 4px; }
+  summary { cursor: pointer; font-size: 1.1rem; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; color: var(--faint); font-weight: 400; font-size: 1.4rem; line-height: 1; }
+  details[open] summary::after { content: "−"; }
+  details p { margin-top: 10px; color: var(--soft); }
+
+  footer { background: var(--band); color: var(--faint); font-size: 0.78rem; }
+  footer .wrap { padding-block: 34px 44px; display: grid; gap: 22px; }
+  .foot-cols { display: grid; grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr)); gap: 28px; }
+  .foot-cols h4 { margin: 0 0 10px; color: var(--ink); font-size: 0.8rem; font-weight: 600; }
+  .foot-cols ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .foot-cols a { color: var(--soft); } .foot-cols p { max-width: 22rem; margin-top: 10px; line-height: 1.5; }
+  .foot-line { border-top: 1px solid var(--line); padding-top: 16px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 22px; }
+
+  @media (max-width: 1000px) {
+    nav.links { display: none; }
+    .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); } .step:nth-child(2)::after { display: none; }
+    .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tile.w2, .tile.w3, .tile.w4 { grid-column: span 1; } .tile.w6, .tile.big { grid-column: span 2; }
+    .split { grid-template-columns: minmax(0, 1fr); } .promise { grid-template-columns: minmax(0, 1fr); }
+    .foot-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .nav-right .left { display: none; }
+    .flow, .bento { grid-template-columns: minmax(0, 1fr); } .tile.w6, .tile.big { grid-column: span 1; } .step::after { display: none; }
+    section.sec { padding-block: 72px; } .tile { padding: 24px; min-height: 0; } .price-card { padding: 30px; }
+    .foot-cols { grid-template-columns: minmax(0, 1fr); }
+  }
+  /* The main-window demo: Bondi's own window, drawn in HTML (always dark, as Bondi looks in the film) */
+  .appshow { display: grid; gap: 16px; padding-block: 8px 72px; }
+  .win { --w-ground: #1c1d20; --w-card: #26272b; --w-card-2: #2e2f34; --w-line: #36373c; --w-ink: #f2f2f4; --w-soft: #9d9da5; --w-faint: #6c6c74;
+    background: var(--w-ground); color: var(--w-ink); border-radius: 18px; border: 1px solid #000; box-shadow: var(--shadow); overflow: hidden;
+    font: 13px/1.35 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; }
+  /* Wider than the page column; its content area is 16:9 like the intro film, with nothing to scroll inside. */
+  .win { position: relative; --win-w: min(1240px, calc(100vw - 44px)); width: var(--win-w); margin-left: calc((100% - var(--win-w)) / 2); box-sizing: border-box; }
+  .win .win-body { min-height: 0; }
+  /* Intro film over the window's content (16:9, the same shape as the film): waits on a dim first frame, starts
+     once the window is 60% in view with a slow eased fade in, and fades out the same way to the clickable window. */
+  .win .win-body { min-height: calc((var(--win-w) - 2px) * 9 / 16 - var(--win-foot-h, 34px) - 4px); } /* 2px: the window border; 4px: toolbar edge and borders */
+  .win-intro { position: absolute; left: 0; right: 0; bottom: 0; top: calc(var(--win-bar-h, 56px) - 1px); background: #000; z-index: 5; overflow: hidden;
+    transition: opacity 1.6s cubic-bezier(.45, 0, .25, 1); }
+  .win-intro.done { opacity: 0; pointer-events: none; }
+  .win-intro.skip { transition-duration: .7s; }
+  .win-intro video { width: 100%; height: 100%; object-fit: cover; display: block; opacity: .35; transition: opacity 1.6s cubic-bezier(.33, 0, .2, 1); }
+  .win-intro.playing video { opacity: 1; }
+  .intro-skip { position: absolute; right: 14px; top: 12px; border: 1px solid rgba(255,255,255,.18); background: rgba(40,40,44,.75); color: #f2f2f4; font: 500 12px/1 -apple-system, sans-serif; padding: 7px 12px; border-radius: 999px; cursor: pointer; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .intro-skip:hover { background: rgba(60,60,66,.85); }
+  .intro-replay { border: 0; background: none; padding: 0; margin-right: 6px; color: var(--bondi-ink); font: inherit; cursor: pointer; }
+  .win-bar { display: grid; grid-template-columns: auto auto 1fr auto; align-items: center; gap: 14px; padding: 12px 16px; border-bottom: 1px solid #000; background: #232427; }
+  .lights { display: flex; gap: 8px; } .lights i { width: 12px; height: 12px; border-radius: 50%; }
+  .lights i:nth-child(1) { background: #ff5f57; } .lights i:nth-child(2) { background: #febc2e; } .lights i:nth-child(3) { background: #28c840; }
+  .win-title { font-weight: 600; color: var(--w-soft); }
+  .win-tabs { justify-self: center; display: flex; gap: 2px; padding: 3px; border-radius: 999px; background: #2f3034; border: 1px solid #3c3d42; overflow-x: auto; max-width: 100%; scrollbar-width: none; }
+  .win-tabs button { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border: 0; border-radius: 999px; background: transparent; color: var(--w-soft); font: 500 12.5px/1 -apple-system, sans-serif; cursor: pointer; white-space: nowrap; }
+  .win-tabs button svg { width: 16px; height: 16px; flex: none; }
+  .win-tabs button .label { display: none; }
+  .win-tabs button[aria-selected="true"] { background: color-mix(in srgb, var(--tint) 22%, #2f3034); color: var(--tint); }
+  .win-tabs button[aria-selected="true"] .label { display: inline; }
+  .win-tools { display: flex; gap: 8px; } .win-tools i { width: 34px; height: 34px; border-radius: 50%; background: #2f3034; border: 1px solid #3c3d42; display: grid; place-items: center; font-style: normal; color: #c7c7cc; box-sizing: border-box; }
+  .win-body { padding: 18px; display: grid; gap: 18px; min-height: 560px; align-content: start; }
+  .win-foot { display: flex; gap: 8px; padding: 8px 16px; font-size: 11.5px; color: var(--w-faint); border-top: 1px solid rgba(255, 255, 255, .06); background: #000; }
+  /* The same backdrop as the intro film (radial-gradient(ellipse at 50% 60%, #0b1a20, #000 70%)), so the app sits where the film was. */
+  .win .win-body { background: radial-gradient(ellipse at 50% 60%, #0b1a20 0%, #000 70%); }
+  .w-h { font-size: 15px; font-weight: 600; }
+  .w-status { background: #1f3b45; border-radius: 10px; padding: 12px 14px; display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; font-size: 14px; }
+  .w-status .spark { color: #2cc0de; } .w-status small { grid-column: 2; color: #58a6ff; font-size: 12px; }
+  .w-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  .w-grid .wide { grid-column: span 2; }
+  .w-card { background: var(--w-card); border: 1px solid var(--w-line); border-radius: 12px; padding: 12px 13px; display: grid; gap: 3px; align-content: start; min-height: 128px; }
+  .win .head { display: flex; justify-content: space-between; gap: 8px; font-size: 11.5px; font-weight: 600; color: var(--w-soft); }
+  .win .head b { color: var(--tint); font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+  .win .head b svg { width: 14px; height: 14px; }
+  .win .head span { font-weight: 400; }
+  .w-big { font-size: 28px; font-weight: 700; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+  .w-big small { font-size: 15px; font-weight: 500; color: var(--w-soft); margin-left: 3px; }
+  .w-sub { font-size: 11.5px; color: var(--w-soft); font-variant-numeric: tabular-nums; }
+  .w-chart { width: 100%; height: 30px; margin-top: auto; display: block; }
+  .w-membar { display: flex; gap: 3px; align-items: center; margin-top: auto; }
+  .w-membar i { flex: 1; height: 8px; border-radius: 2px; background: #45464c; }
+  .w-membar i.on { background: #9b7ae0; } .w-membar i.part { background: linear-gradient(90deg, #9b7ae0 55%, #45464c 55%); }
+  .w-membar .swap { flex: 0 0 26px; height: 10px; border-radius: 3px; border: 1.5px solid #f2a200; margin-left: 5px; background: repeating-linear-gradient(135deg, rgba(242,162,0,.6) 0 2px, transparent 2px 4px); }
+  .w-fill { height: 7px; border-radius: 4px; background: #45464c; margin-top: auto; overflow: hidden; } .w-fill i { display: block; height: 100%; border-radius: 4px; background: var(--tint); }
+  .rings { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 10px; }
+  @media (min-width: 940px) { .win .rings { grid-template-columns: repeat(4, minmax(0, 1fr)); } .win .ring-card { grid-template-columns: 62px minmax(0, 1fr); gap: 6px 10px; padding: 11px; } .win .ring-card svg { width: 62px; height: 62px; } }
+  @media (min-width: 1180px) { .win .ring-card { grid-template-columns: 76px minmax(0, 1fr); gap: 6px 12px; padding: 12px 13px; } .win .ring-card svg { width: 76px; height: 76px; } }
+  .ring-card { background: var(--w-card); border: 1px solid var(--w-line); border-radius: 12px; padding: 12px 13px; display: grid; grid-template-columns: 96px 1fr; gap: 6px 14px; align-items: center; }
+  .ring-card .head { grid-column: 1 / -1; font-size: 11.5px; font-weight: 600; color: var(--tint); }
+  .ring-card svg { width: 96px; height: 96px; }
+  .ring-card ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 11.5px; }
+  .ring-card li { display: grid; grid-template-columns: 8px minmax(0, 1fr) auto; gap: 7px; align-items: center; color: var(--w-soft); }
+  .ring-card li span:nth-child(2) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ring-card li i { width: 8px; height: 8px; border-radius: 50%; } .ring-card li span:last-child { color: var(--w-ink); font-variant-numeric: tabular-nums; }
+  .hero-row { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr); gap: 10px; }
+  .hero-card { background: var(--w-card); border: 1px solid var(--w-line); border-radius: 12px; padding: 14px; display: grid; grid-template-columns: 170px 1fr; gap: 14px; min-height: 220px; }
+  .hero-card .hl { display: grid; align-content: space-between; }
+  .hero-card .w-big { font-size: 44px; }
+  .ranges { display: flex; justify-content: flex-end; gap: 2px; margin-bottom: 6px; } .ranges span { font-size: 10.5px; padding: 3px 7px; border-radius: 5px; color: var(--w-soft); } .ranges span.on { background: #3a3b40; color: var(--w-ink); }
+  .hero-card svg { width: 100%; height: 160px; }
+  .side { background: var(--w-card); border: 1px solid var(--w-line); border-radius: 12px; padding: 14px; display: grid; gap: 8px; align-content: start; }
+  .w-cores { display: flex; gap: 5px; height: 130px; align-items: flex-end; } .w-cores div { flex: 1; height: 100%; border-radius: 3px; background: #3a3b40; position: relative; }
+  .w-cores i { position: absolute; left: 0; right: 0; bottom: 0; border-radius: 3px; background: var(--tint); transition: height .5s ease; }
+  .stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+  .stat { background: var(--w-card); border: 1px solid var(--w-line); border-radius: 10px; padding: 10px 12px; } .stat div { color: var(--w-soft); font-size: 11.5px; } .stat b { font-size: 16px; font-variant-numeric: tabular-nums; }
+  .w-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .w-table th { text-align: right; font-weight: 500; color: var(--w-soft); font-size: 12px; padding: 6px 10px; border-bottom: 1px solid var(--w-line); }
+  .w-table th:first-child, .w-table td:first-child { text-align: left; }
+  .w-table td { text-align: right; padding: 7px 10px; font-variant-numeric: tabular-nums; } .w-table tr:nth-child(even) td { background: #212226; }
+  .w-app { display: inline-flex; align-items: center; gap: 9px; } .w-app i { width: 18px; height: 18px; border-radius: 5px; display: grid; place-items: center; font: 700 10px/1 -apple-system, sans-serif; color: #fff; font-style: normal; }
+  .w-table svg { width: 110px; height: 16px; display: inline-block; vertical-align: middle; }
+  .w-scroll { overflow-x: auto; }
+  .vol { display: grid; grid-template-columns: 150px 1fr 48px; gap: 12px; align-items: center; padding: 8px 0; border-top: 1px solid var(--w-line); }
+  .stack-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; } @media (max-width: 760px) { .stack-cols { grid-template-columns: 1fr; } }
+  .dev { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 10px 0; border-top: 1px solid var(--w-line); } .dev small { color: var(--w-soft); }
+  @media (max-width: 760px) {
+    .win-bar { grid-template-columns: auto 1fr; } .win-title, .win-tools { display: none; }
+    .hero-row { grid-template-columns: minmax(0, 1fr); } .hero-card { grid-template-columns: minmax(0, 1fr); }
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .win-body { padding: 12px; }
+    .w-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  .demo-note { color: var(--faint); font-size: 0.9rem; text-align: center; max-width: 36rem; margin-inline: auto; }
+
+  /* Feature tiles: Bondi's real views rebuilt in HTML with the app's own colours (Colors.xcassets, dark),
+     sizes and wording, filled with real readings from a working Mac, and clickable. */
+  .mac { --bg: #2a2a2d; --card: rgba(255,255,255,.05); --card-line: rgba(255,255,255,.06); --sep: rgba(255,255,255,.1);
+    --t1: #f2f2f2; --t2: #a1a1a6; --t3: #8e8e93; --accent: #1fa9cc; --ai: #40c8e0; --ai-bg: rgba(64,200,224,.12);
+    --btn: rgba(255,255,255,.14); --btn-primary: #147f9c; --cpu: #3d8fe0; --mem: #9b6bd6; --battery: #2fb85b; --sound: #fa2d55;
+    --projects: #5ad1f0; --warn: #ff9f0a; --good: #30d158; --track: rgba(255,255,255,.1); --link: #4ba8ff;
+    position: relative; background: var(--bg); color: var(--t1); border-radius: 16px; padding: 12px; display: grid; gap: 10px;
+    font: 13px/1.35 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif; letter-spacing: 0;
+    box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,.6); text-align: left; }
+  .mac .card { background: var(--card); border: 1px solid var(--card-line); border-radius: 10px; padding: 10px 11px; display: grid; gap: 6px; }
+  .mac .t2 { color: var(--t2); } .mac .t3 { color: var(--t3); }
+  .mac .title { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: var(--t2); white-space: nowrap; }
+  .tile .vis { min-width: 0; } .mac { max-width: 100%; min-width: 0; }
+  .mac .title svg { width: 13px; height: 13px; flex: none; }
+  .mac .title .note { margin-left: auto; font-weight: 400; }
+  .mac .big { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+  .mac .big small { font-size: 15px; font-weight: 500; color: var(--t2); margin-left: 3px; }
+  .mac button { font: inherit; color: inherit; cursor: pointer; }
+  .mac .btn { border: 0; background: var(--btn); border-radius: 6px; padding: 4px 11px; font-size: 12px; }
+  .mac .btn.primary { background: var(--btn-primary); color: #fff; }
+  .mac .link { border: 0; background: none; padding: 0; color: var(--link); font-size: 11px; text-align: left; }
+  .mac .icon { width: 18px; height: 18px; border-radius: 4px; flex: none; }
+  .mac .sys { width: 18px; height: 18px; color: var(--t2); flex: none; }
+  /* Sliders drawn like macOS: thin track, tinted fill up to the knob, white knob with a soft shadow */
+  :is(.mac, .vol) input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 20px; margin: 0; background: none; cursor: pointer; --p: 50%; --fill: var(--accent, #1fa9cc); --tick: none; }
+  :is(.mac, .vol) input[type=range]::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: var(--tick), linear-gradient(to right, var(--fill) var(--p), rgba(255,255,255,.16) var(--p)); }
+  :is(.mac, .vol) input[type=range]::-moz-range-track { height: 4px; border-radius: 2px; background: var(--tick), rgba(255,255,255,.16); }
+  :is(.mac, .vol) input[type=range]::-moz-range-progress { height: 4px; border-radius: 2px; background: var(--fill); }
+  :is(.mac, .vol) input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; margin-top: -6px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 0 0 .5px rgba(0,0,0,.25), 0 1px 3px rgba(0,0,0,.45); transition: transform .12s; }
+  :is(.mac, .vol) input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 0 0 .5px rgba(0,0,0,.25), 0 1px 3px rgba(0,0,0,.45); }
+  :is(.mac, .vol) input[type=range]:active::-webkit-slider-thumb { transform: scale(1.1); }
+  :is(.mac, .vol) input[type=range]:focus-visible { outline: none; }
+  :is(.mac, .vol) input[type=range]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px rgba(31,169,204,.55), 0 1px 3px rgba(0,0,0,.45); }
+  :is(.mac, .vol) input[type=range]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px rgba(31,169,204,.55), 0 1px 3px rgba(0,0,0,.45); }
+  /* Per-app volume goes to 300%, so mark where 100% is */
+  :is(.mac input.vol300, .vol input) { --fill: var(--sound, #fa2d55); --tick: linear-gradient(to right, transparent calc(33.33% - 1px), rgba(255,255,255,.45) calc(33.33% - 1px) calc(33.33% + 1px), transparent calc(33.33% + 1px)); }
+  .mac .volrow { display: grid; grid-template-columns: 18px 64px 1fr 42px; gap: 3px 10px; align-items: center; padding: 3px 0; }
+  .mac .volrow .val { color: var(--t2); }
+  .mac .volrow .lvl { grid-column: 3; height: 3px; border-radius: 2px; background: rgba(255,255,255,.08); overflow: hidden; margin: 0 8px 2px; }
+  .mac .volrow .lvl b { display: block; height: 100%; width: 0; border-radius: 2px; background: linear-gradient(90deg, var(--good), var(--sound)); transition: width .18s linear; }
+  .mac .volrow .val.loud { color: var(--t1); font-weight: 600; }
+  /* Fan boost */
+  .mac .fanspin { transform-origin: 50% 50%; animation: spin var(--dur, 0s) linear infinite; }
+  .mac .fanspin.still { animation: none; }
+  .mac .fanread { display: flex; align-items: baseline; gap: 8px; }
+  .mac .fanread .big { transition: color .3s; }
+  .mac .fanrow { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; }
+  .mac .fanrow span { font-size: 11px; color: var(--t2); }
+  .mac input.fanslider { --fill: var(--cpu); }
+  .mac .fansafe { list-style: none; margin: 0; padding: 10px 0 0; border-top: 1px solid var(--sep); display: grid; gap: 7px; font-size: 11.5px; color: var(--t2); }
+  .mac .fansafe li { display: grid; grid-template-columns: 11px 1fr; gap: 8px; align-items: start; } .mac .fansafe svg { color: var(--good); margin-top: 2px; }
+  /* status line */
+  .mac .status { background: var(--ai-bg); border-radius: 8px; padding: 10px; display: grid; grid-template-columns: auto 1fr auto; gap: 6px 8px; align-items: start; }
+  .mac .status .sp { color: var(--ai); }
+  .mac .status .link { grid-column: 2; }
+  .mac .status .x { border: 0; background: none; color: var(--t2); font-size: 14px; line-height: 1; padding: 0 2px; }
+  /* busiest */
+  .mac .seg { display: inline-flex; background: rgba(255,255,255,.08); border-radius: 6px; padding: 1px; margin-left: auto; }
+  .mac .seg button { border: 0; background: none; border-radius: 5px; padding: 3px 8px; font-size: 10.5px; color: var(--t1); }
+  .mac .seg button[aria-pressed="true"] { background: rgba(255,255,255,.18); }
+  .mac .rowx { display: grid; grid-template-columns: 18px minmax(0, 1fr) minmax(36px, 70px) auto; align-items: center; gap: 8px; }
+  .mac .rowx > span:nth-child(2) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mac .val { white-space: nowrap; }
+  .mac .bar { height: 5px; border-radius: 3px; background: var(--track); overflow: hidden; }
+  .mac .bar i { display: block; height: 100%; border-radius: 3px; transition: width .45s ease, background .3s; }
+  .mac .val { text-align: right; font-variant-numeric: tabular-nums; }
+  /* ask */
+  .mac .field { display: flex; gap: 8px; }
+  .mac .field input { flex: 1; background: rgba(0,0,0,.25); border: 1px solid var(--sep); border-radius: 7px; color: var(--t1); padding: 6px 9px; font: inherit; }
+  .mac .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .mac .chips button { border: 0; background: var(--btn); border-radius: 6px; padding: 4px 9px; font-size: 11.5px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mac .answer { display: grid; grid-template-columns: auto 1fr; gap: 8px; min-height: 58px; }
+  .mac .answer .sp { color: var(--ai); }
+  .mac .spin { width: 12px; height: 12px; border: 2px solid var(--t3); border-top-color: transparent; border-radius: 50%; animation: spin .8s linear infinite; display: inline-block; vertical-align: -2px; margin-right: 6px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  /* menu bar */
+  .mac .menubar { display: flex; align-items: center; justify-content: flex-end; gap: 16px; background: rgba(28,28,30,.96); border-radius: 8px; padding: 5px 12px; font-size: 13px; font-weight: 500; }
+  .mac .menubar .item { display: inline-flex; align-items: center; gap: 5px; border: 0; background: none; padding: 2px 6px; border-radius: 5px; }
+  .mac .menubar .item[aria-expanded="true"] { background: rgba(255,255,255,.18); }
+  .mac .menubar svg { width: 17px; height: 17px; }
+  .mac .warnbanner { background: var(--card); border: 1px solid var(--card-line); border-radius: 10px; padding: 10px 11px; display: grid; grid-template-columns: auto 1fr; gap: 3px 8px; }
+  .mac .warnbanner .tri { color: var(--warn); } .mac .warnbanner b { font-weight: 600; }
+  .mac .warnbanner .btn { grid-column: 2; justify-self: end; margin-top: 5px; }
+  .mac .result { color: var(--good); font-weight: 500; display: flex; gap: 6px; align-items: center; }
+  /* alert sheet, as macOS draws NSAlert */
+  .mac .alert { position: absolute; inset: 0; background: rgba(0,0,0,.45); border-radius: 16px; display: grid; place-items: center; z-index: 3; }
+  .mac .alert > div { width: min(270px, 88%); background: #323236; border: 1px solid rgba(255,255,255,.12); border-radius: 14px; padding: 18px 16px 14px; display: grid; gap: 6px; justify-items: center; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,.6); }
+  .mac .alert img { width: 48px; height: 48px; }
+  .mac .alert b { font-size: 13px; } .mac .alert p { margin: 0; font-size: 11px; color: var(--t2); }
+  .mac .alert .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-top: 8px; }
+  .mac .alert .row2 .btn { padding: 6px 0; font-size: 13px; border-radius: 7px; }
+  .mac .alert .row2 .btn.primary { background: #2f7cf6; }
+  /* stack */
+  .mac .srvrow { display: grid; grid-template-columns: 1fr auto 16px; gap: 1px 10px; align-items: center; padding: 6px 0; border-top: 1px solid var(--sep); }
+  .mac .srvrow:first-of-type { border-top: 0; }
+  .mac .srvrow b { font-weight: 600; } .mac .srvrow .proj { color: var(--t2); font-weight: 400; margin-left: 4px; }
+  .mac .srvrow .url { grid-column: 1; color: var(--link); font-size: 12px; }
+  .mac .srvrow .mem { grid-column: 2; grid-row: 1 / span 2; font-variant-numeric: tabular-nums; }
+  .mac .srvrow .stop { grid-column: 3; grid-row: 1 / span 2; width: 13px; height: 13px; border-radius: 3px; background: #8e8e93; border: 0; padding: 0; }
+  .mac .srvrow .stop:hover { background: #f2f2f2; }
+  .mac .srvrow .idle { color: var(--warn); }
+  .mac .srvrow.gone { opacity: .35; } .mac .srvrow.gone .stop { visibility: hidden; }
+  .mac .soon { font-size: 10px; font-weight: 600; color: var(--projects); background: rgba(90,209,240,.14); padding: 2px 7px; border-radius: 999px; margin-left: auto; }
+  .mac .dim { opacity: .55; }
+  /* history chart */
+  .mac .ranges { display: inline-flex; gap: 1px; background: rgba(255,255,255,.08); border-radius: 6px; padding: 1px; margin-left: auto; }
+  .mac .ranges button { border: 0; background: none; border-radius: 5px; padding: 3px 7px; font-size: 10.5px; color: var(--t1); }
+  .mac .ranges button[aria-pressed="true"] { background: rgba(255,255,255,.18); }
+  .mac .chart { position: relative; }
+  .mac .chart svg { width: 100%; height: 150px; display: block; }
+  .mac .tip { position: absolute; top: 0; transform: translateX(-50%); background: #3a3a3e; border-radius: 6px; padding: 3px 7px; font-size: 11px; white-space: nowrap; pointer-events: none; }
+  .mac .stats2 { display: flex; gap: 22px; } .mac .stats2 b { font-size: 15px; font-variant-numeric: tabular-nums; }
+  /* guide */
+  .mac .proc { display: grid; grid-template-columns: 18px 1fr 56px 74px 22px; gap: 8px; align-items: center; padding: 6px 4px; border-radius: 5px; font-size: 12.5px; }
+  .mac .proc:nth-child(even) { background: rgba(255,255,255,.03); }
+  .mac .proc .more { border: 0; background: none; color: var(--t2); font-size: 15px; padding: 0; }
+  .mac .proc[aria-current="true"] { background: rgba(31,169,204,.25); }
+  .mac .gpop { background: #323236; border: 1px solid rgba(255,255,255,.12); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; box-shadow: 0 16px 40px rgba(0,0,0,.5); }
+  .mac .gpop h4 { margin: 0; font-size: 13px; } .mac .gpop dt { font-size: 11px; font-weight: 600; color: var(--t2); } .mac .gpop dd { margin: 2px 0 0; font-size: 12px; }
+  /* icon picker */
+  .mac .picker { display: flex; gap: 14px; justify-content: center; }
+  .mac .picker button { border: 0; background: none; padding: 0; display: grid; justify-items: center; gap: 5px; font-size: 11px; color: var(--t2); }
+  .mac .picker .ic { width: 50px; height: 50px; border-radius: 12px; outline: 2.5px solid transparent; outline-offset: 3px; position: relative; overflow: hidden; }
+  .mac .picker .ic img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .mac .picker .ic img + img { clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+  .mac .picker button[aria-pressed="true"] { color: var(--t1); } .mac .picker button[aria-pressed="true"] .ic { outline-color: #2f7cf6; }
+  .tile .vis .mac { margin-top: 4px; }
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top"><img src="assets/icon-blue.png" width="26" height="26" alt="">Bondi</a>
+    <nav class="links" aria-label="Sections">
+      <a href="#ai">On-device AI</a>
+      <a href="#app">Try it</a>
+      <a href="#features">Features</a>
+      <a href="#compare">Compare</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-right">
+      <span class="left launching"><span>Beta launching soon</span></span>
+      <a class="pillbtn primary small" href="#signup"><span>Get updates</span></a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap">
+    <section class="hero">
+      <img class="hero-icon" src="assets/icon-blue.png" width="128" height="128" alt="Bondi's app icon: a speedometer with a wave, in Bondi Blue.">
+      <p class="hero-for">Bondi for Apple Mac</p>
+      <h1>Your Mac, explained.</h1>
+      <p class="sub">Bondi tells you why your Mac is slow in one plain sentence, written on your Mac by Apple's on-device model. Nothing leaves it.</p>
+      <div class="ctas">
+        <a class="pillbtn primary" href="#app">Try it below</a>
+        <a class="pillbtn secondary" href="#signup">Get updates</a>
+      </div>
+      <p class="facts"><span class="launching">Beta launching soon</span><span>Full launch soon after</span><span>macOS 15 or later</span></p>
+    </section>
+
+    <section class="appshow" id="app" aria-label="Bondi's main window, running on made-up numbers">
+      <div class="win" role="group" aria-label="Bondi window demo">
+        <div class="win-bar">
+          <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="win-title">Bondi</span>
+          <div class="win-tabs" role="tablist" aria-label="Sections" data-wtabs></div>
+          <span class="win-tools" aria-hidden="true"><i title="Search"><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8.6" cy="8.6" r="5.6"/><path d="M12.8 12.8l4.4 4.4"/></svg></i><i title="Settings"><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M16.28 8.33 L18.18 8.60 L18.18 11.40 L16.28 11.67 L15.62 13.26 L16.78 14.79 L14.79 16.78 L13.26 15.62 L11.67 16.28 L11.40 18.18 L8.60 18.18 L8.33 16.28 L6.74 15.62 L5.21 16.78 L3.22 14.79 L4.38 13.26 L3.72 11.67 L1.82 11.40 L1.82 8.60 L3.72 8.33 L4.38 6.74 L3.22 5.21 L5.21 3.22 L6.74 4.38 L8.33 3.72 L8.60 1.82 L11.40 1.82 L11.67 3.72 L13.26 4.38 L14.79 3.22 L16.78 5.21 L15.62 6.74Z"/><circle cx="10" cy="10" r="2.6"/></svg></i></span>
+        </div>
+        <div class="win-body" data-wbody></div>
+        <div class="win-intro" data-intro hidden>
+          <video src="assets/bondi-window.mp4" poster="assets/bondi-window-poster.jpg" muted playsinline preload="auto" width="1920" height="1080"
+                 aria-label="Intro film: 955 processes on a real Mac, drawn as stars, pull together into 43 apps, each shown with its app icon and process count. It ends on Bondi for Apple Mac."></video>
+          <button type="button" class="intro-skip" data-intro-skip>Skip intro</button>
+        </div>
+        <div class="win-foot"><span>Bondi: <span data-v="self">0.3</span>% CPU, 104 MB</span><span>·</span><span>39 apps, <span data-v="procs">966</span> processes</span></div>
+      </div>
+      <p class="demo-note"><button type="button" class="intro-replay" data-intro-replay hidden>▶ Replay intro</button> Click any tab. This is Bondi's window running on made-up numbers; on your Mac it reads the real ones, and they never leave it.</p>
+    </section>
+  </div>
+
+  <div class="band">
+    <div class="wrap">
+      <section class="sec intel" id="ai" aria-labelledby="ai-title">
+        <div class="sec-head center">
+          <p class="eyebrow">On-device AI</p>
+          <h2 id="ai-title">Apple's on-device model. Bondi's numbers.</h2>
+          <p class="sub">On Macs with Apple Intelligence, Bondi writes with Apple's own on-device model: the one built into macOS, running on your Mac's Apple silicon. It never goes to the cloud, and it never gets to make up a number.</p>
+        </div>
+        <div class="flow" aria-label="How Bondi writes a sentence, in four steps">
+          <div class="step"><h3>Bondi measures</h3><p>Every figure is worked out in code from your Mac's own readings.</p><div class="viz">Chrome <em>12.23 GB</em><br>80 processes<br>pressure <em>Normal</em></div></div>
+          <div class="step"><h3>Bondi picks the point</h3><p>A problem, the disk, the battery, something idle, or all calm: Bondi decides what matters.</p><div class="viz">topic: <em>idle server</em><br>tone: <em>gentle note</em></div></div>
+          <div class="step"><h3>Apple's model writes</h3><p>The on-device model adds the plain English, on your Mac. The figures stay Bondi's.</p><div class="viz">"A dev server is sitting idle."</div></div>
+          <div class="step"><h3>Bondi checks it</h3><p>Wrong tone, wrong subject or any number: Bondi uses its own sentence instead.</p><div class="viz"><em>✓</em> A dev server is sitting idle. Vite in shop has been idle for 3h 20m and holds 612.0 MB.</div></div>
+        </div>
+        <div class="promise">
+          <div><strong>0 bytes</strong><span>of your data leave your Mac. The model runs on it, offline.</span></div>
+          <div><strong>0 numbers</strong><span>written by the AI. Bondi computes every figure and checks every sentence.</span></div>
+          <div><strong>No extra cost</strong><span>The AI is included. Macs without Apple Intelligence can download a small free model from Settings.</span></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section class="sec" id="features" aria-labelledby="features-title">
+      <div class="sec-head center">
+        <p class="eyebrow">Features</p>
+        <h2 id="features-title">Everything your Mac is doing. In words you already use.</h2>
+      </div>
+      <div class="bento">
+
+        <article class="tile w4 big">
+          <p class="kicker">Why is my Mac slow?</p>
+          <h3>Ask once. Get the whole story.</h3>
+          <p>Click the link. Bondi explains what's using your Mac, what's idle and holding memory, and what changed in the last hour. Apple's on-device model writes the opening; every figure is Bondi's.</p>
+          <div class="vis"><div class="mac" data-why>
+            <div class="status">
+              <span class="sp" aria-hidden="true">✦</span>
+              <span data-why-text>Everything is fine. Google Chrome is using the most memory, 13.09 GB across 82 processes.</span>
+              <button class="x" data-why-close hidden aria-label="Close the explanation">✕</button>
+              <button class="link" data-why-open>Why is my Mac slow?</button>
+            </div>
+          </div></div>
+        </article>
+
+        <article class="tile w2">
+          <p class="kicker">Apps, not processes</p>
+          <h3>Chrome is one row.</h3>
+          <p>Every helper counts toward the app that started it. Switch between CPU, Memory and Energy.</p>
+          <div class="vis"><div class="mac"><div class="card" data-busiest>
+            <div class="title">Busiest Right Now<span class="seg" role="group" aria-label="Rank by"><button aria-pressed="false" data-rank="cpu">CPU</button><button aria-pressed="true" data-rank="memory">Memory</button><button aria-pressed="false" data-rank="energy">Energy</button></span></div>
+            <div data-busiest-rows></div>
+          </div></div></div>
+        </article>
+
+        <article class="tile w3">
+          <p class="kicker">Ask your history</p>
+          <h3>Ask about the last 30 days.</h3>
+          <p>Try a suggestion. These are Bondi's real answers from a working Mac, written from its own history file.</p>
+          <div class="vis"><div class="mac"><div class="card" data-ask>
+            <div class="field"><input type="text" placeholder="Ask about your Mac's last 30 days" aria-label="Question" data-ask-input readonly><button class="btn primary" data-ask-go>Ask</button></div>
+            <div class="chips">
+              <button data-q="0">What drained my battery yesterday?</button>
+              <button data-q="1">What slowed my Mac yesterday?</button>
+              <button data-q="2">Which app used the most memory this week?</button>
+            </div>
+            <div class="answer" data-ask-answer aria-live="polite"><span class="sp" aria-hidden="true">✦</span><span class="t2">Pick a question above.</span></div>
+          </div></div></div>
+        </article>
+
+        <article class="tile w3">
+          <p class="kicker">Warnings</p>
+          <h3>One cause. One fix. Always your call.</h3>
+          <p>When memory runs short, the menu bar says so and the popover names the cause with one fix. Try the button: Bondi always asks first.</p>
+          <div class="vis"><div class="mac" data-warn>
+            <div class="menubar" aria-hidden="true"><span class="t2" style="font-weight:400">Tue 5:32 PM</span><span class="item" style="color:var(--warn)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 2.5c.5 0 .9.3 1.2.7l7 12.3c.5.9-.1 2-1.2 2H3c-1 0-1.7-1.1-1.2-2l7-12.3c.3-.4.7-.7 1.2-.7z"/><path d="M10 7.5v4.2M10 14.3v.1" stroke="#1c1c1e" stroke-width="1.8" stroke-linecap="round"/></svg>MEM 72%</span></div>
+            <div class="warnbanner" data-warn-banner>
+              <span class="tri" aria-hidden="true">▲</span><b>Memory pressure is Elevated.</b>
+              <span></span><span class="t2">Google Chrome is using 13.09 GB.</span>
+              <button class="btn" data-warn-fix>Quit Google Chrome</button>
+            </div>
+          </div></div>
+        </article>
+
+        <article class="tile w3">
+          <p class="kicker">For developers</p>
+          <h3>Every server, grouped. Stop any of them.</h3>
+          <p>Dev servers by project and port, Docker containers and local AI models, with the memory each holds. Kubernetes is next.</p>
+          <div class="vis"><div class="mac" data-stack>
+            <div class="card"><div class="title" style="color:var(--projects)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3.5" width="14" height="5" rx="1.5"/><rect x="3" y="11.5" width="14" height="5" rx="1.5"/></svg><span style="color:var(--t2)">Stack</span></div>
+              <div class="big">4<small>servers running</small></div><div class="t2">2 projects · 1.24 GB · 4 ports</div></div>
+            <div class="card">
+              <div class="title">Talim</div>
+              <div class="srvrow" data-srv="0"><span><b>Python http.server</b><span class="proj">Talim</span></span><span class="url">localhost:8420</span><span class="mem">14.0 MB</span><button class="stop" aria-label="Stop Python http.server"></button></div>
+              <div class="srvrow" data-srv="1"><span><b>Wrangler</b><span class="proj">Talim/server</span></span><span class="url">localhost:8787</span><span class="mem">461.0 MB</span><button class="stop" aria-label="Stop Wrangler"></button></div>
+              <div class="title" style="margin-top:6px">shop</div>
+              <div class="srvrow" data-srv="2"><span><b>Node.js</b><span class="proj">shop/api</span></span><span class="url">localhost:4000</span><span class="mem">184.3 MB</span><button class="stop" aria-label="Stop Node.js"></button></div>
+              <div class="srvrow" data-srv="3"><span><b>Vite</b><span class="proj">shop</span></span><span class="url">localhost:5173 · <span class="idle">idle 3h 20m</span></span><span class="mem">612.0 MB</span><button class="stop" aria-label="Stop Vite"></button></div>
+            </div>
+            <div class="card">
+              <div class="title"><img class="icon" src="assets/apps/docker.png" alt="" style="width:14px;height:14px">Docker</div>
+              <div class="srvrow" data-srv="4"><span><b>postgres</b><span class="proj">container</span></span><span class="url">port 5432</span><span class="mem">212.0 MB</span><button class="stop" aria-label="Stop postgres"></button></div>
+              <div class="srvrow" data-srv="5"><span><b>redis</b><span class="proj">container</span></span><span class="url">port 6379</span><span class="mem">18.4 MB</span><button class="stop" aria-label="Stop redis"></button></div>
+            </div>
+            <div class="card">
+              <div class="title"><img class="icon" src="assets/apps/lmstudio.png" alt="" style="width:14px;height:14px">Local AI</div>
+              <div class="srvrow" data-srv="6"><span><b>Llama 3.1 8B</b><span class="proj">LM Studio</span></span><span class="url t2" style="color:var(--t2)">loaded · idle</span><span class="mem">8.54 GB</span><button class="stop" aria-label="Unload Llama 3.1 8B"></button></div>
+            </div>
+            <div class="card dim">
+              <div class="title">Kubernetes<span class="soon">Coming soon</span></div>
+              <div class="srvrow"><span><b>web-7d9f</b><span class="proj">default</span></span><span class="url t2" style="color:var(--t2)">pod · Running</span><span class="mem">—</span></div>
+            </div>
+          </div></div>
+        </article>
+
+        <article class="tile w3">
+          <p class="kicker">30-day history</p>
+          <h3>See yesterday. And last Tuesday.</h3>
+          <p>Real CPU history from a working Mac. Switch the range and move across the chart; shaded time is when the Mac slept.</p>
+          <div class="vis"><div class="mac"><div class="card" data-hist>
+            <div class="title" style="color:var(--cpu)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4.5" y="4.5" width="11" height="11" rx="2"/><rect x="8" y="8" width="4" height="4"/></svg><span style="color:var(--t1);font-size:13px">CPU</span>
+              <span class="ranges" role="group" aria-label="Range" data-ranges></span></div>
+            <div class="chart" data-chart><svg viewBox="0 0 400 150" preserveAspectRatio="none" aria-label="CPU history chart"></svg><span class="tip" hidden data-tip></span></div>
+            <div class="stats2"><span><span class="t2" style="font-size:11px">Average</span><br><b data-avg>—</b></span><span><span class="t2" style="font-size:11px">Peak</span><br><b data-peak>—</b></span><span class="t3" style="font-size:11px;align-self:end" data-since></span></div>
+          </div></div></div>
+        </article>
+
+        <article class="tile w2">
+          <p class="kicker">Menu bar</p>
+          <h3>Always there. Barely there.</h3>
+          <p>Click Bondi's icon. About 0.3% of one CPU core while it waits.</p>
+          <div class="vis"><div class="mac" data-mb>
+            <div class="menubar"><span class="t2" style="font-weight:400">Tue 5:32 PM</span><button class="item" aria-expanded="true" data-mb-item aria-label="Bondi"><svg viewBox="0 0 22 22" fill="none" stroke="#f2f2f2" stroke-width="1.6" stroke-linecap="round"><path d="M5.34 16.66A8 8 0 1 1 16.66 16.66" stroke-opacity=".35"/><path d="M5.34 16.66A8 8 0 0 1 16.14 4.87"/><path d="M11 11L14 7.6"/><path d="M7.4 15c1.2-.7 2.4.7 3.6 0s2.4-.7 3.6 0"/></svg><span data-mb-cpu>14%</span></button></div>
+            <div data-mb-pop>
+              <div class="status" style="grid-template-columns:auto 1fr"><span style="color:var(--good)">✓</span><span>Everything looks normal.</span></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+                <div class="card"><div class="title" style="color:var(--cpu)">CPU<span class="note">load 3.48</span></div><div class="big"><span data-mb-cpu2>14</span><small>%</small></div></div>
+                <div class="card"><div class="title" style="color:var(--mem)">Memory<span class="note">Normal</span></div><div class="big">44.7<small>GB</small></div></div>
+              </div>
+            </div>
+          </div></div>
+        </article>
+
+        <article class="tile w2">
+          <p class="kicker">Sound</p>
+          <h3>Every app, its own volume.</h3>
+          <p>Turn a call up to 300% and the music down, without touching the rest.</p>
+          <div class="vis"><div class="mac">
+            <div class="card"><div class="title" style="color:var(--sound)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M3.6 7.4h2.5L9.8 4.3c.4-.3 1-.1 1 .4v10.6c0 .5-.6.7-1 .4l-3.7-3.1H3.6c-.6 0-1.1-.5-1.1-1.1V8.5c0-.6.5-1.1 1.1-1.1z"/></svg><span style="color:var(--t2)">Output</span><span class="note" style="color:var(--t1)">MacBook Pro Speakers<svg viewBox="0 0 10 14" width="8" height="11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="margin-left:5px;vertical-align:-1px"><path d="M2 5l3-3 3 3M2 9l3 3 3-3"/></svg></span></div></div>
+            <div class="card" style="gap:2px"><div class="title" style="margin-bottom:4px">Apps<span class="note">100% is the app's normal level</span></div>
+              <div class="volrow"><img class="icon" src="assets/apps/zoom.png" alt=""><span>Zoom</span><input class="vol300" type="range" min="0" max="300" step="5" value="160" aria-label="Zoom volume" data-vol2><span class="val">160%</span><span class="lvl"><b></b></span></div>
+              <div class="volrow"><img class="icon" src="assets/apps/music.png" alt=""><span>Music</span><input class="vol300" type="range" min="0" max="300" step="5" value="60" aria-label="Music volume" data-vol2><span class="val">60%</span><span class="lvl"><b></b></span></div>
+              <div class="volrow"><img class="icon" src="assets/apps/chrome.png" alt=""><span>Chrome</span><input class="vol300" type="range" min="0" max="300" step="5" value="100" aria-label="Google Chrome volume" data-vol2><span class="val">100%</span><span class="lvl"><b></b></span></div>
+              <div class="volrow"><img class="icon" src="assets/apps/podcasts.png" alt=""><span>Podcasts</span><input class="vol300" type="range" min="0" max="300" step="5" value="80" aria-label="Podcasts volume" data-vol2><span class="val">80%</span><span class="lvl"><b></b></span></div>
+            </div></div>
+        </article>
+
+        <article class="tile w2">
+          <p class="kicker">Fan boost</p>
+          <h3>Cooler when you want it.</h3>
+          <p>Drag to boost. Never slower than your fans already were, and back to Auto when you quit.</p>
+          <div class="vis"><div class="mac"><div class="card" data-fan style="gap:10px">
+            <div class="title" style="color:var(--cpu)"><svg class="fanspin still" data-fan-icon viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="1.6"/><path d="M10 8.4c-.5-2.6.4-5 2.6-5.4 1.8-.3 2.6 1.6 1.1 3.2-.9 1-2.2 1.6-3.7 2.2zM11.6 10c2.6-.5 5 .4 5.4 2.6.3 1.8-1.6 2.6-3.2 1.1-1-.9-1.6-2.2-2.2-3.7zM10 11.6c.5 2.6-.4 5-2.6 5.4-1.8.3-2.6-1.6-1.1-3.2.9-1 2.2-1.6 3.7-2.2zM8.4 10c-2.6.5-5-.4-5.4-2.6-.3-1.8 1.6-2.6 3.2-1.1 1 .9 1.6 2.2 2.2 3.7z"/></svg><span style="color:var(--t2)">Fans</span><span class="note t3" style="font-variant-numeric:tabular-nums">1,180–5,779 rpm</span></div>
+            <div class="fanread"><span class="big" data-fan-big>Auto</span><span class="t2" style="font-size:12px" data-fan-sub>Drag to boost</span></div>
+            <div class="fanrow"><span>Auto</span><input class="fanslider" type="range" min="0" max="100" value="0" aria-label="Fan speed" data-fan-slider><span>Max</span></div>
+            <div style="display:flex;justify-content:flex-end;min-height:14px;margin-top:-4px"><button class="link" data-fan-auto hidden>Back to Auto</button></div>
+            <ul class="fansafe"><li><svg viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.3l2.3 2.2 4.7-5"/></svg><span>Never slower than when you started the boost.</span></li><li><svg viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.3l2.3 2.2 4.7-5"/></svg><span>Full speed whenever macOS reports the Mac running hot.</span></li><li><svg viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.3l2.3 2.2 4.7-5"/></svg><span>Back to Auto on quit, sleep or crash.</span></li></ul>
+          </div></div></div>
+        </article>
+
+        <article class="tile w3">
+          <p class="kicker">Process guide</p>
+          <h3>"What is this process?"</h3>
+          <p>Click a process. Bondi's own notes on 125 common macOS processes, with what each is using right now.</p>
+          <div class="vis"><div class="mac" data-guide>
+            <div class="card" style="gap:0" data-guide-rows></div>
+            <div class="gpop" data-guide-pop aria-live="polite"></div>
+          </div></div>
+        </article>
+
+        <article class="tile w3">
+          <p class="kicker">Your Bondi</p>
+          <h3>Three finishes. Or let it follow your Mac.</h3>
+          <p>Pick one: this page's icons change with it, as Bondi's Dock icon does.</p>
+          <div class="vis"><div class="mac"><div class="card" style="padding:14px 11px">
+            <div class="picker" role="group" aria-label="App icon" data-picker>
+              <button aria-pressed="true" data-pick="auto"><span class="ic"><img src="assets/icon-white.png" alt=""><img src="assets/icon-black.png" alt=""></span>Automatic</button>
+              <button aria-pressed="false" data-pick="white"><span class="ic"><img src="assets/icon-white.png" alt=""></span>Light</button>
+              <button aria-pressed="false" data-pick="black"><span class="ic"><img src="assets/icon-black.png" alt=""></span>Dark</button>
+              <button aria-pressed="false" data-pick="blue"><span class="ic"><img src="assets/icon-blue.png" alt=""></span>Bondi Blue</button>
+            </div>
+          </div></div></div>
+        </article>
+
+      </div>
+    </section>
+  </div>
+
+  <div class="band">
+    <div class="wrap">
+      <section class="sec stars" id="stars" aria-label="Film: 955 processes become 43 apps">
+        <div class="film">
+          <video src="assets/bondi-stars.mp4" poster="assets/bondi-stars-poster.jpg" autoplay muted loop playsinline width="1920" height="1080"
+                 aria-label="Every process on a real Mac drawn as a star: 955 of them. They pull together into the apps they belong to, and become 43 app icons, each with its process count: macOS 719, Google Chrome 80, Visual Studio Code 44 and more. It ends on Bondi for Apple Mac."></video>
+        </div>
+        <p class="stars-note">Every star is a real process from one reading of a working Mac, and each app gets exactly its own.</p>
+      </section>
+
+      <section class="sec" id="compare" aria-labelledby="compare-title">
+        <div class="split">
+          <div class="sec-head">
+            <p class="eyebrow">Apps, not processes</p>
+            <h2 id="compare-title">966 rows. Or 39 you recognise.</h2>
+            <p class="sub">A browser is dozens of helper processes, so no single row in Activity Monitor looks big. Bondi adds each one to the app that started it. Both lists here are one real reading of the same Mac.</p>
+          </div>
+          <div class="compare">
+            <div class="compare-top">
+              <span class="toggle" role="group" aria-label="View"><button aria-pressed="false" data-view="am"><img class="tico" src="assets/apps/activitymonitor.png" alt="">Activity Monitor</button><button aria-pressed="true" data-view="bondi"><img class="tico" src="assets/icon-blue.png" alt="">Bondi</button></span>
+              <span class="count" data-count>39 apps</span>
+            </div>
+            <div class="list" data-list></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section class="sec" id="film" aria-labelledby="film-title">
+      <div class="sec-head center">
+        <p class="eyebrow">In 24 seconds</p>
+        <h2 id="film-title">From a thousand processes to one plain sentence.</h2>
+      </div>
+      <div class="film">
+        <video src="assets/bondi-film.mp4" poster="assets/bondi-film-poster.png" autoplay muted loop playsinline width="1920" height="1080"
+               aria-label="A 24-second film: a Mac running 931 processes, grouped by Bondi into 39 apps; Bondi's one-sentence explanations; and a question about the last week answered from history."></video>
+      </div>
+    </section>
+
+    <section class="sec" id="launch" aria-labelledby="launch-title">
+      <div class="sec-head center">
+        <p class="eyebrow">Coming soon</p>
+        <h2 id="launch-title">Almost ready.</h2>
+        <p class="sub">Bondi is in its final round of testing on real Macs.</p>
+      </div>
+      <ol class="steps">
+        <li><span class="step-dot now"></span><b>Beta</b><span>Launching soon.</span></li>
+        <li><span class="step-dot"></span><b>Full launch</b><span>Soon after the beta, with the launch price below.</span></li>
+      </ol>
+      <form class="signup" id="signup" data-signup novalidate>
+        <h3>Sign up for updates</h3>
+        <p class="soft">Hear when the beta opens and when Bondi launches.</p>
+        <div class="signup-fields">
+          <label><span class="vh">Name</span><input name="name" autocomplete="name" placeholder="Name" maxlength="100" required></label>
+          <label><span class="vh">Email</span><input name="email" type="email" autocomplete="email" placeholder="Email" maxlength="254" required></label>
+          <label class="vh" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
+          <button class="pillbtn primary" type="submit">Sign up</button>
+        </div>
+        <p class="signup-msg" role="status" aria-live="polite" data-signup-msg></p>
+        <p class="fine">We keep your name, email, IP address and country only to email you about Bondi. Ask <a href="mailto:support@trybondi.app">support@trybondi.app</a> to remove them anytime. <a href="/privacy/">Privacy policy</a></p>
+      </form>
+    </section>
+
+    <section class="sec" id="pricing" aria-labelledby="pricing-title">
+      <div class="sec-head center">
+        <p class="eyebrow">Pricing</p>
+        <h2 id="pricing-title">Buy it once. Keep it.</h2>
+        <p class="sub">At full launch: try everything free for 7 days. Then one price, one Mac, no subscription.</p>
+      </div>
+      <div class="price-card">
+        <span class="badge">Launch price for the first 250</span>
+        <div><span class="price">$<span data-price>6.99</span></span></div>
+        <span class="was" data-was>$29.99 after the first 250</span>
+        <ul><li>Every feature, with updates</li><li>On-device AI included</li><li>One Mac; move it whenever you like</li><li>Paddle handles payment, tax and your receipt</li></ul>
+        <span class="pillbtn soonbtn" aria-disabled="true">Available at full launch</span>
+      </div>
+    </section>
+
+    <section class="sec" id="faq" aria-labelledby="faq-title">
+      <div class="sec-head center"><h2 id="faq-title">Questions</h2></div>
+      <div class="faq">
+        <details><summary>When can I get Bondi?</summary><p>The beta is launching soon, and the full launch follows soon after. You'll be able to buy a license at full launch. <a href="#signup">Sign up for updates</a> to hear first.</p></details>
+        <details><summary>Which AI does Bondi use?</summary><p>On Macs with Apple Intelligence (macOS 26, Apple silicon), Apple's on-device foundation model, built into macOS. Other Macs can download a small free open model (Qwen2.5 0.5B) from Bondi's Settings; nothing downloads unless you press Download. Either way it runs on your Mac.</p></details>
+        <details><summary>Does my data leave my Mac?</summary><p>No. History stays in a file on your Mac, and the AI runs on your Mac. Bondi only contacts our server to check your trial or license, and to look for updates. See the <a href="/privacy/">privacy policy</a>.</p></details>
+        <details><summary>Which Macs does it run on?</summary><p>Any Mac with macOS 15 or later, Apple silicon or Intel.</p></details>
+        <details><summary>Will it slow my Mac down?</summary><p>No. With its windows closed, Bondi uses about 0.3% of one CPU core, and the AI only works while you're looking.</p></details>
+        <details><summary>Can Bondi quit apps on its own?</summary><p>Never. It suggests one fix at a time and asks before it quits, stops or unloads anything.</p></details>
+        <details><summary>What happens after the trial?</summary><p>The menu bar keeps showing your CPU for free. Everything else waits for a license.</p></details>
+        <details><summary>Can I get a refund?</summary><p>Yes. See the <a href="/refunds/">refund policy</a>; Paddle, who handles the payment, issues it.</p></details>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-cols">
+      <div><a class="brand" href="#top"><img src="assets/icon-blue.png" width="26" height="26" alt="">Bondi</a><p>Bondi runs entirely on your Mac. No account, no analytics, and its AI never uploads anything.</p></div>
+      <div><h4>Bondi</h4><ul><li><a href="#ai">On-device AI</a></li><li><a href="#app">Try it</a></li><li><a href="#features">Features</a></li><li><a href="#launch">Launch plans</a></li><li><a href="#pricing">Pricing</a></li></ul></div>
+      <div><h4>Support</h4><ul><li><a href="mailto:support@trybondi.app">support@trybondi.app</a></li><li><a href="#faq">Questions</a></li><li><a href="#launch">Launch plans</a></li></ul></div>
+      <div><h4>Legal</h4><ul><li><a href="/privacy/">Privacy</a></li><li><a href="/terms/">Terms</a></li><li><a href="/eula/">License agreement</a></li><li><a href="/refunds/">Refunds</a></li></ul></div>
+    </div>
+    <div class="foot-line">
+      <span>© 2026 Jabble Inc. Bondi for Mac is a trademark of Jabble Inc.</span>
+      <span>Apple, Mac, macOS and Apple Intelligence are trademarks of Apple Inc. Bondi isn't made or endorsed by Apple.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const $ = (s, root = document) => root.querySelector(s);
+  const $$ = (s, root = document) => [...root.querySelectorAll(s)];
+
+  // Links within the page scroll to their section without adding "#section" to the address, so it stays
+  // trybondi.app. An address that already has one (a shared link) still opens there, then the # is removed.
+  const goTo = id => {
+    const target = id === 'top' ? document.documentElement : document.getElementById(id);
+    if (!target) return false;
+    target.scrollIntoView({ block: 'start' }); // smooth unless Reduce Motion is on (html scroll-behavior)
+    return true;
+  };
+  document.addEventListener('click', event => {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+    if (goTo(link.getAttribute('href').slice(1))) event.preventDefault();
+  });
+  if (location.hash) {
+    const id = decodeURIComponent(location.hash.slice(1));
+    history.replaceState(null, '', location.pathname + location.search);
+    addEventListener('load', () => goTo(id));
+  }
+
+  // Live price and launch licenses left, from the license server.
+  fetch('/api/offer').then(r => r.ok ? r.json() : null).then(offer => {
+    if (!offer) return;
+    $$('[data-price]').forEach(el => el.textContent = offer.price);
+  }).catch(() => {});
+
+  // Intro film over the app window: stars become apps, then the real, clickable window shows through. Starts
+  // when 60% of the window is in view; skipped with Reduce Motion and on phones.
+  (() => {
+    const intro = $('[data-intro]');
+    if (!intro) return;
+    const video = $('video', intro), win = intro.closest('.win'), bar = $('.win-bar', win), foot = $('.win-foot', win), replay = $('[data-intro-replay]');
+    const fit = () => { win.style.setProperty('--win-bar-h', bar.offsetHeight + 'px'); if (foot) win.style.setProperty('--win-foot-h', foot.offsetHeight + 'px'); };
+    fit(); addEventListener('resize', fit);
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || win.clientWidth < 700) return;
+    const finish = skipped => {
+      if (intro.classList.contains('done')) return;
+      video.pause();
+      intro.classList.toggle('skip', skipped);
+      intro.classList.add('done');
+      setTimeout(() => { if (intro.classList.contains('done')) intro.hidden = true; }, skipped ? 750 : 1650);
+      replay.hidden = false;
+    };
+    const play = () => {
+      intro.hidden = false; intro.classList.remove('done', 'skip', 'playing'); replay.hidden = true;
+      video.currentTime = 0;
+      requestAnimationFrame(() => intro.classList.add('playing'));
+      video.play().catch(() => finish(true)); // a browser that won't autoplay just shows the window
+    };
+    intro.hidden = false; // the dim first frame waits over the window until it's in view
+    video.addEventListener('ended', () => finish(false));
+    $('[data-intro-skip]').addEventListener('click', () => finish(true));
+    $('[data-wtabs]').addEventListener('click', () => finish(true), true);
+    replay.addEventListener('click', () => { play(); win.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+    // 60% of the window in view (or 60% of the screen filled by it, on short screens).
+    const seen = new IntersectionObserver(entries => {
+      const e = entries[entries.length - 1];
+      if (e.intersectionRatio >= 0.6 || e.intersectionRect.height >= innerHeight * 0.6) { seen.disconnect(); play(); }
+    }, { threshold: Array.from({ length: 21 }, (_, i) => i / 20) });
+    seen.observe(win);
+  })();
+
+  // Sign up for updates: name and email to the license server, with the browser's time zone for the
+  // country when the server can't tell it from the IP.
+  const signup = $('[data-signup]');
+  if (signup) signup.addEventListener('submit', async event => {
+    event.preventDefault();
+    const msg = $('[data-signup-msg]'), button = $('button', signup), fields = signup.elements;
+    const say = (text, ok) => { msg.textContent = text; msg.className = 'signup-msg ' + (ok ? 'ok' : 'err'); };
+    const name = fields.name.value.trim(), email = fields.email.value.trim();
+    fields.name.setAttribute('aria-invalid', String(!name));
+    fields.email.setAttribute('aria-invalid', String(!fields.email.checkValidity() || !email));
+    if (!name) { say('Enter your name.'); fields.name.focus(); return; }
+    if (!email || !fields.email.checkValidity()) { say('Enter a valid email address.'); fields.email.focus(); return; }
+    button.disabled = true; say('');
+    let timeZone = '';
+    try { timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+    try {
+      const response = await fetch('/api/signup', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, time_zone: timeZone, website: fields.website.value }) });
+      const answer = await response.json().catch(() => ({}));
+      if (response.ok) {
+        say(`Thanks, ${name}. We'll email you when the beta opens.`, true);
+        signup.querySelector('.signup-fields').hidden = true;
+      } else {
+        say(answer.message || "Couldn't sign you up just now. Try again in a minute.");
+      }
+    } catch (e) {
+      say("Couldn't sign you up just now. Try again in a minute.");
+    }
+    button.disabled = false;
+  });
+
+  $$('[data-vol]').forEach(r => r.addEventListener('input', () => {
+    r.nextElementSibling.textContent = r.value + '%';
+    const meter = r.parentElement.querySelector('.meter b');
+    if (meter) meter.style.setProperty('--l', Math.min(1, r.value / 230).toFixed(2));
+  }));
+  $$('[data-icon]').forEach(b => b.addEventListener('click', () => $$('[data-icon]').forEach(x => x.setAttribute('aria-pressed', String(x === b)))));
+
+  // Activity Monitor vs Bondi.
+  // One real reading of a working Mac (MacBook Pro M1 Max, 64 GB, 2026-09-29): its biggest processes as
+  // Activity Monitor would list them, and the same moment grouped by Bondi.
+  const processes = [
+    ['com.apple.WebKit.WebContent', '1.13 GB'], ['PaperKitExtension', '977.5 MB'], ['Google Chrome Helper (Renderer)', '933.0 MB'],
+    ['Google Chrome Helper (Renderer)', '809.1 MB'], ['Code Helper (Plugin)', '682.3 MB'], ['WindowServer', '667.2 MB'],
+    ['Google Chrome Helper (Renderer)', '637.7 MB'], ['Google Chrome Helper (Renderer)', '635.4 MB'], ['Google Chrome Helper (Renderer)', '568.4 MB'],
+    ['Google Chrome', '556.7 MB'], ['Google Chrome Helper (Renderer)', '554.5 MB'], ['Google Chrome Helper', '550.5 MB'],
+    ['Finder', '494.9 MB'], ['Google Chrome Helper (Renderer)', '478.5 MB'], ['Notes', '436.1 MB'],
+    ['Code Helper (Plugin)', '401.2 MB'], ['Google Chrome Helper (Renderer)', '373.3 MB'], ['Code Helper (Renderer)', '368.8 MB'],
+  ];
+  const grouped = [
+    ['Google Chrome', '80 processes', '12.23 GB'], ['macOS', '745 processes', '8.85 GB'], ['Visual Studio Code', '44 processes', '4.24 GB'],
+    ['Safari', '16 processes', '1.42 GB'], ['Notes', '9 processes', '526.7 MB'], ['Finder', '3 processes', '499.9 MB'],
+    ['Preview', '6 processes', '346.5 MB'], ['TextEdit', '10 processes', '217.8 MB'],
+  ];
+  const iconFor = (name) => {
+    const n = name.toLowerCase();
+    const file = n.includes('chrome') ? 'chrome' : n.startsWith('code') || n.includes('visual studio') ? 'vscode' : n.includes('webkit') || n === 'safari' ? 'safari'
+      : n === 'finder' ? 'finder' : n === 'notes' ? 'notes' : n === 'preview' ? 'preview' : n === 'textedit' ? 'textedit' : null;
+    return file ? `<img class="ai" src="assets/apps/${file}.png" alt="">`
+      : n === 'macos' ? '<svg class="ai" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3l7 3.5-7 3.5-7-3.5z"/><path d="M3 10l7 3.5 7-3.5M3 13.5L10 17l7-3.5"/></svg>'
+      : '<svg class="ai" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="14" height="12" rx="2"/><path d="M6 8l2 2-2 2M10 12h3"/></svg>';
+  };
+  const showView = view => {
+    $$('.toggle button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === view)));
+    $('[data-count]').textContent = view === 'am' ? '966 processes' : '39 apps';
+    $('[data-list]').innerHTML = view === 'am'
+      ? processes.map(([n, m]) => `<div class="item proc">${iconFor(n)}<span>${n}</span><span class="num">${m}</span></div>`).join('')
+      : grouped.map(([n, p, m]) => `<div class="item">${iconFor(n)}<span>${n}<small>${p}</small></span><span class="num">${m}</span></div>`).join('');
+  };
+  $$('.toggle button').forEach(b => b.addEventListener('click', () => showView(b.dataset.view)));
+  showView('bondi');
+})();
+</script>
+<script>
+
+// Feature tiles: real Bondi views, clickable. Figures and sentences are real readings and answers from a working
+// Mac (MacBook Pro, M1 Max, 64 GB, 2026-09-29); the page itself reads nothing from yours.
+(() => {
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const stackIcon = '<svg class="sys" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3l7 3.5-7 3.5-7-3.5z"/><path d="M3 10l7 3.5 7-3.5M3 13.5L10 17l7-3.5"/></svg>';
+  const appIcon = (file) => file ? `<img class="icon" src="assets/apps/${file}.png" alt="">` : stackIcon;
+  const alertSheet = (host, { icon, title, message, action }, onConfirm) => {
+    const sheet = document.createElement('div');
+    sheet.className = 'alert';
+    sheet.innerHTML = `<div role="alertdialog" aria-label="${title}">${icon ? `<img src="${icon}" alt="">` : ''}<b>${title}</b><p>${message}</p>`
+      + `<div class="row2"><button class="btn" data-no>Cancel</button><button class="btn primary" data-yes>${action}</button></div></div>`;
+    host.appendChild(sheet);
+    $('[data-yes]', sheet).focus();
+    $('[data-no]', sheet).onclick = () => sheet.remove();
+    $('[data-yes]', sheet).onclick = () => { sheet.remove(); onConfirm(); };
+  };
+
+  // Why is my Mac slow?
+  const why = $('[data-why]');
+  if (why) {
+    const line = $('[data-why-text]', why).textContent;
+    const answer = 'Everything is fine. Memory pressure is Normal, with 44.73 GB of 64.00 GB used. Google Chrome is using the most memory, 13.09 GB across 82 processes.';
+    const open = $('[data-why-open]', why), close = $('[data-why-close]', why), text = $('[data-why-text]', why);
+    open.onclick = () => {
+      open.hidden = true; text.innerHTML = '<span class="spin"></span><span class="t2">Looking at your Mac…</span>';
+      setTimeout(() => { text.textContent = answer; close.hidden = false; }, reduced ? 0 : 1400);
+    };
+    close.onclick = () => { text.textContent = line; close.hidden = true; open.hidden = false; };
+  }
+
+  // Busiest right now: one real reading, three rankings
+  const busiest = [
+    { n: 'Google Chrome', i: 'chrome', cpu: 12.8, memory: 13.50, energy: 1.44 },
+    { n: 'macOS', i: null, cpu: 7.7, memory: 8.58, energy: 0.12 },
+    { n: 'Visual Studio Code', i: 'vscode', cpu: 2.2, memory: 4.41, energy: 0.04 },
+    { n: 'Safari', i: 'safari', cpu: 0.3, memory: 1.83, energy: 0.0 },
+  ];
+  const tint = { cpu: 'var(--cpu)', memory: 'var(--mem)', energy: 'var(--battery)' };
+  const fmt = { cpu: v => v.toFixed(1) + '%', memory: v => v.toFixed(2) + ' GB', energy: v => v.toFixed(1) + ' W' };
+  const drawBusiest = (mode) => {
+    const top = [...busiest].sort((a, b) => b[mode] - a[mode]).slice(0, 3), lead = top[0][mode] || 1;
+    $('[data-busiest-rows]').innerHTML = top.map(a => `<div class="rowx">${appIcon(a.i)}<span>${a.n}</span><span class="bar"><i style="width:${Math.max(3, a[mode] / lead * 100)}%;background:${tint[mode]}"></i></span><span class="val">${fmt[mode](a[mode])}</span></div>`).join('');
+  };
+  $$('[data-rank]').forEach(b => b.onclick = () => { $$('[data-rank]').forEach(x => x.setAttribute('aria-pressed', String(x === b))); drawBusiest(b.dataset.rank); });
+  if ($('[data-busiest-rows]')) drawBusiest('memory');
+
+  // Ask: Bondi's real answers to its three suggestions
+  const answers = [
+    'Yesterday, Visual Studio Code used the most power, 2.5 W on average, then Google Chrome (0.4 W) and Xcode (0.1 W). The battery started and ended at 100%, lowest 12% at 12:41 PM.',
+    'Yesterday, memory used averaged 35.29 GB and peaked at 54.26 GB at 1:51 PM, and the CPU averaged 19.8% and peaked at 40.0% at 7:02 PM. Google Chrome used the most memory, 9.63 GB on average, then macOS (6.39 GB) and Visual Studio Code (3.48 GB). Visual Studio Code used the most CPU, 8.0% of the chip on average, then macOS (3.7%) and Google Chrome (3.4%).',
+    'Over the last 7 days (Sep 22–Sep 29), Google Chrome used the most memory, 10.58 GB on average, then macOS (6.33 GB) and Visual Studio Code (3.35 GB). Memory used averaged 35.80 GB and peaked at 54.26 GB on Mon 1:51 PM.',
+  ];
+  let typing;
+  $$('[data-q]').forEach(chip => chip.onclick = () => {
+    const input = $('[data-ask-input]'), out = $('[data-ask-answer]'), q = chip.textContent;
+    clearInterval(typing); input.value = ''; let i = 0;
+    const done = () => {
+      out.innerHTML = '<span></span><span><span class="spin"></span><span class="t2">Looking through your history…</span></span>';
+      setTimeout(() => { out.innerHTML = `<span class="sp" aria-hidden="true">✦</span><span>${answers[chip.dataset.q]}</span>`; }, reduced ? 0 : 1100);
+    };
+    if (reduced) { input.value = q; done(); return; }
+    typing = setInterval(() => { input.value = q.slice(0, ++i); if (i >= q.length) { clearInterval(typing); done(); } }, 22);
+  });
+  const go = $('[data-ask-go]');
+  if (go) go.onclick = () => $('[data-q="2"]').click();
+
+  // Warning: the fix asks first, then says what it freed
+  const warn = $('[data-warn]');
+  if (warn) {
+    const banner = $('[data-warn-banner]', warn), original = banner.innerHTML;
+    const arm = () => $('[data-warn-fix]', banner).onclick = () => alertSheet(warn,
+      { icon: 'assets/apps/chrome.png', title: 'Quit Google Chrome?', message: '82 processes will close.', action: 'Quit' }, () => {
+        banner.innerHTML = '<span class="result" style="grid-column:1/-1">✓ Freed 13.09 GB. Pressure is back to Normal.</span>';
+        setTimeout(() => { banner.innerHTML = original; arm(); }, 4000);
+      });
+    arm();
+  }
+
+  // Stack: stop asks first, with Bondi's own wording
+  const servers = [
+    ['Python http.server', 'Talim', '1 process will close and port 8420 will be free. This frees about 14.0 MB.'],
+    ['Wrangler', 'Talim', '6 processes will close and port 8787 will be free. This frees about 461.0 MB.'],
+    ['Node.js', 'shop', '1 process will close and port 4000 will be free. This frees about 184.3 MB.'],
+    ['Vite', 'shop', '2 processes will close and port 5173 will be free. This frees about 612.0 MB.'],
+    ['postgres', 'Docker', 'The container stops and port 5432 will be free. This frees about 212.0 MB.'],
+    ['redis', 'Docker', 'The container stops and port 6379 will be free. This frees about 18.4 MB.'],
+    ['Llama 3.1 8B', 'LM Studio', 'The model is unloaded from memory. This frees about 8.54 GB. You can load it again in LM Studio.'],
+  ];
+  $$('[data-srv]').forEach(row => {
+    const [name, where, message] = servers[row.dataset.srv];
+    const model = where === 'LM Studio', docker = where === 'Docker';
+    const stop = $('.stop', row);
+    if (stop) stop.onclick = () => alertSheet($('[data-stack]'), {
+      title: model ? `Unload ${name}?` : docker ? `Stop ${name}?` : `Stop ${name} in ${where}?`,
+      message: message + (model ? '' : ' You can start it again from Bondi.'), action: model ? 'Unload' : 'Stop' }, () => {
+        row.classList.add('gone'); $('.mem', row).textContent = model ? 'Unloaded' : 'Stopped';
+        setTimeout(() => { row.classList.remove('gone'); $('.mem', row).textContent = row.dataset.mem; }, 4000);
+      });
+    row.dataset.mem = $('.mem', row).textContent;
+  });
+
+  // History: real CPU readings, 10 minutes to 30 days, sleep shaded
+  const H = {"now":1790726849,"ranges":{"10 min":{"span":600,"bucket":10,"points":[[1790726240,8.5],[1790726250,7.4],[1790726260,5.3],[1790726270,4.6],[1790726280,8.9],[1790726290,5.1],[1790726300,4.8],[1790726310,5.6],[1790726320,5.5],[1790726330,4.8],[1790726340,4.6],[1790726350,5.1],[1790726360,4.7],[1790726370,5.7],[1790726380,5.2],[1790726390,4.6],[1790726400,9.7],[1790726410,9.0],[1790726420,20.2],[1790726430,22.8],[1790726440,18.6],[1790726450,10.3],[1790726460,9.2],[1790726470,11.8],[1790726480,19.3],[1790726490,20.8],[1790726500,15.1],[1790726510,14.7],[1790726520,14.3],[1790726530,17.8],[1790726540,17.0],[1790726550,18.2],[1790726560,20.1],[1790726570,9.2],[1790726580,15.7],[1790726590,8.9],[1790726600,7.8],[1790726610,8.9],[1790726620,18.3],[1790726630,10.6],[1790726640,9.9],[1790726650,10.1],[1790726660,8.7],[1790726670,10.3],[1790726680,33.9],[1790726770,36.8],[1790726780,29.4],[1790726790,17.0],[1790726800,17.1],[1790726810,39.2],[1790726820,17.2]]},"1 h":{"span":3600,"bucket":60,"points":[[1790723220,16.3],[1790723280,15.8],[1790723340,15.3],[1790723400,10.5],[1790723460,15.4],[1790723520,18.0],[1790723580,18.5],[1790723640,16.6],[1790723700,14.3],[1790723760,18.4],[1790723820,10.5],[1790723880,13.7],[1790723940,14.1],[1790724000,10.7],[1790724060,8.7],[1790724120,15.8],[1790724180,18.3],[1790724240,9.8],[1790724300,14.9],[1790724360,15.2],[1790724420,14.8],[1790724480,15.4],[1790724540,10.3],[1790724600,11.6],[1790724660,25.7],[1790724780,13.6],[1790724840,10.6],[1790724900,9.7],[1790724960,11.1],[1790725020,9.6],[1790725080,10.9],[1790725140,12.4],[1790725200,13.1],[1790725260,11.1],[1790725320,9.1],[1790725380,9.5],[1790725440,10.9],[1790725500,16.9],[1790725560,16.8],[1790725620,18.2],[1790725680,11.5],[1790725740,9.5],[1790725800,11.8],[1790725920,8.3],[1790725980,10.2],[1790726040,9.1],[1790726100,10.0],[1790726160,9.3],[1790726220,13.0],[1790726280,5.8],[1790726340,5.0],[1790726400,15.1],[1790726460,15.1],[1790726520,16.1],[1790726580,11.7],[1790726640,14.6],[1790726760,27.9],[1790726820,17.2]]},"24 h":{"span":86400,"bucket":900,"points":[[1790640000,22.5],[1790641800,18.0],[1790642700,30.4],[1790643600,27.8],[1790644500,29.2],[1790645400,28.3],[1790646300,29.7],[1790647200,23.1],[1790648100,17.5],[1790649000,20.5],[1790649900,22.4],[1790650800,24.0],[1790651700,20.6],[1790652600,19.2],[1790653500,20.6],[1790654400,21.0],[1790655300,16.4],[1790656200,13.3],[1790657100,13.7],[1790658000,14.1],[1790658900,11.5],[1790659800,12.5],[1790660700,13.1],[1790661600,11.9],[1790662500,11.0],[1790663400,12.9],[1790664300,12.5],[1790665200,13.2],[1790666100,15.8],[1790667000,8.9],[1790667900,15.8],[1790668800,21.5],[1790669700,19.1],[1790670600,24.9],[1790671500,13.1],[1790672400,14.4],[1790673300,14.7],[1790675100,14.3],[1790676000,12.8],[1790676900,11.8],[1790677800,18.1],[1790678700,18.0],[1790679600,9.9],[1790680500,15.0],[1790681400,14.9],[1790682300,15.4],[1790683200,17.1],[1790685000,21.0],[1790685900,15.0],[1790686800,11.6],[1790687700,10.2],[1790688600,15.3],[1790689500,26.8],[1790690400,21.0],[1790691300,11.2],[1790692200,24.1],[1790693100,18.7],[1790694000,25.3],[1790694900,10.8],[1790695800,13.8],[1790696700,17.9],[1790697600,26.3],[1790699400,25.6],[1790700300,14.1],[1790701200,24.2],[1790702100,16.8],[1790703000,17.4],[1790703900,14.7],[1790704800,11.0],[1790705700,10.6],[1790706600,13.5],[1790707500,16.9],[1790708400,12.6],[1790709300,13.1],[1790710200,11.6],[1790711100,14.3],[1790712000,15.2],[1790712900,21.1],[1790713800,13.0],[1790714700,11.6],[1790715600,13.2],[1790716500,18.4],[1790717400,11.5],[1790718300,11.1],[1790719200,15.5],[1790720100,11.7],[1790721000,15.5],[1790721900,16.6],[1790722800,16.0],[1790723700,13.6],[1790724600,11.0],[1790725500,11.0],[1790726400,17.2]]},"7 d":{"span":604800,"bucket":3600,"points":[[1790492400,15.9],[1790496000,36.6],[1790499600,24.7],[1790503200,28.4],[1790506800,27.8],[1790510400,46.1],[1790514000,37.2],[1790517600,27.8],[1790521200,30.4],[1790524800,24.1],[1790528400,21.9],[1790532000,20.5],[1790535600,20.6],[1790539200,20.0],[1790542800,23.6],[1790546400,26.1],[1790550000,27.3],[1790553600,20.2],[1790557200,23.6],[1790560800,25.6],[1790564400,24.6],[1790568000,25.8],[1790571600,22.9],[1790575200,19.7],[1790578800,25.3],[1790582400,20.2],[1790586000,20.5],[1790589600,23.6],[1790593200,18.3],[1790596800,20.9],[1790600400,20.9],[1790604000,20.7],[1790607600,21.5],[1790611200,18.5],[1790614800,22.8],[1790618400,24.2],[1790622000,22.1],[1790625600,21.1],[1790629200,20.5],[1790632800,20.1],[1790636400,19.5],[1790640000,22.2],[1790643600,29.0],[1790647200,20.9],[1790650800,21.0],[1790654400,16.1],[1790658000,12.8],[1790661600,11.9],[1790665200,12.0],[1790668800,19.6],[1790672400,14.4],[1790676000,14.7],[1790679600,14.4],[1790683200,17.7],[1790686800,14.1],[1790690400,20.0],[1790694000,18.5],[1790697600,18.9],[1790701200,16.4],[1790704800,12.7],[1790708400,12.9],[1790712000,15.6],[1790715600,13.6],[1790719200,14.8],[1790722800,13.1]]},"30 d":{"span":2592000,"bucket":3600,"points":[[1790492400,15.9],[1790496000,36.6],[1790499600,24.7],[1790503200,28.4],[1790506800,27.8],[1790510400,46.1],[1790514000,37.2],[1790517600,27.8],[1790521200,30.4],[1790524800,24.1],[1790528400,21.9],[1790532000,20.5],[1790535600,20.6],[1790539200,20.0],[1790542800,23.6],[1790546400,26.1],[1790550000,27.3],[1790553600,20.2],[1790557200,23.6],[1790560800,25.6],[1790564400,24.6],[1790568000,25.8],[1790571600,22.9],[1790575200,19.7],[1790578800,25.3],[1790582400,20.2],[1790586000,20.5],[1790589600,23.6],[1790593200,18.3],[1790596800,20.9],[1790600400,20.9],[1790604000,20.7],[1790607600,21.5],[1790611200,18.5],[1790614800,22.8],[1790618400,24.2],[1790622000,22.1],[1790625600,21.1],[1790629200,20.5],[1790632800,20.1],[1790636400,19.5],[1790640000,22.2],[1790643600,29.0],[1790647200,20.9],[1790650800,21.0],[1790654400,16.1],[1790658000,12.8],[1790661600,11.9],[1790665200,12.0],[1790668800,19.6],[1790672400,14.4],[1790676000,14.7],[1790679600,14.4],[1790683200,17.7],[1790686800,14.1],[1790690400,20.0],[1790694000,18.5],[1790697600,18.9],[1790701200,16.4],[1790704800,12.7],[1790708400,12.9],[1790712000,15.6],[1790715600,13.6],[1790719200,14.8],[1790722800,13.1]]}},"sleeps":[[1790494779,1790523972],[1790527811,1790529114],[1790531162,1790531747],[1790539026,1790542595],[1790546500,1790550116],[1790565262,1790573695],[1790575757,1790616266],[1790635024,1790645011],[1790645414,1790645414],[1790645424,1790647325],[1790668206,1790701949]],"first":1790492400};
+  const chart = $('[data-chart]');
+  if (chart) {
+    const svg = $('svg', chart), tip = $('[data-tip]'), W = 400, HT = 150, top = 8, bottom = 132;
+    const ranges = Object.keys(H.ranges);
+    let current = '24 h', pts = [];
+    $('[data-ranges]').innerHTML = ranges.map(r => `<button aria-pressed="${r === current}" data-r="${r}">${r}</button>`).join('');
+    const tick = (t, span) => { const d = new Date(t * 1000);
+      return span <= 3600 ? d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+        : span <= 86400 ? d.toLocaleTimeString([], { hour: 'numeric' }) : d.toLocaleDateString([], { weekday: 'short' }); };
+    const draw = () => {
+      const r = H.ranges[current], start = H.now - r.span, x = t => (t - start) / r.span * W, y = v => bottom - Math.min(100, v) / 100 * (bottom - top);
+      pts = r.points.map(([t, v]) => [x(t), y(v), t, v]);
+      const gap = r.bucket * 2.5;
+      let path = '', area = '';
+      pts.forEach((p, i) => {
+        const breaks = i === 0 || p[2] - pts[i - 1][2] > gap;
+        path += (breaks ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1);
+      });
+      const runs = []; let run = [];
+      pts.forEach((p, i) => { if (i && p[2] - pts[i - 1][2] > gap) { runs.push(run); run = []; } run.push(p); }); if (run.length) runs.push(run);
+      area = runs.map(rn => `M${rn[0][0].toFixed(1)},${bottom} ` + rn.map(p => `L${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ') + ` L${rn[rn.length - 1][0].toFixed(1)},${bottom}Z`).join(' ');
+      const sleeps = H.sleeps.filter(([a, b]) => b > start).map(([a, b]) => `<rect x="${Math.max(0, x(a)).toFixed(1)}" y="${top}" width="${Math.max(1, x(b) - Math.max(0, x(a))).toFixed(1)}" height="${bottom - top}" fill="#ffffff" opacity=".07"/>`).join('');
+      const noData = H.first > start ? `<rect x="0" y="${top}" width="${x(H.first).toFixed(1)}" height="${bottom - top}" fill="url(#hatch)"/>` : '';
+      const grid = [0, 50, 100].map(v => `<line x1="0" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="#ffffff" stroke-opacity=".08" stroke-dasharray="3 3"/><text x="${W - 2}" y="${y(v) - 3}" text-anchor="end" fill="#8e8e93" font-size="9">${v}%</text>`).join('');
+      const ticks = [0.12, 0.37, 0.62, 0.87].map(f => `<text x="${f * W}" y="146" text-anchor="middle" fill="#8e8e93" font-size="9">${tick(start + f * r.span, r.span)}</text>`).join('');
+      svg.innerHTML = `<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#ffffff" stroke-opacity=".06" stroke-width="3"/></pattern></defs>`
+        + noData + sleeps + grid + `<path d="${area}" fill="#3d8fe0" opacity=".18"/><path d="${path}" fill="none" stroke="#3d8fe0" stroke-width="1.5" vector-effect="non-scaling-stroke"/>` + ticks
+        + '<line data-cross x1="0" x2="0" y1="' + top + '" y2="' + bottom + '" stroke="#f2f2f2" stroke-opacity="0" />';
+      const values = r.points.map(p => p[1]);
+      $('[data-avg]').textContent = values.length ? (values.reduce((s, v) => s + v, 0) / values.length).toFixed(0) + '%' : '—';
+      $('[data-peak]').textContent = values.length ? Math.max(...values).toFixed(0) + '%' : '—';
+      $('[data-since]').textContent = H.first > start ? 'History starts ' + new Date(H.first * 1000).toLocaleDateString([], { month: 'short', day: 'numeric' }) : '';
+    };
+    $$('[data-r]').forEach(b => b.onclick = () => { current = b.dataset.r; $$('[data-r]').forEach(x => x.setAttribute('aria-pressed', String(x === b))); draw(); tip.hidden = true; });
+    chart.addEventListener('pointermove', e => {
+      if (!pts.length) return;
+      const box = svg.getBoundingClientRect(), px = (e.clientX - box.left) / box.width * W;
+      const p = pts.reduce((a, b) => Math.abs(b[0] - px) < Math.abs(a[0] - px) ? b : a);
+      const cross = $('[data-cross]', svg); cross.setAttribute('x1', p[0]); cross.setAttribute('x2', p[0]); cross.setAttribute('stroke-opacity', '.4');
+      tip.hidden = false; tip.style.left = (p[0] / W * 100) + '%';
+      tip.textContent = `${p[3].toFixed(0)}% · ${new Date(p[2] * 1000).toLocaleString([], { weekday: 'short', hour: 'numeric', minute: '2-digit' })}`;
+    });
+    chart.addEventListener('pointerleave', () => { tip.hidden = true; const c = $('[data-cross]', svg); if (c) c.setAttribute('stroke-opacity', '0'); });
+    draw();
+  }
+
+  // Menu bar: click the icon
+  const mbItem = $('[data-mb-item]');
+  if (mbItem) {
+    mbItem.onclick = () => { const open = mbItem.getAttribute('aria-expanded') !== 'true'; mbItem.setAttribute('aria-expanded', String(open)); $('[data-mb-pop]').hidden = !open; };
+    if (!reduced) setInterval(() => { const v = Math.round(10 + Math.random() * 9); $('[data-mb-cpu]').textContent = v + '%'; $('[data-mb-cpu2]').textContent = v; }, 2000);
+  }
+
+  // Sliders: fill the track up to the knob, the way macOS draws it
+  const paint = r => r.style.setProperty('--p', (r.value - r.min) / (r.max - r.min) * 100 + '%');
+  $$('.mac input[type=range]').forEach(r => { paint(r); r.addEventListener('input', () => paint(r)); });
+
+  // Sound sliders
+  $$('[data-vol2]').forEach(r => { const show = () => { const v = r.nextElementSibling; v.textContent = r.value + '%'; v.classList.toggle('loud', +r.value > 100); }; show(); r.addEventListener('input', show); });
+  // Level meters: what each app is playing, after its own volume
+  const levels = () => $$('[data-vol2]').forEach((r, i) => {
+    const beat = reduced ? 0.6 : 0.45 + Math.random() * 0.4 * (i === 1 ? 1.3 : 1);
+    r.parentElement.querySelector('.lvl b').style.width = Math.min(100, beat * r.value / 2.2) + '%';
+  });
+  levels(); $$('[data-vol2]').forEach(r => r.addEventListener('input', levels));
+  if (!reduced) setInterval(levels, 220);
+
+  // Fan boost: Auto to Max, as Bondi labels it (this Mac's fans: about 1,180 to 5,779 rpm)
+  const fan = $('[data-fan-slider]');
+  if (fan) {
+    const minRPM = 1180, maxRPM = 5779, icon = $('[data-fan-icon]');
+    const show = () => {
+      const f = fan.value / 100, rpm = minRPM + f * (maxRPM - minRPM), max = f >= 0.995;
+      const shown = max ? Math.round(rpm) : Math.round(rpm / 100) * 100;
+      $('[data-fan-big]').innerHTML = f === 0 ? 'Auto' : `${max ? '' : '≈ '}${shown.toLocaleString()}<small>rpm</small>`;
+      $('[data-fan-big]').style.color = f === 0 ? '' : 'var(--cpu)';
+      $('[data-fan-sub]').textContent = f === 0 ? 'Drag to boost' : max ? 'Max' : 'Boost';
+      $('[data-fan-auto]').hidden = f === 0;
+      icon.classList.toggle('still', f === 0 || reduced);
+      icon.style.setProperty('--dur', (1.6 - f * 1.35).toFixed(2) + 's');
+      paint(fan);
+    };
+    fan.addEventListener('input', show);
+    $('[data-fan-auto]').onclick = () => { fan.value = 0; show(); };
+    show();
+  }
+
+  // Process guide: Bondi's own notes, with each process's real figures
+  const guide = [{"name": "WindowServer", "cpu": "1.7%", "mem": "674.4 MB", "what": "Draws everything on your screens: windows, the Dock, the menu bar and animations.", "busy": "Many open windows, several or very high-resolution displays, screen recording, video and heavy animations make it work harder.", "quit": "Leave it running: macOS needs it. Quitting it logs you out and closes every app."}, {"name": "kernel_task", "cpu": "1.0%", "mem": "16.2 MB", "what": "The core of macOS. Its CPU figure also includes time macOS sets aside on purpose to cool the Mac: when the chip gets hot, kernel_task takes CPU time so apps slow down and heat drops.", "busy": "High CPU usually means the Mac is hot, for example charging in a warm room or on a soft surface. Its large memory figure is normal.", "quit": "Leave it running: macOS needs it. It can't be quit. If it stays busy, let the Mac cool down or close the apps that heat it."}, {"name": "mds_stores", "cpu": "0.0%", "mem": "105.3 MB", "what": "Spotlight's indexer. It keeps an index of your files so searches are instant.", "busy": "After a macOS update, when you add many files, or when a new disk is connected, it re-indexes. That can take hours, then it settles.", "quit": "Leave it running: macOS needs it. Leave it running: it finishes on its own. You can leave folders out in System Settings, Spotlight."}, {"name": "photoanalysisd", "cpu": "0.0%", "mem": "52.5 MB", "what": "Analyzes your photo library for Photos: people, places and Memories.", "busy": "After importing many photos or turning on iCloud Photos. It prefers to work while the Mac is idle and plugged in.", "quit": "Stopping it doesn't help for long: macOS starts it again when it's needed."}];
+  const rows = $('[data-guide-rows]'), pop = $('[data-guide-pop]');
+  if (rows) {
+    rows.innerHTML = '<div class="proc t2" style="font-size:11px;font-weight:600"><span></span><span>Process</span><span style="text-align:right">% CPU</span><span style="text-align:right">Memory</span><span></span></div>'
+      + guide.map((p, i) => `<div class="proc" data-g="${i}"><svg class="sys" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="14" height="12" rx="2"/><path d="M6 8l2 2-2 2M10 12h3"/></svg><span>${p.name}</span><span class="val">${p.cpu}</span><span class="val">${p.mem}</span><button class="more" aria-label="What Is This? ${p.name}">⋯</button></div>`).join('');
+    const showGuide = i => {
+      const p = guide[i];
+      $$('.proc[data-g]', rows).forEach(r => r.setAttribute('aria-current', String(r.dataset.g == i)));
+      pop.innerHTML = `<h4>${p.name}</h4><dl style="margin:0"><dt>What it is</dt><dd>${p.what}</dd><dt>Why it gets busy</dt><dd>${p.busy}</dd><dt>Can I stop it?</dt><dd>${p.quit}</dd></dl><span style="font-size:12px">Right now it's using ${p.cpu} of the CPU and ${p.mem} of memory.</span>`;
+    };
+    $$('.proc[data-g]', rows).forEach(r => r.onclick = () => showGuide(r.dataset.g));
+    showGuide(0);
+  }
+
+  // App icon: the page's icons follow the pick, like Bondi's Dock icon
+  const picker = $('[data-picker]');
+  if (picker) {
+    const dark = matchMedia('(prefers-color-scheme: dark)');
+    let pick = 'auto';
+    const apply = () => {
+      const file = pick === 'auto' ? (dark.matches ? 'black' : 'white') : pick;
+      $$('.hero-icon, .brand img').forEach(img => img.src = `assets/icon-${file}.png`);
+      const fav = document.querySelector('link[rel="icon"]'); if (fav) fav.href = `assets/icon-${file}.png`;
+    };
+    $$('[data-pick]', picker).forEach(b => b.onclick = () => { pick = b.dataset.pick; $$('[data-pick]', picker).forEach(x => x.setAttribute('aria-pressed', String(x === b))); apply(); });
+    dark.addEventListener('change', () => { if (pick === 'auto') apply(); });
+  }
+})();
+</script>
+<script>
+  // The main-window demo. Made-up figures that drift, drawn the way Bondi draws them.
+  (() => {
+    const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+    const body = $('[data-wbody]'), tabsEl = $('[data-wtabs]');
+    if (!body) return;
+    const icon = {
+      overview: '<circle cx="10" cy="10" r="7.5"/><path d="M10 10l3.5-3.5" stroke-linecap="round"/>',
+      cpu: '<rect x="4.5" y="4.5" width="11" height="11" rx="2"/><rect x="8" y="8" width="4" height="4"/><path d="M8 2v2.5M12 2v2.5M8 15.5V18M12 15.5V18M2 8h2.5M2 12h2.5M15.5 8H18M15.5 12H18"/>',
+      memory: '<rect x="2.5" y="6" width="15" height="8" rx="1.5"/><path d="M5 14v2.5M8.3 14v2.5M11.7 14v2.5M15 14v2.5"/>',
+      disk: '<rect x="2.5" y="8" width="15" height="7" rx="2"/><path d="M4.5 8l2-4h7l2 4M6 12h1"/>',
+      network: '<circle cx="10" cy="10" r="7.5"/><path d="M2.5 10h15M10 2.5c2.5 2.5 2.5 12.5 0 15M10 2.5c-2.5 2.5-2.5 12.5 0 15"/>',
+      gpu: '<path d="M10 3l7 3.5-7 3.5-7-3.5z"/><path d="M3 10l7 3.5 7-3.5M3 13.5L10 17l7-3.5"/>',
+      neural: '<path d="M7 4a3 3 0 00-3 3 3 3 0 00-1 5.5A3 3 0 007 16h1V4zM13 4a3 3 0 013 3 3 3 0 011 5.5A3 3 0 0113 16h-1V4z"/>',
+      battery: '<rect x="2.5" y="6.5" width="13" height="7" rx="2"/><path d="M17.5 9v2"/><rect x="4.5" y="8.5" width="6" height="3" fill="currentColor" stroke="none"/>',
+      sound: '<path d="M3.6 7.4h2.5L9.8 4.3c.4-.3 1-.1 1 .4v10.6c0 .5-.6.7-1 .4l-3.7-3.1H3.6c-.6 0-1.1-.5-1.1-1.1V8.5c0-.6.5-1.1 1.1-1.1z" fill="currentColor" stroke="none"/><path d="M13.6 7.6a3.4 3.4 0 010 4.8M15.9 5.3a6.6 6.6 0 010 9.4"/>',
+      bluetooth: '<path d="M6 6.5l8 7L10 17V3l4 3.5-8 7"/>',
+      stack: '<rect x="3" y="3.5" width="14" height="5" rx="1.5"/><rect x="3" y="11.5" width="14" height="5" rx="1.5"/><path d="M6 6h.5M6 14h.5"/>',
+    };
+    const svg = (name) => `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">${icon[name]}</svg>`;
+    const tabs = [
+      ['overview', 'Overview', '#2cc0de'], ['cpu', 'CPU', '#4a90e2'], ['memory', 'Memory', '#9b7ae0'], ['disk', 'Disk', '#f2a57c'],
+      ['network', 'Network', '#8fcf4f'], ['gpu', 'GPU', '#e27aa0'], ['neural', 'Neural Engine', '#7b6cf6'], ['battery', 'Battery', '#5cc26a'],
+      ['sound', 'Sound', '#e0305a'], ['bluetooth', 'Bluetooth', '#4a90e2'], ['stack', 'Stack', '#2cc0de'],
+    ];
+    const tint = Object.fromEntries(tabs.map(([k, , c]) => [k, c]));
+
+    // State: series of 60 readings each, plus apps.
+    const N = 60, rnd = (a, b) => a + Math.random() * (b - a);
+    const walk = (v, step, lo, hi) => Math.min(hi, Math.max(lo, v + (Math.random() - 0.5) * step));
+    const series = { cpu: [], mem: [], down: [], read: [], gpu: [], ane: [], batt: [] };
+    let v = { cpu: 18, mem: 45.3, down: 820, up: 12, read: 2.4, write: 1.1, gpu: 38, ane: 0, batt: 71, procs: 966, self: 0.3 };
+    for (let i = 0; i < N; i++) step(true);
+    function step(seed) {
+      v.cpu = walk(v.cpu, 9, 5, 62); v.mem = walk(v.mem, 0.5, 42, 49); v.down = walk(v.down, 700, 20, 4200); v.up = walk(v.up, 20, 2, 180);
+      v.read = walk(v.read, 2.5, 0.1, 18); v.write = walk(v.write, 1.2, 0.1, 9); v.gpu = walk(v.gpu, 12, 3, 88);
+      v.ane = Math.random() < 0.12 ? rnd(0.2, 1.4) : Math.max(0, v.ane * 0.4); v.batt = Math.max(5, v.batt - (seed ? 0.02 : 0.01));
+      v.procs = Math.round(walk(v.procs, 6, 950, 985)); v.self = seed ? 0.3 : +(walk(v.self, 0.1, 0.2, 0.5)).toFixed(1);
+      const push = (k, x) => { series[k].push(x); if (series[k].length > N) series[k].shift(); };
+      push('cpu', v.cpu); push('mem', v.mem); push('down', v.down); push('read', v.read); push('gpu', v.gpu); push('ane', v.ane); push('batt', v.batt);
+    }
+    const apps = [
+      { n: 'Google Chrome', c: '#e8453c', cpu: 6.8, mem: 12.23, en: 1.9, p: 80, rd: 0.9 },
+      { n: 'macOS', c: '#6e6e76', cpu: 5.9, mem: 8.85, en: 0.8, p: 745, rd: 1.2 },
+      { n: 'Visual Studio Code', c: '#2f7cf6', cpu: 3.0, mem: 4.24, en: 0.9, p: 44, rd: 0.3 },
+      { n: 'Safari', c: '#1e9bf0', cpu: 0.3, mem: 1.42, en: 0.2, p: 16, rd: 0.1 },
+      { n: 'Docker Desktop', c: '#1d63ed', cpu: 1.4, mem: 2.1, en: 0.5, p: 9, rd: 0.4 },
+      { n: 'Slack', c: '#8a3f8f', cpu: 0.6, mem: 1.06, en: 0.3, p: 13, rd: 0.1 },
+      { n: 'Notes', c: '#e6b400', cpu: 0.1, mem: 0.51, en: 0.05, p: 9, rd: 0 },
+      { n: 'Finder', c: '#3aa0f0', cpu: 0.0, mem: 0.49, en: 0.02, p: 3, rd: 0.05 },
+    ];
+    apps.forEach(a => a.hist = Array.from({ length: 20 }, () => a.cpu * rnd(0.6, 1.4)));
+    const drift = () => apps.forEach(a => {
+      a.cpu = walk(a.cpu, a.cpu * 0.5 + 0.3, 0, 24); a.mem = walk(a.mem, 0.06, 0.2, 14); a.en = walk(a.en, 0.3, 0.02, 4); a.rd = walk(a.rd, 0.4, 0, 6);
+      a.hist.push(a.cpu); a.hist.shift();
+    });
+
+    const f1 = x => x.toFixed(1), f2 = x => x.toFixed(2);
+    const gb = x => x >= 1 ? f2(x) + ' GB' : (x * 1024).toFixed(1) + ' MB';
+    const rate = kb => kb >= 1024 ? f1(kb / 1024) + ' MB/s' : Math.round(kb) + ' KB/s';
+    const area = (data, max, w, h, color, fill = true) => {
+      const pts = data.map((y, i) => [(i / (data.length - 1)) * w, h - Math.min(1, y / max) * (h - 2) - 1]);
+      const line = pts.map(p => p.map(n => n.toFixed(1)).join(',')).join(' ');
+      return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">`
+        + (fill ? `<polygon points="0,${h} ${line} ${w},${h}" fill="${color}" opacity=".18"/>` : '')
+        + `<polyline points="${line}" fill="none" stroke="${color}" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg>`;
+    };
+    const head = (k, title, note = '') => `<div class="head"><b style="color:${tint[k]}">${svg(k)}${title}</b><span>${note}</span></div>`;
+    const membar = used => { const s = used / 8; return `<div class="w-membar">${Array.from({ length: 8 }, (_, i) => `<i class="${i < Math.floor(s) ? 'on' : i === Math.floor(s) ? 'part' : ''}"></i>`).join('')}<span class="swap"></span></div>`; };
+    const ring = (parts, total, center, caption) => {
+      let off = 0; const C = 2 * Math.PI * 38;
+      const arcs = parts.map(([, val, col]) => { const len = (val / total) * C; const s = `<circle cx="48" cy="48" r="38" fill="none" stroke="${col}" stroke-width="12" stroke-dasharray="${Math.max(0, len - 2)} ${C}" stroke-dashoffset="${-off}" transform="rotate(-90 48 48)"/>`; off += len; return s; });
+      return `<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="38" fill="none" stroke="#3a3b40" stroke-width="12"/>${arcs.join('')}<text x="48" y="47" text-anchor="middle" fill="#f2f2f4" font-size="14" font-weight="700">${center}</text><text x="48" y="61" text-anchor="middle" fill="#9d9da5" font-size="9">${caption}</text></svg>`;
+    };
+    const legend = rows => `<ul>${rows.map(([n, val, col, txt]) => `<li><i style="background:${col}"></i><span>${n}</span><span>${txt}</span></li>`).join('')}</ul>`;
+    const iconFile = { 'Google Chrome': 'chrome', 'Visual Studio Code': 'vscode', 'Safari': 'safari', 'Docker Desktop': 'docker', 'Notes': 'notes', 'Finder': 'finder', 'Music': 'music', 'zoom.us': 'zoom' };
+    const appCell = a => iconFile[a.n] ? `<span class="w-app"><img src="assets/apps/${iconFile[a.n]}.png" alt="" style="width:18px;height:18px">${a.n}</span>`
+      : a.n === 'macOS' ? `<span class="w-app"><svg viewBox="0 0 20 20" style="width:18px;height:18px;color:#9d9da5" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3l7 3.5-7 3.5-7-3.5z"/><path d="M3 10l7 3.5 7-3.5M3 13.5L10 17l7-3.5"/></svg>${a.n}</span>`
+      : `<span class="w-app"><i style="background:${a.c}">${a.n[0]}</i>${a.n}</span>`;
+    const cpuOf = a => f1(a.cpu) + '%';
+    const statusLines = [
+      ['Everything looks normal.', ' Google Chrome is using the most memory, 12.23 GB across 80 processes.'],
+      ['A dev server is sitting idle.', ' Vite in shop has been idle for 3h 20m and holds 612.0 MB.'],
+      ['Running on battery.', ' The battery is at 71% with 3h 31m left.'],
+    ];
+    let statusIndex = 0;
+
+    const views = {
+      overview: () => {
+        const [lead, rest] = statusLines[statusIndex % statusLines.length];
+        const byMem = [...apps].sort((a, b) => b.mem - a.mem), byCpu = [...apps].sort((a, b) => b.cpu - a.cpu), byEn = [...apps].sort((a, b) => b.en - a.en);
+        const top = (list, key, cols, fmt) => list.slice(0, 4).map((a, i) => [a.n, a[key], cols[i], fmt(a[key])]);
+        const memTotal = byMem.reduce((s, a) => s + a.mem, 0), cpuTotal = byCpu.reduce((s, a) => s + a.cpu, 0) || 1, enTotal = byEn.reduce((s, a) => s + a.en, 0);
+        const purple = ['#9b7ae0', '#b69bf0', '#7d5cc9', '#cbb8f5'], blue = ['#4a90e2', '#74aaf0', '#3471bd', '#a6c8f5'], green = ['#5cc26a', '#86d68f', '#3f9b4c', '#b3e6b8'];
+        const types = [['App', 38.56, '#9b7ae0', '38.56 GB'], ['Wired', 3.32, '#e8793a', '3.32 GB'], ['Compressed', 3.39, '#5cc26a', '3.39 GB'], ['Cached Files', 16.81, '#6e6e76', '16.81 GB']];
+        return `
+          <div class="w-status"><span class="spark">✦</span><span><b>${lead}</b>${rest}</span><small>Why is my Mac slow?</small></div>
+          <div class="w-h">At a glance</div>
+          <div class="w-grid">
+            <div class="w-card" style="--tint:${tint.cpu}">${head('cpu', 'CPU', 'load 3.48')}<div class="w-big">${Math.round(v.cpu)}<small>%</small></div><div class="w-sub">User ${f1(v.cpu * 0.7)}% · System ${f1(v.cpu * 0.3)}%</div><div class="w-chart">${area(series.cpu, 100, 200, 30, tint.cpu)}</div></div>
+            <div class="w-card" style="--tint:${tint.memory}">${head('memory', 'Memory', 'Normal')}<div class="w-big">${f1(v.mem)}<small>GB</small></div><div class="w-sub">of 64 GB · 0.5 GB swap</div>${membar(v.mem)}</div>
+            <div class="w-card" style="--tint:${tint.network}">${head('network', 'Network', 'active')}<div class="w-big">${rate(v.down).split(' ')[0]}<small>${rate(v.down).split(' ')[1]} down</small></div><div class="w-sub">${rate(v.up)} up · 2.13 GB today</div><div class="w-chart">${area(series.down, 4200, 200, 30, tint.network)}</div></div>
+            <div class="w-card" style="--tint:${tint.disk}">${head('disk', 'Disk', '78% full')}<div class="w-big">222<small>GB free</small></div><div class="w-sub">of 995 GB</div><div class="w-fill"><i style="width:78%"></i></div></div>
+            <div class="w-card" style="--tint:${tint.gpu}">${head('gpu', 'GPU')}<div class="w-big">${Math.round(v.gpu)}<small>%</small></div><div class="w-sub">M1 Max · 24 cores</div><div class="w-chart">${area(series.gpu, 100, 200, 30, tint.gpu)}</div></div>
+            <div class="w-card" style="--tint:${tint.neural}">${head('neural', 'Neural Engine', v.ane > 0.05 ? 'Working' : 'Idle')}<div class="w-big">${f2(v.ane)}<small>W</small></div><div class="w-sub">16 cores · 11 TOPS</div><div class="w-chart">${area(series.ane, 1.5, 200, 30, tint.neural)}</div></div>
+            <div class="w-card wide" style="--tint:${tint.battery}">${head('battery', 'Battery', '3h 31m left')}<div class="w-big">${Math.round(v.batt)}<small>%</small></div><div class="w-sub">Drawing 11.8 W</div><div class="w-fill"><i style="width:${v.batt}%"></i></div></div>
+          </div>
+          <div class="w-h">Right now</div>
+          <div class="rings">
+            <div class="ring-card"><div class="head" style="color:${tint.memory}">Memory by type</div>${ring(types, 64, Math.round(v.mem / 64 * 100) + '%', 'in use')}${legend(types)}</div>
+            <div class="ring-card"><div class="head" style="color:${tint.memory}">Memory by app</div>${ring(top(byMem, 'mem', purple, gb), memTotal, f1(memTotal) + ' GB', 'all apps')}${legend(top(byMem, 'mem', purple, gb))}</div>
+            <div class="ring-card"><div class="head" style="color:${tint.cpu}">CPU by app</div>${ring(top(byCpu, 'cpu', blue, x => f1(x) + '%'), cpuTotal, Math.round(v.cpu) + '%', 'in use')}${legend(top(byCpu, 'cpu', blue, x => f1(x) + '%'))}</div>
+            <div class="ring-card"><div class="head" style="color:${tint.battery}">Power by app</div>${ring(top(byEn, 'en', green, x => f1(x) + ' W'), enTotal, f1(enTotal) + ' W', 'all apps')}${legend(top(byEn, 'en', green, x => f1(x) + ' W'))}</div>
+          </div>`;
+      },
+      cpu: () => section('cpu', 'CPU', Math.round(v.cpu) + '<small>%</small>', 'Apple M1 Max', series.cpu, 100, ['Average', '17%', 'Peak', '51%'],
+        `<div class="w-h" style="color:#9d9da5;font-size:12px">Cores</div><div class="w-cores">${Array.from({ length: 10 }, (_, i) => `<div><i style="height:${Math.round(i < 2 ? rnd(35, 80) : Math.max(2, v.cpu * (1.5 - i * 0.14) + rnd(0, 8)))}%"></i></div>`).join('')}</div><div class="w-sub">2 efficiency · 8 performance</div>`,
+        [['User', f1(v.cpu * 0.7) + '%'], ['System', f1(v.cpu * 0.3) + '%'], ['Load average', '2.70 3.42 4.33'], ['Uptime', '34d 13h'], ['Busiest', [...apps].sort((a, b) => b.cpu - a.cpu)[0].n]],
+        ['% CPU', 'Last hour', 'Memory', 'Processes'], a => [cpuOf(a), area(a.hist, 24, 110, 16, tint.cpu, false), gb(a.mem), a.p], (a, b) => b.cpu - a.cpu),
+      memory: () => section('memory', 'Memory', f1(v.mem) + '<small>GB</small>', 'of 64 GB used', series.mem, 64, ['Average', '33 GB', 'Peak', '54 GB'],
+        `<div class="w-h" style="color:#9d9da5;font-size:12px">By type · Pressure Normal</div>${membar(v.mem)}<div class="w-sub">App 38.56 · Wired 3.32 · Compressed 3.39 · Cached 16.81 GB</div>`,
+        [['App Memory', '38.56 GB'], ['Wired Memory', '3.32 GB'], ['Compressed', '3.39 GB'], ['Cached Files', '16.81 GB'], ['Swap Used', '484.9 MB']],
+        ['Memory', 'Last hour', 'Change', '% CPU'], a => [gb(a.mem), area(a.hist.map(x => x + a.mem), 30, 110, 16, tint.memory, false), '—', cpuOf(a)], (a, b) => b.mem - a.mem),
+      disk: () => section('disk', 'Disk', '222<small>GB free</small>', 'of 995 GB · Macintosh HD', series.read, 18, ['Read', f1(v.read) + ' MB/s', 'Write', f1(v.write) + ' MB/s'],
+        `<div class="w-h" style="color:#9d9da5;font-size:12px">Startup disk</div><div class="w-fill" style="--tint:${tint.disk};height:12px"><i style="width:78%"></i></div><div class="w-sub">773 GB used · 78% full</div>`,
+        [['Reading', f1(v.read) + ' MB/s'], ['Writing', f1(v.write) + ' MB/s'], ['Read today', '14.2 GB'], ['Written today', '6.8 GB'], ['Busiest', 'macOS']],
+        ['Read', 'Write', 'Memory', 'Processes'], a => [f1(a.rd) + ' MB/s', f1(a.rd * 0.4) + ' MB/s', gb(a.mem), a.p], (a, b) => b.rd - a.rd),
+      network: () => section('network', 'Network', rate(v.down).replace(' ', '<small>') + ' down</small>', rate(v.up) + ' up · Wi-Fi', series.down, 4200, ['Today', '2.13 GB', 'This week', '14.8 GB'],
+        `<div class="w-h" style="color:#9d9da5;font-size:12px">Wi-Fi</div><div class="w-sub">Home · 5 GHz · signal good</div>`,
+        [['Downloading', rate(v.down)], ['Uploading', rate(v.up)], ['Today', '2.13 GB'], ['This week', '14.8 GB'], ['Interface', 'Wi-Fi']], null),
+      gpu: () => section('gpu', 'GPU', Math.round(v.gpu) + '<small>%</small>', 'Apple M1 Max · 24 cores', series.gpu, 100, ['Average', '31%', 'Peak', '77%'],
+        `<div class="w-h" style="color:#9d9da5;font-size:12px">Now</div><div class="w-fill" style="--tint:${tint.gpu};height:12px"><i style="width:${v.gpu}%"></i></div>`,
+        [['Utilization', Math.round(v.gpu) + '%'], ['Cores', '24'], ['Average today', '31%'], ['Peak today', '77%'], ['Chip', 'M1 Max']], null),
+      neural: () => section('neural', 'Neural Engine', f2(v.ane) + '<small>W</small>', v.ane > 0.05 ? 'Working' : 'Idle', series.ane, 1.5, ['Peak', '1.40 W', 'Rated', '11 TOPS'],
+        `<div class="w-h" style="color:#9d9da5;font-size:12px">What uses it</div><div class="w-sub">Photos analysis, Live Text, dictation and Apple Intelligence run here.</div>`,
+        [['Power', f2(v.ane) + ' W'], ['Cores', '16'], ['Rated', '11 TOPS'], ['State', v.ane > 0.05 ? 'Working' : 'Idle'], ['Chip', 'M1 Max']], null),
+      battery: () => section('battery', 'Battery', Math.round(v.batt) + '<small>%</small>', 'On battery · 3h 31m left', series.batt, 100, ['Drawing', '11.8 W', 'Health', '86%'],
+        `<div class="w-h" style="color:#9d9da5;font-size:12px">Charge</div><div class="w-fill" style="--tint:${tint.battery};height:12px"><i style="width:${v.batt}%"></i></div><div class="w-sub">412 cycles · health 86%</div>`,
+        [['Time left', '3h 31m'], ['Drawing', '11.8 W'], ['Health', '86%'], ['Cycles', '412'], ['Busiest', [...apps].sort((a, b) => b.en - a.en)[0].n]],
+        ['Energy', 'Last hour', 'Memory', '% CPU'], a => [f1(a.en) + ' W', area(a.hist, 24, 110, 16, tint.battery, false), gb(a.mem), cpuOf(a)], (a, b) => b.en - a.en),
+      sound: () => `<div class="w-card" style="--tint:${tint.sound};min-height:0">${head('sound', 'Sound', 'MacBook Pro Speakers')}
+          <div class="w-sub" style="margin-bottom:6px">Each app's own volume, up to 300%. Try the sliders.</div>
+          ${[['Music', 80], ['Google Chrome', 100], ['zoom.us', 140], ['Slack', 40]].map(([n, val], i) => `<div class="vol">${appCell({ n, c: ['#fa3e5c', '#e8453c', '#2d8cff', '#8a3f8f'][i] })}<input type="range" min="0" max="300" value="${val}" aria-label="${n} volume" data-vol><span data-volv>${val}%</span></div>`).join('')}</div>`,
+      bluetooth: () => `<div class="w-card" style="--tint:${tint.bluetooth};min-height:0">${head('bluetooth', 'Bluetooth', '3 connected')}
+          ${[['AirPods Pro', 'Left 80% · Right 75% · Case 60%'], ['Magic Keyboard', 'Battery 64%'], ['Magic Mouse', 'Battery 22%']].map(([n, d]) => `<div class="dev"><b>${n}</b><span class="w-sub">Connected</span><small>${d}</small></div>`).join('')}</div>`,
+      stack: () => {
+        const group = (title, rows, note = '') => `<div class="w-h" style="font-size:12px;color:#9d9da5;margin-top:10px">${title}${note}</div>`
+          + rows.map(([n, d, action]) => `<div class="dev"><b>${n}</b><span class="w-sub">${action}</span><small>${d}</small></div>`).join('');
+        const soon = ' <span style="font-size:10.5px;font-weight:600;color:#2cc0de;background:rgba(44,192,222,.14);padding:2px 7px;border-radius:999px;margin-left:6px">Coming soon</span>';
+        return `<div class="w-card" style="--tint:${tint.stack};min-height:0">${head('stack', 'Stack', '4 servers · 3 containers · 1 model')}
+          <div class="stack-cols"><div>
+          ${group('Dev servers', [['Node.js · api', 'localhost:4000 · 184.3 MB · active', 'Stop…'], ['Vite · shop', 'localhost:5173 · 612.0 MB · <span style="color:#ff9f0a">idle 3h 20m</span>', 'Stop…'],
+                                  ['Next.js · site', 'localhost:3000 · 480.2 MB · active', 'Stop…'], ['Wrangler · Talim', 'localhost:8787 · 331.5 MB · active', 'Stop…']])}
+          ${group('Docker', [['postgres', 'container · 212.0 MB · port 5432', 'Stop…'], ['redis', 'container · 18.4 MB · port 6379', 'Stop…'], ['nginx', 'container · 9.6 MB · port 8080', 'Stop…']])}
+          </div><div>
+          ${group('Local AI', [['LM Studio · Llama 3.1 8B', 'model loaded · 8.54 GB · working now', 'Unload…']])}
+          <div style="opacity:.55">${group('Kubernetes', [['web-7d9f · default', 'pod · Running · 2 restarts', ''], ['worker-5c2b · default', 'pod · Running', '']], soon)}</div></div></div></div>`;
+      },
+    };
+
+    function section(k, title, big, sub, data, max, pair, side, stats, cols, cells, sort) {
+      const ranges = ['10 min', '1 h', '24 h', '7 d', '30 d'].map((r, i) => `<span class="${i === 2 ? 'on' : ''}">${r}</span>`).join('');
+      const table = cols ? `<div class="w-scroll"><table class="w-table"><thead><tr><th>App Name</th>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>`
+        + [...apps].sort(sort).slice(0, 4).map(a => `<tr><td>${appCell(a)}</td>${cells(a).map(c => `<td>${c}</td>`).join('')}</tr>`).join('') + '</tbody></table></div>' : '';
+      return `<div class="hero-row">
+          <div class="hero-card" style="--tint:${tint[k]}"><div class="hl">${head(k, title)}<div><div class="w-big">${big}</div><div class="w-sub">${sub}</div></div>
+            <div class="w-sub">${pair[0]} <b style="color:#f2f2f4">${pair[1]}</b> · ${pair[2]} <b style="color:#f2f2f4">${pair[3]}</b></div></div>
+            <div><div class="ranges">${ranges}</div>${area(data, max, 600, 160, tint[k])}</div></div>
+          <div class="side" style="--tint:${tint[k]}">${side}</div></div>
+        <div class="stats">${stats.map(([l, val]) => `<div class="stat"><div>${l}</div><b>${val}</b></div>`).join('')}</div>${table}`;
+    }
+
+    let current = 'overview';
+    tabsEl.innerHTML = tabs.map(([k, label, col]) => `<button role="tab" aria-selected="${k === current}" data-t="${k}" style="--tint:${col}" aria-label="${label}">${svg(k)}<span class="label">${label}</span></button>`).join('');
+    const render = () => {
+      body.innerHTML = views[current]();
+      bindLive();
+      // On smaller screens the Overview can be taller than 16:9; every tab then keeps its height, so the window doesn't jump.
+      if (current === 'overview' && body.offsetHeight > 0) body.style.minHeight = body.offsetHeight + 'px';
+    };
+    const bindLive = () => $$('[data-vol]', body).forEach(r => { const paint = () => r.style.setProperty('--p', r.value / 3 + '%'); paint(); r.addEventListener('input', () => { paint(); r.nextElementSibling.textContent = r.value + '%'; }); });
+    $$('button', tabsEl).forEach(b => b.addEventListener('click', () => {
+      current = b.dataset.t;
+      $$('button', tabsEl).forEach(x => x.setAttribute('aria-selected', String(x === b)));
+      render();
+    }));
+    render();
+    const live = () => {
+      step(false); drift();
+      $$('[data-v]').forEach(el => { const key = el.dataset.v; if (key in v) el.textContent = v[key]; });
+      if (!['sound', 'bluetooth', 'stack'].includes(current)) render();
+    };
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setInterval(live, 1600);
+      setInterval(() => { statusIndex++; if (current === 'overview') render(); }, 6400);
+    }
+  })();
+
+</script>
+</body>
+</html>
