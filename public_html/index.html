@@ -189,7 +189,9 @@
   .toggle button[aria-pressed="true"] { background: var(--tile); color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,.16); }
   .count { font-size: 0.9rem; color: var(--soft); }
   .list { height: 420px; overflow: hidden; border-radius: 18px; background: var(--tile-2); mask-image: linear-gradient(black 78%, transparent); -webkit-mask-image: linear-gradient(black 78%, transparent); }
-  .list .item { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding: 11px 16px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+  .list .item { display: grid; grid-template-columns: 22px 1fr auto; gap: 12px; align-items: center; padding: 11px 16px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+  .list .item .ai { width: 22px; height: 22px; color: var(--soft); }
+  .list .proc .ai { width: 16px; height: 16px; }
   .list .item small { display: block; color: var(--faint); font-size: 0.8rem; }
   .list .proc { font-family: var(--mono); font-size: 0.82rem; padding: 7px 16px; }
   .price-card { background: var(--tile); border-radius: 28px; padding: 44px; display: grid; gap: 18px; justify-items: center; text-align: center; max-width: 560px; margin-inline: auto; }
@@ -301,6 +303,106 @@
   }
   .demo-note { color: var(--faint); font-size: 0.9rem; text-align: center; max-width: 36rem; margin-inline: auto; }
 
+  /* Feature tiles: Bondi's real views rebuilt in HTML with the app's own colours (Colors.xcassets, dark),
+     sizes and wording, filled with real readings from a working Mac, and clickable. */
+  .mac { --bg: #2a2a2d; --card: rgba(255,255,255,.05); --card-line: rgba(255,255,255,.06); --sep: rgba(255,255,255,.1);
+    --t1: #f2f2f2; --t2: #a1a1a6; --t3: #8e8e93; --accent: #1fa9cc; --ai: #40c8e0; --ai-bg: rgba(64,200,224,.12);
+    --btn: rgba(255,255,255,.14); --btn-primary: #147f9c; --cpu: #3d8fe0; --mem: #9b6bd6; --battery: #2fb85b; --sound: #fa2d55;
+    --projects: #5ad1f0; --warn: #ff9f0a; --good: #30d158; --track: rgba(255,255,255,.1); --link: #4ba8ff;
+    position: relative; background: var(--bg); color: var(--t1); border-radius: 16px; padding: 12px; display: grid; gap: 10px;
+    font: 13px/1.35 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif; letter-spacing: 0;
+    box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,.6); text-align: left; }
+  .mac .card { background: var(--card); border: 1px solid var(--card-line); border-radius: 10px; padding: 10px 11px; display: grid; gap: 6px; }
+  .mac .t2 { color: var(--t2); } .mac .t3 { color: var(--t3); }
+  .mac .title { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: var(--t2); white-space: nowrap; }
+  .tile .vis { min-width: 0; } .mac { max-width: 100%; min-width: 0; }
+  .mac .title svg { width: 13px; height: 13px; flex: none; }
+  .mac .title .note { margin-left: auto; font-weight: 400; }
+  .mac .big { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+  .mac .big small { font-size: 15px; font-weight: 500; color: var(--t2); margin-left: 3px; }
+  .mac button { font: inherit; color: inherit; cursor: pointer; }
+  .mac .btn { border: 0; background: var(--btn); border-radius: 6px; padding: 4px 11px; font-size: 12px; }
+  .mac .btn.primary { background: var(--btn-primary); color: #fff; }
+  .mac .link { border: 0; background: none; padding: 0; color: var(--link); font-size: 11px; text-align: left; }
+  .mac .icon { width: 18px; height: 18px; border-radius: 4px; flex: none; }
+  .mac .sys { width: 18px; height: 18px; color: var(--t2); flex: none; }
+  .mac input[type=range] { width: 100%; accent-color: var(--accent); }
+  /* status line */
+  .mac .status { background: var(--ai-bg); border-radius: 8px; padding: 10px; display: grid; grid-template-columns: auto 1fr auto; gap: 6px 8px; align-items: start; }
+  .mac .status .sp { color: var(--ai); }
+  .mac .status .link { grid-column: 2; }
+  .mac .status .x { border: 0; background: none; color: var(--t2); font-size: 14px; line-height: 1; padding: 0 2px; }
+  /* busiest */
+  .mac .seg { display: inline-flex; background: rgba(255,255,255,.08); border-radius: 6px; padding: 1px; margin-left: auto; }
+  .mac .seg button { border: 0; background: none; border-radius: 5px; padding: 3px 8px; font-size: 10.5px; color: var(--t1); }
+  .mac .seg button[aria-pressed="true"] { background: rgba(255,255,255,.18); }
+  .mac .rowx { display: grid; grid-template-columns: 18px minmax(0, 1fr) minmax(36px, 70px) auto; align-items: center; gap: 8px; }
+  .mac .rowx > span:nth-child(2) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mac .val { white-space: nowrap; }
+  .mac .bar { height: 5px; border-radius: 3px; background: var(--track); overflow: hidden; }
+  .mac .bar i { display: block; height: 100%; border-radius: 3px; transition: width .45s ease, background .3s; }
+  .mac .val { text-align: right; font-variant-numeric: tabular-nums; }
+  /* ask */
+  .mac .field { display: flex; gap: 8px; }
+  .mac .field input { flex: 1; background: rgba(0,0,0,.25); border: 1px solid var(--sep); border-radius: 7px; color: var(--t1); padding: 6px 9px; font: inherit; }
+  .mac .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .mac .chips button { border: 0; background: var(--btn); border-radius: 6px; padding: 4px 9px; font-size: 11.5px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mac .answer { display: grid; grid-template-columns: auto 1fr; gap: 8px; min-height: 58px; }
+  .mac .answer .sp { color: var(--ai); }
+  .mac .spin { width: 12px; height: 12px; border: 2px solid var(--t3); border-top-color: transparent; border-radius: 50%; animation: spin .8s linear infinite; display: inline-block; vertical-align: -2px; margin-right: 6px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  /* menu bar */
+  .mac .menubar { display: flex; align-items: center; justify-content: flex-end; gap: 16px; background: rgba(28,28,30,.96); border-radius: 8px; padding: 5px 12px; font-size: 13px; font-weight: 500; }
+  .mac .menubar .item { display: inline-flex; align-items: center; gap: 5px; border: 0; background: none; padding: 2px 6px; border-radius: 5px; }
+  .mac .menubar .item[aria-expanded="true"] { background: rgba(255,255,255,.18); }
+  .mac .menubar svg { width: 17px; height: 17px; }
+  .mac .warnbanner { background: var(--card); border: 1px solid var(--card-line); border-radius: 10px; padding: 10px 11px; display: grid; grid-template-columns: auto 1fr; gap: 3px 8px; }
+  .mac .warnbanner .tri { color: var(--warn); } .mac .warnbanner b { font-weight: 600; }
+  .mac .warnbanner .btn { grid-column: 2; justify-self: end; margin-top: 5px; }
+  .mac .result { color: var(--good); font-weight: 500; display: flex; gap: 6px; align-items: center; }
+  /* alert sheet, as macOS draws NSAlert */
+  .mac .alert { position: absolute; inset: 0; background: rgba(0,0,0,.45); border-radius: 16px; display: grid; place-items: center; z-index: 3; }
+  .mac .alert > div { width: min(270px, 88%); background: #323236; border: 1px solid rgba(255,255,255,.12); border-radius: 14px; padding: 18px 16px 14px; display: grid; gap: 6px; justify-items: center; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,.6); }
+  .mac .alert img { width: 48px; height: 48px; }
+  .mac .alert b { font-size: 13px; } .mac .alert p { margin: 0; font-size: 11px; color: var(--t2); }
+  .mac .alert .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-top: 8px; }
+  .mac .alert .row2 .btn { padding: 6px 0; font-size: 13px; border-radius: 7px; }
+  .mac .alert .row2 .btn.primary { background: #2f7cf6; }
+  /* stack */
+  .mac .srvrow { display: grid; grid-template-columns: 1fr auto 16px; gap: 1px 10px; align-items: center; padding: 6px 0; border-top: 1px solid var(--sep); }
+  .mac .srvrow:first-of-type { border-top: 0; }
+  .mac .srvrow b { font-weight: 600; } .mac .srvrow .proj { color: var(--t2); font-weight: 400; margin-left: 4px; }
+  .mac .srvrow .url { grid-column: 1; color: var(--link); font-size: 12px; }
+  .mac .srvrow .mem { grid-column: 2; grid-row: 1 / span 2; font-variant-numeric: tabular-nums; }
+  .mac .srvrow .stop { grid-column: 3; grid-row: 1 / span 2; width: 13px; height: 13px; border-radius: 3px; background: #8e8e93; border: 0; padding: 0; }
+  .mac .srvrow .stop:hover { background: #f2f2f2; }
+  .mac .srvrow .idle { color: var(--warn); }
+  .mac .srvrow.gone { opacity: .35; } .mac .srvrow.gone .stop { visibility: hidden; }
+  .mac .soon { font-size: 10px; font-weight: 600; color: var(--projects); background: rgba(90,209,240,.14); padding: 2px 7px; border-radius: 999px; margin-left: auto; }
+  .mac .dim { opacity: .55; }
+  /* history chart */
+  .mac .ranges { display: inline-flex; gap: 1px; background: rgba(255,255,255,.08); border-radius: 6px; padding: 1px; margin-left: auto; }
+  .mac .ranges button { border: 0; background: none; border-radius: 5px; padding: 3px 7px; font-size: 10.5px; color: var(--t1); }
+  .mac .ranges button[aria-pressed="true"] { background: rgba(255,255,255,.18); }
+  .mac .chart { position: relative; }
+  .mac .chart svg { width: 100%; height: 150px; display: block; }
+  .mac .tip { position: absolute; top: 0; transform: translateX(-50%); background: #3a3a3e; border-radius: 6px; padding: 3px 7px; font-size: 11px; white-space: nowrap; pointer-events: none; }
+  .mac .stats2 { display: flex; gap: 22px; } .mac .stats2 b { font-size: 15px; font-variant-numeric: tabular-nums; }
+  /* guide */
+  .mac .proc { display: grid; grid-template-columns: 18px 1fr 56px 74px 22px; gap: 8px; align-items: center; padding: 6px 4px; border-radius: 5px; font-size: 12.5px; }
+  .mac .proc:nth-child(even) { background: rgba(255,255,255,.03); }
+  .mac .proc .more { border: 0; background: none; color: var(--t2); font-size: 15px; padding: 0; }
+  .mac .proc[aria-current="true"] { background: rgba(31,169,204,.25); }
+  .mac .gpop { background: #323236; border: 1px solid rgba(255,255,255,.12); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; box-shadow: 0 16px 40px rgba(0,0,0,.5); }
+  .mac .gpop h4 { margin: 0; font-size: 13px; } .mac .gpop dt { font-size: 11px; font-weight: 600; color: var(--t2); } .mac .gpop dd { margin: 2px 0 0; font-size: 12px; }
+  /* icon picker */
+  .mac .picker { display: flex; gap: 14px; justify-content: center; }
+  .mac .picker button { border: 0; background: none; padding: 0; display: grid; justify-items: center; gap: 5px; font-size: 11px; color: var(--t2); }
+  .mac .picker .ic { width: 50px; height: 50px; border-radius: 12px; outline: 2.5px solid transparent; outline-offset: 3px; position: relative; overflow: hidden; }
+  .mac .picker .ic img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .mac .picker .ic img + img { clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+  .mac .picker button[aria-pressed="true"] { color: var(--t1); } .mac .picker button[aria-pressed="true"] .ic { outline-color: #2f7cf6; }
+  .tile .vis .mac { margin-top: 4px; }
 </style>
 </head>
 <body>
@@ -384,78 +486,162 @@
         <article class="tile w4 big">
           <p class="kicker">Why is my Mac slow?</p>
           <h3>Ask once. Get the whole story.</h3>
-          <p>One click, and Bondi explains what's using your Mac, what's idle and holding memory, and what changed in the last hour. Apple's on-device model writes the opening; every figure is Bondi's.</p>
-          <div class="vis"><img class="shot" src="assets/features/why.png" width="404" height="93" loading="lazy" alt="Bondi's answer, written on this Mac: Everything is fine. Memory pressure is Normal, with 44.73 GB of 64.00 GB used. Google Chrome is using the most memory, 13.09 GB across 82 processes."></div>
+          <p>Click the link. Bondi explains what's using your Mac, what's idle and holding memory, and what changed in the last hour. Apple's on-device model writes the opening; every figure is Bondi's.</p>
+          <div class="vis"><div class="mac" data-why>
+            <div class="status">
+              <span class="sp" aria-hidden="true">✦</span>
+              <span data-why-text>Everything is fine. Google Chrome is using the most memory, 13.09 GB across 82 processes.</span>
+              <button class="x" data-why-close hidden aria-label="Close the explanation">✕</button>
+              <button class="link" data-why-open>Why is my Mac slow?</button>
+            </div>
+          </div></div>
         </article>
 
         <article class="tile w2">
           <p class="kicker">Apps, not processes</p>
           <h3>Chrome is one row.</h3>
-          <p>Every helper counts toward the app that started it, so the biggest app really looks biggest.</p>
-          <div class="vis"><img class="shot" src="assets/features/busiest.png" width="404" height="136" loading="lazy" alt="Busiest Right Now, by memory: Google Chrome 13.05 GB, macOS 8.76 GB, Visual Studio Code 4.33 GB."></div>
+          <p>Every helper counts toward the app that started it. Switch between CPU, Memory and Energy.</p>
+          <div class="vis"><div class="mac"><div class="card" data-busiest>
+            <div class="title">Busiest Right Now<span class="seg" role="group" aria-label="Rank by"><button aria-pressed="false" data-rank="cpu">CPU</button><button aria-pressed="true" data-rank="memory">Memory</button><button aria-pressed="false" data-rank="energy">Energy</button></span></div>
+            <div data-busiest-rows></div>
+          </div></div></div>
         </article>
 
         <article class="tile w3">
           <p class="kicker">Ask your history</p>
-          <h3>"Which app used the most memory this week?"</h3>
-          <p>Bondi reads 30 days of history kept on your Mac, and answers with the numbers.</p>
-          <div class="vis"><img class="shot" src="assets/features/ask.png" width="588" height="177" loading="lazy" alt="Ask about your Mac: over the last 7 days, Google Chrome used the most memory, 10.57 GB on average, then macOS (6.32 GB) and Visual Studio Code (3.35 GB)."></div>
+          <h3>Ask about the last 30 days.</h3>
+          <p>Try a suggestion. These are Bondi's real answers from a working Mac, written from its own history file.</p>
+          <div class="vis"><div class="mac"><div class="card" data-ask>
+            <div class="field"><input type="text" placeholder="Ask about your Mac's last 30 days" aria-label="Question" data-ask-input readonly><button class="btn primary" data-ask-go>Ask</button></div>
+            <div class="chips">
+              <button data-q="0">What drained my battery yesterday?</button>
+              <button data-q="1">What slowed my Mac yesterday?</button>
+              <button data-q="2">Which app used the most memory this week?</button>
+            </div>
+            <div class="answer" data-ask-answer aria-live="polite"><span class="sp" aria-hidden="true">✦</span><span class="t2">Pick a question above.</span></div>
+          </div></div></div>
         </article>
 
         <article class="tile w3">
           <p class="kicker">Warnings</p>
           <h3>One cause. One fix. Always your call.</h3>
-          <p>When memory runs short or the CPU stays pinned, the menu bar shows a warning and the popover names the cause with one fix. It asks before it does anything.</p>
-          <div class="vis stack-shots"><div class="menubar-strip"><img src="assets/features/menubar-warning.png" width="104" height="22" alt="The menu bar item showing a warning triangle and the memory figure."></div><img class="shot" src="assets/features/warning.png" width="404" height="110" loading="lazy" alt="Warning banner: Memory pressure is Elevated. Google Chrome is using 13.09 GB. Button: Quit Google Chrome."></div>
+          <p>When memory runs short, the menu bar says so and the popover names the cause with one fix. Try the button: Bondi always asks first.</p>
+          <div class="vis"><div class="mac" data-warn>
+            <div class="menubar" aria-hidden="true"><span class="t2" style="font-weight:400">Tue 5:32 PM</span><span class="item" style="color:var(--warn)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 2.5c.5 0 .9.3 1.2.7l7 12.3c.5.9-.1 2-1.2 2H3c-1 0-1.7-1.1-1.2-2l7-12.3c.3-.4.7-.7 1.2-.7z"/><path d="M10 7.5v4.2M10 14.3v.1" stroke="#1c1c1e" stroke-width="1.8" stroke-linecap="round"/></svg>MEM 72%</span></div>
+            <div class="warnbanner" data-warn-banner>
+              <span class="tri" aria-hidden="true">▲</span><b>Memory pressure is Elevated.</b>
+              <span></span><span class="t2">Google Chrome is using 13.09 GB.</span>
+              <button class="btn" data-warn-fix>Quit Google Chrome</button>
+            </div>
+          </div></div>
         </article>
 
         <article class="tile w3">
           <p class="kicker">For developers</p>
-          <h3>Finds the servers you forgot.</h3>
-          <p>Node.js, Vite, Next.js, Wrangler, Python and more, by project and port, plus Docker containers and local AI models, with the memory each holds. Kubernetes is next.</p>
-          <div class="vis"><img class="shot" src="assets/features/stack.png" width="404" height="248" loading="lazy" alt="Stack: 2 servers running in the Talim project, Python http.server on localhost:8420 using 14.0 MB and Wrangler on localhost:8787 using 461.0 MB."></div>
+          <h3>Every server, grouped. Stop any of them.</h3>
+          <p>Dev servers by project and port, Docker containers and local AI models, with the memory each holds. Kubernetes is next.</p>
+          <div class="vis"><div class="mac" data-stack>
+            <div class="card"><div class="title" style="color:var(--projects)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3.5" width="14" height="5" rx="1.5"/><rect x="3" y="11.5" width="14" height="5" rx="1.5"/></svg><span style="color:var(--t2)">Stack</span></div>
+              <div class="big">4<small>servers running</small></div><div class="t2">2 projects · 1.24 GB · 4 ports</div></div>
+            <div class="card">
+              <div class="title">Talim</div>
+              <div class="srvrow" data-srv="0"><span><b>Python http.server</b><span class="proj">Talim</span></span><span class="url">localhost:8420</span><span class="mem">14.0 MB</span><button class="stop" aria-label="Stop Python http.server"></button></div>
+              <div class="srvrow" data-srv="1"><span><b>Wrangler</b><span class="proj">Talim/server</span></span><span class="url">localhost:8787</span><span class="mem">461.0 MB</span><button class="stop" aria-label="Stop Wrangler"></button></div>
+              <div class="title" style="margin-top:6px">shop</div>
+              <div class="srvrow" data-srv="2"><span><b>Node.js</b><span class="proj">shop/api</span></span><span class="url">localhost:4000</span><span class="mem">184.3 MB</span><button class="stop" aria-label="Stop Node.js"></button></div>
+              <div class="srvrow" data-srv="3"><span><b>Vite</b><span class="proj">shop</span></span><span class="url">localhost:5173 · <span class="idle">idle 3h 20m</span></span><span class="mem">612.0 MB</span><button class="stop" aria-label="Stop Vite"></button></div>
+            </div>
+            <div class="card">
+              <div class="title"><img class="icon" src="assets/apps/docker.png" alt="" style="width:14px;height:14px">Docker</div>
+              <div class="srvrow" data-srv="4"><span><b>postgres</b><span class="proj">container</span></span><span class="url">port 5432</span><span class="mem">212.0 MB</span><button class="stop" aria-label="Stop postgres"></button></div>
+              <div class="srvrow" data-srv="5"><span><b>redis</b><span class="proj">container</span></span><span class="url">port 6379</span><span class="mem">18.4 MB</span><button class="stop" aria-label="Stop redis"></button></div>
+            </div>
+            <div class="card">
+              <div class="title"><img class="icon" src="assets/apps/lmstudio.png" alt="" style="width:14px;height:14px">Local AI</div>
+              <div class="srvrow" data-srv="6"><span><b>Llama 3.1 8B</b><span class="proj">LM Studio</span></span><span class="url t2" style="color:var(--t2)">loaded · idle</span><span class="mem">8.54 GB</span><button class="stop" aria-label="Unload Llama 3.1 8B"></button></div>
+            </div>
+            <div class="card dim">
+              <div class="title">Kubernetes<span class="soon">Coming soon</span></div>
+              <div class="srvrow"><span><b>web-7d9f</b><span class="proj">default</span></span><span class="url t2" style="color:var(--t2)">pod · Running</span><span class="mem">—</span></div>
+            </div>
+          </div></div>
         </article>
 
         <article class="tile w3">
           <p class="kicker">30-day history</p>
           <h3>See yesterday. And last Tuesday.</h3>
-          <p>Every chart goes from 10 minutes to 30 days, with the time your Mac slept shaded. Click any point to see what was running.</p>
-          <div class="vis"><img class="shot" src="assets/features/history.png" width="707" height="210" loading="lazy" alt="CPU over 24 hours on an Apple M1 Max: average 17%, peak 51%, with sleep periods shaded."></div>
+          <p>Real CPU history from a working Mac. Switch the range and move across the chart; shaded time is when the Mac slept.</p>
+          <div class="vis"><div class="mac"><div class="card" data-hist>
+            <div class="title" style="color:var(--cpu)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4.5" y="4.5" width="11" height="11" rx="2"/><rect x="8" y="8" width="4" height="4"/></svg><span style="color:var(--t1);font-size:13px">CPU</span>
+              <span class="ranges" role="group" aria-label="Range" data-ranges></span></div>
+            <div class="chart" data-chart><svg viewBox="0 0 400 150" preserveAspectRatio="none" aria-label="CPU history chart"></svg><span class="tip" hidden data-tip></span></div>
+            <div class="stats2"><span><span class="t2" style="font-size:11px">Average</span><br><b data-avg>—</b></span><span><span class="t2" style="font-size:11px">Peak</span><br><b data-peak>—</b></span><span class="t3" style="font-size:11px;align-self:end" data-since></span></div>
+          </div></div></div>
         </article>
 
         <article class="tile w2">
           <p class="kicker">Menu bar</p>
           <h3>Always there. Barely there.</h3>
-          <p>Every metric one click away, and about 0.3% of one CPU core while it waits.</p>
-          <div class="vis"><img class="shot" src="assets/features/popover-top.png" width="400" height="235" loading="lazy" alt="The top of Bondi's popover: section tabs, a status line saying everything looks normal, and CPU and Memory cards."></div>
+          <p>Click Bondi's icon. About 0.3% of one CPU core while it waits.</p>
+          <div class="vis"><div class="mac" data-mb>
+            <div class="menubar"><span class="t2" style="font-weight:400">Tue 5:32 PM</span><button class="item" aria-expanded="true" data-mb-item aria-label="Bondi"><svg viewBox="0 0 22 22" fill="none" stroke="#f2f2f2" stroke-width="1.6" stroke-linecap="round"><path d="M5.34 16.66A8 8 0 1 1 16.66 16.66" stroke-opacity=".35"/><path d="M5.34 16.66A8 8 0 0 1 16.14 4.87"/><path d="M11 11L14 7.6"/><path d="M7.4 15c1.2-.7 2.4.7 3.6 0s2.4-.7 3.6 0"/></svg><span data-mb-cpu>14%</span></button></div>
+            <div data-mb-pop>
+              <div class="status" style="grid-template-columns:auto 1fr"><span style="color:var(--good)">✓</span><span>Everything looks normal.</span></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+                <div class="card"><div class="title" style="color:var(--cpu)">CPU<span class="note">load 3.48</span></div><div class="big"><span data-mb-cpu2>14</span><small>%</small></div></div>
+                <div class="card"><div class="title" style="color:var(--mem)">Memory<span class="note">Normal</span></div><div class="big">44.7<small>GB</small></div></div>
+              </div>
+            </div>
+          </div></div>
         </article>
 
         <article class="tile w2">
           <p class="kicker">Sound</p>
           <h3>Every app, its own volume.</h3>
-          <p>Choose the output and turn each app that's playing up to 300% or down, without touching the rest.</p>
-          <div class="vis"><img class="shot" src="assets/features/sound.png" width="404" height="79" loading="lazy" alt="Sound: the output, MacBook Pro Speakers, at 100%."></div>
+          <p>Turn a call up to 300% and the music down, without touching the rest.</p>
+          <div class="vis"><div class="mac">
+            <div class="card"><div class="title" style="color:var(--sound)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M3.6 7.4h2.5L9.8 4.3c.4-.3 1-.1 1 .4v10.6c0 .5-.6.7-1 .4l-3.7-3.1H3.6c-.6 0-1.1-.5-1.1-1.1V8.5c0-.6.5-1.1 1.1-1.1z"/></svg><span style="color:var(--t2)">Output</span><span class="note" style="color:var(--t1)">MacBook Pro Speakers ⌃</span></div></div>
+            <div class="card"><div class="title">Apps</div>
+              <div class="rowx" style="grid-template-columns:18px 90px 1fr 42px"><img class="icon" src="assets/apps/zoom.png" alt=""><span>Zoom</span><input type="range" min="0" max="300" value="160" aria-label="Zoom volume" data-vol2><span class="val">160%</span></div>
+              <div class="rowx" style="grid-template-columns:18px 90px 1fr 42px"><img class="icon" src="assets/apps/music.png" alt=""><span>Music</span><input type="range" min="0" max="300" value="60" aria-label="Music volume" data-vol2><span class="val">60%</span></div>
+              <div class="rowx" style="grid-template-columns:18px 90px 1fr 42px"><img class="icon" src="assets/apps/chrome.png" alt=""><span>Chrome</span><input type="range" min="0" max="300" value="100" aria-label="Google Chrome volume" data-vol2><span class="val">100%</span></div>
+            </div>
+          </div></div>
         </article>
 
         <article class="tile w2">
           <p class="kicker">Fan boost</p>
           <h3>Cooler when you want it.</h3>
-          <p>Speed the fans up for a long build. Never slower than Apple's own control, and back to Auto when you quit.</p>
-          <div class="vis"><img class="shot" src="assets/features/fans.png" width="404" height="84" loading="lazy" alt="Fans card with a slider from Auto to Max."></div>
+          <p>Drag it. Never slower than Apple's own control, and back to Auto when you quit.</p>
+          <div class="vis"><div class="mac"><div class="card" data-fan>
+            <div class="title" style="color:var(--cpu)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="1.6"/><path d="M10 8.4c-.5-2.6.4-5 2.6-5.4 1.8-.3 2.6 1.6 1.1 3.2-.9 1-2.2 1.6-3.7 2.2zM11.6 10c2.6-.5 5 .4 5.4 2.6.3 1.8-1.6 2.6-3.2 1.1-1-.9-1.6-2.2-2.2-3.7zM10 11.6c.5 2.6-.4 5-2.6 5.4-1.8.3-2.6-1.6-1.1-3.2.9-1 2.2-1.6 3.7-2.2zM8.4 10c-2.6.5-5-.4-5.4-2.6-.3-1.8 1.6-2.6 3.2-1.1 1 .9 1.6 2.2 2.2 3.7z"/></svg><span style="color:var(--t2)">Fans</span><span class="note" data-fan-note>Off</span></div>
+            <div style="display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center"><span class="t2" style="font-size:11px">Auto</span><input type="range" min="0" max="100" value="0" aria-label="Fan speed" data-fan-slider><span class="t2" style="font-size:11px">Max</span></div>
+            <div style="display:flex;justify-content:space-between;min-height:16px"><span style="font-size:11px;font-weight:500" data-fan-label></span><button class="link" data-fan-auto hidden>Auto</button></div>
+          </div></div></div>
         </article>
 
         <article class="tile w3">
           <p class="kicker">Process guide</p>
-          <h3>"What is WindowServer?"</h3>
-          <p>Plain notes on 125 common macOS processes, one click from any row, with what each is using right now.</p>
-          <div class="vis"><img class="shot narrow" src="assets/features/guide.png" width="348" height="295" loading="lazy" alt="WindowServer: what it is, why it gets busy, whether you can stop it, and what it is using right now: 1.0% of the CPU and 639.9 MB of memory."></div>
+          <h3>"What is this process?"</h3>
+          <p>Click a process. Bondi's own notes on 125 common macOS processes, with what each is using right now.</p>
+          <div class="vis"><div class="mac" data-guide>
+            <div class="card" style="gap:0" data-guide-rows></div>
+            <div class="gpop" data-guide-pop aria-live="polite"></div>
+          </div></div>
         </article>
 
         <article class="tile w3">
           <p class="kicker">Your Bondi</p>
           <h3>Three finishes. Or let it follow your Mac.</h3>
-          <p>Pick Light, Dark or Bondi Blue in Settings, or Automatic to match Light and Dark Mode.</p>
-          <div class="vis"><img class="shot" src="assets/features/icons.png" width="448" height="97" loading="lazy" alt="Settings, App icon: Automatic, Light, Dark and Bondi Blue."></div>
+          <p>Pick one: this page's icons change with it, as Bondi's Dock icon does.</p>
+          <div class="vis"><div class="mac"><div class="card" style="padding:14px 11px">
+            <div class="picker" role="group" aria-label="App icon" data-picker>
+              <button aria-pressed="true" data-pick="auto"><span class="ic"><img src="assets/icon-white.png" alt=""><img src="assets/icon-black.png" alt=""></span>Automatic</button>
+              <button aria-pressed="false" data-pick="white"><span class="ic"><img src="assets/icon-white.png" alt=""></span>Light</button>
+              <button aria-pressed="false" data-pick="black"><span class="ic"><img src="assets/icon-black.png" alt=""></span>Dark</button>
+              <button aria-pressed="false" data-pick="blue"><span class="ic"><img src="assets/icon-blue.png" alt=""></span>Bondi Blue</button>
+            </div>
+          </div></div></div>
         </article>
 
       </div>
@@ -556,18 +742,6 @@
     }
   }).catch(() => {});
 
-  // Feature visuals
-  const dots = $('[data-dots]');
-  if (dots) dots.innerHTML = Array.from({ length: 120 }, (_, i) => `<i style="background:${i % 7 === 0 ? '#9b7ae0' : '#45464c'}"></i>`).join('');
-  const hist = $('[data-hist]');
-  if (hist) {
-    const W = 400, H = 140, n = 90; let y = 60; const pts = [];
-    for (let i = 0; i < n; i++) { y = Math.max(20, Math.min(120, y + (Math.random() - 0.5) * 22)); pts.push([i / (n - 1) * W, H - y]); }
-    const line = pts.map(p => p.map(v => v.toFixed(1)).join(',')).join(' ');
-    hist.innerHTML = `<rect x="120" y="0" width="70" height="${H}" fill="#ffffff" opacity=".06"/><rect x="300" y="0" width="60" height="${H}" fill="#ffffff" opacity=".06"/>`
-      + `<polygon points="0,${H} ${line} ${W},${H}" fill="#9b7ae0" opacity=".2"/><polyline points="${line}" fill="none" stroke="#9b7ae0" stroke-width="2"/>`
-      + ['Mon', 'Wed', 'Fri', 'Sun'].map((d, i) => `<text x="${20 + i * 110}" y="${H - 6}" fill="#9d9da5" font-size="11">${d}</text>`).join('');
-  }
   $$('[data-vol]').forEach(r => r.addEventListener('input', () => {
     r.nextElementSibling.textContent = r.value + '%';
     const meter = r.parentElement.querySelector('.meter b');
@@ -591,15 +765,230 @@
     ['Safari', '16 processes', '1.42 GB'], ['Notes', '9 processes', '526.7 MB'], ['Finder', '3 processes', '499.9 MB'],
     ['Preview', '6 processes', '346.5 MB'], ['TextEdit', '10 processes', '217.8 MB'],
   ];
+  const iconFor = (name) => {
+    const n = name.toLowerCase();
+    const file = n.includes('chrome') ? 'chrome' : n.startsWith('code') || n.includes('visual studio') ? 'vscode' : n.includes('webkit') || n === 'safari' ? 'safari'
+      : n === 'finder' ? 'finder' : n === 'notes' ? 'notes' : n === 'preview' ? 'preview' : n === 'textedit' ? 'textedit' : null;
+    return file ? `<img class="ai" src="assets/apps/${file}.png" alt="">`
+      : n === 'macos' ? '<svg class="ai" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3l7 3.5-7 3.5-7-3.5z"/><path d="M3 10l7 3.5 7-3.5M3 13.5L10 17l7-3.5"/></svg>'
+      : '<svg class="ai" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="14" height="12" rx="2"/><path d="M6 8l2 2-2 2M10 12h3"/></svg>';
+  };
   const showView = view => {
     $$('.toggle button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === view)));
     $('[data-count]').textContent = view === 'am' ? '966 processes' : '39 apps';
     $('[data-list]').innerHTML = view === 'am'
-      ? processes.map(([n, m]) => `<div class="item proc"><span>${n}</span><span class="num">${m}</span></div>`).join('')
-      : grouped.map(([n, p, m]) => `<div class="item"><span>${n}<small>${p}</small></span><span class="num">${m}</span></div>`).join('');
+      ? processes.map(([n, m]) => `<div class="item proc">${iconFor(n)}<span>${n}</span><span class="num">${m}</span></div>`).join('')
+      : grouped.map(([n, p, m]) => `<div class="item">${iconFor(n)}<span>${n}<small>${p}</small></span><span class="num">${m}</span></div>`).join('');
   };
   $$('.toggle button').forEach(b => b.addEventListener('click', () => showView(b.dataset.view)));
   showView('bondi');
+})();
+</script>
+<script>
+
+// Feature tiles: real Bondi views, clickable. Figures and sentences are real readings and answers from a working
+// Mac (MacBook Pro, M1 Max, 64 GB, 2026-09-29); the page itself reads nothing from yours.
+(() => {
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const stackIcon = '<svg class="sys" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3l7 3.5-7 3.5-7-3.5z"/><path d="M3 10l7 3.5 7-3.5M3 13.5L10 17l7-3.5"/></svg>';
+  const appIcon = (file) => file ? `<img class="icon" src="assets/apps/${file}.png" alt="">` : stackIcon;
+  const alertSheet = (host, { icon, title, message, action }, onConfirm) => {
+    const sheet = document.createElement('div');
+    sheet.className = 'alert';
+    sheet.innerHTML = `<div role="alertdialog" aria-label="${title}">${icon ? `<img src="${icon}" alt="">` : ''}<b>${title}</b><p>${message}</p>`
+      + `<div class="row2"><button class="btn" data-no>Cancel</button><button class="btn primary" data-yes>${action}</button></div></div>`;
+    host.appendChild(sheet);
+    $('[data-yes]', sheet).focus();
+    $('[data-no]', sheet).onclick = () => sheet.remove();
+    $('[data-yes]', sheet).onclick = () => { sheet.remove(); onConfirm(); };
+  };
+
+  // Why is my Mac slow?
+  const why = $('[data-why]');
+  if (why) {
+    const line = $('[data-why-text]', why).textContent;
+    const answer = 'Everything is fine. Memory pressure is Normal, with 44.73 GB of 64.00 GB used. Google Chrome is using the most memory, 13.09 GB across 82 processes.';
+    const open = $('[data-why-open]', why), close = $('[data-why-close]', why), text = $('[data-why-text]', why);
+    open.onclick = () => {
+      open.hidden = true; text.innerHTML = '<span class="spin"></span><span class="t2">Looking at your Mac…</span>';
+      setTimeout(() => { text.textContent = answer; close.hidden = false; }, reduced ? 0 : 1400);
+    };
+    close.onclick = () => { text.textContent = line; close.hidden = true; open.hidden = false; };
+  }
+
+  // Busiest right now: one real reading, three rankings
+  const busiest = [
+    { n: 'Google Chrome', i: 'chrome', cpu: 12.8, memory: 13.50, energy: 1.44 },
+    { n: 'macOS', i: null, cpu: 7.7, memory: 8.58, energy: 0.12 },
+    { n: 'Visual Studio Code', i: 'vscode', cpu: 2.2, memory: 4.41, energy: 0.04 },
+    { n: 'Safari', i: 'safari', cpu: 0.3, memory: 1.83, energy: 0.0 },
+  ];
+  const tint = { cpu: 'var(--cpu)', memory: 'var(--mem)', energy: 'var(--battery)' };
+  const fmt = { cpu: v => v.toFixed(1) + '%', memory: v => v.toFixed(2) + ' GB', energy: v => v.toFixed(1) + ' W' };
+  const drawBusiest = (mode) => {
+    const top = [...busiest].sort((a, b) => b[mode] - a[mode]).slice(0, 3), lead = top[0][mode] || 1;
+    $('[data-busiest-rows]').innerHTML = top.map(a => `<div class="rowx">${appIcon(a.i)}<span>${a.n}</span><span class="bar"><i style="width:${Math.max(3, a[mode] / lead * 100)}%;background:${tint[mode]}"></i></span><span class="val">${fmt[mode](a[mode])}</span></div>`).join('');
+  };
+  $$('[data-rank]').forEach(b => b.onclick = () => { $$('[data-rank]').forEach(x => x.setAttribute('aria-pressed', String(x === b))); drawBusiest(b.dataset.rank); });
+  if ($('[data-busiest-rows]')) drawBusiest('memory');
+
+  // Ask: Bondi's real answers to its three suggestions
+  const answers = [
+    'Yesterday, Visual Studio Code used the most power, 2.5 W on average, then Google Chrome (0.4 W) and Xcode (0.1 W). The battery started and ended at 100%, lowest 12% at 12:41 PM.',
+    'Yesterday, memory used averaged 35.29 GB and peaked at 54.26 GB at 1:51 PM, and the CPU averaged 19.8% and peaked at 40.0% at 7:02 PM. Google Chrome used the most memory, 9.63 GB on average, then macOS (6.39 GB) and Visual Studio Code (3.48 GB). Visual Studio Code used the most CPU, 8.0% of the chip on average, then macOS (3.7%) and Google Chrome (3.4%).',
+    'Over the last 7 days (Sep 22–Sep 29), Google Chrome used the most memory, 10.58 GB on average, then macOS (6.33 GB) and Visual Studio Code (3.35 GB). Memory used averaged 35.80 GB and peaked at 54.26 GB on Mon 1:51 PM.',
+  ];
+  let typing;
+  $$('[data-q]').forEach(chip => chip.onclick = () => {
+    const input = $('[data-ask-input]'), out = $('[data-ask-answer]'), q = chip.textContent;
+    clearInterval(typing); input.value = ''; let i = 0;
+    const done = () => {
+      out.innerHTML = '<span></span><span><span class="spin"></span><span class="t2">Looking through your history…</span></span>';
+      setTimeout(() => { out.innerHTML = `<span class="sp" aria-hidden="true">✦</span><span>${answers[chip.dataset.q]}</span>`; }, reduced ? 0 : 1100);
+    };
+    if (reduced) { input.value = q; done(); return; }
+    typing = setInterval(() => { input.value = q.slice(0, ++i); if (i >= q.length) { clearInterval(typing); done(); } }, 22);
+  });
+  const go = $('[data-ask-go]');
+  if (go) go.onclick = () => $('[data-q="2"]').click();
+
+  // Warning: the fix asks first, then says what it freed
+  const warn = $('[data-warn]');
+  if (warn) {
+    const banner = $('[data-warn-banner]', warn), original = banner.innerHTML;
+    const arm = () => $('[data-warn-fix]', banner).onclick = () => alertSheet(warn,
+      { icon: 'assets/apps/chrome.png', title: 'Quit Google Chrome?', message: '82 processes will close.', action: 'Quit' }, () => {
+        banner.innerHTML = '<span class="result" style="grid-column:1/-1">✓ Freed 13.09 GB. Pressure is back to Normal.</span>';
+        setTimeout(() => { banner.innerHTML = original; arm(); }, 4000);
+      });
+    arm();
+  }
+
+  // Stack: stop asks first, with Bondi's own wording
+  const servers = [
+    ['Python http.server', 'Talim', '1 process will close and port 8420 will be free. This frees about 14.0 MB.'],
+    ['Wrangler', 'Talim', '6 processes will close and port 8787 will be free. This frees about 461.0 MB.'],
+    ['Node.js', 'shop', '1 process will close and port 4000 will be free. This frees about 184.3 MB.'],
+    ['Vite', 'shop', '2 processes will close and port 5173 will be free. This frees about 612.0 MB.'],
+    ['postgres', 'Docker', 'The container stops and port 5432 will be free. This frees about 212.0 MB.'],
+    ['redis', 'Docker', 'The container stops and port 6379 will be free. This frees about 18.4 MB.'],
+    ['Llama 3.1 8B', 'LM Studio', 'The model is unloaded from memory. This frees about 8.54 GB. You can load it again in LM Studio.'],
+  ];
+  $$('[data-srv]').forEach(row => {
+    const [name, where, message] = servers[row.dataset.srv];
+    const model = where === 'LM Studio', docker = where === 'Docker';
+    const stop = $('.stop', row);
+    if (stop) stop.onclick = () => alertSheet($('[data-stack]'), {
+      title: model ? `Unload ${name}?` : docker ? `Stop ${name}?` : `Stop ${name} in ${where}?`,
+      message: message + (model ? '' : ' You can start it again from Bondi.'), action: model ? 'Unload' : 'Stop' }, () => {
+        row.classList.add('gone'); $('.mem', row).textContent = model ? 'Unloaded' : 'Stopped';
+        setTimeout(() => { row.classList.remove('gone'); $('.mem', row).textContent = row.dataset.mem; }, 4000);
+      });
+    row.dataset.mem = $('.mem', row).textContent;
+  });
+
+  // History: real CPU readings, 10 minutes to 30 days, sleep shaded
+  const H = {"now":1790726849,"ranges":{"10 min":{"span":600,"bucket":10,"points":[[1790726240,8.5],[1790726250,7.4],[1790726260,5.3],[1790726270,4.6],[1790726280,8.9],[1790726290,5.1],[1790726300,4.8],[1790726310,5.6],[1790726320,5.5],[1790726330,4.8],[1790726340,4.6],[1790726350,5.1],[1790726360,4.7],[1790726370,5.7],[1790726380,5.2],[1790726390,4.6],[1790726400,9.7],[1790726410,9.0],[1790726420,20.2],[1790726430,22.8],[1790726440,18.6],[1790726450,10.3],[1790726460,9.2],[1790726470,11.8],[1790726480,19.3],[1790726490,20.8],[1790726500,15.1],[1790726510,14.7],[1790726520,14.3],[1790726530,17.8],[1790726540,17.0],[1790726550,18.2],[1790726560,20.1],[1790726570,9.2],[1790726580,15.7],[1790726590,8.9],[1790726600,7.8],[1790726610,8.9],[1790726620,18.3],[1790726630,10.6],[1790726640,9.9],[1790726650,10.1],[1790726660,8.7],[1790726670,10.3],[1790726680,33.9],[1790726770,36.8],[1790726780,29.4],[1790726790,17.0],[1790726800,17.1],[1790726810,39.2],[1790726820,17.2]]},"1 h":{"span":3600,"bucket":60,"points":[[1790723220,16.3],[1790723280,15.8],[1790723340,15.3],[1790723400,10.5],[1790723460,15.4],[1790723520,18.0],[1790723580,18.5],[1790723640,16.6],[1790723700,14.3],[1790723760,18.4],[1790723820,10.5],[1790723880,13.7],[1790723940,14.1],[1790724000,10.7],[1790724060,8.7],[1790724120,15.8],[1790724180,18.3],[1790724240,9.8],[1790724300,14.9],[1790724360,15.2],[1790724420,14.8],[1790724480,15.4],[1790724540,10.3],[1790724600,11.6],[1790724660,25.7],[1790724780,13.6],[1790724840,10.6],[1790724900,9.7],[1790724960,11.1],[1790725020,9.6],[1790725080,10.9],[1790725140,12.4],[1790725200,13.1],[1790725260,11.1],[1790725320,9.1],[1790725380,9.5],[1790725440,10.9],[1790725500,16.9],[1790725560,16.8],[1790725620,18.2],[1790725680,11.5],[1790725740,9.5],[1790725800,11.8],[1790725920,8.3],[1790725980,10.2],[1790726040,9.1],[1790726100,10.0],[1790726160,9.3],[1790726220,13.0],[1790726280,5.8],[1790726340,5.0],[1790726400,15.1],[1790726460,15.1],[1790726520,16.1],[1790726580,11.7],[1790726640,14.6],[1790726760,27.9],[1790726820,17.2]]},"24 h":{"span":86400,"bucket":900,"points":[[1790640000,22.5],[1790641800,18.0],[1790642700,30.4],[1790643600,27.8],[1790644500,29.2],[1790645400,28.3],[1790646300,29.7],[1790647200,23.1],[1790648100,17.5],[1790649000,20.5],[1790649900,22.4],[1790650800,24.0],[1790651700,20.6],[1790652600,19.2],[1790653500,20.6],[1790654400,21.0],[1790655300,16.4],[1790656200,13.3],[1790657100,13.7],[1790658000,14.1],[1790658900,11.5],[1790659800,12.5],[1790660700,13.1],[1790661600,11.9],[1790662500,11.0],[1790663400,12.9],[1790664300,12.5],[1790665200,13.2],[1790666100,15.8],[1790667000,8.9],[1790667900,15.8],[1790668800,21.5],[1790669700,19.1],[1790670600,24.9],[1790671500,13.1],[1790672400,14.4],[1790673300,14.7],[1790675100,14.3],[1790676000,12.8],[1790676900,11.8],[1790677800,18.1],[1790678700,18.0],[1790679600,9.9],[1790680500,15.0],[1790681400,14.9],[1790682300,15.4],[1790683200,17.1],[1790685000,21.0],[1790685900,15.0],[1790686800,11.6],[1790687700,10.2],[1790688600,15.3],[1790689500,26.8],[1790690400,21.0],[1790691300,11.2],[1790692200,24.1],[1790693100,18.7],[1790694000,25.3],[1790694900,10.8],[1790695800,13.8],[1790696700,17.9],[1790697600,26.3],[1790699400,25.6],[1790700300,14.1],[1790701200,24.2],[1790702100,16.8],[1790703000,17.4],[1790703900,14.7],[1790704800,11.0],[1790705700,10.6],[1790706600,13.5],[1790707500,16.9],[1790708400,12.6],[1790709300,13.1],[1790710200,11.6],[1790711100,14.3],[1790712000,15.2],[1790712900,21.1],[1790713800,13.0],[1790714700,11.6],[1790715600,13.2],[1790716500,18.4],[1790717400,11.5],[1790718300,11.1],[1790719200,15.5],[1790720100,11.7],[1790721000,15.5],[1790721900,16.6],[1790722800,16.0],[1790723700,13.6],[1790724600,11.0],[1790725500,11.0],[1790726400,17.2]]},"7 d":{"span":604800,"bucket":3600,"points":[[1790492400,15.9],[1790496000,36.6],[1790499600,24.7],[1790503200,28.4],[1790506800,27.8],[1790510400,46.1],[1790514000,37.2],[1790517600,27.8],[1790521200,30.4],[1790524800,24.1],[1790528400,21.9],[1790532000,20.5],[1790535600,20.6],[1790539200,20.0],[1790542800,23.6],[1790546400,26.1],[1790550000,27.3],[1790553600,20.2],[1790557200,23.6],[1790560800,25.6],[1790564400,24.6],[1790568000,25.8],[1790571600,22.9],[1790575200,19.7],[1790578800,25.3],[1790582400,20.2],[1790586000,20.5],[1790589600,23.6],[1790593200,18.3],[1790596800,20.9],[1790600400,20.9],[1790604000,20.7],[1790607600,21.5],[1790611200,18.5],[1790614800,22.8],[1790618400,24.2],[1790622000,22.1],[1790625600,21.1],[1790629200,20.5],[1790632800,20.1],[1790636400,19.5],[1790640000,22.2],[1790643600,29.0],[1790647200,20.9],[1790650800,21.0],[1790654400,16.1],[1790658000,12.8],[1790661600,11.9],[1790665200,12.0],[1790668800,19.6],[1790672400,14.4],[1790676000,14.7],[1790679600,14.4],[1790683200,17.7],[1790686800,14.1],[1790690400,20.0],[1790694000,18.5],[1790697600,18.9],[1790701200,16.4],[1790704800,12.7],[1790708400,12.9],[1790712000,15.6],[1790715600,13.6],[1790719200,14.8],[1790722800,13.1]]},"30 d":{"span":2592000,"bucket":3600,"points":[[1790492400,15.9],[1790496000,36.6],[1790499600,24.7],[1790503200,28.4],[1790506800,27.8],[1790510400,46.1],[1790514000,37.2],[1790517600,27.8],[1790521200,30.4],[1790524800,24.1],[1790528400,21.9],[1790532000,20.5],[1790535600,20.6],[1790539200,20.0],[1790542800,23.6],[1790546400,26.1],[1790550000,27.3],[1790553600,20.2],[1790557200,23.6],[1790560800,25.6],[1790564400,24.6],[1790568000,25.8],[1790571600,22.9],[1790575200,19.7],[1790578800,25.3],[1790582400,20.2],[1790586000,20.5],[1790589600,23.6],[1790593200,18.3],[1790596800,20.9],[1790600400,20.9],[1790604000,20.7],[1790607600,21.5],[1790611200,18.5],[1790614800,22.8],[1790618400,24.2],[1790622000,22.1],[1790625600,21.1],[1790629200,20.5],[1790632800,20.1],[1790636400,19.5],[1790640000,22.2],[1790643600,29.0],[1790647200,20.9],[1790650800,21.0],[1790654400,16.1],[1790658000,12.8],[1790661600,11.9],[1790665200,12.0],[1790668800,19.6],[1790672400,14.4],[1790676000,14.7],[1790679600,14.4],[1790683200,17.7],[1790686800,14.1],[1790690400,20.0],[1790694000,18.5],[1790697600,18.9],[1790701200,16.4],[1790704800,12.7],[1790708400,12.9],[1790712000,15.6],[1790715600,13.6],[1790719200,14.8],[1790722800,13.1]]}},"sleeps":[[1790494779,1790523972],[1790527811,1790529114],[1790531162,1790531747],[1790539026,1790542595],[1790546500,1790550116],[1790565262,1790573695],[1790575757,1790616266],[1790635024,1790645011],[1790645414,1790645414],[1790645424,1790647325],[1790668206,1790701949]],"first":1790492400};
+  const chart = $('[data-chart]');
+  if (chart) {
+    const svg = $('svg', chart), tip = $('[data-tip]'), W = 400, HT = 150, top = 8, bottom = 132;
+    const ranges = Object.keys(H.ranges);
+    let current = '24 h', pts = [];
+    $('[data-ranges]').innerHTML = ranges.map(r => `<button aria-pressed="${r === current}" data-r="${r}">${r}</button>`).join('');
+    const tick = (t, span) => { const d = new Date(t * 1000);
+      return span <= 3600 ? d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+        : span <= 86400 ? d.toLocaleTimeString([], { hour: 'numeric' }) : d.toLocaleDateString([], { weekday: 'short' }); };
+    const draw = () => {
+      const r = H.ranges[current], start = H.now - r.span, x = t => (t - start) / r.span * W, y = v => bottom - Math.min(100, v) / 100 * (bottom - top);
+      pts = r.points.map(([t, v]) => [x(t), y(v), t, v]);
+      const gap = r.bucket * 2.5;
+      let path = '', area = '';
+      pts.forEach((p, i) => {
+        const breaks = i === 0 || p[2] - pts[i - 1][2] > gap;
+        path += (breaks ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1);
+      });
+      const runs = []; let run = [];
+      pts.forEach((p, i) => { if (i && p[2] - pts[i - 1][2] > gap) { runs.push(run); run = []; } run.push(p); }); if (run.length) runs.push(run);
+      area = runs.map(rn => `M${rn[0][0].toFixed(1)},${bottom} ` + rn.map(p => `L${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ') + ` L${rn[rn.length - 1][0].toFixed(1)},${bottom}Z`).join(' ');
+      const sleeps = H.sleeps.filter(([a, b]) => b > start).map(([a, b]) => `<rect x="${Math.max(0, x(a)).toFixed(1)}" y="${top}" width="${Math.max(1, x(b) - Math.max(0, x(a))).toFixed(1)}" height="${bottom - top}" fill="#ffffff" opacity=".07"/>`).join('');
+      const noData = H.first > start ? `<rect x="0" y="${top}" width="${x(H.first).toFixed(1)}" height="${bottom - top}" fill="url(#hatch)"/>` : '';
+      const grid = [0, 50, 100].map(v => `<line x1="0" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="#ffffff" stroke-opacity=".08" stroke-dasharray="3 3"/><text x="${W - 2}" y="${y(v) - 3}" text-anchor="end" fill="#8e8e93" font-size="9">${v}%</text>`).join('');
+      const ticks = [0.12, 0.37, 0.62, 0.87].map(f => `<text x="${f * W}" y="146" text-anchor="middle" fill="#8e8e93" font-size="9">${tick(start + f * r.span, r.span)}</text>`).join('');
+      svg.innerHTML = `<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#ffffff" stroke-opacity=".06" stroke-width="3"/></pattern></defs>`
+        + noData + sleeps + grid + `<path d="${area}" fill="#3d8fe0" opacity=".18"/><path d="${path}" fill="none" stroke="#3d8fe0" stroke-width="1.5" vector-effect="non-scaling-stroke"/>` + ticks
+        + '<line data-cross x1="0" x2="0" y1="' + top + '" y2="' + bottom + '" stroke="#f2f2f2" stroke-opacity="0" />';
+      const values = r.points.map(p => p[1]);
+      $('[data-avg]').textContent = values.length ? (values.reduce((s, v) => s + v, 0) / values.length).toFixed(0) + '%' : '—';
+      $('[data-peak]').textContent = values.length ? Math.max(...values).toFixed(0) + '%' : '—';
+      $('[data-since]').textContent = H.first > start ? 'History starts ' + new Date(H.first * 1000).toLocaleDateString([], { month: 'short', day: 'numeric' }) : '';
+    };
+    $$('[data-r]').forEach(b => b.onclick = () => { current = b.dataset.r; $$('[data-r]').forEach(x => x.setAttribute('aria-pressed', String(x === b))); draw(); tip.hidden = true; });
+    chart.addEventListener('pointermove', e => {
+      if (!pts.length) return;
+      const box = svg.getBoundingClientRect(), px = (e.clientX - box.left) / box.width * W;
+      const p = pts.reduce((a, b) => Math.abs(b[0] - px) < Math.abs(a[0] - px) ? b : a);
+      const cross = $('[data-cross]', svg); cross.setAttribute('x1', p[0]); cross.setAttribute('x2', p[0]); cross.setAttribute('stroke-opacity', '.4');
+      tip.hidden = false; tip.style.left = (p[0] / W * 100) + '%';
+      tip.textContent = `${p[3].toFixed(0)}% · ${new Date(p[2] * 1000).toLocaleString([], { weekday: 'short', hour: 'numeric', minute: '2-digit' })}`;
+    });
+    chart.addEventListener('pointerleave', () => { tip.hidden = true; const c = $('[data-cross]', svg); if (c) c.setAttribute('stroke-opacity', '0'); });
+    draw();
+  }
+
+  // Menu bar: click the icon
+  const mbItem = $('[data-mb-item]');
+  if (mbItem) {
+    mbItem.onclick = () => { const open = mbItem.getAttribute('aria-expanded') !== 'true'; mbItem.setAttribute('aria-expanded', String(open)); $('[data-mb-pop]').hidden = !open; };
+    if (!reduced) setInterval(() => { const v = Math.round(10 + Math.random() * 9); $('[data-mb-cpu]').textContent = v + '%'; $('[data-mb-cpu2]').textContent = v; }, 2000);
+  }
+
+  // Sound sliders
+  $$('[data-vol2]').forEach(r => r.oninput = () => { r.nextElementSibling.textContent = r.value + '%'; });
+
+  // Fan boost: Auto to Max, as Bondi labels it (this Mac's fans: about 1,180 to 5,779 rpm)
+  const fan = $('[data-fan-slider]');
+  if (fan) {
+    const minRPM = 1180, maxRPM = 5779;
+    const show = () => {
+      const f = fan.value / 100, rpm = minRPM + f * (maxRPM - minRPM);
+      $('[data-fan-label]').textContent = f === 0 ? '' : f >= 0.995 ? `Max: ≈ ${Math.round(rpm).toLocaleString()} rpm` : `Boost to ≈ ${(Math.round(rpm / 100) * 100).toLocaleString()} rpm`;
+      $('[data-fan-note]').textContent = f === 0 ? 'Off' : `${(Math.round(rpm / 10) * 10).toLocaleString()} rpm`;
+      $('[data-fan-auto]').hidden = f === 0;
+    };
+    fan.oninput = show;
+    $('[data-fan-auto]').onclick = () => { fan.value = 0; show(); };
+    show();
+  }
+
+  // Process guide: Bondi's own notes, with each process's real figures
+  const guide = [{"name": "WindowServer", "cpu": "1.7%", "mem": "674.4 MB", "what": "Draws everything on your screens: windows, the Dock, the menu bar and animations.", "busy": "Many open windows, several or very high-resolution displays, screen recording, video and heavy animations make it work harder.", "quit": "Leave it running: macOS needs it. Quitting it logs you out and closes every app."}, {"name": "kernel_task", "cpu": "1.0%", "mem": "16.2 MB", "what": "The core of macOS. Its CPU figure also includes time macOS sets aside on purpose to cool the Mac: when the chip gets hot, kernel_task takes CPU time so apps slow down and heat drops.", "busy": "High CPU usually means the Mac is hot, for example charging in a warm room or on a soft surface. Its large memory figure is normal.", "quit": "Leave it running: macOS needs it. It can't be quit. If it stays busy, let the Mac cool down or close the apps that heat it."}, {"name": "mds_stores", "cpu": "0.0%", "mem": "105.3 MB", "what": "Spotlight's indexer. It keeps an index of your files so searches are instant.", "busy": "After a macOS update, when you add many files, or when a new disk is connected, it re-indexes. That can take hours, then it settles.", "quit": "Leave it running: macOS needs it. Leave it running: it finishes on its own. You can leave folders out in System Settings, Spotlight."}, {"name": "photoanalysisd", "cpu": "0.0%", "mem": "52.5 MB", "what": "Analyzes your photo library for Photos: people, places and Memories.", "busy": "After importing many photos or turning on iCloud Photos. It prefers to work while the Mac is idle and plugged in.", "quit": "Stopping it doesn't help for long: macOS starts it again when it's needed."}];
+  const rows = $('[data-guide-rows]'), pop = $('[data-guide-pop]');
+  if (rows) {
+    rows.innerHTML = '<div class="proc t2" style="font-size:11px;font-weight:600"><span></span><span>Process</span><span style="text-align:right">% CPU</span><span style="text-align:right">Memory</span><span></span></div>'
+      + guide.map((p, i) => `<div class="proc" data-g="${i}"><svg class="sys" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="14" height="12" rx="2"/><path d="M6 8l2 2-2 2M10 12h3"/></svg><span>${p.name}</span><span class="val">${p.cpu}</span><span class="val">${p.mem}</span><button class="more" aria-label="What Is This? ${p.name}">⋯</button></div>`).join('');
+    const showGuide = i => {
+      const p = guide[i];
+      $$('.proc[data-g]', rows).forEach(r => r.setAttribute('aria-current', String(r.dataset.g == i)));
+      pop.innerHTML = `<h4>${p.name}</h4><dl style="margin:0"><dt>What it is</dt><dd>${p.what}</dd><dt>Why it gets busy</dt><dd>${p.busy}</dd><dt>Can I stop it?</dt><dd>${p.quit}</dd></dl><span style="font-size:12px">Right now it's using ${p.cpu} of the CPU and ${p.mem} of memory.</span>`;
+    };
+    $$('.proc[data-g]', rows).forEach(r => r.onclick = () => showGuide(r.dataset.g));
+    showGuide(0);
+  }
+
+  // App icon: the page's icons follow the pick, like Bondi's Dock icon
+  const picker = $('[data-picker]');
+  if (picker) {
+    const dark = matchMedia('(prefers-color-scheme: dark)');
+    let pick = 'auto';
+    const apply = () => {
+      const file = pick === 'auto' ? (dark.matches ? 'black' : 'white') : pick;
+      $$('.hero-icon, .brand img').forEach(img => img.src = `assets/icon-${file}.png`);
+      const fav = document.querySelector('link[rel="icon"]'); if (fav) fav.href = `assets/icon-${file}.png`;
+    };
+    $$('[data-pick]', picker).forEach(b => b.onclick = () => { pick = b.dataset.pick; $$('[data-pick]', picker).forEach(x => x.setAttribute('aria-pressed', String(x === b))); apply(); });
+    dark.addEventListener('change', () => { if (pick === 'auto') apply(); });
+  }
 })();
 </script>
 <script>
@@ -677,7 +1066,10 @@
       return `<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="38" fill="none" stroke="#3a3b40" stroke-width="12"/>${arcs.join('')}<text x="48" y="47" text-anchor="middle" fill="#f2f2f4" font-size="14" font-weight="700">${center}</text><text x="48" y="61" text-anchor="middle" fill="#9d9da5" font-size="9">${caption}</text></svg>`;
     };
     const legend = rows => `<ul>${rows.map(([n, val, col, txt]) => `<li><i style="background:${col}"></i><span>${n}</span><span>${txt}</span></li>`).join('')}</ul>`;
-    const appCell = a => `<span class="w-app"><i style="background:${a.c}">${a.n[0]}</i>${a.n}</span>`;
+    const iconFile = { 'Google Chrome': 'chrome', 'Visual Studio Code': 'vscode', 'Safari': 'safari', 'Docker Desktop': 'docker', 'Notes': 'notes', 'Finder': 'finder', 'Music': 'music', 'zoom.us': 'zoom' };
+    const appCell = a => iconFile[a.n] ? `<span class="w-app"><img src="assets/apps/${iconFile[a.n]}.png" alt="" style="width:18px;height:18px">${a.n}</span>`
+      : a.n === 'macOS' ? `<span class="w-app"><svg viewBox="0 0 20 20" style="width:18px;height:18px;color:#9d9da5" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3l7 3.5-7 3.5-7-3.5z"/><path d="M3 10l7 3.5 7-3.5M3 13.5L10 17l7-3.5"/></svg>${a.n}</span>`
+      : `<span class="w-app"><i style="background:${a.c}">${a.n[0]}</i>${a.n}</span>`;
     const cpuOf = a => f1(a.cpu) + '%';
     const statusLines = [
       ['Everything looks normal.', ' Google Chrome is using the most memory, 12.23 GB across 80 processes.'],
@@ -743,7 +1135,7 @@
         ['Energy', 'Last hour', 'Memory', '% CPU'], a => [f1(a.en) + ' W', area(a.hist, 24, 110, 16, tint.battery, false), gb(a.mem), cpuOf(a)], (a, b) => b.en - a.en),
       sound: () => `<div class="w-card" style="--tint:${tint.sound};min-height:0">${head('sound', 'Sound', 'MacBook Pro Speakers')}
           <div class="w-sub" style="margin-bottom:6px">Each app's own volume, up to 300%. Try the sliders.</div>
-          ${[['Music', 80], ['Google Chrome', 100], ['zoom.us', 140], ['Slack', 40]].map(([n, val], i) => `<div class="vol"><span class="w-app"><i style="background:${['#fa3e5c', '#e8453c', '#2d8cff', '#8a3f8f'][i]}">${n[0]}</i>${n}</span><input type="range" min="0" max="300" value="${val}" aria-label="${n} volume" data-vol><span data-volv>${val}%</span></div>`).join('')}</div>`,
+          ${[['Music', 80], ['Google Chrome', 100], ['zoom.us', 140], ['Slack', 40]].map(([n, val], i) => `<div class="vol">${appCell({ n, c: ['#fa3e5c', '#e8453c', '#2d8cff', '#8a3f8f'][i] })}<input type="range" min="0" max="300" value="${val}" aria-label="${n} volume" data-vol><span data-volv>${val}%</span></div>`).join('')}</div>`,
       bluetooth: () => `<div class="w-card" style="--tint:${tint.bluetooth};min-height:0">${head('bluetooth', 'Bluetooth', '3 connected')}
           ${[['AirPods Pro', 'Left 80% · Right 75% · Case 60%'], ['Magic Keyboard', 'Battery 64%'], ['Magic Mouse', 'Battery 22%']].map(([n, d]) => `<div class="dev"><b>${n}</b><span class="w-sub">Connected</span><small>${d}</small></div>`).join('')}</div>`,
       stack: () => {
