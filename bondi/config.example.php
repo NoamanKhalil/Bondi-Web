@@ -28,13 +28,13 @@ return [
     'mail_from' => 'Bondi <support@trybondi.app>',
     'support_email' => 'support@trybondi.app',
 
-    // Admin page sign-in: a username you choose (not case-sensitive) and a password, stored as a hash.
+    // Admin page sign-in: a username you choose (not case-sensitive) and a password used nowhere else.
     'admin_username' => 'CHANGE-ME',
+    'admin_password' => '',
 
-    // Admin page password, stored as a hash. Make one on your Mac in Terminal:
-    //   php -r 'echo password_hash("your password here", PASSWORD_DEFAULT), PHP_EOL;'
-    // and paste the result (starts with $2y$ or $argon2) here.
-    'admin_password_hash' => 'CHANGE-ME',
+    // Optional instead of admin_password (leave that one empty): the password as a hash, so it can't be read
+    // from this file. Make one in Terminal with php -r 'echo password_hash(trim(fgets(STDIN)), PASSWORD_DEFAULT), PHP_EOL;'
+    'admin_password_hash' => '',
 
     // Trial length in days (owner decision: 7).
     'trial_days' => 7,
