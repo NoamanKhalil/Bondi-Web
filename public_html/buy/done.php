@@ -7,7 +7,9 @@ $fromApp = ($_GET['from'] ?? '') === 'app';
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Thank you</title>
+<title>Thank you · Bondi</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
 <style>
   :root { color-scheme: light dark; --bg: #f5f5f7; --card: #fff; --text: #1d1d1f; --muted: #6e6e73; --accent: #0071e3; }
   @media (prefers-color-scheme: dark) { :root { --bg: #1c1c1e; --card: #2c2c2e; --text: #f5f5f7; --muted: #a1a1a6; --accent: #0a84ff; } }
