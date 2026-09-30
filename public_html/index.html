@@ -293,7 +293,6 @@
   .w-table svg { width: 110px; height: 16px; display: inline-block; vertical-align: middle; }
   .w-scroll { overflow-x: auto; }
   .vol { display: grid; grid-template-columns: 150px 1fr 48px; gap: 12px; align-items: center; padding: 8px 0; border-top: 1px solid var(--w-line); }
-  .vol input { width: 100%; accent-color: #e0305a; }
   .dev { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 10px 0; border-top: 1px solid var(--w-line); } .dev small { color: var(--w-soft); }
   @media (max-width: 760px) {
     .win-bar { grid-template-columns: auto 1fr; } .win-title, .win-tools { display: none; }
@@ -326,7 +325,34 @@
   .mac .link { border: 0; background: none; padding: 0; color: var(--link); font-size: 11px; text-align: left; }
   .mac .icon { width: 18px; height: 18px; border-radius: 4px; flex: none; }
   .mac .sys { width: 18px; height: 18px; color: var(--t2); flex: none; }
-  .mac input[type=range] { width: 100%; accent-color: var(--accent); }
+  /* Sliders drawn like macOS: thin track, tinted fill up to the knob, white knob with a soft shadow */
+  :is(.mac, .vol) input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 20px; margin: 0; background: none; cursor: pointer; --p: 50%; --fill: var(--accent, #1fa9cc); --tick: none; }
+  :is(.mac, .vol) input[type=range]::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: var(--tick), linear-gradient(to right, var(--fill) var(--p), rgba(255,255,255,.16) var(--p)); }
+  :is(.mac, .vol) input[type=range]::-moz-range-track { height: 4px; border-radius: 2px; background: var(--tick), rgba(255,255,255,.16); }
+  :is(.mac, .vol) input[type=range]::-moz-range-progress { height: 4px; border-radius: 2px; background: var(--fill); }
+  :is(.mac, .vol) input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; margin-top: -6px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 0 0 .5px rgba(0,0,0,.25), 0 1px 3px rgba(0,0,0,.45); transition: transform .12s; }
+  :is(.mac, .vol) input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 0 0 .5px rgba(0,0,0,.25), 0 1px 3px rgba(0,0,0,.45); }
+  :is(.mac, .vol) input[type=range]:active::-webkit-slider-thumb { transform: scale(1.1); }
+  :is(.mac, .vol) input[type=range]:focus-visible { outline: none; }
+  :is(.mac, .vol) input[type=range]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px rgba(31,169,204,.55), 0 1px 3px rgba(0,0,0,.45); }
+  :is(.mac, .vol) input[type=range]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px rgba(31,169,204,.55), 0 1px 3px rgba(0,0,0,.45); }
+  /* Per-app volume goes to 300%, so mark where 100% is */
+  :is(.mac input.vol300, .vol input) { --fill: var(--sound, #fa2d55); --tick: linear-gradient(to right, transparent calc(33.33% - 1px), rgba(255,255,255,.45) calc(33.33% - 1px) calc(33.33% + 1px), transparent calc(33.33% + 1px)); }
+  .mac .volrow { display: grid; grid-template-columns: 18px 64px 1fr 42px; gap: 3px 10px; align-items: center; padding: 3px 0; }
+  .mac .volrow .val { color: var(--t2); }
+  .mac .volrow .lvl { grid-column: 3; height: 3px; border-radius: 2px; background: rgba(255,255,255,.08); overflow: hidden; margin: 0 8px 2px; }
+  .mac .volrow .lvl b { display: block; height: 100%; width: 0; border-radius: 2px; background: linear-gradient(90deg, var(--good), var(--sound)); transition: width .18s linear; }
+  .mac .volrow .val.loud { color: var(--t1); font-weight: 600; }
+  /* Fan boost */
+  .mac .fanspin { transform-origin: 50% 50%; animation: spin var(--dur, 0s) linear infinite; }
+  .mac .fanspin.still { animation: none; }
+  .mac .fanread { display: flex; align-items: baseline; gap: 8px; }
+  .mac .fanread .big { transition: color .3s; }
+  .mac .fanrow { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; }
+  .mac .fanrow span { font-size: 11px; color: var(--t2); }
+  .mac input.fanslider { --fill: var(--cpu); }
+  .mac .fansafe { list-style: none; margin: 0; padding: 10px 0 0; border-top: 1px solid var(--sep); display: grid; gap: 7px; font-size: 11.5px; color: var(--t2); }
+  .mac .fansafe li { display: grid; grid-template-columns: 11px 1fr; gap: 8px; align-items: start; } .mac .fansafe svg { color: var(--good); margin-top: 2px; }
   /* status line */
   .mac .status { background: var(--ai-bg); border-radius: 8px; padding: 10px; display: grid; grid-template-columns: auto 1fr auto; gap: 6px 8px; align-items: start; }
   .mac .status .sp { color: var(--ai); }
@@ -600,23 +626,25 @@
           <h3>Every app, its own volume.</h3>
           <p>Turn a call up to 300% and the music down, without touching the rest.</p>
           <div class="vis"><div class="mac">
-            <div class="card"><div class="title" style="color:var(--sound)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M3.6 7.4h2.5L9.8 4.3c.4-.3 1-.1 1 .4v10.6c0 .5-.6.7-1 .4l-3.7-3.1H3.6c-.6 0-1.1-.5-1.1-1.1V8.5c0-.6.5-1.1 1.1-1.1z"/></svg><span style="color:var(--t2)">Output</span><span class="note" style="color:var(--t1)">MacBook Pro Speakers ⌃</span></div></div>
-            <div class="card"><div class="title">Apps</div>
-              <div class="rowx" style="grid-template-columns:18px 90px 1fr 42px"><img class="icon" src="assets/apps/zoom.png" alt=""><span>Zoom</span><input type="range" min="0" max="300" value="160" aria-label="Zoom volume" data-vol2><span class="val">160%</span></div>
-              <div class="rowx" style="grid-template-columns:18px 90px 1fr 42px"><img class="icon" src="assets/apps/music.png" alt=""><span>Music</span><input type="range" min="0" max="300" value="60" aria-label="Music volume" data-vol2><span class="val">60%</span></div>
-              <div class="rowx" style="grid-template-columns:18px 90px 1fr 42px"><img class="icon" src="assets/apps/chrome.png" alt=""><span>Chrome</span><input type="range" min="0" max="300" value="100" aria-label="Google Chrome volume" data-vol2><span class="val">100%</span></div>
-            </div>
-          </div></div>
+            <div class="card"><div class="title" style="color:var(--sound)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M3.6 7.4h2.5L9.8 4.3c.4-.3 1-.1 1 .4v10.6c0 .5-.6.7-1 .4l-3.7-3.1H3.6c-.6 0-1.1-.5-1.1-1.1V8.5c0-.6.5-1.1 1.1-1.1z"/></svg><span style="color:var(--t2)">Output</span><span class="note" style="color:var(--t1)">MacBook Pro Speakers<svg viewBox="0 0 10 14" width="8" height="11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="margin-left:5px;vertical-align:-1px"><path d="M2 5l3-3 3 3M2 9l3 3 3-3"/></svg></span></div></div>
+            <div class="card" style="gap:2px"><div class="title" style="margin-bottom:4px">Apps<span class="note">100% is the app's normal level</span></div>
+              <div class="volrow"><img class="icon" src="assets/apps/zoom.png" alt=""><span>Zoom</span><input class="vol300" type="range" min="0" max="300" step="5" value="160" aria-label="Zoom volume" data-vol2><span class="val">160%</span><span class="lvl"><b></b></span></div>
+              <div class="volrow"><img class="icon" src="assets/apps/music.png" alt=""><span>Music</span><input class="vol300" type="range" min="0" max="300" step="5" value="60" aria-label="Music volume" data-vol2><span class="val">60%</span><span class="lvl"><b></b></span></div>
+              <div class="volrow"><img class="icon" src="assets/apps/chrome.png" alt=""><span>Chrome</span><input class="vol300" type="range" min="0" max="300" step="5" value="100" aria-label="Google Chrome volume" data-vol2><span class="val">100%</span><span class="lvl"><b></b></span></div>
+              <div class="volrow"><img class="icon" src="assets/apps/podcasts.png" alt=""><span>Podcasts</span><input class="vol300" type="range" min="0" max="300" step="5" value="80" aria-label="Podcasts volume" data-vol2><span class="val">80%</span><span class="lvl"><b></b></span></div>
+            </div></div>
         </article>
 
         <article class="tile w2">
           <p class="kicker">Fan boost</p>
           <h3>Cooler when you want it.</h3>
-          <p>Drag it. Never slower than Apple's own control, and back to Auto when you quit.</p>
-          <div class="vis"><div class="mac"><div class="card" data-fan>
-            <div class="title" style="color:var(--cpu)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="1.6"/><path d="M10 8.4c-.5-2.6.4-5 2.6-5.4 1.8-.3 2.6 1.6 1.1 3.2-.9 1-2.2 1.6-3.7 2.2zM11.6 10c2.6-.5 5 .4 5.4 2.6.3 1.8-1.6 2.6-3.2 1.1-1-.9-1.6-2.2-2.2-3.7zM10 11.6c.5 2.6-.4 5-2.6 5.4-1.8.3-2.6-1.6-1.1-3.2.9-1 2.2-1.6 3.7-2.2zM8.4 10c-2.6.5-5-.4-5.4-2.6-.3-1.8 1.6-2.6 3.2-1.1 1 .9 1.6 2.2 2.2 3.7z"/></svg><span style="color:var(--t2)">Fans</span><span class="note" data-fan-note>Off</span></div>
-            <div style="display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center"><span class="t2" style="font-size:11px">Auto</span><input type="range" min="0" max="100" value="0" aria-label="Fan speed" data-fan-slider><span class="t2" style="font-size:11px">Max</span></div>
-            <div style="display:flex;justify-content:space-between;min-height:16px"><span style="font-size:11px;font-weight:500" data-fan-label></span><button class="link" data-fan-auto hidden>Auto</button></div>
+          <p>Drag to boost. Never slower than your fans already were, and back to Auto when you quit.</p>
+          <div class="vis"><div class="mac"><div class="card" data-fan style="gap:10px">
+            <div class="title" style="color:var(--cpu)"><svg class="fanspin still" data-fan-icon viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="1.6"/><path d="M10 8.4c-.5-2.6.4-5 2.6-5.4 1.8-.3 2.6 1.6 1.1 3.2-.9 1-2.2 1.6-3.7 2.2zM11.6 10c2.6-.5 5 .4 5.4 2.6.3 1.8-1.6 2.6-3.2 1.1-1-.9-1.6-2.2-2.2-3.7zM10 11.6c.5 2.6-.4 5-2.6 5.4-1.8.3-2.6-1.6-1.1-3.2.9-1 2.2-1.6 3.7-2.2zM8.4 10c-2.6.5-5-.4-5.4-2.6-.3-1.8 1.6-2.6 3.2-1.1 1 .9 1.6 2.2 2.2 3.7z"/></svg><span style="color:var(--t2)">Fans</span><span class="note t3" style="font-variant-numeric:tabular-nums">1,180–5,779 rpm</span></div>
+            <div class="fanread"><span class="big" data-fan-big>Auto</span><span class="t2" style="font-size:12px" data-fan-sub>Drag to boost</span></div>
+            <div class="fanrow"><span>Auto</span><input class="fanslider" type="range" min="0" max="100" value="0" aria-label="Fan speed" data-fan-slider><span>Max</span></div>
+            <div style="display:flex;justify-content:flex-end;min-height:14px;margin-top:-4px"><button class="link" data-fan-auto hidden>Back to Auto</button></div>
+            <ul class="fansafe"><li><svg viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.3l2.3 2.2 4.7-5"/></svg><span>Never slower than when you started the boost.</span></li><li><svg viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.3l2.3 2.2 4.7-5"/></svg><span>Full speed whenever macOS reports the Mac running hot.</span></li><li><svg viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.3l2.3 2.2 4.7-5"/></svg><span>Back to Auto on quit, sleep or crash.</span></li></ul>
           </div></div></div>
         </article>
 
@@ -943,20 +971,36 @@
     if (!reduced) setInterval(() => { const v = Math.round(10 + Math.random() * 9); $('[data-mb-cpu]').textContent = v + '%'; $('[data-mb-cpu2]').textContent = v; }, 2000);
   }
 
+  // Sliders: fill the track up to the knob, the way macOS draws it
+  const paint = r => r.style.setProperty('--p', (r.value - r.min) / (r.max - r.min) * 100 + '%');
+  $$('.mac input[type=range]').forEach(r => { paint(r); r.addEventListener('input', () => paint(r)); });
+
   // Sound sliders
-  $$('[data-vol2]').forEach(r => r.oninput = () => { r.nextElementSibling.textContent = r.value + '%'; });
+  $$('[data-vol2]').forEach(r => { const show = () => { const v = r.nextElementSibling; v.textContent = r.value + '%'; v.classList.toggle('loud', +r.value > 100); }; show(); r.addEventListener('input', show); });
+  // Level meters: what each app is playing, after its own volume
+  const levels = () => $$('[data-vol2]').forEach((r, i) => {
+    const beat = reduced ? 0.6 : 0.45 + Math.random() * 0.4 * (i === 1 ? 1.3 : 1);
+    r.parentElement.querySelector('.lvl b').style.width = Math.min(100, beat * r.value / 2.2) + '%';
+  });
+  levels(); $$('[data-vol2]').forEach(r => r.addEventListener('input', levels));
+  if (!reduced) setInterval(levels, 220);
 
   // Fan boost: Auto to Max, as Bondi labels it (this Mac's fans: about 1,180 to 5,779 rpm)
   const fan = $('[data-fan-slider]');
   if (fan) {
-    const minRPM = 1180, maxRPM = 5779;
+    const minRPM = 1180, maxRPM = 5779, icon = $('[data-fan-icon]');
     const show = () => {
-      const f = fan.value / 100, rpm = minRPM + f * (maxRPM - minRPM);
-      $('[data-fan-label]').textContent = f === 0 ? '' : f >= 0.995 ? `Max: ≈ ${Math.round(rpm).toLocaleString()} rpm` : `Boost to ≈ ${(Math.round(rpm / 100) * 100).toLocaleString()} rpm`;
-      $('[data-fan-note]').textContent = f === 0 ? 'Off' : `${(Math.round(rpm / 10) * 10).toLocaleString()} rpm`;
+      const f = fan.value / 100, rpm = minRPM + f * (maxRPM - minRPM), max = f >= 0.995;
+      const shown = max ? Math.round(rpm) : Math.round(rpm / 100) * 100;
+      $('[data-fan-big]').innerHTML = f === 0 ? 'Auto' : `${max ? '' : '≈ '}${shown.toLocaleString()}<small>rpm</small>`;
+      $('[data-fan-big]').style.color = f === 0 ? '' : 'var(--cpu)';
+      $('[data-fan-sub]').textContent = f === 0 ? 'Drag to boost' : max ? 'Max' : 'Boost';
       $('[data-fan-auto]').hidden = f === 0;
+      icon.classList.toggle('still', f === 0 || reduced);
+      icon.style.setProperty('--dur', (1.6 - f * 1.35).toFixed(2) + 's');
+      paint(fan);
     };
-    fan.oninput = show;
+    fan.addEventListener('input', show);
     $('[data-fan-auto]').onclick = () => { fan.value = 0; show(); };
     show();
   }
@@ -1166,7 +1210,7 @@
     let current = 'overview';
     tabsEl.innerHTML = tabs.map(([k, label, col]) => `<button role="tab" aria-selected="${k === current}" data-t="${k}" style="--tint:${col}" aria-label="${label}">${svg(k)}<span class="label">${label}</span></button>`).join('');
     const render = () => { body.innerHTML = views[current](); bindLive(); };
-    const bindLive = () => $$('[data-vol]', body).forEach(r => r.addEventListener('input', () => { r.nextElementSibling.textContent = r.value + '%'; }));
+    const bindLive = () => $$('[data-vol]', body).forEach(r => { const paint = () => r.style.setProperty('--p', r.value / 3 + '%'); paint(); r.addEventListener('input', () => { paint(); r.nextElementSibling.textContent = r.value + '%'; }); });
     $$('button', tabsEl).forEach(b => b.addEventListener('click', () => {
       current = b.dataset.t;
       $$('button', tabsEl).forEach(x => x.setAttribute('aria-selected', String(x === b)));
