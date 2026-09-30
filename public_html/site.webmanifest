@@ -1,0 +1,13 @@
+{
+  "name": "Bondi for Mac",
+  "short_name": "Bondi",
+  "description": "Bondi tells you why your Mac is slow, in one plain sentence.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#f5f5f7",
+  "theme_color": "#0095b6",
+  "icons": [
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/assets/icon-blue.png", "sizes": "256x256", "type": "image/png" }
+  ]
+}
