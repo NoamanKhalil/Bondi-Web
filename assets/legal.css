@@ -3,7 +3,10 @@
 @font-face { font-family: "IBM Plex Sans"; font-weight: 400 600; font-display: swap; src: url(/assets/fonts/ibm-plex-sans.woff2) format("woff2"); }
 @font-face { font-family: "IBM Plex Mono"; font-weight: 500; font-display: swap; src: url(/assets/fonts/ibm-plex-mono-500.woff2) format("woff2"); }
 :root { --ground:#eef6f8; --surface:#fff; --ink:#0a1d24; --soft:#3d5963; --line:#cfe2e8; --bondi:#00708a; }
-@media (prefers-color-scheme: dark) { :root { color-scheme: dark; --ground:#06161b; --surface:#0d242b; --ink:#e4f3f6; --soft:#9dbac3; --line:#1d3d47; --bondi:#5fd4ea; } }
+/* Dark when the Mac is dark, or when the visitor picks it with the switch (assets/theme.js sets data-theme). */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark; --ground:#06161b; --surface:#0d242b; --ink:#e4f3f6; --soft:#9dbac3; --line:#1d3d47; --bondi:#5fd4ea; } }
+:root[data-theme="dark"] { color-scheme: dark; --ground:#06161b; --surface:#0d242b; --ink:#e4f3f6; --soft:#9dbac3; --line:#1d3d47; --bondi:#5fd4ea; }
+:root[data-theme="light"] { color-scheme: light; }
 * { box-sizing: border-box; }
 body { margin: 0; padding-inline: 20px; background: var(--ground); color: var(--ink); font: 17px/1.65 "IBM Plex Sans", -apple-system, "Helvetica Neue", sans-serif; }
 main { max-width: 720px; margin: 0 auto; padding-block: 40px 80px; }
@@ -21,3 +24,11 @@ th { color: var(--ink); font-weight: 600; }
 .table-wrap { overflow-x: auto; }
 footer { max-width: 720px; margin: 0 auto; padding-block: 28px 48px; border-top: 1px solid var(--line); color: var(--soft); font-size: .88rem; display: flex; flex-wrap: wrap; gap: 8px 20px; }
 footer a { color: var(--soft); }
+
+/* Light / dark switch: a moon in light mode, a sun in dark */
+header nav { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 0; }
+.theme-toggle { width: 30px; height: 30px; margin-left: 18px; display: inline-grid; place-items: center; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: none; color: var(--soft); cursor: pointer; }
+.theme-toggle:hover { color: var(--ink); }
+.theme-toggle svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.theme-toggle .moon { fill: currentColor; stroke: none; }
+:root[data-theme="dark"] .theme-toggle .moon, :root:not([data-theme="dark"]) .theme-toggle .sun { display: none; }

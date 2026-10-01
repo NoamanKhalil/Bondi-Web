@@ -18,6 +18,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<script src="/assets/theme.js"></script>
 <style>
   /* The homepage's colours: Bondi Blue on Apple's greys, light and dark */
   :root {
@@ -65,6 +66,13 @@
   .pillbtn.primary { background: var(--bondi); color: var(--on-bondi); } .pillbtn.primary:hover { background: var(--bondi-ink); text-decoration: none; }
   .pillbtn.secondary { color: var(--bondi-ink); border-color: var(--bondi); } .pillbtn.secondary:hover { background: var(--bondi-soft); text-decoration: none; }
   .pillbtn.small { padding: 5px 13px; font-size: 0.78rem; }
+
+  /* Light / dark switch (assets/theme.js): a moon in light mode, a sun in dark */
+  .theme-toggle { width: 30px; height: 30px; display: inline-grid; place-items: center; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: none; color: var(--soft); cursor: pointer; }
+  .theme-toggle:hover { color: var(--ink); border-color: var(--faint); }
+  .theme-toggle svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .theme-toggle .moon { fill: currentColor; stroke: none; }
+  :root[data-theme="dark"] .theme-toggle .moon, :root:not([data-theme="dark"]) .theme-toggle .sun { display: none; }
 
   /* Navigation: glass, like the homepage */
   header.nav { position: sticky; top: 0; z-index: 20; background: var(--glass); backdrop-filter: saturate(1.8) blur(20px); -webkit-backdrop-filter: saturate(1.8) blur(20px);
@@ -210,6 +218,7 @@
     <a class="brand" href="/"><img src="/assets/icon-blue.png" alt="" width="26" height="26">Bondi</a>
     <div class="nav-right">
       <a href="/">What's Bondi?</a>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
       <a class="pillbtn primary small" href="#join">Join the beta</a>
     </div>
   </div>
