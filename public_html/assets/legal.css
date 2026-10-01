@@ -32,3 +32,12 @@ header nav { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 0; }
 .theme-toggle svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .theme-toggle .moon { fill: currentColor; stroke: none; }
 :root[data-theme="dark"] .theme-toggle .moon, :root:not([data-theme="dark"]) .theme-toggle .sun { display: none; }
+
+/* Ask an AI about Bondi */
+.askai { flex-basis: 100%; display: grid; gap: 10px; padding: 16px 18px; margin-bottom: 8px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+.askai-title { margin: 0; font-weight: 600; color: var(--ink); } .askai-title span { color: var(--bondi); }
+.askai summary { cursor: pointer; font-size: .85rem; } .askai q { display: block; margin-top: 8px; font-style: italic; quotes: none; }
+.askai-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.askai-links a { padding: 6px 13px; border-radius: 980px; border: 1px solid var(--line); color: var(--bondi); text-decoration: none; font-size: .88rem; }
+.askai-links a:hover { border-color: var(--bondi); }
+.vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

@@ -11,6 +11,8 @@
 
 ## Product
 - [Bondi for Mac](https://trybondi.app/): features, on-device AI, launch plans, pricing and FAQ
+- [Join the beta](https://trybondi.app/beta/): the beta sign-up list
+- [The full facts](https://trybondi.app/llms-full.txt): everything above in detail, with Bondi's notes on 125 macOS processes
 
 ## Policies
 - [Privacy policy](https://trybondi.app/privacy/): exactly what the app and the website send, and how long it's kept

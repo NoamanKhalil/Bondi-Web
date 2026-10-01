@@ -1,0 +1,677 @@
+# Bondi: the full facts
+
+> Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by Apple's on-device model. It's made by Jabble Super Intelligence Inc. This file is the complete, authoritative description of Bondi from its makers, for AI assistants and search tools. The website is https://trybondi.app/ and the short version of this file is https://trybondi.app/llms.txt.
+
+## Status and price
+- The beta is launching soon, and the full launch follows soon after. Bondi can't be bought yet. People can join the beta list at https://trybondi.app/beta/.
+- At full launch: a 7-day free trial with every feature, then a one-time purchase for one Mac, with no subscription. The first 250 licenses cost $6.99; after that the price is $29.99. Updates are included. A license can be moved to another Mac.
+- Paddle is the merchant of record: it handles payment, tax and the receipt. Refunds are available within 14 days (https://trybondi.app/refunds/).
+- After the trial, the menu bar keeps showing CPU for free; everything else waits for a license.
+
+## Requirements
+- macOS 15 or later, on Apple silicon or Intel.
+- The AI uses Apple's on-device foundation model on Macs with Apple Intelligence (macOS 26, Apple silicon). Other Macs can download a small free open model (Qwen2.5 0.5B) from Bondi's Settings; nothing downloads unless the person presses Download.
+
+## Privacy
+- Everything Bondi measures (apps, processes, memory, CPU, battery, disk, network, sensors) and its 30 days of history stay in files on the Mac.
+- The AI runs on the Mac and never goes to the cloud. 0 bytes of the person's data leave the Mac.
+- The app contacts Jabble's server only to check its trial or license and to look for updates. There is no account and no analytics.
+- Full policy: https://trybondi.app/privacy/
+
+## How the AI works
+Bondi computes every number in code from the Mac's own readings, decides what matters (a problem, the disk, the battery, something idle, or all calm), and lets the on-device model write the plain-English sentence around it. Bondi then checks the sentence: if the tone, the subject or any number is wrong, Bondi uses its own sentence instead. The AI writes 0 numbers.
+
+## Features
+- Why is my Mac slow?: one click explains what's using the Mac, what's idle and holding memory, and what changed in the last hour. Example from a real Mac: "Everything is fine. Google Chrome is using the most memory, 13.09 GB across 82 processes."
+- Apps, not processes: every helper process counts toward the app that started it, so a browser is one row instead of dozens. One real reading of a Mac showed 966 processes in Activity Monitor and 39 apps in Bondi. Switch between CPU, Memory and Energy.
+- Ask your history: questions about the last 30 days, such as "What drained my battery yesterday?", answered from Bondi's own history file on the Mac.
+- Warnings: when memory runs short, the menu bar says so and names one cause with one fix. Bondi always asks before it quits, stops or unloads anything; it never does so on its own.
+- For developers: dev servers grouped by project and port, Docker containers and local AI models, with the memory each holds, and a button to stop any of them. Kubernetes is coming.
+- 30-day history: CPU history for yesterday, last Tuesday or any day in the last 30, with the time the Mac slept shaded.
+- Menu bar: always there, using about 0.3% of one CPU core while it waits.
+- Sound: a separate volume for every app, up to 300%.
+- Fan boost: drag to cool the Mac; never slower than the fans already were, full speed whenever macOS reports the Mac running hot, and back to Auto on quit, sleep or crash.
+- Process guide: Bondi's own notes on 125 common macOS processes (listed below), with what each is using right now.
+- Three icon finishes (Light, Dark, Bondi Blue), or one that follows the Mac's appearance.
+
+## Bondi and Activity Monitor
+Activity Monitor, built into macOS, lists every process: a browser alone is dozens of helper processes, so no single row looks big. Bondi adds each process to the app that started it, explains in a sentence what is slowing the Mac, keeps 30 days of history, and suggests one fix at a time. Bondi doesn't replace Activity Monitor; it reads the same Mac and says what it means.
+
+## Questions
+- When can I get Bondi? The beta is launching soon, and the full launch follows soon after. Licenses go on sale at full launch.
+- Does my data leave my Mac? No. History stays in a file on the Mac, and the AI runs on the Mac.
+- Will it slow my Mac down? No. With its windows closed, Bondi uses about 0.3% of one CPU core, and the AI only works while the person is looking.
+- Can Bondi quit apps on its own? Never. It suggests one fix at a time and asks first.
+
+## Company and contact
+- Made by Jabble Super Intelligence Inc., a Delaware corporation.
+- Support: support@trybondi.app
+- Terms: https://trybondi.app/terms/ · License agreement: https://trybondi.app/eula/
+
+## Process guide: 125 common macOS processes, in Bondi's words
+Each entry: what the process is, why it gets busy, and whether to quit it.
+
+### kernel_task
+- What it is: The core of macOS. Its CPU figure also includes time macOS sets aside on purpose to cool the Mac: when the chip gets hot, kernel_task takes CPU time so apps slow down and heat drops.
+- Why it gets busy: High CPU usually means the Mac is hot, for example charging in a warm room or on a soft surface. Its large memory figure is normal.
+- Quitting it: Leave it running: macOS needs it. It can't be quit. If it stays busy, let the Mac cool down or close the apps that heat it.
+
+### WindowServer
+- What it is: Draws everything on your screens: windows, the Dock, the menu bar and animations.
+- Why it gets busy: Many open windows, several or very high-resolution displays, screen recording, video and heavy animations make it work harder.
+- Quitting it: Leave it running: macOS needs it. Quitting it logs you out and closes every app.
+
+### launchd
+- What it is: The first process macOS starts. It starts, stops and restarts every other background service.
+- Why it gets busy: It's rarely busy. If it is, some other service is being started over and over.
+- Quitting it: Leave it running: macOS needs it.
+
+### loginwindow
+- What it is: Your login session: logging in and out, the lock screen, and reopening apps after a restart.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Leave it running: macOS needs it. Quitting it logs you out.
+
+### Dock
+- What it is: The Dock, Launchpad, Mission Control and the app switcher.
+- Why it gets busy: Animations, many windows in Mission Control, or a Dock that's stuck.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### Finder
+- What it is: The Finder app: your desktop, file windows and file copies.
+- Why it gets busy: Copying or moving many files, working out folder sizes, or previews of folders with many files.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### SystemUIServer
+- What it is: Runs some of the menu bar's icons.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### ControlCenter
+- What it is: Control Center and many menu bar icons, such as Wi-Fi, Bluetooth, sound, battery and the clock.
+- Why it gets busy: It's rarely busy for long.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### NotificationCenter
+- What it is: Shows notifications and the widgets in Notification Center.
+- Why it gets busy: Many notifications at once, or widgets that update often.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### WindowManager
+- What it is: Stage Manager and window tiling.
+- Why it gets busy: Moving and resizing many windows, or Stage Manager's animations.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### UIKitSystem
+- What it is: Runs apps built for iPhone and iPad, and some system screens built the same way.
+- Why it gets busy: The app it's running is busy.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### ViewBridgeAuxiliary
+- What it is: Shows part of one app inside another, for example an Open or Save panel.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### com.apple.appkit.xpc.openAndSavePanelService
+- What it is: The Open and Save panels that apps show.
+- Why it gets busy: Browsing folders with many files in a panel.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### CoreServicesUIAgent
+- What it is: Shows system prompts, such as the warning when you open an app downloaded from the internet.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### UserNotificationCenter
+- What it is: Shows alerts from system services that aren't in Notification Center.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### mds, mds_stores
+- What it is: Spotlight's indexer. It keeps an index of your files so searches are instant.
+- Why it gets busy: After a macOS update, when you add many files, or when a new disk is connected, it re-indexes. That can take hours, then it settles.
+- Quitting it: Leave it running: macOS needs it. Leave it running: it finishes on its own. You can leave folders out in System Settings, Spotlight.
+
+### mdworker, mdworker_shared, mdbulkimport
+- What it is: Helpers of Spotlight's indexer that read the contents of your files.
+- Why it gets busy: Many new or changed files, often after an update or a big download.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### corespotlightd
+- What it is: Keeps the Spotlight index for content inside apps, such as messages, mail and notes.
+- Why it gets busy: After lots of new content in those apps.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### Spotlight
+- What it is: The Spotlight search window and its results.
+- Why it gets busy: Typing a search while the index is still being built.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### backupd, backupd-helper
+- What it is: Time Machine backups.
+- Why it gets busy: During a backup, especially the first one or after many files changed.
+- Quitting it: Leave it running: macOS needs it. To stop a backup, use Skip This Backup in the Time Machine menu instead.
+
+### fseventsd
+- What it is: Keeps a record of file changes, so apps like Time Machine and Spotlight know what changed.
+- Why it gets busy: Many file changes at once, for example builds, downloads or unpacking archives.
+- Quitting it: Leave it running: macOS needs it.
+
+### revisiond
+- What it is: Keeps earlier versions of your documents (File, Revert To).
+- Why it gets busy: Saving large documents often.
+- Quitting it: Leave it running: macOS needs it.
+
+### deleted
+- What it is: Frees purgeable space, such as caches and old local snapshots, when the disk runs low.
+- Why it gets busy: The startup disk is nearly full.
+- Quitting it: Leave it running: macOS needs it.
+
+### apfsd
+- What it is: Maintenance for the Mac's file system (APFS), such as snapshots and free space.
+- Why it gets busy: Large deletions or snapshot clean-up.
+- Quitting it: Leave it running: macOS needs it.
+
+### diskarbitrationd
+- What it is: Mounts and ejects disks and notices new ones.
+- Why it gets busy: A disk being connected or checked.
+- Quitting it: Leave it running: macOS needs it.
+
+### fileproviderd
+- What it is: Connects cloud storage (iCloud Drive, OneDrive, Dropbox and others) to Finder.
+- Why it gets busy: Syncing many files, or the first sync after signing in.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### bird
+- What it is: iCloud Drive syncing, together with cloudd.
+- Why it gets busy: Uploading or downloading many files, or right after signing in to iCloud.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### cloudd
+- What it is: Syncs data with iCloud for Apple's apps and iCloud Drive.
+- Why it gets busy: Large syncs, such as after signing in or turning on a new iCloud feature.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### nsurlsessiond
+- What it is: Runs downloads and uploads for apps in the background, so they continue after the app closes.
+- Why it gets busy: Large downloads, app or system updates, or iCloud transfers.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### QuickLookUIService, QuickLookSatellite, quicklookd
+- What it is: Quick Look previews of files.
+- Why it gets busy: Previewing large files or folders with many files.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### *ThumbnailExtension
+- What it is: Makes the thumbnails you see for files in Finder.
+- Why it gets busy: Opening folders with many images, videos or documents.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### photoanalysisd
+- What it is: Analyzes your photo library for Photos: people, places and Memories.
+- Why it gets busy: After importing many photos or turning on iCloud Photos. It prefers to work while the Mac is idle and plugged in.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### photolibraryd
+- What it is: Manages the Photos library for Photos and other apps.
+- Why it gets busy: Imports, edits and syncing in Photos.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### mediaanalysisd
+- What it is: Analyzes photos and videos on the Mac, for example to find text and objects for search and Live Text.
+- Why it gets busy: After adding many photos or videos.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### cloudphotod
+- What it is: Syncs your photo library with iCloud Photos.
+- Why it gets busy: Uploading or downloading many photos.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### VTDecoderXPCService
+- What it is: Decodes video with the Mac's media engine for apps that play video.
+- Why it gets busy: Playing video, especially several at once or at high resolution.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### VTEncoderXPCService
+- What it is: Encodes video with the Mac's media engine for recording, exporting and video calls.
+- Why it gets busy: Screen recording, video calls or exporting video.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### mediaremoted
+- What it is: Now Playing: which app controls media playback and the media keys.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### AirPlayXPCHelper
+- What it is: AirPlay streaming to TVs and speakers.
+- Why it gets busy: While streaming with AirPlay.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### AirPlayUIAgent
+- What it is: The AirPlay menu and prompts.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### coreaudiod
+- What it is: All sound on the Mac: playback, recording and audio devices.
+- Why it gets busy: Many apps playing or recording, audio plug-ins, or an audio device that misbehaves.
+- Quitting it: Leave it running: macOS needs it. Quitting it cuts all sound until macOS starts it again.
+
+### audiomxd
+- What it is: Helps coreaudiod manage audio for apps.
+- Why it gets busy: Many apps playing sound.
+- Quitting it: Leave it running: macOS needs it.
+
+### MTLCompilerService
+- What it is: Prepares graphics code (Metal shaders) for apps and games.
+- Why it gets busy: The first launch of a game or app, or after an update.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### com.apple.WebKit.GPU
+- What it is: Graphics and video for Safari and apps that show web pages.
+- Why it gets busy: Pages with video, animations or 3D.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### WallpaperAgent, *Wallpaper*Extension, WallpaperAerialsExtension
+- What it is: Your desktop picture, including moving aerial and dynamic wallpapers.
+- Why it gets busy: Moving wallpapers keep the graphics chip busy. A still picture uses almost nothing.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### TGOnDeviceInferenceProviderService
+- What it is: Part of Apple Intelligence: it runs Apple's on-device language model for the features and apps that use it, including Bondi's optional AI.
+- Why it gets busy: When Apple Intelligence features, or apps using the on-device model, are writing text. Most of that work runs on the Neural Engine and graphics chip.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### ANECompilerService, aned, aneuserd
+- What it is: Prepares and runs work on the Neural Engine, the chip that runs machine learning.
+- Why it gets busy: Apps using on-device machine learning, such as photo analysis, dictation or Apple Intelligence.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### modelmanagerd, ModelCatalogAgent, modelcatalogd
+- What it is: Manages the on-device models Apple Intelligence uses: which are installed and which are loaded.
+- Why it gets busy: Downloading or updating Apple Intelligence models.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### IntelligencePlatformComputeService, intelligenceplatformd
+- What it is: Part of Apple Intelligence that builds on-device knowledge from your apps' content.
+- Why it gets busy: After lots of new content, usually while the Mac is idle.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### trustd
+- What it is: Checks the security certificates of websites and servers that apps connect to.
+- Why it gets busy: Many new connections at once.
+- Quitting it: Leave it running: macOS needs it.
+
+### syspolicyd
+- What it is: Gatekeeper: checks apps the first time you open them.
+- Why it gets busy: Opening a new or very large app, or many at once.
+- Quitting it: Leave it running: macOS needs it.
+
+### XprotectService, XProtect, XProtectBridgeService, XProtectUpdateService
+- What it is: XProtect, Apple's built-in malware protection. It checks apps and files and keeps its rules up to date.
+- Why it gets busy: Scans after a rules update, or checking newly downloaded files.
+- Quitting it: Leave it running: macOS needs it.
+
+### amfid
+- What it is: Checks apps' code signatures before their code runs.
+- Why it gets busy: Opening many apps or tools at once.
+- Quitting it: Leave it running: macOS needs it.
+
+### tccd
+- What it is: Privacy permissions: which apps may use the camera, microphone, screen, files and more.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Leave it running: macOS needs it.
+
+### securityd
+- What it is: Keychain and security work, such as passwords, keys and certificates.
+- Why it gets busy: Apps reading many passwords or certificates.
+- Quitting it: Leave it running: macOS needs it.
+
+### secd
+- What it is: Keychain items and their syncing with iCloud Keychain.
+- Why it gets busy: Syncing passwords after changes on another device.
+- Quitting it: Leave it running: macOS needs it.
+
+### opendirectoryd
+- What it is: User accounts and groups: who can log in and what they may access.
+- Why it gets busy: Network accounts or apps looking up users often.
+- Quitting it: Leave it running: macOS needs it.
+
+### authd
+- What it is: Handles requests for administrator rights, such as installer password prompts.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Leave it running: macOS needs it.
+
+### biometrickitd
+- What it is: Touch ID.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Leave it running: macOS needs it.
+
+### akd
+- What it is: Apple Account sign-in and authentication.
+- Why it gets busy: Signing in, or apps checking your Apple Account.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### accountsd
+- What it is: Internet accounts (iCloud, Google, Exchange and others) used by Mail, Calendar and Contacts.
+- Why it gets busy: Adding accounts or apps syncing with them.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### mDNSResponder
+- What it is: Finds devices on your network (Bonjour) and looks up web addresses (DNS).
+- Why it gets busy: Many network lookups, or a network with many devices.
+- Quitting it: Leave it running: macOS needs it.
+
+### configd
+- What it is: Network settings: which network is active, addresses and proxies.
+- Why it gets busy: Switching networks or VPNs.
+- Quitting it: Leave it running: macOS needs it.
+
+### airportd
+- What it is: Wi-Fi: scanning, joining networks and keeping the connection.
+- Why it gets busy: Scanning for networks, a weak signal or switching networks.
+- Quitting it: Leave it running: macOS needs it.
+
+### WiFiAgent
+- What it is: Wi-Fi prompts and the Wi-Fi part of the menu bar.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### symptomsd
+- What it is: Watches how network connections are doing, to help macOS choose the best one.
+- Why it gets busy: Unstable networks.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### apsd
+- What it is: Apple Push Notifications: receives notifications from the internet for apps.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Leave it running: macOS needs it.
+
+### bluetoothd
+- What it is: Bluetooth: keyboards, mice, headphones and other wireless devices.
+- Why it gets busy: Many devices, or a device reconnecting over and over.
+- Quitting it: Leave it running: macOS needs it. Quitting it disconnects your Bluetooth devices for a moment.
+
+### hidd
+- What it is: Keyboards, mice, trackpads and other input devices.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Leave it running: macOS needs it.
+
+### sharingd
+- What it is: AirDrop, Handoff, Universal Clipboard and other sharing between your devices.
+- Why it gets busy: AirDrop transfers or clipboard sharing.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### rapportd
+- What it is: Lets your Apple devices nearby find and talk to each other, for Handoff and Continuity.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### UniversalControl
+- What it is: Universal Control: one keyboard and mouse across your Mac and iPad.
+- Why it gets busy: While Universal Control is in use.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### SidecarRelay
+- What it is: Sidecar: using an iPad as a second display.
+- Why it gets busy: While an iPad is used as a display.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### ContinuityCaptureAgent
+- What it is: Continuity Camera: using your iPhone as a webcam.
+- Why it gets busy: While your iPhone is used as a camera.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### appleh13camerad, cameracaptured
+- What it is: Runs the built-in camera.
+- Why it gets busy: While an app uses the camera.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### avconferenced
+- What it is: Audio and video for FaceTime and other calls.
+- Why it gets busy: During calls.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### locationd
+- What it is: Location Services: works out where the Mac is for apps you allow.
+- Why it gets busy: Apps asking for your location often.
+- Quitting it: Leave it running: macOS needs it.
+
+### com.apple.geod
+- What it is: Map data, such as map tiles, addresses and places, for Maps and other apps.
+- Why it gets busy: Using Maps or apps that show maps.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### imagent
+- What it is: Messages and FaceTime in the background: sending and receiving.
+- Why it gets busy: Syncing many messages, such as after signing in.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### identityservicesd
+- What it is: The account service behind iMessage and FaceTime.
+- Why it gets busy: Syncing Messages or FaceTime.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### IMDPersistenceAgent
+- What it is: Saves your Messages history on the Mac.
+- Why it gets busy: Syncing many messages.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### callservicesd
+- What it is: Phone and FaceTime calls, including calls relayed from your iPhone.
+- Why it gets busy: During calls.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### CommCenter
+- What it is: Phone and text message features that work with your iPhone.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### assistantd, Siri
+- What it is: Siri.
+- Why it gets busy: While you use Siri or dictation.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### suggestd
+- What it is: Finds suggestions in your mail and messages, such as contacts and events.
+- Why it gets busy: After lots of new mail or messages.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### parsecd
+- What it is: Siri Suggestions and suggestions from the web in Spotlight and Safari.
+- Why it gets busy: Searching often.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### knowledge-agent, knowledgeconstructiond
+- What it is: Builds on-device knowledge from how you use the Mac, for Siri and suggestions.
+- Why it gets busy: Usually while the Mac is idle.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### biomed, BiomeAgent
+- What it is: Stores on-device activity history that suggestions and Screen Time use.
+- Why it gets busy: It's rarely busy for long.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### ScreenTimeAgent, UsageTrackingAgent
+- What it is: Screen Time: tracks app and website use for Screen Time reports.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### AppleSpell
+- What it is: Spelling and grammar checking.
+- Why it gets busy: Checking long documents.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### TextInputMenuAgent
+- What it is: The input menu in the menu bar, for keyboard layouts and input sources.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### softwareupdated
+- What it is: Checks for, downloads and prepares macOS updates.
+- Why it gets busy: Downloading or preparing an update.
+- Quitting it: Leave it running: macOS needs it.
+
+### appstoreagent
+- What it is: App Store downloads and app updates.
+- Why it gets busy: Downloading or installing apps.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### installd, system_installd
+- What it is: Installs apps and system software.
+- Why it gets busy: While something is being installed.
+- Quitting it: Leave it running: macOS needs it.
+
+### ReportCrash
+- What it is: Writes a report when an app crashes.
+- Why it gets busy: Right after a crash; it finishes quickly.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### spindump
+- What it is: Records what an app was doing when it stopped responding.
+- Why it gets busy: Right after an app hangs; it finishes quickly.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### logd
+- What it is: The system log: collects messages from macOS and apps.
+- Why it gets busy: An app or service writing a lot of log messages.
+- Quitting it: Leave it running: macOS needs it.
+
+### diagnosticd
+- What it is: Collects diagnostic information for logs and troubleshooting tools.
+- Why it gets busy: While a tool is streaming logs.
+- Quitting it: Leave it running: macOS needs it.
+
+### analyticsd
+- What it is: Collects diagnostic and usage data. It's sent to Apple only if you share analytics.
+- Why it gets busy: It's rarely busy for long.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### powerd
+- What it is: Power management: sleep, wake, and what keeps the Mac awake.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Leave it running: macOS needs it.
+
+### thermalmonitord
+- What it is: Watches the Mac's temperature and tells macOS when to slow down to stay cool.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Leave it running: macOS needs it.
+
+### PerfPowerServices
+- What it is: Records energy use and battery statistics, the data behind Battery settings.
+- Why it gets busy: It's rarely busy for long.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### dasd
+- What it is: Schedules background work such as backups, indexing and updates for when the Mac is idle or plugged in.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Leave it running: macOS needs it.
+
+### runningboardd
+- What it is: Tracks which apps and helpers are running and what they're allowed to use.
+- Why it gets busy: Many apps starting and stopping.
+- Quitting it: Leave it running: macOS needs it.
+
+### backgroundtaskmanagementd
+- What it is: Keeps track of login items and apps that run in the background (System Settings, General, Login Items).
+- Why it gets busy: After installing apps with background helpers.
+- Quitting it: Leave it running: macOS needs it.
+
+### cfprefsd
+- What it is: Reads and saves every app's settings.
+- Why it gets busy: An app saving its settings very often.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### distnoted
+- What it is: Passes notifications between apps and system services.
+- Why it gets busy: Usually another app sending many messages.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### coreservicesd
+- What it is: Core services for Finder and apps, such as which app opens which file.
+- Why it gets busy: After installing or moving many apps.
+- Quitting it: Leave it running: macOS needs it.
+
+### lsd
+- What it is: Launch Services: keeps track of installed apps and which app opens which kind of file.
+- Why it gets busy: After installing or updating apps.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### UserEventAgent
+- What it is: Loads small system plug-ins that react to events, such as connecting a device or changing networks.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Leave it running: macOS needs it.
+
+### universalaccessd
+- What it is: Accessibility features such as zoom, display settings and VoiceOver support.
+- Why it gets busy: While accessibility features are in use.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### corebrightnessd
+- What it is: Display brightness, True Tone and Night Shift.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Leave it running: macOS needs it.
+
+### PowerChime
+- What it is: Plays the sound when you connect power.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### com.apple.WebKit.WebContent*
+- What it is: One Safari web page, or a web page shown inside another app. Each tab or window has its own.
+- Why it gets busy: A busy page: video, ads or a site running scripts. Closing that tab stops it.
+- Quitting it: Safe to quit. Quitting it closes that page's content; reload the page to get it back.
+
+### com.apple.WebKit.Networking
+- What it is: Network requests for Safari and apps that show web pages.
+- Why it gets busy: Large downloads or many open pages.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### com.apple.Safari.SafeBrowsing.Service
+- What it is: Safari's Fraudulent Website Warning list.
+- Why it gets busy: Updating its list.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### com.apple.Safari.History
+- What it is: Safari's browsing history and its syncing.
+- Why it gets busy: Syncing history with iCloud.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### PaperKitExtension
+- What it is: Drawing and Markup in Apple's apps, such as sketches in Notes and Markup in Preview.
+- Why it gets busy: Drawing, handwriting or marking up documents.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### screencaptureui
+- What it is: The Screenshot tool: its toolbar, the thumbnail after a capture, and screen recording controls.
+- Why it gets busy: While taking screenshots or recording the screen.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### PhotosPicker
+- What it is: The panel apps show when you choose photos from your library.
+- Why it gets busy: Browsing a large photo library in the panel.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### DockHelper
+- What it is: A helper of the Dock.
+- Why it gets busy: It's rarely busy.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### chronod
+- What it is: Keeps widgets up to date, on the desktop and in Notification Center.
+- Why it gets busy: Many widgets, or widgets that refresh often.
+- Quitting it: Stopping it doesn't help for long: macOS starts it again when it's needed.
+
+### com.apple.DriverKit-AppleBCMWLAN
+- What it is: The driver for the Mac's Wi-Fi chip.
+- Why it gets busy: Heavy Wi-Fi traffic or scanning for networks.
+- Quitting it: Leave it running: macOS needs it.
+
+### audioclocksyncd
+- What it is: Keeps audio clocks in step between audio devices.
+- Why it gets busy: Several audio devices in use at once.
+- Quitting it: Leave it running: macOS needs it.
+
+### launchservicesd
+- What it is: Launch Services: keeps track of installed apps and which app opens which kind of file.
+- Why it gets busy: After installing or updating apps.
+- Quitting it: Leave it running: macOS needs it.

@@ -36,6 +36,13 @@ The owner reviews the site as a private claude.ai artifact: **https://claude.ai/
 - Legal pages are drafts; "[company mailing address]" still needs Jabble Super Intelligence Inc.'s address, and a lawyer should review them.
 - Don't copy any asset, text or layout detail from Vitals or any other app. Wording "Bondi for Apple Mac" is the owner's choice.
 
+## AI assistants and search
+
+- `llms.txt` (short) and `llms-full.txt` (everything, with the app's 125 process notes). Rebuild `llms-full.txt` with `php dev/build-llms-full.php` when the site's facts or `../TryBondi/Bondi/Resources/ProcessGuide.json` change.
+- "Ask an AI about Bondi" at the top of every footer: plain links (ChatGPT, Claude, Perplexity, Google AI Mode, Grok) that open with a prepared question. The question and the list live in `dev/ask-ai.php`; run it to update every page.
+- Competitors named (owner): Activity Monitor, iStat Menus, Stats and Vitals. Re-check what's said about them, and that each Ask-AI link still opens its assistant, every few months.
+- Guide pages (process pages from the app's guide, topic guides, comparisons): later, one page at a time, as the owner decides.
+
 ## Design
 
 - Apple's design language: SF Pro (the system font), large tight headlines, dark theme. Page background `#131315`; cards `#161617`; Bondi Blue `#2cc0de` (ink `#5fd4ea`).
@@ -43,4 +50,5 @@ The owner reviews the site as a private claude.ai artifact: **https://claude.ai/
 - App icons: `../TryBondi/Bondi-Icons/` (Black default, White, Bondi Blue) and `../TryBondi/Bondi/Resources/Assets.xcassets`. Other apps' icons are exported from the Mac with `NSWorkspace` (see `video/scripts/refresh-reading.swift`).
 - Screens to replicate live in `../TryBondi/Bondi/UI/` (MenuBar, Window, Settings, Components). The app's Debug build can render real screens without screen recording: `--render-screenshots DIR` and `--render-feature-shots DIR`.
 - Support light and dark mode, Reduce Motion, keyboard and screen readers; phone width with no sideways scroll.
+- Light/dark switch: `assets/theme.js` (loaded in every page's head) and the moon/sun `data-theme-toggle` button; it sets `<html data-theme>`. The homepage's window replica and feature tiles use named colours with the app's light values; screenshots and films stay dark until the app's light mode (ES-12) exists.
 - In-page links scroll without adding `#section` to the address.
