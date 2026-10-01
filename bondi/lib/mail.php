@@ -252,7 +252,7 @@ function email_html(string $title, string $preview, string $inner): string
 $inner
   </td></tr>
   </table>
-  <p class="soft" style="margin:20px 0 0;font-family:$font;font-size:12px;line-height:1.5;color:#6e6e73;">Bondi for Apple Mac · Jabble Inc. · <a class="link" href="https://trybondi.app" style="color:#0e86a6;text-decoration:none;">trybondi.app</a></p>
+  <p class="soft" style="margin:20px 0 0;font-family:$font;font-size:12px;line-height:1.5;color:#6e6e73;">Bondi for Apple Mac · Jabble Super Intelligence Inc. · <a class="link" href="https://trybondi.app" style="color:#0e86a6;text-decoration:none;">trybondi.app</a></p>
 </td></tr>
 </table>
 </body>
