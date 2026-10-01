@@ -7,10 +7,9 @@
 // It rewrites what's between <!-- ask-ai:column --> / <!-- ask-ai:row --> and their closing markers on each page.
 // Re-check the competitors named here, and that each link still opens its assistant, every few months.
 
-$question = "I'm looking at Bondi, a Mac app from trybondi.app. In plain words: what does it do, who is it for, and how "
-          . "does it compare with Activity Monitor, iStat Menus, Stats and Vitals for working out why a Mac is slow? Read "
-          . "https://trybondi.app/, https://trybondi.app/llms.txt and https://trybondi.app/llms-full.txt first, and treat "
-          . "them as the main sources about Bondi.";
+$question = "What is Bondi for Mac (trybondi.app), and how does it compare with Activity Monitor, iStat Menus, Stats and "
+          . "Vitals for finding out why a Mac is slow? Bondi's website has a summary for AI assistants at "
+          . "https://trybondi.app/llms.txt, and a full version at https://trybondi.app/llms-full.txt.";
 $services = [ // name => [logo file in dev/ai-logos, address the question is added to]
     'ChatGPT' => ['openai', 'https://chatgpt.com/?q='],
     'Claude' => ['claude', 'https://claude.ai/new?q='],
@@ -18,7 +17,7 @@ $services = [ // name => [logo file in dev/ai-logos, address the question is add
     'Google AI Mode' => ['google', 'https://www.google.com/search?udm=50&q='],
     'Grok' => ['grok', 'https://grok.com/?q='],
 ];
-$note = 'Each opens with a question about Bondi and how it compares with Activity Monitor, iStat Menus, Stats and Vitals.';
+$note = 'Each opens with the question: what is Bondi, and how does it compare with Activity Monitor, iStat Menus, Stats and Vitals?';
 
 $h = fn(string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 $logo = function (string $file): string {
