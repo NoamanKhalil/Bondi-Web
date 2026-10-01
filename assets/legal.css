@@ -3,7 +3,10 @@
 @font-face { font-family: "IBM Plex Sans"; font-weight: 400 600; font-display: swap; src: url(/assets/fonts/ibm-plex-sans.woff2) format("woff2"); }
 @font-face { font-family: "IBM Plex Mono"; font-weight: 500; font-display: swap; src: url(/assets/fonts/ibm-plex-mono-500.woff2) format("woff2"); }
 :root { --ground:#eef6f8; --surface:#fff; --ink:#0a1d24; --soft:#3d5963; --line:#cfe2e8; --bondi:#00708a; }
-@media (prefers-color-scheme: dark) { :root { color-scheme: dark; --ground:#06161b; --surface:#0d242b; --ink:#e4f3f6; --soft:#9dbac3; --line:#1d3d47; --bondi:#5fd4ea; } }
+/* Dark when the Mac is dark, or when the visitor picks it with the switch (assets/theme.js sets data-theme). */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark; --ground:#06161b; --surface:#0d242b; --ink:#e4f3f6; --soft:#9dbac3; --line:#1d3d47; --bondi:#5fd4ea; } }
+:root[data-theme="dark"] { color-scheme: dark; --ground:#06161b; --surface:#0d242b; --ink:#e4f3f6; --soft:#9dbac3; --line:#1d3d47; --bondi:#5fd4ea; }
+:root[data-theme="light"] { color-scheme: light; }
 * { box-sizing: border-box; }
 body { margin: 0; padding-inline: 20px; background: var(--ground); color: var(--ink); font: 17px/1.65 "IBM Plex Sans", -apple-system, "Helvetica Neue", sans-serif; }
 main { max-width: 720px; margin: 0 auto; padding-block: 40px 80px; }
@@ -21,3 +24,20 @@ th { color: var(--ink); font-weight: 600; }
 .table-wrap { overflow-x: auto; }
 footer { max-width: 720px; margin: 0 auto; padding-block: 28px 48px; border-top: 1px solid var(--line); color: var(--soft); font-size: .88rem; display: flex; flex-wrap: wrap; gap: 8px 20px; }
 footer a { color: var(--soft); }
+
+/* Light / dark switch: a moon in light mode, a sun in dark */
+header nav { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 0; }
+.theme-toggle { width: 30px; height: 30px; margin-left: 18px; display: inline-grid; place-items: center; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: none; color: var(--soft); cursor: pointer; }
+.theme-toggle:hover { color: var(--ink); }
+.theme-toggle svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.theme-toggle .moon { fill: currentColor; stroke: none; }
+:root[data-theme="dark"] .theme-toggle .moon, :root:not([data-theme="dark"]) .theme-toggle .sun { display: none; }
+
+/* Ask an AI about Bondi */
+.askai { flex-basis: 100%; display: grid; gap: 10px; padding: 16px 18px; margin-bottom: 8px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+.askai-title { margin: 0; font-weight: 600; color: var(--ink); } .askai-title span { color: var(--bondi); }
+.askai summary { cursor: pointer; font-size: .85rem; } .askai q { display: block; margin-top: 8px; font-style: italic; quotes: none; }
+.askai-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.askai-links a { padding: 6px 13px; border-radius: 980px; border: 1px solid var(--line); color: var(--bondi); text-decoration: none; font-size: .88rem; }
+.askai-links a:hover { border-color: var(--bondi); }
+.vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

@@ -27,6 +27,7 @@
   {"@type": "WebSite", "@id": "https://trybondi.app/#site", "name": "Bondi", "url": "https://trybondi.app/", "publisher": {"@id": "https://trybondi.app/#org"}}
 ]}
 </script>
+<script src="/assets/theme.js"></script>
 <style>
   :root {
     --ground: #f5f5f7;
@@ -95,6 +96,13 @@
   .nav-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
   .left { display: inline-flex; align-items: center; gap: 6px; color: var(--soft); white-space: nowrap; }
   .left::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--attention); }
+
+  /* Light / dark switch (assets/theme.js): a moon in light mode, a sun in dark */
+  .theme-toggle { width: 30px; height: 30px; display: inline-grid; place-items: center; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: none; color: var(--soft); cursor: pointer; }
+  .theme-toggle:hover { color: var(--ink); border-color: var(--faint); }
+  .theme-toggle svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .theme-toggle .moon { fill: currentColor; stroke: none; }
+  :root[data-theme="dark"] .theme-toggle .moon, :root:not([data-theme="dark"]) .theme-toggle .sun { display: none; }
 
   /* Pill buttons */
   .pillbtn { display: inline-flex; align-items: center; justify-content: center; border-radius: 980px; padding: 11px 22px; font: 400 1.05rem/1.2 var(--sans); letter-spacing: -0.01em; border: 1px solid transparent; }
@@ -253,6 +261,18 @@
   details[open] summary::after { content: "−"; }
   details p { margin-top: 10px; color: var(--soft); }
 
+  /* Ask an AI about Bondi: plain links, the question shown on request */
+  .askai { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px; padding: 18px 22px; border-radius: 18px; background: var(--bondi-soft); }
+  .askai-text { flex: 1 1 320px; display: grid; gap: 4px; }
+  .askai-title { margin: 0; font-size: 1rem; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; } .askai-title span { color: var(--bondi); }
+  .askai details { font-size: .8rem; color: var(--soft); border: 0; padding: 0; }
+  .askai summary { cursor: pointer; list-style: none; display: block; font-size: .8rem; font-weight: 400; line-height: 1.5; }
+  .askai summary::-webkit-details-marker { display: none; } .askai details summary::after { content: " ›"; font-size: inherit; color: var(--bondi-ink); }
+  .askai details[open] summary::after { content: " ⌄"; }
+  .askai q { display: block; margin-top: 8px; padding: 10px 12px; border-radius: 10px; background: var(--ground); color: var(--soft); font-style: italic; quotes: none; }
+  .askai-links { display: flex; flex-wrap: wrap; gap: 8px; }
+  .askai-links a { padding: 7px 14px; border-radius: 980px; border: 1px solid color-mix(in srgb, var(--bondi) 45%, transparent); background: var(--tile); color: var(--bondi-ink); font-size: .85rem; font-weight: 500; }
+  .askai-links a:hover { background: var(--bondi); color: var(--on-bondi); text-decoration: none; }
   footer { background: var(--band); color: var(--faint); font-size: 0.78rem; }
   footer .wrap { padding-block: 34px 44px; display: grid; gap: 22px; }
   .foot-cols { display: grid; grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr)); gap: 28px; }
@@ -274,10 +294,16 @@
     section.sec { padding-block: 72px; } .tile { padding: 24px; min-height: 0; } .price-card { padding: 30px; }
     .foot-cols { grid-template-columns: minmax(0, 1fr); }
   }
-  /* The main-window demo: Bondi's own window, drawn in HTML (always dark, as Bondi looks in the film) */
+  /* The main-window demo: Bondi's own window, drawn in HTML with the app's colours: dark, or light when the page is
+     (the intro film over it stays dark, as it was filmed) */
   .appshow { display: grid; gap: 16px; padding-block: 8px 72px; }
   .win { --w-ground: #1c1d20; --w-card: #26272b; --w-card-2: #2e2f34; --w-line: #36373c; --w-ink: #f2f2f4; --w-soft: #9d9da5; --w-faint: #6c6c74;
-    background: var(--w-ground); color: var(--w-ink); border-radius: 18px; border: 1px solid #000; box-shadow: var(--shadow); overflow: hidden;
+    --w-bar: #232427; --w-edge: #000; --w-foot: #000; --w-track: #3a3b40; --fg-rgb: 255, 255, 255;
+    --w-pill: #2f3034; --w-pill-line: #3c3d42; --w-icon: #c7c7cc; --w-meter: #45464c; --w-row: #212226;
+    --w-body: radial-gradient(ellipse at 50% 60%, #0b1a20 0%, #000 70%); --w-ai-bg: #1f3b45; --w-ai: #2cc0de; --w-link: #58a6ff;
+    --m-overview: #2cc0de; --m-cpu: #4a90e2; --m-memory: #9b7ae0; --m-disk: #f2a57c; --m-network: #8fcf4f; --m-gpu: #e27aa0;
+    --m-neural: #7b6cf6; --m-battery: #5cc26a; --m-sound: #e0305a; --m-bluetooth: #4a90e2;
+    background: var(--w-ground); color: var(--w-ink); border-radius: 18px; border: 1px solid var(--w-edge); box-shadow: var(--shadow); overflow: hidden;
     font: 13px/1.35 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; }
   /* Wider than the page column; its content area is 16:9 like the intro film, with nothing to scroll inside. */
   .win { position: relative; --win-w: min(1240px, calc(100vw - 44px)); width: var(--win-w); margin-left: calc((100% - var(--win-w)) / 2); box-sizing: border-box; }
@@ -294,24 +320,24 @@
   .intro-skip { position: absolute; right: 14px; top: 12px; border: 1px solid rgba(255,255,255,.18); background: rgba(40,40,44,.75); color: #f2f2f4; font: 500 12px/1 -apple-system, sans-serif; padding: 7px 12px; border-radius: 999px; cursor: pointer; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
   .intro-skip:hover { background: rgba(60,60,66,.85); }
   .intro-replay { border: 0; background: none; padding: 0; margin-right: 6px; color: var(--bondi-ink); font: inherit; cursor: pointer; }
-  .win-bar { display: grid; grid-template-columns: auto auto 1fr auto; align-items: center; gap: 14px; padding: 12px 16px; border-bottom: 1px solid #000; background: #232427; }
+  .win-bar { display: grid; grid-template-columns: auto auto 1fr auto; align-items: center; gap: 14px; padding: 12px 16px; border-bottom: 1px solid var(--w-edge); background: var(--w-bar); }
   .lights { display: flex; gap: 8px; } .lights i { width: 12px; height: 12px; border-radius: 50%; }
   .lights i:nth-child(1) { background: #ff5f57; } .lights i:nth-child(2) { background: #febc2e; } .lights i:nth-child(3) { background: #28c840; }
   .win-title { font-weight: 600; color: var(--w-soft); }
-  .win-tabs { justify-self: center; display: flex; gap: 2px; padding: 3px; border-radius: 999px; background: #2f3034; border: 1px solid #3c3d42; overflow-x: auto; max-width: 100%; scrollbar-width: none; }
+  .win-tabs { justify-self: center; display: flex; gap: 2px; padding: 3px; border-radius: 999px; background: var(--w-pill); border: 1px solid var(--w-pill-line); overflow-x: auto; max-width: 100%; scrollbar-width: none; }
   .win-tabs button { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border: 0; border-radius: 999px; background: transparent; color: var(--w-soft); font: 500 12.5px/1 -apple-system, sans-serif; cursor: pointer; white-space: nowrap; }
   .win-tabs button svg { width: 16px; height: 16px; flex: none; }
   .win-tabs button .label { display: none; }
-  .win-tabs button[aria-selected="true"] { background: color-mix(in srgb, var(--tint) 22%, #2f3034); color: var(--tint); }
+  .win-tabs button[aria-selected="true"] { background: color-mix(in srgb, var(--tint) 22%, var(--w-pill)); color: var(--tint); }
   .win-tabs button[aria-selected="true"] .label { display: inline; }
-  .win-tools { display: flex; gap: 8px; } .win-tools i { width: 34px; height: 34px; border-radius: 50%; background: #2f3034; border: 1px solid #3c3d42; display: grid; place-items: center; font-style: normal; color: #c7c7cc; box-sizing: border-box; }
+  .win-tools { display: flex; gap: 8px; } .win-tools i { width: 34px; height: 34px; border-radius: 50%; background: var(--w-pill); border: 1px solid var(--w-pill-line); display: grid; place-items: center; font-style: normal; color: var(--w-icon); box-sizing: border-box; }
   .win-body { padding: 18px; display: grid; gap: 18px; min-height: 560px; align-content: start; }
-  .win-foot { display: flex; gap: 8px; padding: 8px 16px; font-size: 11.5px; color: var(--w-faint); border-top: 1px solid rgba(255, 255, 255, .06); background: #000; }
+  .win-foot { display: flex; gap: 8px; padding: 8px 16px; font-size: 11.5px; color: var(--w-faint); border-top: 1px solid rgba(var(--fg-rgb), .06); background: var(--w-foot); }
   /* The same backdrop as the intro film (radial-gradient(ellipse at 50% 60%, #0b1a20, #000 70%)), so the app sits where the film was. */
-  .win .win-body { background: radial-gradient(ellipse at 50% 60%, #0b1a20 0%, #000 70%); }
+  .win .win-body { background: var(--w-body); }
   .w-h { font-size: 15px; font-weight: 600; }
-  .w-status { background: #1f3b45; border-radius: 10px; padding: 12px 14px; display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; font-size: 14px; }
-  .w-status .spark { color: #2cc0de; } .w-status small { grid-column: 2; color: #58a6ff; font-size: 12px; }
+  .w-status { background: var(--w-ai-bg); border-radius: 10px; padding: 12px 14px; display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; font-size: 14px; }
+  .w-status .spark { color: var(--w-ai); } .w-status small { grid-column: 2; color: var(--w-link); font-size: 12px; }
   .w-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
   .w-grid .wide { grid-column: span 2; }
   .w-card { background: var(--w-card); border: 1px solid var(--w-line); border-radius: 12px; padding: 12px 13px; display: grid; gap: 3px; align-content: start; min-height: 128px; }
@@ -324,10 +350,10 @@
   .w-sub { font-size: 11.5px; color: var(--w-soft); font-variant-numeric: tabular-nums; }
   .w-chart { width: 100%; height: 30px; margin-top: auto; display: block; }
   .w-membar { display: flex; gap: 3px; align-items: center; margin-top: auto; }
-  .w-membar i { flex: 1; height: 8px; border-radius: 2px; background: #45464c; }
-  .w-membar i.on { background: #9b7ae0; } .w-membar i.part { background: linear-gradient(90deg, #9b7ae0 55%, #45464c 55%); }
+  .w-membar i { flex: 1; height: 8px; border-radius: 2px; background: var(--w-meter); }
+  .w-membar i.on { background: #9b7ae0; } .w-membar i.part { background: linear-gradient(90deg, #9b7ae0 55%, var(--w-meter) 55%); }
   .w-membar .swap { flex: 0 0 26px; height: 10px; border-radius: 3px; border: 1.5px solid #f2a200; margin-left: 5px; background: repeating-linear-gradient(135deg, rgba(242,162,0,.6) 0 2px, transparent 2px 4px); }
-  .w-fill { height: 7px; border-radius: 4px; background: #45464c; margin-top: auto; overflow: hidden; } .w-fill i { display: block; height: 100%; border-radius: 4px; background: var(--tint); }
+  .w-fill { height: 7px; border-radius: 4px; background: var(--w-meter); margin-top: auto; overflow: hidden; } .w-fill i { display: block; height: 100%; border-radius: 4px; background: var(--tint); }
   .rings { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 10px; }
   @media (min-width: 940px) { .win .rings { grid-template-columns: repeat(4, minmax(0, 1fr)); } .win .ring-card { grid-template-columns: 62px minmax(0, 1fr); gap: 6px 10px; padding: 11px; } .win .ring-card svg { width: 62px; height: 62px; } }
   @media (min-width: 1180px) { .win .ring-card { grid-template-columns: 76px minmax(0, 1fr); gap: 6px 12px; padding: 12px 13px; } .win .ring-card svg { width: 76px; height: 76px; } }
@@ -345,14 +371,14 @@
   .ranges { display: flex; justify-content: flex-end; gap: 2px; margin-bottom: 6px; } .ranges span { font-size: 10.5px; padding: 3px 7px; border-radius: 5px; color: var(--w-soft); } .ranges span.on { background: #3a3b40; color: var(--w-ink); }
   .hero-card svg { width: 100%; height: 160px; }
   .side { background: var(--w-card); border: 1px solid var(--w-line); border-radius: 12px; padding: 14px; display: grid; gap: 8px; align-content: start; }
-  .w-cores { display: flex; gap: 5px; height: 130px; align-items: flex-end; } .w-cores div { flex: 1; height: 100%; border-radius: 3px; background: #3a3b40; position: relative; }
+  .w-cores { display: flex; gap: 5px; height: 130px; align-items: flex-end; } .w-cores div { flex: 1; height: 100%; border-radius: 3px; background: var(--w-track); position: relative; }
   .w-cores i { position: absolute; left: 0; right: 0; bottom: 0; border-radius: 3px; background: var(--tint); transition: height .5s ease; }
   .stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
   .stat { background: var(--w-card); border: 1px solid var(--w-line); border-radius: 10px; padding: 10px 12px; } .stat div { color: var(--w-soft); font-size: 11.5px; } .stat b { font-size: 16px; font-variant-numeric: tabular-nums; }
   .w-table { width: 100%; border-collapse: collapse; font-size: 13px; }
   .w-table th { text-align: right; font-weight: 500; color: var(--w-soft); font-size: 12px; padding: 6px 10px; border-bottom: 1px solid var(--w-line); }
   .w-table th:first-child, .w-table td:first-child { text-align: left; }
-  .w-table td { text-align: right; padding: 7px 10px; font-variant-numeric: tabular-nums; } .w-table tr:nth-child(even) td { background: #212226; }
+  .w-table td { text-align: right; padding: 7px 10px; font-variant-numeric: tabular-nums; } .w-table tr:nth-child(even) td { background: var(--w-row); }
   .w-app { display: inline-flex; align-items: center; gap: 9px; } .w-app i { width: 18px; height: 18px; border-radius: 5px; display: grid; place-items: center; font: 700 10px/1 -apple-system, sans-serif; color: #fff; font-style: normal; }
   .w-table svg { width: 110px; height: 16px; display: inline-block; vertical-align: middle; }
   .w-scroll { overflow-x: auto; }
@@ -373,9 +399,22 @@
     --t1: #f2f2f2; --t2: #a1a1a6; --t3: #8e8e93; --accent: #1fa9cc; --ai: #40c8e0; --ai-bg: rgba(64,200,224,.12);
     --btn: rgba(255,255,255,.14); --btn-primary: #147f9c; --cpu: #3d8fe0; --mem: #9b6bd6; --battery: #2fb85b; --sound: #fa2d55;
     --projects: #5ad1f0; --warn: #ff9f0a; --good: #30d158; --track: rgba(255,255,255,.1); --link: #4ba8ff;
+    --fg-rgb: 255, 255, 255; --panel: #323236; --menubar: rgba(28,28,30,.96); --field: rgba(0,0,0,.25); --mac-edge: rgba(0,0,0,.6);
     position: relative; background: var(--bg); color: var(--t1); border-radius: 16px; padding: 12px; display: grid; gap: 10px;
     font: 13px/1.35 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif; letter-spacing: 0;
-    box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,.6); text-align: left; }
+    box-shadow: var(--shadow); border: 1px solid var(--mac-edge); text-align: left; }
+  /* Light: Bondi's own light colours (Colors.xcassets) */
+  :root[data-theme="light"] .win { --w-ground: #ffffff; --w-card: #ffffff; --w-card-2: #f4f4f6; --w-line: #e0e0e4; --w-ink: #1d1d1f; --w-soft: #6e6e73; --w-faint: #8a8a8e;
+    --w-bar: #f6f6f6; --w-edge: rgba(0,0,0,.14); --w-foot: #f6f6f6; --w-track: #e5e5ea; --fg-rgb: 0, 0, 0;
+    --w-pill: #ececef; --w-pill-line: #dcdce0; --w-icon: #3a3a3c; --w-meter: #e0e0e5; --w-row: #f8f8fa;
+    --w-body: radial-gradient(ellipse at 50% 60%, #e8f4f7 0%, #f2f2f5 70%); --w-ai-bg: #e3f3f8; --w-ai: #0e86a6; --w-link: #0058d6;
+    --m-overview: #0e86a6; --m-cpu: #1f6bbf; --m-memory: #7446b0; --m-disk: #d9774e; --m-network: #4f9a1a; --m-gpu: #c7457a;
+    --m-neural: #4e48c0; --m-battery: #248a3d; --m-sound: #d6173f; --m-bluetooth: #0058d6; }
+  :root[data-theme="light"] .mac { --bg: #f5f5f7; --card: rgba(0,0,0,.04); --card-line: rgba(0,0,0,.06); --sep: rgba(0,0,0,.1);
+    --t1: #1d1d1f; --t2: #6e6e73; --t3: #8a8a8e; --accent: #0e86a6; --ai: #0e86a6; --ai-bg: rgba(31,169,204,.1);
+    --btn: rgba(0,0,0,.06); --btn-primary: #0e86a6; --cpu: #1f6bbf; --mem: #7446b0; --battery: #248a3d; --sound: #d6173f;
+    --projects: #0a84a8; --warn: #c76e00; --good: #248a3d; --track: rgba(0,0,0,.08); --link: #0058d6;
+    --fg-rgb: 0, 0, 0; --panel: #ffffff; --menubar: rgba(246,246,246,.96); --field: #ffffff; --mac-edge: rgba(0,0,0,.1); }
   .mac .card { background: var(--card); border: 1px solid var(--card-line); border-radius: 10px; padding: 10px 11px; display: grid; gap: 6px; }
   .mac .t2 { color: var(--t2); } .mac .t3 { color: var(--t3); }
   .mac .title { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: var(--t2); white-space: nowrap; }
@@ -392,8 +431,8 @@
   .mac .sys { width: 18px; height: 18px; color: var(--t2); flex: none; }
   /* Sliders drawn like macOS: thin track, tinted fill up to the knob, white knob with a soft shadow */
   :is(.mac, .vol) input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 20px; margin: 0; background: none; cursor: pointer; --p: 50%; --fill: var(--accent, #1fa9cc); --tick: none; }
-  :is(.mac, .vol) input[type=range]::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: var(--tick), linear-gradient(to right, var(--fill) var(--p), rgba(255,255,255,.16) var(--p)); }
-  :is(.mac, .vol) input[type=range]::-moz-range-track { height: 4px; border-radius: 2px; background: var(--tick), rgba(255,255,255,.16); }
+  :is(.mac, .vol) input[type=range]::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: var(--tick), linear-gradient(to right, var(--fill) var(--p), rgba(var(--fg-rgb), .16) var(--p)); }
+  :is(.mac, .vol) input[type=range]::-moz-range-track { height: 4px; border-radius: 2px; background: var(--tick), rgba(var(--fg-rgb), .16); }
   :is(.mac, .vol) input[type=range]::-moz-range-progress { height: 4px; border-radius: 2px; background: var(--fill); }
   :is(.mac, .vol) input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; margin-top: -6px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 0 0 .5px rgba(0,0,0,.25), 0 1px 3px rgba(0,0,0,.45); transition: transform .12s; }
   :is(.mac, .vol) input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 0 0 .5px rgba(0,0,0,.25), 0 1px 3px rgba(0,0,0,.45); }
@@ -402,10 +441,10 @@
   :is(.mac, .vol) input[type=range]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px rgba(31,169,204,.55), 0 1px 3px rgba(0,0,0,.45); }
   :is(.mac, .vol) input[type=range]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px rgba(31,169,204,.55), 0 1px 3px rgba(0,0,0,.45); }
   /* Per-app volume goes to 300%, so mark where 100% is */
-  :is(.mac input.vol300, .vol input) { --fill: var(--sound, #fa2d55); --tick: linear-gradient(to right, transparent calc(33.33% - 1px), rgba(255,255,255,.45) calc(33.33% - 1px) calc(33.33% + 1px), transparent calc(33.33% + 1px)); }
+  :is(.mac input.vol300, .vol input) { --fill: var(--sound, #fa2d55); --tick: linear-gradient(to right, transparent calc(33.33% - 1px), rgba(var(--fg-rgb), .45) calc(33.33% - 1px) calc(33.33% + 1px), transparent calc(33.33% + 1px)); }
   .mac .volrow { display: grid; grid-template-columns: 18px 64px 1fr 42px; gap: 3px 10px; align-items: center; padding: 3px 0; }
   .mac .volrow .val { color: var(--t2); }
-  .mac .volrow .lvl { grid-column: 3; height: 3px; border-radius: 2px; background: rgba(255,255,255,.08); overflow: hidden; margin: 0 8px 2px; }
+  .mac .volrow .lvl { grid-column: 3; height: 3px; border-radius: 2px; background: rgba(var(--fg-rgb), .08); overflow: hidden; margin: 0 8px 2px; }
   .mac .volrow .lvl b { display: block; height: 100%; width: 0; border-radius: 2px; background: linear-gradient(90deg, var(--good), var(--sound)); transition: width .18s linear; }
   .mac .volrow .val.loud { color: var(--t1); font-weight: 600; }
   /* Fan boost */
@@ -424,9 +463,9 @@
   .mac .status .link { grid-column: 2; }
   .mac .status .x { border: 0; background: none; color: var(--t2); font-size: 14px; line-height: 1; padding: 0 2px; }
   /* busiest */
-  .mac .seg { display: inline-flex; background: rgba(255,255,255,.08); border-radius: 6px; padding: 1px; margin-left: auto; }
+  .mac .seg { display: inline-flex; background: rgba(var(--fg-rgb), .08); border-radius: 6px; padding: 1px; margin-left: auto; }
   .mac .seg button { border: 0; background: none; border-radius: 5px; padding: 3px 8px; font-size: 10.5px; color: var(--t1); }
-  .mac .seg button[aria-pressed="true"] { background: rgba(255,255,255,.18); }
+  .mac .seg button[aria-pressed="true"] { background: rgba(var(--fg-rgb), .18); }
   .mac .rowx { display: grid; grid-template-columns: 18px minmax(0, 1fr) minmax(36px, 70px) auto; align-items: center; gap: 8px; }
   .mac .rowx > span:nth-child(2) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .mac .val { white-space: nowrap; }
@@ -435,7 +474,7 @@
   .mac .val { text-align: right; font-variant-numeric: tabular-nums; }
   /* ask */
   .mac .field { display: flex; gap: 8px; }
-  .mac .field input { flex: 1; background: rgba(0,0,0,.25); border: 1px solid var(--sep); border-radius: 7px; color: var(--t1); padding: 6px 9px; font: inherit; }
+  .mac .field input { flex: 1; background: var(--field); border: 1px solid var(--sep); border-radius: 7px; color: var(--t1); padding: 6px 9px; font: inherit; }
   .mac .chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .mac .chips button { border: 0; background: var(--btn); border-radius: 6px; padding: 4px 9px; font-size: 11.5px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .mac .answer { display: grid; grid-template-columns: auto 1fr; gap: 8px; min-height: 58px; }
@@ -443,9 +482,9 @@
   .mac .spin { width: 12px; height: 12px; border: 2px solid var(--t3); border-top-color: transparent; border-radius: 50%; animation: spin .8s linear infinite; display: inline-block; vertical-align: -2px; margin-right: 6px; }
   @keyframes spin { to { transform: rotate(360deg); } }
   /* menu bar */
-  .mac .menubar { display: flex; align-items: center; justify-content: flex-end; gap: 16px; background: rgba(28,28,30,.96); border-radius: 8px; padding: 5px 12px; font-size: 13px; font-weight: 500; }
+  .mac .menubar { display: flex; align-items: center; justify-content: flex-end; gap: 16px; background: var(--menubar); border-radius: 8px; padding: 5px 12px; font-size: 13px; font-weight: 500; }
   .mac .menubar .item { display: inline-flex; align-items: center; gap: 5px; border: 0; background: none; padding: 2px 6px; border-radius: 5px; }
-  .mac .menubar .item[aria-expanded="true"] { background: rgba(255,255,255,.18); }
+  .mac .menubar .item[aria-expanded="true"] { background: rgba(var(--fg-rgb), .18); }
   .mac .menubar svg { width: 17px; height: 17px; }
   .mac .warnbanner { background: var(--card); border: 1px solid var(--card-line); border-radius: 10px; padding: 10px 11px; display: grid; grid-template-columns: auto 1fr; gap: 3px 8px; }
   .mac .warnbanner .tri { color: var(--warn); } .mac .warnbanner b { font-weight: 600; }
@@ -453,7 +492,7 @@
   .mac .result { color: var(--good); font-weight: 500; display: flex; gap: 6px; align-items: center; }
   /* alert sheet, as macOS draws NSAlert */
   .mac .alert { position: absolute; inset: 0; background: rgba(0,0,0,.45); border-radius: 16px; display: grid; place-items: center; z-index: 3; }
-  .mac .alert > div { width: min(270px, 88%); background: #323236; border: 1px solid rgba(255,255,255,.12); border-radius: 14px; padding: 18px 16px 14px; display: grid; gap: 6px; justify-items: center; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,.6); }
+  .mac .alert > div { width: min(270px, 88%); background: var(--panel); border: 1px solid rgba(var(--fg-rgb), .12); border-radius: 14px; padding: 18px 16px 14px; display: grid; gap: 6px; justify-items: center; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,.6); }
   .mac .alert img { width: 48px; height: 48px; }
   .mac .alert b { font-size: 13px; } .mac .alert p { margin: 0; font-size: 11px; color: var(--t2); }
   .mac .alert .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-top: 8px; }
@@ -472,19 +511,19 @@
   .mac .soon { font-size: 10px; font-weight: 600; color: var(--projects); background: rgba(90,209,240,.14); padding: 2px 7px; border-radius: 999px; margin-left: auto; }
   .mac .dim { opacity: .55; }
   /* history chart */
-  .mac .ranges { display: inline-flex; gap: 1px; background: rgba(255,255,255,.08); border-radius: 6px; padding: 1px; margin-left: auto; }
+  .mac .ranges { display: inline-flex; gap: 1px; background: rgba(var(--fg-rgb), .08); border-radius: 6px; padding: 1px; margin-left: auto; }
   .mac .ranges button { border: 0; background: none; border-radius: 5px; padding: 3px 7px; font-size: 10.5px; color: var(--t1); }
-  .mac .ranges button[aria-pressed="true"] { background: rgba(255,255,255,.18); }
+  .mac .ranges button[aria-pressed="true"] { background: rgba(var(--fg-rgb), .18); }
   .mac .chart { position: relative; }
   .mac .chart svg { width: 100%; height: 150px; display: block; }
   .mac .tip { position: absolute; top: 0; transform: translateX(-50%); background: #3a3a3e; border-radius: 6px; padding: 3px 7px; font-size: 11px; white-space: nowrap; pointer-events: none; }
   .mac .stats2 { display: flex; gap: 22px; } .mac .stats2 b { font-size: 15px; font-variant-numeric: tabular-nums; }
   /* guide */
   .mac .proc { display: grid; grid-template-columns: 18px 1fr 56px 74px 22px; gap: 8px; align-items: center; padding: 6px 4px; border-radius: 5px; font-size: 12.5px; }
-  .mac .proc:nth-child(even) { background: rgba(255,255,255,.03); }
+  .mac .proc:nth-child(even) { background: rgba(var(--fg-rgb), .03); }
   .mac .proc .more { border: 0; background: none; color: var(--t2); font-size: 15px; padding: 0; }
   .mac .proc[aria-current="true"] { background: rgba(31,169,204,.25); }
-  .mac .gpop { background: #323236; border: 1px solid rgba(255,255,255,.12); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; box-shadow: 0 16px 40px rgba(0,0,0,.5); }
+  .mac .gpop { background: var(--panel); border: 1px solid rgba(var(--fg-rgb), .12); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; box-shadow: 0 16px 40px rgba(0,0,0,.5); }
   .mac .gpop h4 { margin: 0; font-size: 13px; } .mac .gpop dt { font-size: 11px; font-weight: 600; color: var(--t2); } .mac .gpop dd { margin: 2px 0 0; font-size: 12px; }
   /* icon picker */
   .mac .picker { display: flex; gap: 14px; justify-content: center; }
@@ -510,6 +549,7 @@
     </nav>
     <div class="nav-right">
       <a class="left launching" href="/beta/"><span>Beta launching soon</span></a>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
       <a class="pillbtn primary small" href="#signup"><span>Get updates</span></a>
     </div>
   </div>
@@ -845,6 +885,7 @@
 
 <footer>
   <div class="wrap">
+    <!-- ask-ai --><div class="askai" role="group" aria-labelledby="askai-title"><div class="askai-text"><p class="askai-title" id="askai-title"><span aria-hidden="true">✦</span> Ask an AI about Bondi</p><details><summary>Opens with a question about what Bondi does and how it compares with Activity Monitor, iStat Menus, Stats and Vitals. See the question</summary><q>I&#039;m looking at Bondi, a Mac app from trybondi.app. In plain words: what does it do, who is it for, and how does it compare with Activity Monitor, iStat Menus, Stats and Vitals for working out why a Mac is slow? Read https://trybondi.app/, https://trybondi.app/llms.txt and https://trybondi.app/llms-full.txt first, and treat them as the main sources about Bondi.</q></details></div><nav class="askai-links" aria-label="Ask an AI about Bondi"><a href="https://chatgpt.com/?q=I%27m%20looking%20at%20Bondi%2C%20a%20Mac%20app%20from%20trybondi.app.%20In%20plain%20words%3A%20what%20does%20it%20do%2C%20who%20is%20it%20for%2C%20and%20how%20does%20it%20compare%20with%20Activity%20Monitor%2C%20iStat%20Menus%2C%20Stats%20and%20Vitals%20for%20working%20out%20why%20a%20Mac%20is%20slow%3F%20Read%20https%3A%2F%2Ftrybondi.app%2F%2C%20https%3A%2F%2Ftrybondi.app%2Fllms.txt%20and%20https%3A%2F%2Ftrybondi.app%2Fllms-full.txt%20first%2C%20and%20treat%20them%20as%20the%20main%20sources%20about%20Bondi." target="_blank" rel="noopener noreferrer">ChatGPT<span class="vh"> (opens in a new tab)</span></a><a href="https://claude.ai/new?q=I%27m%20looking%20at%20Bondi%2C%20a%20Mac%20app%20from%20trybondi.app.%20In%20plain%20words%3A%20what%20does%20it%20do%2C%20who%20is%20it%20for%2C%20and%20how%20does%20it%20compare%20with%20Activity%20Monitor%2C%20iStat%20Menus%2C%20Stats%20and%20Vitals%20for%20working%20out%20why%20a%20Mac%20is%20slow%3F%20Read%20https%3A%2F%2Ftrybondi.app%2F%2C%20https%3A%2F%2Ftrybondi.app%2Fllms.txt%20and%20https%3A%2F%2Ftrybondi.app%2Fllms-full.txt%20first%2C%20and%20treat%20them%20as%20the%20main%20sources%20about%20Bondi." target="_blank" rel="noopener noreferrer">Claude<span class="vh"> (opens in a new tab)</span></a><a href="https://www.perplexity.ai/search?q=I%27m%20looking%20at%20Bondi%2C%20a%20Mac%20app%20from%20trybondi.app.%20In%20plain%20words%3A%20what%20does%20it%20do%2C%20who%20is%20it%20for%2C%20and%20how%20does%20it%20compare%20with%20Activity%20Monitor%2C%20iStat%20Menus%2C%20Stats%20and%20Vitals%20for%20working%20out%20why%20a%20Mac%20is%20slow%3F%20Read%20https%3A%2F%2Ftrybondi.app%2F%2C%20https%3A%2F%2Ftrybondi.app%2Fllms.txt%20and%20https%3A%2F%2Ftrybondi.app%2Fllms-full.txt%20first%2C%20and%20treat%20them%20as%20the%20main%20sources%20about%20Bondi." target="_blank" rel="noopener noreferrer">Perplexity<span class="vh"> (opens in a new tab)</span></a><a href="https://www.google.com/search?udm=50&amp;q=I%27m%20looking%20at%20Bondi%2C%20a%20Mac%20app%20from%20trybondi.app.%20In%20plain%20words%3A%20what%20does%20it%20do%2C%20who%20is%20it%20for%2C%20and%20how%20does%20it%20compare%20with%20Activity%20Monitor%2C%20iStat%20Menus%2C%20Stats%20and%20Vitals%20for%20working%20out%20why%20a%20Mac%20is%20slow%3F%20Read%20https%3A%2F%2Ftrybondi.app%2F%2C%20https%3A%2F%2Ftrybondi.app%2Fllms.txt%20and%20https%3A%2F%2Ftrybondi.app%2Fllms-full.txt%20first%2C%20and%20treat%20them%20as%20the%20main%20sources%20about%20Bondi." target="_blank" rel="noopener noreferrer">Google AI Mode<span class="vh"> (opens in a new tab)</span></a><a href="https://grok.com/?q=I%27m%20looking%20at%20Bondi%2C%20a%20Mac%20app%20from%20trybondi.app.%20In%20plain%20words%3A%20what%20does%20it%20do%2C%20who%20is%20it%20for%2C%20and%20how%20does%20it%20compare%20with%20Activity%20Monitor%2C%20iStat%20Menus%2C%20Stats%20and%20Vitals%20for%20working%20out%20why%20a%20Mac%20is%20slow%3F%20Read%20https%3A%2F%2Ftrybondi.app%2F%2C%20https%3A%2F%2Ftrybondi.app%2Fllms.txt%20and%20https%3A%2F%2Ftrybondi.app%2Fllms-full.txt%20first%2C%20and%20treat%20them%20as%20the%20main%20sources%20about%20Bondi." target="_blank" rel="noopener noreferrer">Grok<span class="vh"> (opens in a new tab)</span></a></nav></div><!-- /ask-ai -->
     <div class="foot-cols">
       <div><a class="brand" href="#top"><img src="assets/icon-blue.png" width="26" height="26" alt="">Bondi</a><p>Bondi runs entirely on your Mac. No account, no analytics, and its AI never uploads anything.</p></div>
       <div><h4>Bondi</h4><ul><li><a href="#ai">On-device AI</a></li><li><a href="#app">Try it</a></li><li><a href="#features">Features</a></li><li><a href="#launch">Launch plans</a></li><li><a href="#pricing">Pricing</a></li></ul></div>
@@ -1126,11 +1167,11 @@
       area = runs.map(rn => `M${rn[0][0].toFixed(1)},${bottom} ` + rn.map(p => `L${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ') + ` L${rn[rn.length - 1][0].toFixed(1)},${bottom}Z`).join(' ');
       const sleeps = H.sleeps.filter(([a, b]) => b > start).map(([a, b]) => `<rect x="${Math.max(0, x(a)).toFixed(1)}" y="${top}" width="${Math.max(1, x(b) - Math.max(0, x(a))).toFixed(1)}" height="${bottom - top}" fill="#ffffff" opacity=".07"/>`).join('');
       const noData = H.first > start ? `<rect x="0" y="${top}" width="${x(H.first).toFixed(1)}" height="${bottom - top}" fill="url(#hatch)"/>` : '';
-      const grid = [0, 50, 100].map(v => `<line x1="0" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="#ffffff" stroke-opacity=".08" stroke-dasharray="3 3"/><text x="${W - 2}" y="${y(v) - 3}" text-anchor="end" fill="#8e8e93" font-size="9">${v}%</text>`).join('');
-      const ticks = [0.12, 0.37, 0.62, 0.87].map(f => `<text x="${f * W}" y="146" text-anchor="middle" fill="#8e8e93" font-size="9">${tick(start + f * r.span, r.span)}</text>`).join('');
-      svg.innerHTML = `<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#ffffff" stroke-opacity=".06" stroke-width="3"/></pattern></defs>`
+      const grid = [0, 50, 100].map(v => `<line x1="0" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="var(--t1)" stroke-opacity=".08" stroke-dasharray="3 3"/><text x="${W - 2}" y="${y(v) - 3}" text-anchor="end" fill="var(--t3)" font-size="9">${v}%</text>`).join('');
+      const ticks = [0.12, 0.37, 0.62, 0.87].map(f => `<text x="${f * W}" y="146" text-anchor="middle" fill="var(--t3)" font-size="9">${tick(start + f * r.span, r.span)}</text>`).join('');
+      svg.innerHTML = `<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="var(--t1)" stroke-opacity=".06" stroke-width="3"/></pattern></defs>`
         + noData + sleeps + grid + `<path d="${area}" fill="#3d8fe0" opacity=".18"/><path d="${path}" fill="none" stroke="#3d8fe0" stroke-width="1.5" vector-effect="non-scaling-stroke"/>` + ticks
-        + '<line data-cross x1="0" x2="0" y1="' + top + '" y2="' + bottom + '" stroke="#f2f2f2" stroke-opacity="0" />';
+        + '<line data-cross x1="0" x2="0" y1="' + top + '" y2="' + bottom + '" stroke="var(--t1)" stroke-opacity="0" />';
       const values = r.points.map(p => p[1]);
       $('[data-avg]').textContent = values.length ? (values.reduce((s, v) => s + v, 0) / values.length).toFixed(0) + '%' : '—';
       $('[data-peak]').textContent = values.length ? Math.max(...values).toFixed(0) + '%' : '—';
@@ -1241,9 +1282,9 @@
     };
     const svg = (name) => `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">${icon[name]}</svg>`;
     const tabs = [
-      ['overview', 'Overview', '#2cc0de'], ['cpu', 'CPU', '#4a90e2'], ['memory', 'Memory', '#9b7ae0'], ['disk', 'Disk', '#f2a57c'],
-      ['network', 'Network', '#8fcf4f'], ['gpu', 'GPU', '#e27aa0'], ['neural', 'Neural Engine', '#7b6cf6'], ['battery', 'Battery', '#5cc26a'],
-      ['sound', 'Sound', '#e0305a'], ['bluetooth', 'Bluetooth', '#4a90e2'], ['stack', 'Stack', '#2cc0de'],
+      ['overview', 'Overview', 'var(--m-overview)'], ['cpu', 'CPU', 'var(--m-cpu)'], ['memory', 'Memory', 'var(--m-memory)'], ['disk', 'Disk', 'var(--m-disk)'],
+      ['network', 'Network', 'var(--m-network)'], ['gpu', 'GPU', 'var(--m-gpu)'], ['neural', 'Neural Engine', 'var(--m-neural)'], ['battery', 'Battery', 'var(--m-battery)'],
+      ['sound', 'Sound', 'var(--m-sound)'], ['bluetooth', 'Bluetooth', 'var(--m-bluetooth)'], ['stack', 'Stack', 'var(--m-overview)'],
     ];
     const tint = Object.fromEntries(tabs.map(([k, , c]) => [k, c]));
 
@@ -1292,12 +1333,12 @@
     const ring = (parts, total, center, caption) => {
       let off = 0; const C = 2 * Math.PI * 38;
       const arcs = parts.map(([, val, col]) => { const len = (val / total) * C; const s = `<circle cx="48" cy="48" r="38" fill="none" stroke="${col}" stroke-width="12" stroke-dasharray="${Math.max(0, len - 2)} ${C}" stroke-dashoffset="${-off}" transform="rotate(-90 48 48)"/>`; off += len; return s; });
-      return `<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="38" fill="none" stroke="#3a3b40" stroke-width="12"/>${arcs.join('')}<text x="48" y="47" text-anchor="middle" fill="#f2f2f4" font-size="14" font-weight="700">${center}</text><text x="48" y="61" text-anchor="middle" fill="#9d9da5" font-size="9">${caption}</text></svg>`;
+      return `<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="38" fill="none" stroke="var(--w-track)" stroke-width="12"/>${arcs.join('')}<text x="48" y="47" text-anchor="middle" fill="var(--w-ink)" font-size="14" font-weight="700">${center}</text><text x="48" y="61" text-anchor="middle" fill="var(--w-soft)" font-size="9">${caption}</text></svg>`;
     };
     const legend = rows => `<ul>${rows.map(([n, val, col, txt]) => `<li><i style="background:${col}"></i><span>${n}</span><span>${txt}</span></li>`).join('')}</ul>`;
     const iconFile = { 'Google Chrome': 'chrome', 'Visual Studio Code': 'vscode', 'Safari': 'safari', 'Docker Desktop': 'docker', 'Notes': 'notes', 'Finder': 'finder', 'Music': 'music', 'zoom.us': 'zoom' };
     const appCell = a => iconFile[a.n] ? `<span class="w-app"><img src="assets/apps/${iconFile[a.n]}.png" alt="" style="width:18px;height:18px">${a.n}</span>`
-      : a.n === 'macOS' ? `<span class="w-app"><svg viewBox="0 0 20 20" style="width:18px;height:18px;color:#9d9da5" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3l7 3.5-7 3.5-7-3.5z"/><path d="M3 10l7 3.5 7-3.5M3 13.5L10 17l7-3.5"/></svg>${a.n}</span>`
+      : a.n === 'macOS' ? `<span class="w-app"><svg viewBox="0 0 20 20" style="width:18px;height:18px;color:var(--w-soft)" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3l7 3.5-7 3.5-7-3.5z"/><path d="M3 10l7 3.5 7-3.5M3 13.5L10 17l7-3.5"/></svg>${a.n}</span>`
       : `<span class="w-app"><i style="background:${a.c}">${a.n[0]}</i>${a.n}</span>`;
     const cpuOf = a => f1(a.cpu) + '%';
     const statusLines = [
@@ -1336,28 +1377,28 @@
           </div>`;
       },
       cpu: () => section('cpu', 'CPU', Math.round(v.cpu) + '<small>%</small>', 'Apple M1 Max', series.cpu, 100, ['Average', '17%', 'Peak', '51%'],
-        `<div class="w-h" style="color:#9d9da5;font-size:12px">Cores</div><div class="w-cores">${Array.from({ length: 10 }, (_, i) => `<div><i style="height:${Math.round(i < 2 ? rnd(35, 80) : Math.max(2, v.cpu * (1.5 - i * 0.14) + rnd(0, 8)))}%"></i></div>`).join('')}</div><div class="w-sub">2 efficiency · 8 performance</div>`,
+        `<div class="w-h" style="color:var(--w-soft);font-size:12px">Cores</div><div class="w-cores">${Array.from({ length: 10 }, (_, i) => `<div><i style="height:${Math.round(i < 2 ? rnd(35, 80) : Math.max(2, v.cpu * (1.5 - i * 0.14) + rnd(0, 8)))}%"></i></div>`).join('')}</div><div class="w-sub">2 efficiency · 8 performance</div>`,
         [['User', f1(v.cpu * 0.7) + '%'], ['System', f1(v.cpu * 0.3) + '%'], ['Load average', '2.70 3.42 4.33'], ['Uptime', '34d 13h'], ['Busiest', [...apps].sort((a, b) => b.cpu - a.cpu)[0].n]],
         ['% CPU', 'Last hour', 'Memory', 'Processes'], a => [cpuOf(a), area(a.hist, 24, 110, 16, tint.cpu, false), gb(a.mem), a.p], (a, b) => b.cpu - a.cpu),
       memory: () => section('memory', 'Memory', f1(v.mem) + '<small>GB</small>', 'of 64 GB used', series.mem, 64, ['Average', '33 GB', 'Peak', '54 GB'],
-        `<div class="w-h" style="color:#9d9da5;font-size:12px">By type · Pressure Normal</div>${membar(v.mem)}<div class="w-sub">App 38.56 · Wired 3.32 · Compressed 3.39 · Cached 16.81 GB</div>`,
+        `<div class="w-h" style="color:var(--w-soft);font-size:12px">By type · Pressure Normal</div>${membar(v.mem)}<div class="w-sub">App 38.56 · Wired 3.32 · Compressed 3.39 · Cached 16.81 GB</div>`,
         [['App Memory', '38.56 GB'], ['Wired Memory', '3.32 GB'], ['Compressed', '3.39 GB'], ['Cached Files', '16.81 GB'], ['Swap Used', '484.9 MB']],
         ['Memory', 'Last hour', 'Change', '% CPU'], a => [gb(a.mem), area(a.hist.map(x => x + a.mem), 30, 110, 16, tint.memory, false), '—', cpuOf(a)], (a, b) => b.mem - a.mem),
       disk: () => section('disk', 'Disk', '222<small>GB free</small>', 'of 995 GB · Macintosh HD', series.read, 18, ['Read', f1(v.read) + ' MB/s', 'Write', f1(v.write) + ' MB/s'],
-        `<div class="w-h" style="color:#9d9da5;font-size:12px">Startup disk</div><div class="w-fill" style="--tint:${tint.disk};height:12px"><i style="width:78%"></i></div><div class="w-sub">773 GB used · 78% full</div>`,
+        `<div class="w-h" style="color:var(--w-soft);font-size:12px">Startup disk</div><div class="w-fill" style="--tint:${tint.disk};height:12px"><i style="width:78%"></i></div><div class="w-sub">773 GB used · 78% full</div>`,
         [['Reading', f1(v.read) + ' MB/s'], ['Writing', f1(v.write) + ' MB/s'], ['Read today', '14.2 GB'], ['Written today', '6.8 GB'], ['Busiest', 'macOS']],
         ['Read', 'Write', 'Memory', 'Processes'], a => [f1(a.rd) + ' MB/s', f1(a.rd * 0.4) + ' MB/s', gb(a.mem), a.p], (a, b) => b.rd - a.rd),
       network: () => section('network', 'Network', rate(v.down).replace(' ', '<small>') + ' down</small>', rate(v.up) + ' up · Wi-Fi', series.down, 4200, ['Today', '2.13 GB', 'This week', '14.8 GB'],
-        `<div class="w-h" style="color:#9d9da5;font-size:12px">Wi-Fi</div><div class="w-sub">Home · 5 GHz · signal good</div>`,
+        `<div class="w-h" style="color:var(--w-soft);font-size:12px">Wi-Fi</div><div class="w-sub">Home · 5 GHz · signal good</div>`,
         [['Downloading', rate(v.down)], ['Uploading', rate(v.up)], ['Today', '2.13 GB'], ['This week', '14.8 GB'], ['Interface', 'Wi-Fi']], null),
       gpu: () => section('gpu', 'GPU', Math.round(v.gpu) + '<small>%</small>', 'Apple M1 Max · 24 cores', series.gpu, 100, ['Average', '31%', 'Peak', '77%'],
-        `<div class="w-h" style="color:#9d9da5;font-size:12px">Now</div><div class="w-fill" style="--tint:${tint.gpu};height:12px"><i style="width:${v.gpu}%"></i></div>`,
+        `<div class="w-h" style="color:var(--w-soft);font-size:12px">Now</div><div class="w-fill" style="--tint:${tint.gpu};height:12px"><i style="width:${v.gpu}%"></i></div>`,
         [['Utilization', Math.round(v.gpu) + '%'], ['Cores', '24'], ['Average today', '31%'], ['Peak today', '77%'], ['Chip', 'M1 Max']], null),
       neural: () => section('neural', 'Neural Engine', f2(v.ane) + '<small>W</small>', v.ane > 0.05 ? 'Working' : 'Idle', series.ane, 1.5, ['Peak', '1.40 W', 'Rated', '11 TOPS'],
-        `<div class="w-h" style="color:#9d9da5;font-size:12px">What uses it</div><div class="w-sub">Photos analysis, Live Text, dictation and Apple Intelligence run here.</div>`,
+        `<div class="w-h" style="color:var(--w-soft);font-size:12px">What uses it</div><div class="w-sub">Photos analysis, Live Text, dictation and Apple Intelligence run here.</div>`,
         [['Power', f2(v.ane) + ' W'], ['Cores', '16'], ['Rated', '11 TOPS'], ['State', v.ane > 0.05 ? 'Working' : 'Idle'], ['Chip', 'M1 Max']], null),
       battery: () => section('battery', 'Battery', Math.round(v.batt) + '<small>%</small>', 'On battery · 3h 31m left', series.batt, 100, ['Drawing', '11.8 W', 'Health', '86%'],
-        `<div class="w-h" style="color:#9d9da5;font-size:12px">Charge</div><div class="w-fill" style="--tint:${tint.battery};height:12px"><i style="width:${v.batt}%"></i></div><div class="w-sub">412 cycles · health 86%</div>`,
+        `<div class="w-h" style="color:var(--w-soft);font-size:12px">Charge</div><div class="w-fill" style="--tint:${tint.battery};height:12px"><i style="width:${v.batt}%"></i></div><div class="w-sub">412 cycles · health 86%</div>`,
         [['Time left', '3h 31m'], ['Drawing', '11.8 W'], ['Health', '86%'], ['Cycles', '412'], ['Busiest', [...apps].sort((a, b) => b.en - a.en)[0].n]],
         ['Energy', 'Last hour', 'Memory', '% CPU'], a => [f1(a.en) + ' W', area(a.hist, 24, 110, 16, tint.battery, false), gb(a.mem), cpuOf(a)], (a, b) => b.en - a.en),
       sound: () => `<div class="w-card" style="--tint:${tint.sound};min-height:0">${head('sound', 'Sound', 'MacBook Pro Speakers')}
@@ -1366,7 +1407,7 @@
       bluetooth: () => `<div class="w-card" style="--tint:${tint.bluetooth};min-height:0">${head('bluetooth', 'Bluetooth', '3 connected')}
           ${[['AirPods Pro', 'Left 80% · Right 75% · Case 60%'], ['Magic Keyboard', 'Battery 64%'], ['Magic Mouse', 'Battery 22%']].map(([n, d]) => `<div class="dev"><b>${n}</b><span class="w-sub">Connected</span><small>${d}</small></div>`).join('')}</div>`,
       stack: () => {
-        const group = (title, rows, note = '') => `<div class="w-h" style="font-size:12px;color:#9d9da5;margin-top:10px">${title}${note}</div>`
+        const group = (title, rows, note = '') => `<div class="w-h" style="font-size:12px;color:var(--w-soft);margin-top:10px">${title}${note}</div>`
           + rows.map(([n, d, action]) => `<div class="dev"><b>${n}</b><span class="w-sub">${action}</span><small>${d}</small></div>`).join('');
         const soon = ' <span style="font-size:10.5px;font-weight:600;color:#2cc0de;background:rgba(44,192,222,.14);padding:2px 7px;border-radius:999px;margin-left:6px">Coming soon</span>';
         return `<div class="w-card" style="--tint:${tint.stack};min-height:0">${head('stack', 'Stack', '4 servers · 3 containers · 1 model')}
@@ -1386,7 +1427,7 @@
         + [...apps].sort(sort).slice(0, 4).map(a => `<tr><td>${appCell(a)}</td>${cells(a).map(c => `<td>${c}</td>`).join('')}</tr>`).join('') + '</tbody></table></div>' : '';
       return `<div class="hero-row">
           <div class="hero-card" style="--tint:${tint[k]}"><div class="hl">${head(k, title)}<div><div class="w-big">${big}</div><div class="w-sub">${sub}</div></div>
-            <div class="w-sub">${pair[0]} <b style="color:#f2f2f4">${pair[1]}</b> · ${pair[2]} <b style="color:#f2f2f4">${pair[3]}</b></div></div>
+            <div class="w-sub">${pair[0]} <b style="color:var(--w-ink)">${pair[1]}</b> · ${pair[2]} <b style="color:var(--w-ink)">${pair[3]}</b></div></div>
             <div><div class="ranges">${ranges}</div>${area(data, max, 600, 160, tint[k])}</div></div>
           <div class="side" style="--tint:${tint[k]}">${side}</div></div>
         <div class="stats">${stats.map(([l, val]) => `<div class="stat"><div>${l}</div><b>${val}</b></div>`).join('')}</div>${table}`;
