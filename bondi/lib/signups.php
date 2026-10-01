@@ -1,6 +1,24 @@
 <?php
 // The website's "Sign up for updates" list: name, email, IP address and country.
 
+/** True once sql/005_signup_page.sql has been imported (signups.page exists). */
+function signups_have_page(): bool
+{
+    static $has = null;
+    return $has ??= one("SHOW COLUMNS FROM signups LIKE 'page'") !== null;
+}
+
+/**
+ * The real numbers for the beta page: everyone on the update list, and those who signed up on the beta page
+ * (null until sql/005 is imported).
+ */
+function interest_counts(): array
+{
+    $total = (int)one('SELECT COUNT(*) AS n FROM signups')['n'];
+    $beta = signups_have_page() ? (int)one("SELECT COUNT(*) AS n FROM signups WHERE page = 'beta'")['n'] : null;
+    return ['signups' => $total, 'beta' => $beta];
+}
+
 /** The visitor's IP address. Behind a CDN, set `client_ip_header` in config.php (e.g. HTTP_CF_CONNECTING_IP). */
 function signup_ip(): string
 {

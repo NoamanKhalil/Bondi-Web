@@ -12,7 +12,9 @@
 //   POST deactivate   free this Mac's license, to move it to another Mac
 //   POST recover      email a new key to the buyer's address
 //   POST paddle       Paddle's payment and refund notifications
-//   POST signup       the website's "Sign up for updates": name and email (plus the visitor's IP and country)
+//   POST signup       the website's "Sign up for updates": name and email (plus the visitor's IP and country),
+//                     and page: "beta" from the beta page
+//   GET  interest     how many people have signed up, and how many on the beta page (shown on that page)
 
 // The private code lives beside public_html (best) or inside it as public_html/bondi, locked by its .htaccess.
 require is_file(dirname(__DIR__, 2) . '/bondi/bootstrap.php') ? dirname(__DIR__, 2) . '/bondi/bootstrap.php' : dirname(__DIR__) . '/bondi/bootstrap.php';
@@ -32,6 +34,7 @@ try {
         'recover' => recover(),
         'paddle' => paddle(),
         'signup' => signup(),
+        'interest' => interest(),
         default => fail('not_found', 'Unknown API call.', 404),
     };
 } catch (Throwable $error) {
@@ -199,6 +202,11 @@ function paddle(): never
     }
 }
 
+function interest(): never
+{
+    json_out(interest_counts());
+}
+
 function signup(): never
 {
     require_post();
@@ -218,9 +226,19 @@ function signup(): never
     limit_or_fail('signup:' . client_key(), 10, 3600);
     $timeZone = mb_substr(trim((string)(input()['time_zone'] ?? '')), 0, 64) ?: null;
     [$country, $source] = signup_country($timeZone);
-    run('INSERT INTO signups (email, name, ip, country, country_source, time_zone) VALUES (?, ?, ?, ?, ?, ?)
-         ON DUPLICATE KEY UPDATE name = VALUES(name), ip = VALUES(ip), country = VALUES(country),
-             country_source = VALUES(country_source), time_zone = VALUES(time_zone), updated_at = CURRENT_TIMESTAMP',
-        [$email, $name, signup_ip(), $country, $source, $timeZone]);
+    $values = [$email, $name, signup_ip(), $country, $source, $timeZone];
+    if (signups_have_page()) {
+        // Someone who ever signed up on the beta page stays marked as beta.
+        run("INSERT INTO signups (email, name, ip, country, country_source, time_zone, page) VALUES (?, ?, ?, ?, ?, ?, ?)
+             ON DUPLICATE KEY UPDATE name = VALUES(name), ip = VALUES(ip), country = VALUES(country),
+                 country_source = VALUES(country_source), time_zone = VALUES(time_zone),
+                 page = IF(VALUES(page) = 'beta', 'beta', page), updated_at = CURRENT_TIMESTAMP",
+            [...$values, (input()['page'] ?? '') === 'beta' ? 'beta' : 'home']);
+    } else {
+        run('INSERT INTO signups (email, name, ip, country, country_source, time_zone) VALUES (?, ?, ?, ?, ?, ?)
+             ON DUPLICATE KEY UPDATE name = VALUES(name), ip = VALUES(ip), country = VALUES(country),
+                 country_source = VALUES(country_source), time_zone = VALUES(time_zone), updated_at = CURRENT_TIMESTAMP',
+            $values);
+    }
     json_out($done);
 }

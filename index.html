@@ -111,7 +111,7 @@
   .hero h1 { max-width: 16ch; }
   .hero .sub { max-width: 40rem; }
   .facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px; color: var(--soft); font-size: 0.9rem; }
-  .facts span + span::before { content: "·"; margin-right: 12px; color: var(--faint); }
+  .facts > * + *::before { content: "·"; margin-right: 12px; color: var(--faint); display: inline-block; }
   .facts .hot { color: var(--attention); }
   .hero-for { margin: 0 0 -6px; font-size: 1.3rem; font-weight: 600; letter-spacing: -0.01em; color: var(--bondi-ink); }
   .facts .launching { color: var(--bondi-ink); font-weight: 500; }
@@ -509,7 +509,7 @@
       <a href="#faq">FAQ</a>
     </nav>
     <div class="nav-right">
-      <span class="left launching"><span>Beta launching soon</span></span>
+      <a class="left launching" href="/beta/"><span>Beta launching soon</span></a>
       <a class="pillbtn primary small" href="#signup"><span>Get updates</span></a>
     </div>
   </div>
@@ -526,7 +526,7 @@
         <a class="pillbtn primary" href="#app">Try it below</a>
         <a class="pillbtn secondary" href="#signup">Get updates</a>
       </div>
-      <p class="facts"><span class="launching">Beta launching soon</span><span>Full launch soon after</span><span>macOS 15 or later</span></p>
+      <p class="facts"><a class="launching" href="/beta/">Beta launching soon: join it</a><span>Full launch soon after</span><span>macOS 15 or later</span></p>
     </section>
 
     <section class="appshow" id="app" aria-label="Bondi's main window, running on made-up numbers">
@@ -830,7 +830,7 @@
     <section class="sec" id="faq" aria-labelledby="faq-title">
       <div class="sec-head center"><h2 id="faq-title">Questions</h2></div>
       <div class="faq">
-        <details><summary>When can I get Bondi?</summary><p>The beta is launching soon, and the full launch follows soon after. You'll be able to buy a license at full launch. <a href="#signup">Sign up for updates</a> to hear first.</p></details>
+        <details><summary>When can I get Bondi?</summary><p>The beta is launching soon, and the full launch follows soon after. You'll be able to buy a license at full launch. <a href="/beta/">Join the beta</a> to try it first, or <a href="#signup">sign up for updates</a>.</p></details>
         <details><summary>Which AI does Bondi use?</summary><p>On Macs with Apple Intelligence (macOS 26, Apple silicon), Apple's on-device foundation model, built into macOS. Other Macs can download a small free open model (Qwen2.5 0.5B) from Bondi's Settings; nothing downloads unless you press Download. Either way it runs on your Mac.</p></details>
         <details><summary>Does my data leave my Mac?</summary><p>No. History stays in a file on your Mac, and the AI runs on your Mac. Bondi only contacts our server to check your trial or license, and to look for updates. See the <a href="/privacy/">privacy policy</a>.</p></details>
         <details><summary>Which Macs does it run on?</summary><p>Any Mac with macOS 15 or later, Apple silicon or Intel.</p></details>
