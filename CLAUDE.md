@@ -39,7 +39,7 @@ The owner reviews the site as a private claude.ai artifact: **https://claude.ai/
 ## AI assistants and search
 
 - `llms.txt` (short) and `llms-full.txt` (everything, with the app's 125 process notes). Rebuild `llms-full.txt` with `php dev/build-llms-full.php` when the site's facts or `../TryBondi/Bondi/Resources/ProcessGuide.json` change.
-- "Ask an AI about Bondi" at the top of every footer: plain links (ChatGPT, Claude, Perplexity, Google AI Mode, Grok) that open with a prepared question. The question and the list live in `dev/ask-ai.php`; run it to update every page.
+- "Ask AI about Bondi" in every footer (a column with logos and names on the homepage, a row of logos elsewhere): plain links to ChatGPT, Claude, Perplexity, Google AI Mode and Grok that open with a prepared question. The question and the list live in `dev/ask-ai.php`; run it to update every page. Logos: `dev/ai-logos` (Lobe Icons, MIT), drawn inline.
 - Competitors named (owner): Activity Monitor, iStat Menus, Stats and Vitals. Re-check what's said about them, and that each Ask-AI link still opens its assistant, every few months.
 - Guide pages (process pages from the app's guide, topic guides, comparisons): later, one page at a time, as the owner decides.
 

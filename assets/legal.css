@@ -33,11 +33,11 @@ header nav { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 0; }
 .theme-toggle .moon { fill: currentColor; stroke: none; }
 :root[data-theme="dark"] .theme-toggle .moon, :root:not([data-theme="dark"]) .theme-toggle .sun { display: none; }
 
-/* Ask an AI about Bondi */
-.askai { flex-basis: 100%; display: grid; gap: 10px; padding: 16px 18px; margin-bottom: 8px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
-.askai-title { margin: 0; font-weight: 600; color: var(--ink); } .askai-title span { color: var(--bondi); }
-.askai summary { cursor: pointer; font-size: .85rem; } .askai q { display: block; margin-top: 8px; font-style: italic; quotes: none; }
-.askai-links { display: flex; flex-wrap: wrap; gap: 8px; }
-.askai-links a { padding: 6px 13px; border-radius: 980px; border: 1px solid var(--line); color: var(--bondi); text-decoration: none; font-size: .88rem; }
-.askai-links a:hover { border-color: var(--bondi); }
+/* Ask AI about Bondi (dev/ask-ai.php): a row of logos in the footer line */
+.askai-row { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.askai-label { margin-right: 4px; cursor: help; }
+.askai-row a { width: 30px; height: 30px; display: inline-grid; place-items: center; border-radius: 50%; border: 1px solid var(--line); color: var(--soft); }
+.askai-row a:hover { color: var(--ink); border-color: var(--bondi); text-decoration: none; }
+.askai-row .ai-logo { width: 15px; height: 15px; }
+footer { align-items: center; } .askai-row { margin-left: auto; }
 .vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
