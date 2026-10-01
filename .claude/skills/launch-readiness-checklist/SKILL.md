@@ -1,6 +1,6 @@
 ---
 name: launch-readiness-checklist
-description: Use before shipping a website or web app to production, or to re-audit one that is already live. Works out the site's stack and what it actually does (accounts, payments, email, user-submitted content, analytics), asks the user for the business facts it needs (domain, legal entity, analytics IDs, policies), then audits and fixes only the items that apply — legal pages and claims accuracy, consent, SEO tags/canonical/robots/sitemap/llms.txt/Open Graph/structured data, favicon and manifest, custom 404, accessibility and mobile, form states, analytics, security headers, exposed files, abuse protection, email authentication, payment terms, and backups/monitoring. Each item is explained in plain language so a developer or non-technical founder learns what it is and why it matters, not just whether it's done. Trigger on requests like "is this ready to launch", "pre-launch audit", "SEO checklist", or "go-live checklist".
+description: Use before shipping a website or web app to production, or to re-audit one that is already live. Works out the site's stack and what it actually does (accounts, payments, email, user-submitted content, analytics), asks the user for the business facts it needs (domain, legal entity, analytics IDs, policies), then audits and fixes only the items that apply — legal pages and claims accuracy, consent, SEO tags/canonical/robots/sitemap/llms.txt/Open Graph/structured data, "Ask AI" links and guide pages, favicon and manifest, custom 404, accessibility and mobile, form states, analytics, security headers, exposed files, abuse protection, email authentication, payment terms, and backups/monitoring. Each item is explained in plain language so a developer or non-technical founder learns what it is and why it matters, not just whether it's done. Trigger on requests like "is this ready to launch", "pre-launch audit", "SEO checklist", or "go-live checklist".
 ---
 
 # Launch Readiness Checklist
@@ -161,6 +161,9 @@ fix, and don't skip silently.
 - **Accepts user-submitted content or URLs:** T5.6 applies.
 - **Docs or developer site:** in T2.11, also consider `llms-full.txt` and
   per-page `.md` versions.
+- **A product people compare or ask assistants about:** T2.12 applies.
+- **A topic searched in many specific ways** (troubleshooting, alternatives,
+  comparisons): T2.13 applies.
 
 ## 4. The checklist, by priority tier
 
@@ -511,6 +514,56 @@ shared or clicked.
   Drop sections that don't apply. Docs-heavy sites can also publish
   `llms-full.txt` (full content concatenated) and `.md` versions of pages,
   linked from `llms.txt`; that's N/A for small marketing sites.
+
+**T2.12 "Ask AI about <product>" links** *(conditional: a product people compare
+or ask assistants about; recommended, never launch-blocking)*
+- *What it is:* a row of plain links, usually at the top of the footer, that open
+  ChatGPT, Claude, Perplexity, Google's AI Mode and Grok with a question already
+  typed: what the product is, how it compares with the obvious alternatives, and
+  which pages to read first (the site, `llms.txt`, `llms-full.txt`). Sometimes
+  called generative engine optimization (GEO).
+- *Why it matters:* more people now ask an assistant before they search. A
+  prepared question gets a fairer, better-sourced answer than a cold one, and
+  each click is a visitor who is already curious. Be honest about the limits:
+  it only steers that one conversation (the assistant still decides what to
+  say), it's not a ranking signal, and it's only as good as the pages it points
+  to, so `llms.txt`/`llms-full.txt` must be accurate first (T2.11, T1.8).
+- *Check:* each link opens the right service with the question filled in
+  (`https://chatgpt.com/?q=`, `https://claude.ai/new?q=`,
+  `https://www.perplexity.ai/search?q=`, `https://www.google.com/search?udm=50&q=`,
+  `https://grok.com/?q=`; these URL formats change, so open each one before
+  launch). The question names only real alternatives and asks for a fair
+  comparison rather than a verdict. The links carry no tracking parameters
+  and nothing loads from those services until someone clicks (the privacy
+  policy shouldn't need to change). Each has a text label and opens in a
+  new tab with `rel="noopener"`.
+- *Fix:* write the question in the product's own words, keep it short enough to
+  read in the address bar, URL-encode it, and show the question on hover or
+  beside the links so people know what they're sending. Don't copy another
+  product's wording or layout for this.
+
+**T2.13 Guide pages and internal links** *(conditional: a topic people search
+for in many specific ways; never launch-blocking)*
+- *What it is:* a set of focused pages, each answering one real search
+  ("what is kernel_task", "Activity Monitor alternatives", "<product> vs <rival>"),
+  often generated from one structured source (programmatic SEO), linked together
+  and from a "Guides" column in the footer so every page links to them.
+- *Why it matters:* each page can rank for its own question, and footer links
+  spread the site's authority to all of them and show search engines the site
+  covers the whole topic. The risk is real: search engines treat many thin,
+  near-identical pages made mainly to rank as spam ("scaled content abuse") and
+  can demote the whole site.
+- *Check:* every guide page answers its question with information that is
+  specific to it (not a template with one word swapped) and is true;
+  comparison pages are fair, dated, name their sources, and are re-checked when
+  the other product changes (T1.8); each page has its own title, description,
+  canonical, and is in the sitemap; pages link to each other and back to the
+  product; nothing is generated faster than it can be reviewed.
+- *Fix:* start from data the product already has (its own help text, a
+  glossary, real measurements) rather than writing filler. Ship a small set of
+  strong pages first, add more as they prove useful, and add a "Guides" column
+  to the footer. Draft comparisons for the human to review before publishing,
+  never from memory.
 
 ### Tier 3 — Conversion & UX
 
