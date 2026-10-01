@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Join the Bondi beta</title>
+<meta name="description" content="Your Mac has been trying to tell you something. Bondi explains why it's slow in one plain sentence, written on your Mac. Join the beta.">
+<link rel="canonical" href="https://trybondi.app/beta/">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Bondi">
+<meta property="og:url" content="https://trybondi.app/beta/">
+<meta property="og:title" content="Join the Bondi beta">
+<meta property="og:description" content="Your Mac has been trying to tell you something. Bondi lets it. Be one of the first.">
+<meta property="og:image" content="https://trybondi.app/assets/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  /* The homepage's colours: Bondi Blue on Apple's greys, light and dark */
+  :root {
+    color-scheme: light dark;
+    --ground: #f5f5f7; --tile: #ffffff; --ink: #1d1d1f; --soft: #6e6e73; --faint: #86868b; --line: #d2d2d7;
+    --bondi: #0095b6; --bondi-ink: #00708a; --bondi-soft: rgba(0, 149, 182, 0.12); --on-bondi: #ffffff;
+    --attention: #bf5b00; --glass: rgba(245, 245, 247, 0.72);
+    --sea-1: rgba(0, 149, 182, 0.10); --sea-2: rgba(0, 149, 182, 0.16); --sea-3: rgba(0, 149, 182, 0.26);
+    --glow: rgba(44, 192, 222, 0.30);
+    --shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.35), 0 8px 20px -12px rgba(0, 0, 0, 0.18);
+    --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #131315; --tile: #161617; --ink: #f5f5f7; --soft: #a1a1a6; --faint: #86868b; --line: #2c2c2e;
+      --bondi: #2cc0de; --bondi-ink: #5fd4ea; --bondi-soft: rgba(44, 192, 222, 0.14); --on-bondi: #031418;
+      --attention: #ff9f0a; --glass: rgba(19, 19, 21, 0.72);
+      --sea-1: rgba(44, 192, 222, 0.07); --sea-2: rgba(44, 192, 222, 0.12); --sea-3: rgba(44, 192, 222, 0.22);
+      --glow: rgba(44, 192, 222, 0.28);
+      --shadow: 0 30px 70px -24px rgba(0, 0, 0, 0.9), 0 12px 24px -12px rgba(0, 0, 0, 0.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #131315; --tile: #161617; --ink: #f5f5f7; --soft: #a1a1a6; --faint: #86868b; --line: #2c2c2e;
+    --bondi: #2cc0de; --bondi-ink: #5fd4ea; --bondi-soft: rgba(44, 192, 222, 0.14); --on-bondi: #031418;
+    --attention: #ff9f0a; --glass: rgba(19, 19, 21, 0.72);
+    --sea-1: rgba(44, 192, 222, 0.07); --sea-2: rgba(44, 192, 222, 0.12); --sea-3: rgba(44, 192, 222, 0.22);
+    --glow: rgba(44, 192, 222, 0.28);
+    --shadow: 0 30px 70px -24px rgba(0, 0, 0, 0.9), 0 12px 24px -12px rgba(0, 0, 0, 0.6);
+  }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; scroll-padding-top: 56px; }
+  body { margin: 0; background: var(--ground); color: var(--ink); font: 17px/1.47 var(--sans); letter-spacing: -0.012em; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+  a { color: var(--bondi-ink); text-decoration: none; } a:hover { text-decoration: underline; }
+  :focus-visible { outline: 3px solid var(--bondi); outline-offset: 3px; border-radius: 8px; }
+  h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; }
+  p { margin: 0; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding-inline: 22px; }
+  .vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .eyebrow { font-size: 1.15rem; font-weight: 600; color: var(--bondi-ink); letter-spacing: -0.01em; }
+  .pillbtn { display: inline-flex; align-items: center; justify-content: center; border-radius: 980px; padding: 12px 24px; font: 500 1.05rem/1.2 var(--sans); letter-spacing: -0.01em; border: 1px solid transparent; cursor: pointer; }
+  .pillbtn.primary { background: var(--bondi); color: var(--on-bondi); } .pillbtn.primary:hover { background: var(--bondi-ink); text-decoration: none; }
+  .pillbtn.secondary { color: var(--bondi-ink); border-color: var(--bondi); } .pillbtn.secondary:hover { background: var(--bondi-soft); text-decoration: none; }
+  .pillbtn.small { padding: 5px 13px; font-size: 0.78rem; }
+
+  /* Navigation: glass, like the homepage */
+  header.nav { position: sticky; top: 0; z-index: 20; background: var(--glass); backdrop-filter: saturate(1.8) blur(20px); -webkit-backdrop-filter: saturate(1.8) blur(20px);
+    border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent); }
+  .nav-inner { max-width: 1080px; margin: 0 auto; padding: 10px 22px; display: flex; align-items: center; gap: 18px; font-size: 0.8rem; }
+  .brand { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); font-weight: 600; font-size: 1rem; } .brand:hover { text-decoration: none; }
+  .brand img { width: 26px; height: 26px; }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 16px; } .nav-right > a:not(.pillbtn) { color: var(--soft); }
+
+  /* Hero: the icon builds itself, strains, then the water comes in and it settles */
+  .hero { position: relative; min-height: min(100svh, 980px); display: grid; align-content: center; justify-items: center; text-align: center; gap: 20px; padding: 40px 22px 150px; isolation: isolate; }
+  .hero::before { content: ""; position: absolute; inset: 0; z-index: -2; background: radial-gradient(60% 46% at 50% 34%, var(--bondi-soft), transparent 70%); }
+  .stage { position: relative; width: clamp(150px, 22vw, 200px); aspect-ratio: 1; cursor: pointer; border: 0; padding: 0; background: none; border-radius: 26%; }
+  .stage::before { content: ""; position: absolute; inset: -30%; z-index: -1; border-radius: 50%; background: radial-gradient(closest-side, var(--glow), transparent); animation: breathe 6s ease-in-out 3.4s infinite; }
+  .stage svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  .hero h1 { font-size: clamp(2.5rem, 6.2vw, 4.6rem); line-height: 1.04; font-weight: 700; letter-spacing: -0.04em; max-width: 18ch; }
+  .hero .sub { font-size: clamp(1.15rem, 2.2vw, 1.5rem); line-height: 1.35; color: var(--soft); font-weight: 500; letter-spacing: -0.02em; max-width: 34rem; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: 6px; }
+  .grad { background: linear-gradient(100deg, var(--bondi) 10%, var(--bondi-ink) 50%, var(--bondi) 90%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+  #icon .needle, #icon .progress, #icon .track { transform-box: view-box; transform-origin: 512px 512px; }
+  #icon .progress { stroke-dasharray: 100; stroke-dashoffset: 35; stroke: #fff; }
+  #icon .track { stroke-dasharray: 100; stroke-dashoffset: 0; }
+  @keyframes tile   { 0% { transform: scale(.82); opacity: 0; } 20% { transform: scale(1.03); opacity: 1; } 27%, 100% { transform: scale(1); opacity: 1; } }
+  @keyframes track  { 0%, 10% { stroke-dashoffset: 100; opacity: 0; } 11% { opacity: 1; } 31%, 100% { stroke-dashoffset: 0; opacity: 1; } }
+  @keyframes strain { 0%, 29% { stroke-dashoffset: 100; opacity: 0; stroke: #fff; } 30% { stroke-dashoffset: 100; opacity: 1; stroke: #fff; }
+                      45% { stroke: #fff; } 59% { stroke-dashoffset: 0; stroke: #ffb340; } 69% { stroke-dashoffset: 0; stroke: #ffb340; }
+                      100% { stroke-dashoffset: 35; stroke: #fff; opacity: 1; } }
+  @keyframes needle { 0%, 29% { transform: rotate(-175deg); opacity: 0; } 30% { transform: rotate(-175deg); opacity: 1; animation-timing-function: cubic-bezier(.55, 0, .9, .4); }
+                      59% { transform: rotate(95deg); } 62% { transform: rotate(88deg); } 65% { transform: rotate(95deg); } 68% { transform: rotate(90deg); }
+                      70% { transform: rotate(95deg); animation-timing-function: cubic-bezier(.2, .7, .3, 1); } 92% { transform: rotate(-5deg); } 100% { transform: rotate(0); opacity: 1; } }
+  @keyframes fadein { 0%, 29% { opacity: 0; } 32%, 100% { opacity: 1; } }
+  @keyframes rise   { 0%, 66% { transform: translateY(230px); } 100% { transform: translateY(0); } }
+  @keyframes drift  { to { transform: translateX(-240px); } }
+  @keyframes breathe { 0%, 100% { transform: scale(1); opacity: .85; } 50% { transform: scale(1.08); opacity: 1; } }
+  @keyframes up     { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+  .play #icon .tile  { animation: tile 3.4s cubic-bezier(.2, .8, .2, 1) both; transform-box: view-box; transform-origin: 512px 512px; }
+  .play #icon .track { animation: track 3.4s ease-out both; }
+  .play #icon .progress { animation: strain 3.4s cubic-bezier(.45, 0, .2, 1) both; }
+  .play #icon .needle { animation: needle 3.4s both; }
+  .play #icon .hub { animation: fadein 3.4s both; }
+  .play #icon .water { animation: rise 3.4s cubic-bezier(.2, .8, .25, 1) both; }
+  #icon .wave-back { animation: drift 9s linear infinite; } #icon .wave-front { animation: drift 6s linear infinite reverse; }
+  .play .hero .in-1 { animation: up .9s cubic-bezier(.2, .8, .2, 1) 1.9s both; }
+  .play .hero .in-2 { animation: up .9s cubic-bezier(.2, .8, .2, 1) 2.05s both; }
+  .play .hero .in-3 { animation: up .9s cubic-bezier(.2, .8, .2, 1) 2.2s both; }
+  .play .hero .in-4 { animation: up .9s cubic-bezier(.2, .8, .2, 1) 2.35s both; }
+
+  /* The sea along the bottom of the hero */
+  .sea { position: absolute; left: 0; right: 0; bottom: 0; height: 140px; z-index: -1; overflow: hidden; pointer-events: none; }
+  .sea svg { position: absolute; bottom: 0; left: 0; width: 200%; height: 100%; }
+  .sea .l1 { animation: sea 26s linear infinite; } .sea .l2 { animation: sea 19s linear infinite reverse; } .sea .l3 { animation: sea 14s linear infinite; }
+  @keyframes sea { to { transform: translateX(-50%); } }
+
+  /* Sections */
+  section.block { padding-block: clamp(64px, 9vw, 112px); }
+  .center { text-align: center; margin-inline: auto; }
+  h2 { font-size: clamp(2.2rem, 5.4vw, 3.8rem); line-height: 1.06; font-weight: 700; letter-spacing: -0.035em; }
+  .lede { font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.4; color: var(--soft); font-weight: 500; letter-spacing: -0.02em; max-width: 40rem; }
+
+  /* The count: big and bold */
+  .count { text-align: center; display: grid; justify-items: center; gap: 14px; }
+  .live { display: inline-flex; align-items: center; gap: 8px; font-size: .85rem; font-weight: 600; color: var(--bondi-ink); text-transform: uppercase; letter-spacing: .08em; }
+  .live::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--bondi); box-shadow: 0 0 0 0 var(--glow); animation: ping 2s ease-out infinite; }
+  @keyframes ping { 0% { box-shadow: 0 0 0 0 var(--glow); } 100% { box-shadow: 0 0 0 12px transparent; } }
+  .big { font: 800 clamp(5.5rem, 22vw, 15rem)/.9 var(--display); letter-spacing: -0.06em; font-variant-numeric: tabular-nums;
+    background: linear-gradient(180deg, var(--ink) 30%, var(--bondi) 110%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .count .what { font: 700 clamp(1.5rem, 3.6vw, 2.5rem)/1.15 var(--display); letter-spacing: -0.03em; max-width: 22ch; }
+  .beta-pill { display: inline-flex; align-items: baseline; gap: 10px; margin-top: 10px; padding: 14px 26px; border-radius: 980px; background: var(--bondi-soft); color: var(--bondi-ink); font-size: 1.15rem; font-weight: 600; }
+  .beta-pill b { font: 800 1.9rem/1 var(--display); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+
+  /* You know the feeling */
+  .moments { list-style: none; margin: 56px auto 0; padding: 0; display: grid; gap: 14px; max-width: 760px; }
+  .moments li { background: var(--tile); border-radius: 22px; padding: 26px 30px; font: 600 clamp(1.25rem, 2.6vw, 1.75rem)/1.25 var(--display); letter-spacing: -0.025em; box-shadow: var(--shadow); display: flex; gap: 18px; align-items: center; text-align: left; }
+  .moments .mi { flex: none; width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; background: var(--bondi-soft); color: var(--bondi-ink); }
+  .moments li:nth-child(2) { margin-left: clamp(0px, 6vw, 70px); } .moments li:nth-child(3) { margin-left: clamp(0px, 12vw, 140px); }
+  .turn { margin-top: 56px; font: 600 clamp(1.3rem, 2.6vw, 1.8rem)/1.3 var(--display); letter-spacing: -0.025em; color: var(--soft); }
+  .turn b { color: var(--ink); }
+
+  /* Bondi tells you why */
+  .why { margin: 48px auto 0; max-width: 720px; background: var(--tile); border-radius: 26px; padding: 30px 34px; box-shadow: var(--shadow); text-align: left; border: 1px solid color-mix(in srgb, var(--bondi) 30%, transparent); }
+  .why .who { display: flex; align-items: center; gap: 10px; color: var(--soft); font-size: .9rem; font-weight: 600; }
+  .why .who img { width: 28px; height: 28px; }
+  .why p.say { margin-top: 16px; font: 600 clamp(1.3rem, 2.8vw, 1.85rem)/1.32 var(--display); letter-spacing: -0.025em; min-height: 2.64em; }
+  .why .spark { color: var(--bondi); margin-right: 6px; }
+  .why .caret { display: inline-block; width: 2px; height: 1.05em; vertical-align: -0.15em; margin-left: 2px; background: var(--bondi); animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .why small { display: block; margin-top: 16px; color: var(--faint); font-size: .85rem; }
+
+  /* Help shape it */
+  .perks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 56px; }
+  .perk { background: var(--tile); border-radius: 22px; padding: 28px; box-shadow: var(--shadow); text-align: left; }
+  .perk .ic { width: 44px; height: 44px; border-radius: 12px; background: var(--bondi-soft); color: var(--bondi-ink); display: grid; place-items: center; margin-bottom: 18px; }
+  .perk h3 { font-size: 1.3rem; letter-spacing: -0.02em; } .perk p { margin-top: 8px; color: var(--soft); }
+
+  /* Join */
+  .join { position: relative; max-width: 720px; margin: 0 auto; background: var(--tile); border-radius: 32px; padding: clamp(32px, 6vw, 56px); text-align: center; display: grid; gap: 12px; box-shadow: var(--shadow); overflow: hidden; isolation: isolate; }
+  .join::after { content: ""; position: absolute; left: -10%; right: -10%; bottom: -60%; height: 60%; z-index: -1; border-radius: 45% 55% 0 0; background: linear-gradient(180deg, var(--sea-3), var(--sea-2)); transition: bottom 1.4s cubic-bezier(.2, .8, .2, 1); }
+  .join.done::after { bottom: -28%; }
+  .join h2 { font-size: clamp(2.2rem, 5vw, 3.2rem); }
+  .join .lede { margin: 0 auto; }
+  .fields { display: grid; grid-template-columns: 1fr 1.3fr auto; gap: 10px; margin-top: 18px; }
+  .fields input { font: inherit; font-size: 1rem; padding: 13px 18px; border-radius: 14px; border: 1px solid var(--line); background: var(--ground); color: var(--ink); min-width: 0; width: 100%; }
+  .fields input:focus { outline: 3px solid var(--bondi-soft); border-color: var(--bondi); }
+  .fields input[aria-invalid="true"] { border-color: var(--attention); }
+  .fields button { position: relative; } .fields button[disabled] { opacity: .6; cursor: default; }
+  .msg { min-height: 1.5em; font-weight: 600; } .msg.ok { color: var(--bondi-ink); font-size: 1.25rem; } .msg.err { color: var(--attention); }
+  .fine { font-size: .8rem; color: var(--faint); }
+  .ripple { position: absolute; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--bondi); pointer-events: none; transform: translate(-50%, -50%); animation: ripple 1.2s ease-out forwards; }
+  @keyframes ripple { to { width: 900px; height: 900px; opacity: 0; } }
+  .closing { margin-top: 44px; font: 700 clamp(1.4rem, 3vw, 2rem)/1.25 var(--display); letter-spacing: -0.03em; }
+
+  /* Scroll reveals (only once the script runs, so nothing hides without it) */
+  .js .reveal { opacity: 0; transform: translateY(26px); transition: opacity .9s cubic-bezier(.2, .8, .2, 1), transform .9s cubic-bezier(.2, .8, .2, 1); }
+  .js .reveal.seen { opacity: 1; transform: none; }
+  .js .moments li.reveal:nth-child(2) { transition-delay: .12s; } .js .moments li.reveal:nth-child(3) { transition-delay: .24s; }
+  .js .perk.reveal:nth-child(2) { transition-delay: .1s; } .js .perk.reveal:nth-child(3) { transition-delay: .2s; }
+
+  footer { border-top: 1px solid var(--line); margin-top: 40px; padding: 28px 22px 40px; display: flex; flex-wrap: wrap; gap: 8px 22px; justify-content: center; font-size: .85rem; color: var(--faint); }
+  footer a { color: var(--soft); }
+
+  @media (max-width: 760px) {
+    .nav-right > a:not(.pillbtn) { display: none; }
+    .perks { grid-template-columns: 1fr; }
+    .fields { grid-template-columns: 1fr; }
+    .moments li { padding: 20px 22px; } .moments li:nth-child(n) { margin-left: 0; }
+    .hero { padding-bottom: 130px; } .sea { height: 110px; }
+    .beta-pill { font-size: .95rem; gap: 8px; padding: 12px 20px; } .beta-pill b { font-size: 1.5rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .js .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js'); if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('play');</script>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/"><img src="/assets/icon-blue.png" alt="" width="26" height="26">Bondi</a>
+    <div class="nav-right">
+      <a href="/">What's Bondi?</a>
+      <a class="pillbtn primary small" href="#join">Join the beta</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <button class="stage" type="button" data-replay aria-label="Bondi's icon: a speedometer that races into the red, then settles as the water comes in. Press to play it again.">
+      <svg id="icon" viewBox="0 0 1024 1024" aria-hidden="true">
+        <defs>
+          <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34C8E3"/><stop offset="1" stop-color="#007A97"/></linearGradient>
+          <linearGradient id="wt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0.78"/></linearGradient>
+          <filter id="sh" x="-10%" y="-10%" width="120%" height="125%"><feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#00384a" flood-opacity="0.45"/></filter>
+          <clipPath id="lvl"><circle cx="512" cy="512" r="238"/></clipPath>
+        </defs>
+        <g class="tile">
+          <path d="M300 100 H724 C860 100 924 164 924 300 V724 C924 860 860 924 724 924 H300 C164 924 100 860 100 724 V300 C100 164 164 100 300 100 Z" fill="url(#bg)" filter="url(#sh)"/>
+          <path d="M300 100 H724 C860 100 924 164 924 300 V724 C924 860 860 924 724 924 H300 C164 924 100 860 100 724 V300 C100 164 164 100 300 100 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="6"/>
+        </g>
+        <path class="track" d="M314 710 A280 280 0 1 1 710 710" pathLength="100" fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="42" stroke-linecap="round"/>
+        <path class="progress" d="M314 710 A280 280 0 1 1 710 710" pathLength="100" fill="none" stroke-width="42" stroke-linecap="round"/>
+        <g clip-path="url(#lvl)">
+          <g class="water">
+            <path class="wave-back" fill="#FFFFFF" fill-opacity="0.3" d="M-206 600 c40 -20 80 -20 120 0 s80 20 120 0 c40 -20 80 -20 120 0 s80 20 120 0 c40 -20 80 -20 120 0 s80 20 120 0 c40 -20 80 -20 120 0 s80 20 120 0 c40 -20 80 -20 120 0 s80 20 120 0 c40 -20 80 -20 120 0 s80 20 120 0 L1234 800 L-206 800 Z"/>
+            <path class="wave-front" fill="url(#wt)" d="M-86 646 c40 -22 80 -22 120 0 s80 22 120 0 c40 -22 80 -22 120 0 s80 22 120 0 c40 -22 80 -22 120 0 s80 22 120 0 c40 -22 80 -22 120 0 s80 22 120 0 c40 -22 80 -22 120 0 s80 22 120 0 c40 -22 80 -22 120 0 s80 22 120 0 L1354 800 L-86 800 Z"/>
+          </g>
+        </g>
+        <path class="needle" d="M512 512 L628 374" stroke="#FFFFFF" stroke-width="28" stroke-linecap="round"/>
+        <circle class="hub" cx="512" cy="512" r="34" fill="#FFFFFF"/>
+      </svg>
+    </button>
+    <p class="eyebrow in-1">The Bondi beta</p>
+    <h1 class="in-2">Your Mac has been trying to tell you <span class="grad">something.</span></h1>
+    <p class="sub in-3">Bondi finally lets it. One plain sentence that explains what's slowing your Mac down, written on your Mac. Be one of the first to hear it.</p>
+    <div class="ctas in-4">
+      <a class="pillbtn primary" href="#join">Join the beta</a>
+      <a class="pillbtn secondary" href="#feeling">Why Bondi</a>
+    </div>
+    <div class="sea" aria-hidden="true">
+      <svg class="l1" viewBox="0 0 2880 200" preserveAspectRatio="none"><path fill="var(--sea-1)" d="M0 70 C240 10 480 10 720 70 S1200 130 1440 70 C1680 10 1920 10 2160 70 S2640 130 2880 70 L2880 200 L0 200 Z"/></svg>
+      <svg class="l2" viewBox="0 0 2880 200" preserveAspectRatio="none"><path fill="var(--sea-2)" d="M0 110 C240 60 480 60 720 110 S1200 160 1440 110 C1680 60 1920 60 2160 110 S2640 160 2880 110 L2880 200 L0 200 Z"/></svg>
+      <svg class="l3" viewBox="0 0 2880 200" preserveAspectRatio="none"><path fill="var(--sea-3)" d="M0 150 C240 115 480 115 720 150 S1200 185 1440 150 C1680 115 1920 115 2160 150 S2640 185 2880 150 L2880 200 L0 200 Z"/></svg>
+    </div>
+  </section>
+
+  <section class="block count wrap" data-count hidden aria-labelledby="count-title">
+    <p class="live reveal">Live count</p>
+    <p class="big reveal" data-total aria-hidden="true">0</p>
+    <h2 id="count-title" class="what reveal"><span class="vh" data-total-text></span><span data-total-label>people are waiting for Bondi.</span></h2>
+    <p class="beta-pill reveal" data-beta hidden><b data-beta-num>0</b><span data-beta-label>of them asked for the beta.</span></p>
+  </section>
+
+  <section class="block wrap center" id="feeling">
+    <p class="eyebrow reveal">You know the feeling</p>
+    <h2 class="reveal">It always happens at the worst moment.</h2>
+    <ul class="moments">
+      <li class="reveal"><span class="mi" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3c-2.5 3-2.5 15 0 18M3 12c3-2.5 15-2.5 18 0M5.6 5.6c3.5 1 11.8 9.3 12.8 12.8"/></svg></span>The beach ball spins right when it matters.</li>
+      <li class="reveal"><span class="mi" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M12 10c0-4 1-7 4-7s3 4-2 7M14 12c4 0 7 1 7 4s-4 3-7-2M12 14c0 4-1 7-4 7s-3-4 2-7M10 12c-4 0-7-1-7-4s4-3 7 2"/></svg></span>The fans roar, and nothing is even open.</li>
+      <li class="reveal"><span class="mi" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg></span>It was fine yesterday. Today it crawls.</li>
+    </ul>
+    <p class="turn reveal">Activity Monitor shows you hundreds of processes. <b>It never tells you why.</b></p>
+  </section>
+
+  <section class="block wrap center">
+    <p class="eyebrow reveal">Then Bondi says it plainly</p>
+    <h2 class="reveal">One sentence. The whole story.</h2>
+    <div class="why reveal" data-why>
+      <div class="who"><img src="/assets/icon-blue.png" alt="" width="28" height="28">Bondi</div>
+      <p class="say"><span class="spark" aria-hidden="true">✦</span><span data-say>Everything is fine. Google Chrome is using the most memory, 13.09 GB across 82 processes.</span><span class="caret" aria-hidden="true" hidden data-caret></span></p>
+      <small>A real sentence from Bondi, about a real Mac. Written on that Mac by an on-device AI: nothing left it.</small>
+    </div>
+  </section>
+
+  <section class="block wrap center">
+    <p class="eyebrow reveal">Why join now</p>
+    <h2 class="reveal">Help shape what Bondi becomes.</h2>
+    <p class="lede center reveal" style="margin-top:18px">The first people in use Bondi on their own Macs and tell us what's missing. What they say decides what ships.</p>
+    <div class="perks">
+      <div class="perk reveal">
+        <div class="ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 6.9H21l-5.5 4.2 2.1 6.9L12 15.8 6.4 20l2.1-6.9L3 8.9h6.6z"/></svg></div>
+        <h3>First in line</h3><p>Use Bondi on your own Mac before it launches to everyone.</p>
+      </div>
+      <div class="perk reveal">
+        <div class="ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h3>Your voice counts</h3><p>Your feedback goes straight to the people building Bondi.</p>
+      </div>
+      <div class="perk reveal">
+        <div class="ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+        <h3>Your Mac stays yours</h3><p>No account, no analytics. The AI runs on your Mac, and nothing leaves it.</p>
+      </div>
+    </div>
+    <p class="closing reveal">Your Mac works hard for you.<br><span class="grad">It's time you understood it.</span></p>
+  </section>
+
+  <section class="block wrap" id="join">
+    <form class="join reveal" data-signup novalidate>
+      <h2>Join the beta.</h2>
+      <p class="lede">We'll email you the moment it opens. For any Mac with macOS 15 or later.</p>
+      <div class="fields">
+        <label><span class="vh">Name</span><input name="name" autocomplete="name" placeholder="Name" maxlength="100" required></label>
+        <label><span class="vh">Email</span><input name="email" type="email" autocomplete="email" placeholder="Email" maxlength="254" required></label>
+        <label class="vh" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
+        <button class="pillbtn primary" type="submit">Join the beta</button>
+      </div>
+      <p class="msg" role="status" aria-live="polite" data-msg></p>
+      <p class="fine">We'll only email you about Bondi, and you can stop anytime. <a href="/privacy/">Privacy policy</a></p>
+    </form>
+  </section>
+</main>
+
+<footer>
+  <span>© 2026 Jabble Super Intelligence Inc.</span>
+  <a href="/">trybondi.app</a>
+  <a href="/privacy/">Privacy</a>
+  <a href="/terms/">Terms</a>
+  <a href="mailto:support@trybondi.app">support@trybondi.app</a>
+</footer>
+
+<script>
+(() => {
+  const $ = (s, root = document) => root.querySelector(s);
+  const $$ = (s, root = document) => [...root.querySelectorAll(s)];
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Links within the page scroll to their section without adding "#section" to the address.
+  document.addEventListener('click', event => {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+    const target = document.getElementById(link.getAttribute('href').slice(1));
+    if (!target) return;
+    event.preventDefault();
+    target.scrollIntoView({ block: 'start' });
+    if (target.id === 'join') setTimeout(() => $('input[name=name]', target).focus({ preventScroll: true }), reduced ? 0 : 600);
+  });
+  if (location.hash) {
+    const id = decodeURIComponent(location.hash.slice(1));
+    history.replaceState(null, '', location.pathname + location.search);
+    addEventListener('load', () => document.getElementById(id)?.scrollIntoView({ block: 'start' }));
+  }
+
+  // Press the icon to watch it again.
+  $('[data-replay]').addEventListener('click', () => {
+    if (reduced) return;
+    const root = document.documentElement;
+    root.classList.remove('play'); void root.offsetWidth; root.classList.add('play');
+  });
+
+  // Sections rise in as they come into view.
+  const seen = new IntersectionObserver(entries => entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    entry.target.classList.add('seen');
+    seen.unobserve(entry.target);
+    entry.target.dispatchEvent(new Event('seen'));
+  }), { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
+  $$('.reveal').forEach(el => seen.observe(el));
+
+  // Bondi's sentence types itself out the first time it's seen.
+  const say = $('[data-say]'), caret = $('[data-caret]'), sentence = say.textContent;
+  $('[data-why]').addEventListener('seen', () => {
+    if (reduced) return;
+    say.setAttribute('aria-label', sentence);
+    say.textContent = ''; caret.hidden = false;
+    const words = sentence.split(' ');
+    let i = 0;
+    const next = () => {
+      say.textContent = words.slice(0, ++i).join(' ');
+      if (i < words.length) setTimeout(next, 70 + Math.random() * 90);
+      else setTimeout(() => { caret.hidden = true; say.removeAttribute('aria-label'); }, 1600);
+    };
+    setTimeout(next, 500);
+  }, { once: true });
+
+  // The real count of sign-ups, from the server. Nothing is shown until it arrives.
+  const counter = $('[data-count]');
+  const plural = (n, one, many) => (n === 1 ? one : many);
+  const countUp = (el, to, ms) => {
+    if (reduced || to < 2) { el.textContent = to.toLocaleString('en-US'); return; }
+    const start = performance.now();
+    const step = now => {
+      const t = Math.min(1, (now - start) / ms), eased = 1 - Math.pow(1 - t, 4);
+      el.textContent = Math.round(to * eased).toLocaleString('en-US');
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  let shown = false;
+  const showCounts = ({ signups, beta }, animate) => {
+    if (typeof signups !== 'number' || signups < 1) return;
+    counter.hidden = false;
+    $('[data-total-text]').textContent = signups.toLocaleString('en-US') + ' ';
+    $('[data-total-label]').textContent = plural(signups, 'person is waiting for Bondi.', 'people are waiting for Bondi.');
+    const hasBeta = typeof beta === 'number' && beta > 0;
+    $('[data-beta]').hidden = !hasBeta;
+    if (hasBeta) $('[data-beta-label]').textContent = plural(beta, 'of them asked for the beta.', 'of them asked for the beta.');
+    const run = () => {
+      countUp($('[data-total]'), signups, animate ? 1800 : 400);
+      if (hasBeta) countUp($('[data-beta-num]'), beta, animate ? 1800 : 400);
+    };
+    const big = $('[data-total]');
+    if (reduced || big.classList.contains('seen') || !animate) run(); else big.addEventListener('seen', run, { once: true });
+    shown = true;
+  };
+  const loadCounts = animate => fetch('/api/interest', { cache: 'no-store' }).then(r => r.ok ? r.json() : null)
+    .then(data => data && showCounts(data, animate)).catch(() => {});
+  loadCounts(true);
+
+  // Join: the same sign-up list as the homepage, marked as the beta page.
+  const form = $('[data-signup]');
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    const msg = $('[data-msg]'), button = $('button', form), fields = form.elements;
+    const tell = (text, ok) => { msg.textContent = text; msg.className = 'msg ' + (ok ? 'ok' : 'err'); };
+    const name = fields.name.value.trim(), email = fields.email.value.trim();
+    fields.name.setAttribute('aria-invalid', String(!name));
+    fields.email.setAttribute('aria-invalid', String(!fields.email.checkValidity() || !email));
+    if (!name) { tell('Enter your name.'); fields.name.focus(); return; }
+    if (!email || !fields.email.checkValidity()) { tell('Enter a valid email address.'); fields.email.focus(); return; }
+    button.disabled = true; tell('');
+    let timeZone = '';
+    try { timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+    try {
+      const response = await fetch('/api/signup', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, time_zone: timeZone, page: 'beta', website: fields.website.value }) });
+      const answer = await response.json().catch(() => ({}));
+      if (response.ok) {
+        if (!reduced) {
+          const box = form.getBoundingClientRect(), b = button.getBoundingClientRect();
+          const ring = document.createElement('span');
+          ring.className = 'ripple';
+          ring.style.left = (b.left + b.width / 2 - box.left) + 'px';
+          ring.style.top = (b.top + b.height / 2 - box.top) + 'px';
+          form.append(ring);
+          setTimeout(() => ring.remove(), 1300);
+        }
+        form.classList.add('done');
+        $('.fields', form).hidden = true;
+        tell(`You're on the list, ${name}. We'll email you the moment the beta opens.`, true);
+        loadCounts(false);
+      } else {
+        tell(answer.message || "Couldn't sign you up just now. Try again in a minute.");
+      }
+    } catch (e) {
+      tell("Couldn't sign you up just now. Try again in a minute.");
+    }
+    button.disabled = false;
+  });
+})();
+</script>
+</body>
+</html>

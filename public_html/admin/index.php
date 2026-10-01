@@ -189,7 +189,8 @@ function dashboard(string $query, ?string $flash): never
     stat_box('Active licenses', $counts['active'] ?? 0, 'licenses');
     stat_box('Refunded / revoked', ($counts['refunded'] ?? 0) . ' / ' . ($counts['revoked'] ?? 0), 'licenses');
     stat_box('Trials started', (int)$trials['total'] . ' (' . (int)$trials['week'] . ' this week)', 'trials');
-    stat_box('Update sign-ups', (int)$signups['total'] . ' (' . (int)$signups['week'] . ' this week)', 'signups');
+    $beta = interest_counts()['beta'];
+    stat_box('Update sign-ups', (int)$signups['total'] . ' (' . (int)$signups['week'] . ' this week' . ($beta === null ? '' : ", $beta beta") . ')', 'signups');
     stat_box('Revenue (active, before Paddle fees)', $revenue ? implode(' + ', array_map(fn($r) => money((int)$r['cents'], $r['currency']), $revenue)) : '—', 'licenses');
     echo '</div>';
     if ($failed > 0) {
@@ -304,19 +305,29 @@ function signups_page(string $query, ?string $flash): never
     $total = (int)one('SELECT COUNT(*) AS n FROM signups')['n'];
     echo '<h2>Update sign-ups <span class="muted">(' . $total . ')</span>' . table_tag('signups') . '</h2>';
     $countries = all('SELECT COALESCE(country, \'?\') AS country, COUNT(*) AS n FROM signups GROUP BY country ORDER BY n DESC LIMIT 20');
+    if (signups_have_page()) {
+        $pages = all('SELECT page, COUNT(*) AS n FROM signups GROUP BY page ORDER BY n DESC');
+        echo '<p class="muted">By page: ' . implode(' · ', array_map(fn($p) => h(page_name($p['page'])) . ' ' . (int)$p['n'], $pages))
+           . ' <span title="Search for beta to see only them">(search “beta” for the beta list)</span></p>';
+    } else {
+        echo '<p class="muted">To tell beta-page sign-ups apart, import sql/005_signup_page.sql in phpMyAdmin.</p>';
+    }
     if ($countries) {
         echo '<p class="muted">By country: ' . implode(' · ', array_map(fn($c) => h($c['country'] === '?' ? 'Unknown' : country_name($c['country'])) . ' ' . (int)$c['n'], $countries)) . '</p>';
     }
-    echo '<form class="search"><input type="hidden" name="signups" value="1"><input name="q" value="' . h($query) . '" placeholder="Name, email or country code" autofocus>'
+    echo '<form class="search"><input type="hidden" name="signups" value="1"><input name="q" value="' . h($query) . '" placeholder="Name, email, country code, or beta" autofocus>'
        . '<button>Search</button></form><p><a href="?signups&csv">Download all as CSV</a></p>';
     $matching = signups_matching($query);
     $rows = array_slice($matching, 0, 500);
     if ($matching) { write_to_signups($query, count($matching)); }
     if (!$rows) { echo '<p class="muted">None.</p>'; page_end(); }
-    echo '<table><tr><th>Name</th><th>Email</th><th>Country</th><th>IP</th><th>Signed up</th><th></th></tr>';
+    $hasPage = signups_have_page();
+    echo '<table><tr><th>Name</th><th>Email</th>' . ($hasPage ? '<th>Page</th>' : '') . '<th>Country</th><th>IP</th><th>Signed up</th><th></th></tr>';
     foreach ($rows as $row) {
         $source = $row['country_source'] === 'timezone' ? ' <span class="muted" title="From the browser\'s time zone: ' . h($row['time_zone']) . '">(time zone)</span>' : '';
-        echo '<tr><td>' . h($row['name']) . '</td><td>' . h($row['email']) . '</td><td title="' . h($row['country'] ?? '') . '">' . h(country_name($row['country'])) . $source . '</td>'
+        echo '<tr><td>' . h($row['name']) . '</td><td>' . h($row['email']) . '</td>'
+           . ($hasPage ? '<td>' . ($row['page'] === 'beta' ? '<span class="status active">Beta</span>' : 'Homepage') . '</td>' : '')
+           . '<td title="' . h($row['country'] ?? '') . '">' . h(country_name($row['country'])) . $source . '</td>'
            . '<td class="mono">' . h($row['ip']) . '</td><td>' . h($row['created_at']) . ' UTC</td><td>'
            . '<form method="post" onsubmit="return confirm(' . h(json_encode('Remove ' . $row['email'] . ' from the list?')) . ')">' . csrf_field()
            . '<input type="hidden" name="do" value="delete_signup"><input type="hidden" name="signup" value="' . (int)$row['id'] . '">'
@@ -330,10 +341,14 @@ function signups_page(string $query, ?string $flash): never
 function signups_matching(string $query): array
 {
     $query = trim($query);
-    return $query === ''
-        ? all('SELECT * FROM signups ORDER BY id DESC')
-        : all('SELECT * FROM signups WHERE email LIKE ? OR name LIKE ? OR country = ? ORDER BY id DESC',
-              ['%' . strtolower($query) . '%', '%' . $query . '%', strtoupper($query)]);
+    if ($query === '') {
+        return all('SELECT * FROM signups ORDER BY id DESC');
+    }
+    if (signups_have_page() && strtolower($query) === 'beta') {
+        return all("SELECT * FROM signups WHERE page = 'beta' ORDER BY id DESC");
+    }
+    return all('SELECT * FROM signups WHERE email LIKE ? OR name LIKE ? OR country = ? ORDER BY id DESC',
+               ['%' . strtolower($query) . '%', '%' . $query . '%', strtoupper($query)]);
 }
 
 function write_to_signups(string $query, int $count): void
@@ -363,11 +378,11 @@ function signups_csv(): never
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="bondi-signups-' . gmdate('Y-m-d') . '.csv"');
     $out = fopen('php://output', 'w');
-    fputcsv($out, ['name', 'email', 'country', 'country_name', 'country_source', 'time_zone', 'ip', 'created_at_utc', 'updated_at_utc'], ',', '"', '');
+    fputcsv($out, ['name', 'email', 'country', 'country_name', 'country_source', 'time_zone', 'page', 'ip', 'created_at_utc', 'updated_at_utc'], ',', '"', '');
     foreach (all('SELECT * FROM signups ORDER BY id') as $row) {
         // A leading = + - @ would run as a formula in Excel or Numbers, so it gets a ' in front.
         $safe = fn($value) => is_string($value) && preg_match('/^[=+\-@]/', $value) ? "'" . $value : $value;
-        fputcsv($out, array_map($safe, [$row['name'], $row['email'], $row['country'], $row['country'] === null ? null : country_name($row['country']), $row['country_source'], $row['time_zone'],
+        fputcsv($out, array_map($safe, [$row['name'], $row['email'], $row['country'], $row['country'] === null ? null : country_name($row['country']), $row['country_source'], $row['time_zone'], $row['page'] ?? 'home',
                                           $row['ip'], $row['created_at'], $row['updated_at']]), ',', '"', '');
     }
     exit;
@@ -401,6 +416,12 @@ function action(int $licenseId, string $do, string $label, string $question, str
 function stat_box(string $label, mixed $value, string $table): void
 {
     echo '<div class="stat"><div class="muted">' . h($label) . '</div><div class="value">' . h($value) . '</div>' . table_tag($table) . '</div>';
+}
+
+/** Where someone signed up: the beta page or the homepage. */
+function page_name(?string $page): string
+{
+    return $page === 'beta' ? 'Beta page' : 'Homepage';
 }
 
 /** The database tables a section reads, so it can be matched to phpMyAdmin. */

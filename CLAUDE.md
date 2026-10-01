@@ -10,7 +10,7 @@ The Mac app lives in its own repo next to this one: **`../TryBondi`** (readable 
 | --- | --- | --- |
 | `public_html/` | The website (`index.html`), the license API (`api/`), the admin page (`admin/`), the buy page (`buy/`, not linked until launch), legal pages, `assets/` | Contents go into Hostinger's `public_html` |
 | `bondi/` | Private PHP: settings (`config.php`, never committed), database, Paddle, email, licenses, sign-ups | Live at `public_html/bondi/` (the owner's host wants everything in `public_html`); its `.htaccess` blocks web access. Beside `public_html` also works. After an upload, check `https://trybondi.app/bondi/config.php` answers 403 |
-| `sql/` | Database setup, imported in phpMyAdmin in order (001, 003, 004; 002 only for old installs) | — |
+| `sql/` | Database setup, imported in phpMyAdmin in order (001, 003, 004, 005; 002 only for old installs) | — |
 | `dev/` | Local tests: `dev/test.sh` (a throwaway MySQL and PHP server, 51 checks) | Not uploaded |
 | `video/` | The website films, made with Remotion. Use the `website-video` skill | Renders go to `public_html/assets` |
 

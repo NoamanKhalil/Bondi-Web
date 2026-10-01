@@ -22,7 +22,7 @@ mysqld --initialize-insecure --datadir=$T/data --log-error=$T/init.log >/dev/nul
 mysqld --datadir=$T/data --socket=$SOCK --port=33098 --mysqlx=OFF --log-error=$T/err.log --pid-file=$T/pid >/dev/null 2>&1 &
 for i in $(seq 1 30); do mysql -uroot --socket=$SOCK -e 'select 1' >/dev/null 2>&1 && break; sleep 1; done
 mysql -uroot --socket=$SOCK -e "create database bondi; create user 'bondi'@'localhost' identified by 'test'; grant all on bondi.* to 'bondi'@'localhost';"
-for f in sql/001_schema.sql sql/002_one_mac_per_license.sql sql/003_checkout_claims.sql sql/004_signups.sql; do mysql -uroot --socket=$SOCK bondi < $f; done
+for f in sql/001_schema.sql sql/002_one_mac_per_license.sql sql/003_checkout_claims.sql sql/004_signups.sql sql/005_signup_page.sql; do mysql -uroot --socket=$SOCK bondi < $f; done
 mysql -uroot --socket=$SOCK bondi -e "update price_tiers set paddle_price_id='pri_launch' where tier='launch'; update price_tiers set paddle_price_id='pri_regular' where tier='regular';"
 cat > $T/config.php <<CONF
 <?php
@@ -135,7 +135,7 @@ expect "revoked row offers restore" "$LISTED" 'value="restore"'
 
 expect "admin lists sign-ups" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'grace@example.com'
 expect "admin sign-ups by country" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'By country: .*Germany 1'
-expect "admin sign-ups CSV" "$(curl -s -c $J -b $J "$BASE/admin/?signups&csv")" '"Ada L.",ada@example.com,IN,India,timezone,Asia/Calcutta,127.0.0.1'
+expect "admin sign-ups CSV" "$(curl -s -c $J -b $J "$BASE/admin/?signups&csv")" '"Ada L.",ada@example.com,IN,India,timezone,Asia/Calcutta,home,127.0.0.1'
 NEWS="subject=Beta%20for%20{name}&message=Hi%20{name},%0A%0ASee%20https://trybondi.app&q="
 expect "sign-ups page can write to everyone" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'Write to everyone on the list'
 expect "test email goes to support" "$(curl -s -c $J -b $J -L -d "do=news_test&$NEWS&csrf=$CSRF" $BASE/admin/)" 'Test sent to support@example.com'
@@ -156,6 +156,19 @@ expect "sign-up country comes from the IP before the time zone" "$(mysql -uroot 
 mysql -uroot --socket=$SOCK bondi -e "insert into signups (email, name, ip, country, country_source, time_zone) values ('old@example.com', 'Old', '8.8.8.8', 'JP', 'timezone', 'Asia/Tokyo')"
 expect "admin shows country names" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'United Kingdom'
 expect "older sign-ups get their IP's country" "$(mysql -uroot --socket=$SOCK bondi -N -e "select concat_ws('|', country, country_source) from signups where email='old@example.com'")" 'US|ip'
+
+# Beta page: sign-ups marked beta, and the live counts it shows
+BEFORE=$(curl -s $BASE/api/interest)
+post signup '{"name":"Bea","email":"bea@example.com","time_zone":"Europe/Paris","page":"beta"}' >/dev/null
+post signup '{"name":"Bea T.","email":"bea@example.com","time_zone":"Europe/Paris"}' >/dev/null
+expect "beta page sign-up marked, and stays beta" "$(mysql -uroot --socket=$SOCK bondi -N -e "select concat_ws('|', name, page) from signups where email='bea@example.com'")" 'Bea T.|beta'
+expect "interest counts are the real ones" "$(curl -s $BASE/api/interest)" "$(mysql -uroot --socket=$SOCK bondi -N -e "select concat('{\"signups\":', count(*), ',\"beta\":', sum(page='beta'), '}') from signups")"
+[ "$BEFORE" != "$(curl -s $BASE/api/interest)" ] && { PASS=$((PASS+1)); echo "ok   counts move with sign-ups"; } || { FAILS=$((FAILS+1)); echo "FAIL counts didn't change: $BEFORE"; }
+expect "admin shows beta sign-ups" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'By page: .*Beta page 1'
+expect "admin search beta lists only them" "$(curl -s -c $J -b $J "$BASE/admin/?signups&q=beta")" 'Write to the 1 shown by this search'
+mysql -uroot --socket=$SOCK bondi -e "alter table signups drop column page"
+expect "sign-ups still work before sql/005" "$(post signup '{"name":"Old DB","email":"olddb@example.com","page":"beta"}')" '"status":"ok"'
+expect "counts without sql/005" "$(curl -s $BASE/api/interest)" '"beta":null'
 
 if [ -n "${SNAP:-}" ]; then
   curl -s -c $J -b $J $BASE/admin/ > "$SNAP/admin-licenses.html"
