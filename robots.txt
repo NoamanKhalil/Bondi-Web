@@ -1,4 +1,21 @@
+# Everyone may read everything here, including AI assistants and their crawlers.
+# Short and full summaries for AI tools: https://trybondi.app/llms.txt and https://trybondi.app/llms-full.txt
+
 User-agent: *
+Allow: /
+
+User-agent: GPTBot
+User-agent: ChatGPT-User
+User-agent: OAI-SearchBot
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: meta-externalagent
+User-agent: Amazonbot
 Allow: /
 
 Sitemap: https://trybondi.app/sitemap.xml
