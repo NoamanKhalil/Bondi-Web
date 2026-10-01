@@ -1,6 +1,6 @@
 # Bondi
 
-> Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by Apple's on-device model. It's made by Jabble Inc.
+> Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by Apple's on-device model. It's made by Jabble Super Intelligence Inc.
 
 - Status: the beta is launching soon, and the full launch follows it. Bondi can't be bought yet.
 - What it does: groups every running process under the app that started it, finds what's holding memory, warns about one cause at a time and asks before it quits or stops anything, and keeps 30 days of history on the Mac.
