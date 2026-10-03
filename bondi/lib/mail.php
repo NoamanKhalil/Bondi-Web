@@ -16,7 +16,7 @@ function send_key_email(string $email, string $key, string $kind, ?int $licenseI
 
 /**
  * Sends one email: plain text, plus HTML when given, plus PNG images the HTML shows as cid:<id>, plus any
- * extra headers (such as List-Unsubscribe).
+ * extra headers (such as List-Unsubscribe; a From: there replaces the usual sender).
  * Returns false only when nothing could send it.
  */
 function send_mail(string $to, string $subject, string $text, ?string $html = null, array $images = [], array $extraHeaders = []): bool
@@ -48,8 +48,9 @@ function send_mail(string $to, string $subject, string $text, ?string $html = nu
         }
         $headers = [];
     }
+    $customFrom = (bool)array_filter($extraHeaders, fn($line) => stripos($line, 'From:') === 0);
     $headers = array_merge([
-        'From: ' . config('mail_from'),
+        ...($customFrom ? [] : ['From: ' . config('mail_from')]),
         'Reply-To: ' . config('support_email'),
         'MIME-Version: 1.0',
         "Content-Type: $type",
@@ -186,14 +187,14 @@ HTML;
  * A note to one update sign-up, written on the admin page. {name} in the subject or message becomes their name.
  * Blank lines start new paragraphs; web addresses become links. Returns ['subject', 'text', 'html'].
  */
-function update_email(string $name, string $subject, string $message): array
+function update_email(string $name, string $subject, string $message, ?string $unsubscribeUrl = null): array
 {
     $e = static fn(string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
     $subject = str_replace('{name}', $name, $subject);
     $message = trim(str_replace(["\r\n", '{name}'], ["\n", $name], $message));
     $support = (string)config('support_email');
-    $why = "You're getting this because you signed up for Bondi updates at trybondi.app. "
-         . "To stop them, reply with \"unsubscribe\".";
+    $why = "You're getting this because you signed up for Bondi updates at trybondi.app.";
+    $stopHtml = unsubscribe_html($unsubscribeUrl);
 
     $paragraphs = '';
     foreach (preg_split('/\n\s*\n/', $message) as $paragraph) {
@@ -205,12 +206,165 @@ function update_email(string $name, string $subject, string $message): array
     <h1 class="ink" style="margin:24px 0 18px;font-size:24px;line-height:1.2;font-weight:700;letter-spacing:-.02em;color:#1d1d1f;">{$e($subject)}</h1>
     $paragraphs
     <hr class="rule" style="margin:28px 0 20px;border:0;border-top:1px solid rgba(0,0,0,.08);">
-    <p class="soft" style="margin:0;font-size:13px;line-height:1.5;color:#6e6e73;">{$e($why)} Questions? <a class="link" href="mailto:{$e($support)}" style="color:#0e86a6;text-decoration:none;">{$e($support)}</a></p>
+    <p class="soft" style="margin:0;font-size:13px;line-height:1.5;color:#6e6e73;">{$e($why)} {$stopHtml}Questions? <a class="link" href="mailto:{$e($support)}" style="color:#0e86a6;text-decoration:none;">{$e($support)}</a></p>
 HTML;
-    $text = "$message\n\n--\n$why\nQuestions: $support\n";
+    $text = "$message\n\n--\n$why\n" . ($unsubscribeUrl ? "Unsubscribe: $unsubscribeUrl\n" : "To stop them, reply with \"unsubscribe\".\n") . "Questions: $support\n";
     $preview = mb_substr(preg_replace('/\s+/', ' ', $message), 0, 120);
 
     return ['subject' => $subject, 'text' => $text, 'html' => email_html($subject, $preview, $inner)];
+}
+
+/** Noaman, Bondi's maker, on X. */
+const MAKER_X = 'khalilnoaman';
+
+/**
+ * The thank-you for joining the beta list, from Noaman, sent once per sign-up (sign_up_welcome()).
+ * Returns ['subject', 'text', 'html'].
+ */
+function welcome_email(string $name, ?string $unsubscribeUrl = null): array
+{
+    $e = static fn(string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+    $first = explode(' ', trim($name))[0] ?: 'friend';
+    $support = (string)config('support_email');
+    $x = 'https://x.com/' . MAKER_X;
+    $post = 'https://x.com/intent/post?text=' . rawurlencode("I just joined the beta for Bondi, a Mac app that tells you why your Mac is slow in one plain sentence. Come join the tribe: https://trybondi.app/beta/ (made by @" . MAKER_X . ")");
+    $mail = 'mailto:?subject=' . rawurlencode('Join me on the Bondi beta') . '&body='
+          . rawurlencode("I just joined the beta for Bondi, a Mac app that tells you why your Mac is slow in one plain sentence, right on your Mac. I think you'd love it:\n\nhttps://trybondi.app/beta/");
+    $subject = "You're in, $first. Thank you.";
+    $paras = [
+        "Thank you for signing up for the Bondi beta. I mean that with my whole heart.",
+        "I made Bondi because everyone with a Mac deserves a straight answer to a simple question: why is my Mac slow? Bondi answers in one plain sentence, right on your Mac, and nothing ever leaves it. I've poured so much love into every detail, and you're one of the very first people to believe in it. That means more to me than I can say.",
+        "I'll email you the moment the beta opens. Until then, two small things would mean the world to me:",
+    ];
+    $why = "You're getting this because you signed up for the Bondi beta at trybondi.app.";
+    $stopHtml = unsubscribe_html($unsubscribeUrl);
+
+    $text = "Hi $first,\n\n" . implode("\n\n", $paras) . "\n\n"
+          . "1. Follow along on X. I'm @" . MAKER_X . ", and I share Bondi's journey there: $x\n\n"
+          . "2. Invite a friend. Know someone whose Mac drives them up the wall? Bring them into the tribe: https://trybondi.app/beta/\n\n"
+          . "With love and gratitude,\nNoaman\nMaker of Bondi\n\n--\n$why\n"
+          . ($unsubscribeUrl ? "Unsubscribe: $unsubscribeUrl\n" : "To stop hearing from us, reply with \"unsubscribe\".\n") . "Questions: $support\n";
+
+    $p = fn(string $t): string => '<p class="ink" style="margin:0 0 16px;font-size:16px;line-height:1.55;color:#1d1d1f;">' . $e($t) . '</p>';
+    $body = implode('', array_map($p, $paras));
+    $font = EMAIL_FONT;
+    $inner = <<<HTML
+    <h1 class="ink" style="margin:24px 0 18px;font-size:28px;line-height:1.15;font-weight:700;letter-spacing:-.02em;color:#1d1d1f;">You're in, {$e($first)}.</h1>
+    $body
+    <div class="key" style="margin:8px 0 14px;padding:18px 20px;background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.08);border-radius:14px;">
+      <p class="ink" style="margin:0 0 4px;font-size:16px;font-weight:600;color:#1d1d1f;">Follow along on X</p>
+      <p class="soft" style="margin:0 0 14px;font-size:15px;line-height:1.5;color:#6e6e73;">I'm @{$e(MAKER_X)}, and I share Bondi's journey there.</p>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-radius:10px;background:#0e86a6;">
+        <a href="{$e($x)}" style="display:inline-block;padding:12px 22px;font-family:$font;font-size:15px;line-height:1;font-weight:600;color:#ffffff;text-decoration:none;border-radius:10px;">Follow @{$e(MAKER_X)}</a>
+      </td></tr></table>
+    </div>
+    <div class="key" style="margin:0 0 24px;padding:18px 20px;background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.08);border-radius:14px;">
+      <p class="ink" style="margin:0 0 4px;font-size:16px;font-weight:600;color:#1d1d1f;">Invite a friend</p>
+      <p class="soft" style="margin:0 0 12px;font-size:15px;line-height:1.5;color:#6e6e73;">Know someone whose Mac drives them up the wall? Bring them into the tribe.</p>
+      <p style="margin:0;font-size:15px;font-weight:600;"><a class="link" href="{$e($post)}" style="color:#0e86a6;text-decoration:none;">Share on X</a> <span class="soft" style="color:#6e6e73;">&nbsp;·&nbsp;</span> <a class="link" href="{$e($mail)}" style="color:#0e86a6;text-decoration:none;">Email a friend</a></p>
+    </div>
+    <p class="ink" style="margin:0;font-size:16px;line-height:1.55;color:#1d1d1f;">With love and gratitude,<br><strong>Noaman</strong><br><span class="soft" style="color:#6e6e73;">Maker of Bondi</span></p>
+    <hr class="rule" style="margin:28px 0 20px;border:0;border-top:1px solid rgba(0,0,0,.08);">
+    <p class="soft" style="margin:0;font-size:13px;line-height:1.5;color:#6e6e73;">{$e($why)} {$stopHtml}Questions? <a class="link" href="mailto:{$e($support)}" style="color:#0e86a6;text-decoration:none;">{$e($support)}</a></p>
+HTML;
+    return ['subject' => $subject, 'text' => $text, 'html' => email_html($subject, "Thank you for signing up for the Bondi beta. A note from Noaman.", $inner)];
+}
+
+/**
+ * Sends one sign-up the thank-you from Noaman, unless they've had it. Logged in email_log as 'welcome'.
+ * Returns true if it was sent now.
+ */
+function sign_up_welcome(string $email, string $name): bool
+{
+    if (one("SELECT id FROM email_log WHERE email = ? AND kind = 'welcome' LIMIT 1", [$email]) !== null) {
+        return false;
+    }
+    $signup = one('SELECT id' . (privacy_ready() ? ', unsubscribed_at' : '') . ' FROM signups WHERE email = ?', [$email]);
+    if (($signup['unsubscribed_at'] ?? null) !== null) {
+        return false;
+    }
+    $id = $signup === null ? null : (int)$signup['id'];
+    $mail = welcome_email($name, $id !== null && privacy_ready() ? unsubscribe_url($id) : null);
+    $support = (string)config('support_email');
+    $sent = send_mail($email, $mail['subject'], $mail['text'], $mail['html'], email_images(),
+                      array_merge(["From: Noaman Khalil <$support>"], unsubscribe_headers($id)));
+    if ($sent) {
+        run("INSERT INTO email_log (email, kind, license_id) VALUES (?, 'welcome', NULL)", [$email]);
+    }
+    return $sent;
+}
+
+/** The footer line of a list email: an Unsubscribe link, or replying "unsubscribe" when there's no link. */
+function unsubscribe_html(?string $url): string
+{
+    $e = static fn(string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+    return $url === null
+        ? 'To stop hearing from us, reply with "unsubscribe". '
+        : '<a class="link" href="' . $e($url) . '" style="color:#0e86a6;text-decoration:underline;">Unsubscribe</a> anytime. ';
+}
+
+/** The one-time link to see, download or delete what we hold (the Your data page). */
+function data_link_message(string $link): array
+{
+    $e = static fn(string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+    $font = EMAIL_FONT;
+    $subject = 'Your Bondi data';
+    $intro = "Here's the link you asked for. It shows everything we hold about this email, lets you download it, and lets you delete it. It works once, for 24 hours.";
+    $ignore = "If you didn't ask for this, you can ignore this email: nothing happens unless the link is opened.";
+    $text = "$intro\n\n$link\n\n$ignore\n";
+    $inner = <<<HTML
+    <h1 class="ink" style="margin:24px 0 10px;font-size:26px;line-height:1.15;font-weight:700;letter-spacing:-.02em;color:#1d1d1f;">Your Bondi data</h1>
+    <p class="soft" style="margin:0 0 24px;font-size:16px;line-height:1.5;color:#6e6e73;">{$e($intro)}</p>
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-radius:10px;background:#0e86a6;">
+      <a href="{$e($link)}" style="display:inline-block;padding:13px 24px;font-family:$font;font-size:16px;line-height:1;font-weight:600;color:#ffffff;text-decoration:none;border-radius:10px;">See my data</a>
+    </td></tr></table>
+    <hr class="rule" style="margin:32px 0 20px;border:0;border-top:1px solid rgba(0,0,0,.08);">
+    <p class="soft" style="margin:0;font-size:13px;line-height:1.5;color:#6e6e73;">{$e($ignore)}</p>
+HTML;
+    return ['subject' => $subject, 'text' => $text, 'html' => email_html($subject, $intro, $inner)];
+}
+
+/** After unsubscribing: a thank-you and the confirmation number, and nothing that asks them back. */
+function unsubscribed_email(string $name, string $code): array
+{
+    $first = explode(' ', trim($name))[0] ?: 'there';
+    $paras = [
+        "You're unsubscribed, and you won't get any more emails from us about Bondi.",
+        "Thank you for being here early. It truly meant a lot.",
+    ];
+    return confirmation_email("You're unsubscribed", "Hi $first,", $paras, $code,
+        'Your sign-up stays on our list, without emails, until you ask us to delete it at trybondi.app/your-data/.');
+}
+
+/** After deleting: what went, what stayed and why, and the confirmation number. */
+function deleted_email(string $code, string $removed, ?string $kept): array
+{
+    $paras = ["We've deleted your data: $removed."];
+    if ($kept !== null) {
+        $paras[] = "We kept your $kept.";
+    }
+    $paras[] = "Thank you for having been part of Bondi's early days.";
+    return confirmation_email('Your data is deleted', 'Hello,', $paras, $code,
+        "We keep a record that we did this (the date and a code that can't be turned back into your email) for 3 years. This is the last email you'll get from us.");
+}
+
+/** The shape of the two confirmation emails. */
+function confirmation_email(string $title, string $greeting, array $paras, string $code, string $small): array
+{
+    $e = static fn(string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+    $mono = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
+    $support = (string)config('support_email');
+    $text = "$greeting\n\n" . implode("\n\n", $paras) . "\n\nYour confirmation number: $code\n\n$small\nQuestions: $support\n";
+    $body = implode('', array_map(fn($t) => '<p class="ink" style="margin:0 0 16px;font-size:16px;line-height:1.55;color:#1d1d1f;">' . $e($t) . '</p>', $paras));
+    $inner = <<<HTML
+    <h1 class="ink" style="margin:24px 0 18px;font-size:26px;line-height:1.15;font-weight:700;letter-spacing:-.02em;color:#1d1d1f;">{$e($title)}</h1>
+    <p class="ink" style="margin:0 0 16px;font-size:16px;line-height:1.55;color:#1d1d1f;">{$e($greeting)}</p>
+    $body
+    <p class="soft" style="margin:8px 0 6px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#6e6e73;">Your confirmation number</p>
+    <div class="key" style="margin:0 0 24px;padding:14px 16px;background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.08);border-radius:12px;font-family:$mono;font-size:18px;font-weight:600;letter-spacing:.04em;color:#0e86a6;text-align:center;">{$e($code)}</div>
+    <p class="soft" style="margin:0;font-size:13px;line-height:1.5;color:#6e6e73;">{$e($small)} Questions? <a class="link" href="mailto:{$e($support)}" style="color:#0e86a6;text-decoration:none;">{$e($support)}</a></p>
+HTML;
+    return ['subject' => $title, 'text' => $text, 'html' => email_html($title, $paras[0], $inner)];
 }
 
 const EMAIL_FONT = "-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',Helvetica,Arial,sans-serif";

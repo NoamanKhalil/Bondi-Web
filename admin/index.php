@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 go($back, 'Write a subject and a message first.');
             }
             if ($_POST['do'] === 'news_test') {
-                $first = signups_matching($query)[0]['name'] ?? 'there';
+                $first = signups_reachable($query)[0]['name'] ?? 'there';
                 $mail = update_email($first, $subject, $message);
                 $ok = send_mail((string)config('support_email'), '[Test] ' . $mail['subject'], $mail['text'], $mail['html'], email_images());
                 go($back, $ok ? 'Test sent to ' . config('support_email') . " (with {name} as \"$first\")." : 'The test could not be sent.');
@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // who already has it and carries on with the rest.
             $campaign = 'update-' . substr(sha1($subject . "\n" . $message), 0, 12);
             $sentBefore = array_flip(array_column(all('SELECT email FROM email_log WHERE kind = ?', [$campaign]), 'email'));
-            $todo = array_values(array_filter(signups_matching($query), fn($r) => !isset($sentBefore[$r['email']])));
+            $todo = array_values(array_filter(signups_reachable($query), fn($r) => !isset($sentBefore[$r['email']])));
             ignore_user_abort(true);
             set_time_limit(0);
             $started = microtime(true);
@@ -131,9 +131,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (microtime(true) - $started > 40) {
                     break; // stays well inside the host's time limit; the rest go on the next press
                 }
-                $mail = update_email($row['name'], $subject, $message);
-                $unsubscribe = 'List-Unsubscribe: <mailto:' . config('support_email') . '?subject=unsubscribe>';
-                if (send_mail($row['email'], $mail['subject'], $mail['text'], $mail['html'], email_images(), [$unsubscribe])) {
+                $mail = update_email($row['name'], $subject, $message, privacy_ready() ? unsubscribe_url((int)$row['id']) : null);
+                if (send_mail($row['email'], $mail['subject'], $mail['text'], $mail['html'], email_images(), unsubscribe_headers((int)$row['id']))) {
                     run('INSERT INTO email_log (email, kind, license_id) VALUES (?, ?, NULL)', [$row['email'], $campaign]);
                     $sent++;
                 } else {
@@ -147,10 +146,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             go($back, "Sent to $sent " . ($sent === 1 ? 'person' : 'people') . '.'
                 . ($failed ? " $failed could not be sent." : '')
                 . ($left > 0 ? " $left still to go: press Send again (same subject and message) to carry on." : ''));
+        case 'welcome_rest':
+            // The thank-you from Noaman to everyone on the list who hasn't had it (new sign-ups get it by themselves).
+            $todo = all("SELECT s.email, s.name FROM signups s WHERE " . (privacy_ready() ? 's.unsubscribed_at IS NULL AND ' : '') . "NOT EXISTS
+                         (SELECT 1 FROM email_log e WHERE e.email = s.email AND e.kind = 'welcome') ORDER BY s.id");
+            ignore_user_abort(true);
+            set_time_limit(0);
+            $started = microtime(true);
+            $sent = $failed = 0;
+            foreach ($todo as $row) {
+                if (microtime(true) - $started > 40) {
+                    break;
+                }
+                sign_up_welcome($row['email'], $row['name']) ? $sent++ : $failed++;
+            }
+            $left = count($todo) - $sent - $failed;
+            go('signups', "Thank-you sent to $sent " . ($sent === 1 ? 'person' : 'people') . '.'
+                . ($failed ? " $failed could not be sent." : '') . ($left > 0 ? " $left still to go: press it again." : ''));
         case 'delete_signup':
             $row = one('SELECT email FROM signups WHERE id = ?', [(int)($_POST['signup'] ?? 0)]);
-            run('DELETE FROM signups WHERE id = ?', [(int)($_POST['signup'] ?? 0)]);
-            go('signups', 'Removed ' . ($row['email'] ?? 'that sign-up') . ' from the list.');
+            if ($row === null) {
+                go('signups', 'That sign-up is already gone.');
+            }
+            if (!privacy_ready()) {
+                run('DELETE FROM signups WHERE id = ?', [(int)($_POST['signup'] ?? 0)]);
+                go('signups', 'Removed ' . $row['email'] . ' from the list.');
+            }
+            [$code, $removed, $kept] = delete_person($row['email'], 'admin');
+            go('signups', 'Deleted ' . $row['email'] . " ($removed" . ($kept ? "; kept: $kept" : '') . "). Confirmation number $code, emailed to them.");
     }
     go();
 }
@@ -162,6 +185,8 @@ unset($_SESSION['flash']);
 
 if (isset($_GET['license'])) {
     license_page((int)$_GET['license'], $flash);
+} elseif (isset($_GET['requests'])) {
+    requests_page((string)($_GET['q'] ?? ''), $flash);
 } elseif (isset($_GET['webhooks'])) {
     webhooks_page($flash);
 } elseif (isset($_GET['signups'])) {
@@ -319,22 +344,73 @@ function signups_page(string $query, ?string $flash): never
        . '<button>Search</button></form><p><a href="?signups&csv">Download all as CSV</a></p>';
     $matching = signups_matching($query);
     $rows = array_slice($matching, 0, 500);
-    if ($matching) { write_to_signups($query, count($matching)); }
+    if ($matching) { write_to_signups($query, count(signups_reachable($query))); }
+    welcome_box();
     if (!$rows) { echo '<p class="muted">None.</p>'; page_end(); }
     $hasPage = signups_have_page();
     echo '<table><tr><th>Name</th><th>Email</th>' . ($hasPage ? '<th>Page</th>' : '') . '<th>Country</th><th>IP</th><th>Signed up</th><th></th></tr>';
     foreach ($rows as $row) {
         $source = $row['country_source'] === 'timezone' ? ' <span class="muted" title="From the browser\'s time zone: ' . h($row['time_zone']) . '">(time zone)</span>' : '';
-        echo '<tr><td>' . h($row['name']) . '</td><td>' . h($row['email']) . '</td>'
+        $off = ($row['unsubscribed_at'] ?? null) !== null ? ' <span class="status revoked" title="Unsubscribed ' . h($row['unsubscribed_at']) . ' UTC">unsubscribed</span>' : '';
+        echo '<tr><td>' . h($row['name']) . $off . '</td><td>' . h($row['email']) . '</td>'
            . ($hasPage ? '<td>' . ($row['page'] === 'beta' ? '<span class="status active">Beta</span>' : 'Homepage') . '</td>' : '')
            . '<td title="' . h($row['country'] ?? '') . '">' . h(country_name($row['country'])) . $source . '</td>'
            . '<td class="mono">' . h($row['ip']) . '</td><td>' . h($row['created_at']) . ' UTC</td><td>'
-           . '<form method="post" onsubmit="return confirm(' . h(json_encode('Remove ' . $row['email'] . ' from the list?')) . ')">' . csrf_field()
+           . '<form method="post" onsubmit="return confirm(' . h(json_encode('Delete everything we hold about ' . $row['email'] . '? They get a confirmation number by email. Purchase records stay.')) . ')">' . csrf_field()
            . '<input type="hidden" name="do" value="delete_signup"><input type="hidden" name="signup" value="' . (int)$row['id'] . '">'
-           . '<button class="small danger">Remove</button></form></td></tr>';
+           . '<button class="small danger">Delete</button></form></td></tr>';
     }
     echo '</table>';
     page_end();
+}
+
+/** The sign-ups an email would reach: those matching the search who haven't unsubscribed. */
+function signups_reachable(string $query): array
+{
+    return array_values(array_filter(signups_matching($query), fn($row) => ($row['unsubscribed_at'] ?? null) === null));
+}
+
+/** Privacy requests: look one up by its confirmation number, or by the person's email (through its fingerprint). */
+function requests_page(string $query, ?string $flash): never
+{
+    page_start('Privacy requests');
+    nav($flash);
+    echo '<h2>Privacy requests' . table_tag('data_requests') . '</h2>';
+    if (!privacy_ready()) {
+        echo '<p class="muted">Import sql/006_privacy.sql in phpMyAdmin to turn on unsubscribing, the Your data page and this record.</p>';
+        page_end();
+    }
+    echo '<p class="muted">Every unsubscribe and deletion, kept 3 years. The email itself is never stored: searching by email '
+       . 'matches its fingerprint.</p>'
+       . '<form class="search"><input type="hidden" name="requests" value="1"><input name="q" value="' . h($query) . '" placeholder="Confirmation number (BR-…) or email" autofocus><button>Look up</button></form>';
+    $rows = find_requests($query);
+    if (!$rows) { echo '<p class="muted">None.</p>'; page_end(); }
+    echo '<table><tr><th>Confirmation number</th><th>What</th><th>How</th><th>Done</th><th>Removed</th><th>Kept</th></tr>';
+    foreach ($rows as $row) {
+        echo '<tr><td class="mono">' . h($row['code']) . '</td><td>' . h($row['kind'] === 'delete' ? 'Deletion' : 'Unsubscribe') . '</td>'
+           . '<td>' . h(['web' => 'Your data page', 'email_link' => 'Email link', 'admin' => 'Admin page'][$row['channel']] ?? $row['channel']) . '</td>'
+           . '<td>' . h($row['completed_at']) . ' UTC</td><td>' . h($row['removed'] ?? '—') . '</td><td>' . h($row['kept'] ?? '—') . '</td></tr>';
+    }
+    echo '</table>';
+    page_end();
+}
+
+/** The thank-you from Noaman: who has had it, and a button for those who haven't. */
+function welcome_box(): void
+{
+    $waiting = (int)one("SELECT COUNT(*) AS n FROM signups s WHERE " . (privacy_ready() ? 's.unsubscribed_at IS NULL AND ' : '') . "NOT EXISTS
+                         (SELECT 1 FROM email_log e WHERE e.email = s.email AND e.kind = 'welcome')")['n'];
+    $had = (int)one("SELECT COUNT(DISTINCT email) AS n FROM email_log WHERE kind = 'welcome'")['n'];
+    echo '<div class="card compose welcome"><p><b>Thank-you email from Noaman</b> <span class="muted">· sent by itself to every new sign-up · '
+       . $had . ' sent so far</span></p>';
+    if ($waiting > 0) {
+        echo '<form method="post" class="inline" style="margin-top:10px">' . csrf_field() . '<input type="hidden" name="do" value="welcome_rest">'
+           . '<button onclick="return confirm(' . h(json_encode("Send the thank-you email to the $waiting " . ($waiting === 1 ? 'person' : 'people') . ' who haven\'t had it?')) . ')">'
+           . 'Send it to the ' . $waiting . ' who haven\'t had it</button></form>';
+    } else {
+        echo '<p class="muted" style="margin-top:6px">Everyone on the list has had it.</p>';
+    }
+    echo '</div>';
 }
 
 /** Everyone on the sign-up list, or those whose name, email or country matches the search; newest first. */
@@ -378,12 +454,12 @@ function signups_csv(): never
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="bondi-signups-' . gmdate('Y-m-d') . '.csv"');
     $out = fopen('php://output', 'w');
-    fputcsv($out, ['name', 'email', 'country', 'country_name', 'country_source', 'time_zone', 'page', 'ip', 'created_at_utc', 'updated_at_utc'], ',', '"', '');
+    fputcsv($out, ['name', 'email', 'country', 'country_name', 'country_source', 'time_zone', 'page', 'ip', 'created_at_utc', 'updated_at_utc', 'unsubscribed_at_utc'], ',', '"', '');
     foreach (all('SELECT * FROM signups ORDER BY id') as $row) {
         // A leading = + - @ would run as a formula in Excel or Numbers, so it gets a ' in front.
         $safe = fn($value) => is_string($value) && preg_match('/^[=+\-@]/', $value) ? "'" . $value : $value;
         fputcsv($out, array_map($safe, [$row['name'], $row['email'], $row['country'], $row['country'] === null ? null : country_name($row['country']), $row['country_source'], $row['time_zone'], $row['page'] ?? 'home',
-                                          $row['ip'], $row['created_at'], $row['updated_at']]), ',', '"', '');
+                                          $row['ip'], $row['created_at'], $row['updated_at'], $row['unsubscribed_at'] ?? null]), ',', '"', '');
     }
     exit;
 }
@@ -432,7 +508,7 @@ function table_tag(string ...$tables): string
 
 function nav(?string $flash): void
 {
-    echo '<nav><a href="./">Licenses</a> <a href="?signups">Update sign-ups</a> <a href="?webhooks">Paddle notifications</a>'
+    echo '<nav><a href="./">Licenses</a> <a href="?signups">Update sign-ups</a> <a href="?requests">Privacy requests</a> <a href="?webhooks">Paddle notifications</a>'
        . '<form method="post">' . csrf_field() . '<input type="hidden" name="do" value="logout"><button class="link">Sign out</button></form></nav>';
     if ($flash !== null) { echo '<p class="flash">' . h($flash) . '</p>'; }
 }

@@ -37,6 +37,10 @@ return [
         'pass' => '',
     ],
 
+    // Optional: the secret behind unsubscribe links and the privacy record's email fingerprints. Make one in
+    // Terminal with  openssl rand -hex 32  and never change it afterwards. Without it, one is made from the database settings.
+    'app_secret' => '',
+
     // Admin page sign-in: a username you choose (not case-sensitive) and a password used nowhere else.
     'admin_username' => 'CHANGE-ME',
     'admin_password' => '',
