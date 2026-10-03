@@ -41,3 +41,9 @@ header nav { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 0; }
 .askai-row .ai-logo { width: 15px; height: 15px; }
 footer { align-items: center; } .askai-row { margin-left: auto; }
 .vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Made with love by Noaman, with his X */
+.made { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+.made .heart { color: var(--bondi); }
+.made .x-link { display: inline-flex; align-items: center; gap: 5px; }
+.made .x-logo { width: 11px; height: 11px; fill: currentColor; }
