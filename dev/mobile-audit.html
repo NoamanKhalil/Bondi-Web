@@ -1,0 +1,32 @@
+<!-- Phone-width audit. Copy to public_html/_mobile-audit.html (git ignores _*.html), run  php -S 127.0.0.1:8770 -t public_html, and open
+     /_mobile-audit.html?src=/&w=390   (also: off=<px> to look further down, inside=<selectors> to list what pokes out of those boxes).
+     It shows the page at that width beside a report: sideways overflow, and tap targets under 24px tall. -->
+<!doctype html><meta charset="utf-8"><body style="margin:0;background:#777;font:12px/1.4 Menlo,monospace">
+<div style="display:flex;gap:10px;align-items:flex-start">
+<div id="clip" style="width:390px;height:1600px;overflow:hidden;position:relative;background:#fff">
+<iframe id="f" src="about:blank" style="width:390px;height:20000px;border:0;display:block;position:absolute;left:0;top:0"></iframe></div>
+<pre id="r" style="margin:0;padding:8px;background:#111;color:#0f0;white-space:pre-wrap;width:420px"></pre></div>
+<script>
+const p = new URLSearchParams(location.search), W = +(p.get('w')||390), OFF = +(p.get('off')||0);
+const f = document.getElementById('f');
+f.addEventListener('load', () => setTimeout(() => {
+  const d = f.contentDocument, root = d.documentElement;
+  const foot = d.querySelector('footer'); const H = foot ? Math.ceil(foot.getBoundingClientRect().bottom) : root.scrollHeight; f.style.height = H + 'px'; f.style.top = (-OFF) + 'px';
+  const bad = [];
+  d.querySelectorAll('body *').forEach(el => {
+    const r = el.getBoundingClientRect(); if (!r.width) return;
+    const cs = getComputedStyle(el);
+    if (r.right > W + 1 || r.left < -1) {
+      let anc = el.parentElement, clipped = false;
+      while (anc && anc !== d.body) { const s = getComputedStyle(anc); if (/(hidden|clip|auto|scroll)/.test(s.overflowX)) { const ar = anc.getBoundingClientRect(); if (ar.right <= W + 1 && ar.left >= -1) { clipped = true; break; } } anc = anc.parentElement; }
+      if (!clipped && cs.position !== 'fixed') bad.push(`${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''}${el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(/\s+/).slice(0,2).join('.') : ''} x=${Math.round(r.left)}..${Math.round(r.right)} y=${Math.round(r.top)}`);
+    }
+  });
+  const inside = p.get('inside'); if (inside) { bad.length = 0; d.querySelectorAll(inside).forEach(box => { const br = box.getBoundingClientRect(); box.querySelectorAll('*').forEach(el => { const r = el.getBoundingClientRect(); if (r.width && r.right > br.right + 1) bad.push(`${el.tagName.toLowerCase()}.${(typeof el.className==='string'?el.className:'').trim().split(/\s+/).slice(0,2).join('.')} right=${Math.round(r.right)} box=${Math.round(br.right)} w=${Math.round(r.width)} :: ${(el.textContent||'').trim().slice(0,30)}`); }); }); }
+  const small = [...d.querySelectorAll('a,button,input,summary')].filter(el => { const r = el.getBoundingClientRect(); return r.width && r.height && (r.height < 24) && getComputedStyle(el).display !== 'none'; }).length;
+  document.getElementById('r').textContent = `page ${p.get('src')} at ${W}px\nscrollWidth ${root.scrollWidth} (viewport ${W})\nheight ${H}\ntap targets under 24px tall: ${small}\noverflowing (${bad.length}):\n` + bad.slice(0, 60).join('\n');
+}, +(p.get('wait')||2500)));
+f.src = p.get('src');
+document.getElementById('clip').style.width = W + 'px'; f.style.width = W + 'px';
+document.getElementById('clip').style.height = (+(p.get('h')||1600)) + 'px';
+</script>
