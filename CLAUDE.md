@@ -44,6 +44,7 @@ The owner reviews the site as a private claude.ai artifact: **https://claude.ai/
 - Competitors named (owner): Activity Monitor, iStat Menus, Stats and Vitals. Re-check what's said about them, and that each Ask-AI link still opens its assistant, every few months.
 - Every new sign-up gets a thank-you email from Noaman (`welcome_email()` in `bondi/lib/mail.php`, sent once per email, logged as `welcome`); the admin sign-ups page sends it to anyone who hasn't had it. Noaman's X: @khalilnoaman (`MAKER_X`), also in every footer.
 - Homepage search tags target "why is my Mac slow", "system monitor for Mac" and "Activity Monitor alternative". Its JSON-LD has SoftwareApplication and an FAQPage copied word for word from the FAQ section: change both together.
+- **Blog** (`/blog/`): articles are Markdown in `content/blog/` (header: title, description, date, status draft|published, order, image, related). `php dev/build-blog.php` publishes the `published` ones (pages, index, RSS, sitemap and llms.txt entries, top-level copy); `--preview DIR` builds drafts too. Articles carry the owner's byline, so they go live only after he approves them; numbers come from real readings only. First 10 drafted 2026-10-03.
 - Guide pages (process pages from the app's guide, topic guides, comparisons): later, one page at a time, as the owner decides.
 
 ## Design

@@ -1,0 +1,57 @@
+---
+title: "Bondi vs Activity Monitor: what each one is for"
+description: Activity Monitor shows every process on your Mac. Bondi tells you what they mean. A fair comparison of what each does well, and when to use which.
+date: 2026-10-03
+status: draft
+order: 9
+image: /assets/features/busiest.png
+related: which-app-is-using-my-mac-memory, why-is-my-mac-slow, ai-that-never-makes-up-a-number
+---
+Activity Monitor is the detailed instrument panel built into every Mac: it lists every process and every figure. Bondi is the interpreter: it groups those processes into the apps you know, keeps 30 days of history, and tells you in one sentence what's slowing your Mac down. Most people will use both.
+
+## What Activity Monitor does well
+
+Activity Monitor is free, built in, and thorough:
+
+- **Every process**, with CPU, memory, energy, disk and network figures, in five tabs.
+- **Memory pressure** graph and a breakdown of how memory is used.
+- **Some history**: a CPU History window (Window menu) for recent load, and a 12-hour power column in the Energy tab on laptops.
+- **Deep tools** for developers: sample a process, run a spindump, inspect open files and ports.
+- **Force quit** for anything that's stuck.
+
+If you know what you're looking for, it has the data.
+
+## Where it leaves you on your own
+
+- **Processes, not apps.** A modern app is many processes. On the Mac I measure on, Activity Monitor listed **966 processes**. Google Chrome alone was **80 of them**, adding up to **12.23 GB**, but split into rows of a few hundred megabytes each. Nothing looked big.
+- **Numbers, not answers.** It shows the figures and leaves the conclusion to you.
+- **Little memory of the past.** "What slowed my Mac yesterday afternoon?" isn't something it can answer.
+
+## What Bondi adds
+
+- **Apps, not processes.** Every helper counts toward the app that started it. That same Mac's 966 processes became **39 apps you recognise**.
+- **One plain sentence.** Bondi works out what matters and says it, written on your Mac by an on-device AI, with every number measured by Bondi itself.
+- **30 days of history**, kept on your Mac, that you can ask about in plain words.
+- **Warnings with one fix**, always asking before it quits anything.
+- **Developer and local AI awareness**: dev servers by project and port, Docker containers and local models, with the memory each holds.
+- **Extras Activity Monitor doesn't do**: per-app volume and a fan boost.
+
+![Bondi's Busiest Right Now: Google Chrome, macOS and Visual Studio Code, by memory.](/assets/features/busiest.png)
+*Bondi's busiest apps, grouped: Chrome is one row, not 80.*
+
+## Side by side
+
+| | Activity Monitor | Bondi |
+| --- | --- | --- |
+| Price | Free, built into macOS | At launch: 7-day free trial, then a one-time purchase (from $6.99) |
+| Shows | Every process | Apps (and their processes when you want them) |
+| Explains the cause | No | Yes, in one sentence |
+| History | Recent CPU, 12 hours of energy | 30 days, on your Mac |
+| Warnings | No | Memory pressure and more, one fix at a time |
+| Lives in the menu bar | No (a Dock icon can show a graph) | Yes |
+| Developer tools | Sample, spindump, open files and ports | Dev servers, ports, containers and local AI models |
+| Data leaves the Mac | No | No |
+
+## Which should you use?
+
+Keep Activity Monitor for deep, process-level digging: it's excellent at that, and Bondi doesn't replace it. Use Bondi for the everyday question, "why is my Mac slow right now, and what changed?", answered without the detective work.

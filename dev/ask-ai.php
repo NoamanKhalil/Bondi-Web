@@ -40,6 +40,11 @@ foreach ($services as $name => [$file, $url]) {
 $column .= '</ul><p class="askai-note">' . $h($note) . '</p></div><!-- /ask-ai:column -->';
 $row .= '</div><!-- /ask-ai:row -->';
 
+if (($argv[1] ?? '') === '--print-row') { // dev/build-blog.php puts this row on blog pages; rebuild the blog after changing the question
+    echo $row;
+    exit;
+}
+
 $root = dirname(__DIR__);
 $pages = ['index.html' => 'column', 'beta/index.html' => 'row', 'privacy/index.html' => 'row', 'terms/index.html' => 'row',
           'eula/index.html' => 'row', 'refunds/index.html' => 'row', '404.html' => 'row'];
