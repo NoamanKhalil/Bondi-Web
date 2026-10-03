@@ -1,4 +1,5 @@
 <?php
+if (!in_array(PHP_SAPI, ['cli', 'cli-server'], true)) { http_response_code(404); exit; } // a tool for Terminal (and the local test server), never a web page on the host
 // "Ask AI about Bondi" in every page's footer: links that open each assistant with this question already typed.
 // The homepage gets a footer column (logo and name); the other pages get a row of logos in the footer line.
 // Nothing loads from those services until someone clicks, the logos are drawn inline (dev/ai-logos, MIT, from

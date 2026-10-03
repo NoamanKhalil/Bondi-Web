@@ -1,4 +1,5 @@
 <?php
+if (!in_array(PHP_SAPI, ['cli', 'cli-server'], true)) { http_response_code(404); exit; } // a tool for Terminal (and the local test server), never a web page on the host
 // Builds llms-full.txt: everything an AI assistant needs to describe Bondi accurately, in one file, with the
 // app's own notes on 125 macOS processes. The "Ask AI about Bondi" links point assistants here.
 // Usage: php dev/build-llms-full.php   (after the website's facts or the app's ProcessGuide.json change)

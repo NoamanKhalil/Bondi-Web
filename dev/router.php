@@ -1,4 +1,5 @@
 <?php
+if (!in_array(PHP_SAPI, ['cli', 'cli-server'], true)) { http_response_code(404); exit; } // a tool for Terminal (and the local test server), never a web page on the host
 // Local testing only: `php -S 127.0.0.1:8099 -t public_html dev/router.php` stands in for
 // Hostinger's .htaccess rewrite, sending /api/<action> to api/index.php.
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

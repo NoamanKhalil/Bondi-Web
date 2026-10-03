@@ -1,4 +1,5 @@
 <?php
+if (!in_array(PHP_SAPI, ['cli', 'cli-server'], true)) { http_response_code(404); exit; } // a tool for Terminal (and the local test server), never a web page on the host
 // Refreshes the IP address → country lists the sign-up form uses (bondi/ip-country-v4.bin, -v6.bin).
 // Usage: php dev/update-ip-country.php   (then commit the two files; every few months is plenty)
 //

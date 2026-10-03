@@ -1,4 +1,5 @@
 <?php
+if (!in_array(PHP_SAPI, ['cli', 'cli-server'], true)) { http_response_code(404); exit; } // a tool for Terminal (and the local test server), never a web page on the host
 // Builds the blog from content/blog/*.md into public_html/blog/ (and the top-level copy Hostinger serves).
 //
 //   php dev/build-blog.php                 publish: every article with "status: published"
