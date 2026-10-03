@@ -7,9 +7,9 @@ order: 5
 image: /assets/features/cpu.png
 related: mac-fans-loud, why-is-my-mac-slow, windowserver-high-cpu
 ---
-When kernel_task shows a high CPU figure, your Mac is almost always hot. macOS is taking CPU time on purpose so that apps slow down and the heat drops. It's a safety feature, not a bug or malware.
+When kernel_task shows a high CPU figure, your Mac is almost always running hot, or close to overheating. macOS is taking CPU time on purpose so that apps slow down and the heat drops. It's a safety feature, not a bug or malware.
 
-## What kernel_task is
+## What kernel_task is on a Mac
 
 kernel_task is the core of macOS: the part that manages memory, hardware and every other process. You can't quit it, and you wouldn't want to.
 
@@ -44,5 +44,5 @@ Don't try to quit or limit kernel_task, and be wary of "cleaner" apps that promi
 
 Bondi's own note on kernel_task says it plainly: *"High CPU usually means the Mac is hot, for example charging in a warm room or on a soft surface. It can't be quit. If it stays busy, let the Mac cool down or close the apps that heat it."* Bondi also groups every process under the app that started it, so the app heating your Mac is one row instead of dozens.
 
-![Bondi's CPU view: 7% of 10 cores on an M1 Max, load average and top apps.](/assets/features/cpu.png)
+![Mac CPU usage in Bondi: 7% of 10 cores on an M1 Max MacBook Pro, with load average and top apps.](/assets/features/cpu.png)
 *Bondi's CPU view on the same Mac, in a calm moment.*

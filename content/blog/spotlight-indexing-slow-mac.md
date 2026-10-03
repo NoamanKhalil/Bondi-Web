@@ -17,7 +17,7 @@ If **mds_stores**, **mds** or **mdworker** are near the top of Activity Monitor,
 
 Normally they're quiet. On the Mac I measure on, mds_stores was using **0.0% of the CPU and 105.3 MB of memory** on an ordinary day. It's only when there's a lot to (re)index that they show up.
 
-## How to tell it's indexing
+## How to tell Spotlight is indexing (mds_stores high CPU)
 
 - **mds_stores** or several **mdworker** processes high in Activity Monitor's **CPU** tab.
 - Fans louder than usual, with nothing else busy.
@@ -33,7 +33,7 @@ From minutes to a few hours, depending on how many files you have and how fast t
 2. **Keep the Mac plugged in and awake** until it's done.
 3. **Keep folders out of the index** if they don't need searching: big build folders, caches, virtual machines, or backups. You can leave folders out in **System Settings → Spotlight** (look for the privacy option there; its exact name varies by macOS version).
 
-## When it doesn't settle
+## When Spotlight indexing is stuck
 
 If Spotlight is still busy after a day, something keeps giving it new files: a folder that changes constantly (logs, builds, a sync folder mid-sync) is the usual cause. Adding that folder to Spotlight's privacy list stops the churn.
 

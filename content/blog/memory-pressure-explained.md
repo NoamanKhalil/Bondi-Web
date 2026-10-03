@@ -1,6 +1,6 @@
 ---
 title: Memory pressure on Mac, explained
-description: "Memory Used" being high is normal on a Mac. Memory pressure is the number that tells you whether you actually need more. Here's how to read it.
+description: "Memory Used" being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here's how to read them.
 date: 2026-10-03
 status: draft
 order: 3
@@ -36,7 +36,7 @@ Open Activity Monitor and choose the **Memory** tab. At the bottom:
 | **Cached Files** | Recently used files, given back when needed. |
 | **Swap Used** | Memory moved to the disk. A little is normal; a lot, with yellow or red pressure, is why things feel slow. |
 
-## What to do when it's yellow or red
+## What to do when memory pressure is yellow or red
 
 1. **Find the app using the most.** Usually it's a browser with many tabs, but helper processes hide this. See [Which app is using my Mac's memory?](/blog/which-app-is-using-my-mac-memory/)
 2. **Quit it or close what you don't need**, then watch the graph drop.
@@ -49,5 +49,5 @@ If it's red every day with your normal set of apps, your work needs more memory 
 
 Bondi watches memory pressure for you. When it rises, the menu bar says so and names the cause, with one fix that always asks first:
 
-![Bondi's warning: Memory pressure is Elevated. Google Chrome is using 13.09 GB. Quit Google Chrome.](/assets/features/warning.png)
+![Memory pressure warning on a MacBook Pro, from Bondi: Memory pressure is Elevated. Google Chrome is using 13.09 GB. Quit Google Chrome.](/assets/features/warning.png)
 *A real warning from Bondi. It suggests one fix at a time and never quits anything without asking.*

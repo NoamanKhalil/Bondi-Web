@@ -1,6 +1,6 @@
 ---
 title: Which app is using my Mac's memory?
-description: Apps split themselves into dozens of helper processes, so Activity Monitor rarely shows the real total. Here's how to see what each app is really using.
+description: Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here's how to see which app is really using your Mac's memory.
 date: 2026-10-03
 status: draft
 order: 2
@@ -30,7 +30,7 @@ Added up by app, the picture was completely different:
 
 Chrome was using more memory than all of macOS, spread across 80 processes so no single row stood out.
 
-## Why apps do this
+## Why Chrome and other apps split into helper processes
 
 Browsers run each tab, extension and site in its own process, so one misbehaving page can't crash the rest. Code editors do the same for extensions and language tools. It's good for stability, and bad for anyone trying to read Activity Monitor.
 
@@ -50,5 +50,5 @@ Only if memory pressure is high. If the **Memory Pressure** graph is green, a bi
 
 Bondi does the grouping for you: every helper counts toward the app that started it, so Chrome is one row. Switch between CPU, memory and energy to see who's busiest by each.
 
-![Bondi's Busiest Right Now list, by memory.](/assets/features/busiest.png)
+![Which app is using the most memory on a MacBook Pro: Bondi's Busiest Right Now list.](/assets/features/busiest.png)
 *Bondi's busiest apps, each a single row with all its helpers included.*

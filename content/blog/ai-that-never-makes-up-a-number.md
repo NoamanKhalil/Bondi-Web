@@ -1,13 +1,13 @@
 ---
 title: How Bondi's AI explains your Mac without making up a number
-description: AI models are good with words and bad with numbers. Here's how Bondi uses an on-device model to write the sentence while every figure stays measured and checked.
+description: How Bondi's on-device AI, with Apple Intelligence where available, explains your Mac in one sentence while every figure stays measured and checked.
 date: 2026-10-03
 status: draft
 order: 10
 image: /assets/features/why.png
 related: bondi-vs-activity-monitor, why-is-my-mac-slow, memory-pressure-explained
 ---
-Bondi uses an AI model to write one plain sentence about your Mac, but the AI never decides a single number. Bondi measures everything itself, decides what matters, lets the model write the words around those facts, and then checks the sentence before you see it.
+Bondi uses an on-device AI model, private to your Mac, to write one plain sentence about it, but the AI never decides a single number. Bondi measures everything itself, decides what matters, lets the model write the words around those facts, and then checks the sentence before you see it.
 
 ## The problem with asking an AI about your Mac
 
@@ -15,7 +15,7 @@ Language models are good at sounding right. That's exactly the risk with system 
 
 So I set two rules for Bondi's AI: it runs on your Mac, and it never gets to make up a number.
 
-## How a sentence gets written
+## How Bondi's on-device AI writes a sentence
 
 **1. Bondi measures.** Every figure is worked out in code from your Mac's own readings: memory pressure, which app is using what (with all its helper processes added up), CPU, disk, battery and more.
 

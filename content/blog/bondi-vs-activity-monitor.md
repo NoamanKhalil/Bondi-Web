@@ -1,13 +1,13 @@
 ---
 title: "Bondi vs Activity Monitor: what each one is for"
-description: Activity Monitor shows every process on your Mac. Bondi tells you what they mean. A fair comparison of what each does well, and when to use which.
+description: Looking for an Activity Monitor alternative for Mac? Activity Monitor shows every process; Bondi tells you what they mean. When to use which.
 date: 2026-10-03
 status: draft
 order: 9
 image: /assets/features/busiest.png
 related: which-app-is-using-my-mac-memory, why-is-my-mac-slow, ai-that-never-makes-up-a-number
 ---
-Activity Monitor is the detailed instrument panel built into every Mac: it lists every process and every figure. Bondi is the interpreter: it groups those processes into the apps you know, keeps 30 days of history, and tells you in one sentence what's slowing your Mac down. Most people will use both.
+Activity Monitor is the task manager built into every Mac, a detailed instrument panel: it lists every process and every figure. Bondi is the interpreter: it groups those processes into the apps you know, keeps 30 days of history, and tells you in one sentence what's slowing your Mac down. Most people will use both.
 
 ## What Activity Monitor does well
 
@@ -27,7 +27,7 @@ If you know what you're looking for, it has the data.
 - **Numbers, not answers.** It shows the figures and leaves the conclusion to you.
 - **Little memory of the past.** "What slowed my Mac yesterday afternoon?" isn't something it can answer.
 
-## What Bondi adds
+## What Bondi adds as an Activity Monitor alternative
 
 - **Apps, not processes.** Every helper counts toward the app that started it. That same Mac's 966 processes became **39 apps you recognise**.
 - **One plain sentence.** Bondi works out what matters and says it, written on your Mac by an on-device AI, with every number measured by Bondi itself.

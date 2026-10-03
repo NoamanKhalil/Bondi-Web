@@ -1,13 +1,13 @@
 ---
 title: Why are my Mac's fans so loud?
-description: Loud fans mean your Mac's chip is working hard or running hot. Here's how to find what's heating it, and what to do when the fans won't settle.
+description: Loud fans on a MacBook or any Mac mean the chip is working hard or running hot. Here's how to find what's heating it, and what to do if they won't settle.
 date: 2026-10-03
 status: draft
 order: 4
 image: /assets/features/fans.png
 related: kernel-task-high-cpu, why-is-my-mac-slow, mac-slow-after-update
 ---
-Your Mac's fans get loud for one reason: the chip is producing more heat than the Mac can lose quietly. Find what's making it work hard, give it some air, and the fans settle within minutes.
+On a MacBook Pro or a desktop Mac, the fans get loud for one reason: the chip is producing more heat than the Mac can lose quietly. Find what's making it work hard, give it some air, and the fans settle within minutes.
 
 ## First: is something working hard?
 
@@ -20,7 +20,7 @@ Open Activity Monitor (Command-Space, then type "Activity Monitor"), choose the 
 
 Also check the **GPU** (in Activity Monitor: **Window → GPU History**). Games, video and some web pages heat the graphics side more than the CPU.
 
-## Loud fans with nothing open
+## MacBook fans loud with nothing open
 
 This is the most frustrating version. The usual causes:
 
@@ -41,5 +41,5 @@ This is the most frustrating version. The usual causes:
 
 Sometimes you'd rather have *more* cooling: during a long export or a hot afternoon. macOS doesn't offer a fan control. Bondi's **Fan boost** does, with three rules: it's never slower than your fans already were, it goes to full speed whenever macOS reports the Mac running hot, and it returns to Apple's automatic control when you quit Bondi, sleep or crash.
 
-![Bondi's fan control: Auto, with a slider to boost.](/assets/features/fans.png)
+![Mac fan control in Bondi: Auto, with a slider to boost the fans.](/assets/features/fans.png)
 *Bondi's Fan boost on a Mac whose fans range from about 1,180 to 5,779 rpm.*

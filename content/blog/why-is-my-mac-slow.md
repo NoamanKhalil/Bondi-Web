@@ -1,13 +1,13 @@
 ---
 title: Why is my Mac slow? How to find the real cause
-description: A slow Mac usually comes down to one of a handful of causes. Here's how to tell which one it is, with real readings from a real Mac.
+description: Mac running slow? It usually comes down to one of a handful of causes. Here's how to tell which one it is, with real readings from a real MacBook Pro.
 date: 2026-10-03
 status: draft
 order: 1
 image: /assets/features/why.png
 related: memory-pressure-explained, which-app-is-using-my-mac-memory, mac-slow-after-update
 ---
-A slow Mac almost always has one specific cause: memory running short, one app working hard, macOS doing background work, or the Mac protecting itself from heat. The trick is finding which one, because the fix for each is different.
+A slow Mac, whether it's a MacBook Air, a MacBook Pro or an iMac, almost always has one specific cause: memory running short, one app working hard, macOS doing background work, or the Mac protecting itself from heat. The trick is finding which one, because the fix for each is different.
 
 Here are the usual suspects, in the order I'd check them, and how to spot each one.
 
@@ -47,7 +47,7 @@ Developers know this one: a dev server, a Docker container or a local AI model y
 
 macOS needs free space for swap, caches and updates. When the startup disk is close to full, everything that touches the disk slows down. Check it in **System Settings → General → Storage**.
 
-## The quick checklist
+## Mac running slow? The quick checklist
 
 | Symptom | Most likely cause | Where to look |
 | --- | --- | --- |
@@ -61,7 +61,7 @@ macOS needs free space for swap, caches and updates. When the startup disk is cl
 
 All of this is detective work, and Activity Monitor gives you the clues but not the answer. Bondi does the detective work for you and says it in one sentence. On that same Mac, it said:
 
-![Bondi's sentence: Everything is fine. Memory pressure is Normal, with 44.73 GB of 64.00 GB used. Google Chrome is using the most memory, 13.09 GB across 82 processes.](/assets/features/why.png)
+![Bondi explaining why a MacBook Pro is slow: Everything is fine. Memory pressure is Normal, with 44.73 GB of 64.00 GB used. Google Chrome is using the most memory, 13.09 GB across 82 processes.](/assets/features/why.png)
 *Bondi's one-sentence answer, from a real reading on a MacBook Pro (M1 Max, 64 GB).*
 
 Every number in that sentence is measured by Bondi itself, and the sentence is written on your Mac, so nothing about your apps ever leaves it.
