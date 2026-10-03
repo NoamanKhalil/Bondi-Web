@@ -15,6 +15,7 @@
 //   POST signup       the website's "Sign up for updates": name and email (plus the visitor's IP and country),
 //                     and page: "beta" from the beta page
 //   GET  interest     how many people have signed up, and how many on the beta page (shown on that page)
+//   POST unsubscribe  mail apps' own one-click Unsubscribe button (RFC 8058): ?id=<sign-up>&s=<signature>
 
 // The private code lives beside public_html (best) or inside it as public_html/bondi, locked by its .htaccess.
 require is_file(dirname(__DIR__, 2) . '/bondi/bootstrap.php') ? dirname(__DIR__, 2) . '/bondi/bootstrap.php' : dirname(__DIR__) . '/bondi/bootstrap.php';
@@ -35,6 +36,7 @@ try {
         'paddle' => paddle(),
         'signup' => signup(),
         'interest' => interest(),
+        'unsubscribe' => unsubscribe_one_click(),
         default => fail('not_found', 'Unknown API call.', 404),
     };
 } catch (Throwable $error) {
@@ -202,6 +204,22 @@ function paddle(): never
     }
 }
 
+/** Gmail's and Apple Mail's Unsubscribe button posts here. Quiet: no email follows a one-click unsubscribe. */
+function unsubscribe_one_click(): never
+{
+    require_post();
+    limit_or_fail('unsubscribe:' . client_key(), 60, 3600);
+    if (!privacy_ready()) {
+        fail('unavailable', 'Unsubscribing isn\'t set up yet. Reply to the email with "unsubscribe".', 503);
+    }
+    $signup = signup_for_unsubscribe_link($_GET['id'] ?? null, $_GET['s'] ?? null);
+    if ($signup === null) {
+        fail('not_found', 'This unsubscribe link isn\'t valid.', 404);
+    }
+    $code = $signup['unsubscribed_at'] === null ? unsubscribe_signup($signup, 'email_link', true) : null;
+    json_out(['status' => 'unsubscribed', 'code' => $code]);
+}
+
 function interest(): never
 {
     json_out(interest_counts());
@@ -232,7 +250,8 @@ function signup(): never
         run("INSERT INTO signups (email, name, ip, country, country_source, time_zone, page) VALUES (?, ?, ?, ?, ?, ?, ?)
              ON DUPLICATE KEY UPDATE name = VALUES(name), ip = VALUES(ip), country = VALUES(country),
                  country_source = VALUES(country_source), time_zone = VALUES(time_zone),
-                 page = IF(VALUES(page) = 'beta', 'beta', page), updated_at = CURRENT_TIMESTAMP",
+                 page = IF(VALUES(page) = 'beta', 'beta', page), updated_at = CURRENT_TIMESTAMP"
+                 . (privacy_ready() ? ', unsubscribed_at = NULL' : ''), // signing up again is a fresh yes
             [...$values, (input()['page'] ?? '') === 'beta' ? 'beta' : 'home']);
     } else {
         run('INSERT INTO signups (email, name, ip, country, country_source, time_zone) VALUES (?, ?, ?, ?, ?, ?)

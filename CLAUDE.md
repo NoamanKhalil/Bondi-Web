@@ -10,8 +10,8 @@ The Mac app lives in its own repo next to this one: **`../TryBondi`** (readable 
 | --- | --- | --- |
 | `public_html/` | The website (`index.html`), the license API (`api/`), the admin page (`admin/`), the buy page (`buy/`, not linked until launch), legal pages, `assets/` | Contents go into Hostinger's `public_html` |
 | `bondi/` | Private PHP: settings (`config.php`, never committed), database, Paddle, email, licenses, sign-ups | Live at `public_html/bondi/` (the owner's host wants everything in `public_html`); its `.htaccess` blocks web access. Beside `public_html` also works. After an upload, check `https://trybondi.app/bondi/config.php` answers 403 |
-| `sql/` | Database setup, imported in phpMyAdmin in order (001, 003, 004, 005; 002 only for old installs) | — |
-| `dev/` | Local tests: `dev/test.sh` (a throwaway MySQL and PHP server, 51 checks) | Not uploaded |
+| `sql/` | Database setup, imported in phpMyAdmin in order (001, 003, 004, 005, 006; 002 only for old installs) | — |
+| `dev/` | Local tests: `dev/test.sh` (a throwaway MySQL and PHP server, 110 checks) | Not uploaded |
 | `video/` | The website films, made with Remotion. Use the `website-video` skill | Renders go to `public_html/assets` |
 
 `README.md` has the Hostinger and Paddle setup steps.
@@ -33,6 +33,7 @@ The owner reviews the site as a private claude.ai artifact: **https://claude.ai/
 - **Real numbers only.** Figures, app lists and films come from real readings of the owner's Mac (Bondi's engine, `--dump-engine` in the app's Debug build). Where something is an example (demo rows), say so.
 - **Privacy:** no analytics, no tracking, no third-party lookups of visitors. The sign-up form stores name, email, IP and country (from the IP via `bondi/ip-country-*.bin`, refreshed with `php dev/update-ip-country.php`; else the browser's time zone) and the privacy policy says so. Keep the policy in step with anything new the site collects.
 - **Pre-launch:** "Beta launching soon, full launch soon after." No buy buttons until the owner says so. Price: $6.99 for the first 250, then $29.99; 1 Mac per license; 7-day trial (at launch). Paddle is the merchant of record.
+- **Your data and unsubscribing** (GDPR/CCPA, `bondi/lib/privacy.php`): every list email has an Unsubscribe link and Gmail's one-click header; `/your-data/` emails a one-time link to see, download (JSON) or delete what we hold (purchase records stay, for tax). Each unsubscribe or deletion gets a confirmation number (BR-XXXXX-XXXX) in `data_requests`, which keeps a keyed fingerprint of the email (never the email) for 3 years. After someone leaves, only a confirmation email, never marketing; win-back lives on the web page (undo). Not directed at children (13; 16 in the EU/UK).
 - Legal pages are drafts; "[company mailing address]" still needs Jabble Super Intelligence Inc.'s address, and a lawyer should review them.
 - Don't copy any asset, text or layout detail from Vitals or any other app. Wording "Bondi for Apple Mac" is the owner's choice.
 

@@ -22,7 +22,7 @@ mysqld --initialize-insecure --datadir=$T/data --log-error=$T/init.log >/dev/nul
 mysqld --datadir=$T/data --socket=$SOCK --port=33098 --mysqlx=OFF --log-error=$T/err.log --pid-file=$T/pid >/dev/null 2>&1 &
 for i in $(seq 1 30); do mysql -uroot --socket=$SOCK -e 'select 1' >/dev/null 2>&1 && break; sleep 1; done
 mysql -uroot --socket=$SOCK -e "create database bondi; create user 'bondi'@'localhost' identified by 'test'; grant all on bondi.* to 'bondi'@'localhost';"
-for f in sql/001_schema.sql sql/002_one_mac_per_license.sql sql/003_checkout_claims.sql sql/004_signups.sql sql/005_signup_page.sql; do mysql -uroot --socket=$SOCK bondi < $f; done
+for f in sql/001_schema.sql sql/002_one_mac_per_license.sql sql/003_checkout_claims.sql sql/004_signups.sql sql/005_signup_page.sql sql/006_privacy.sql; do mysql -uroot --socket=$SOCK bondi < $f; done
 mysql -uroot --socket=$SOCK bondi -e "update price_tiers set paddle_price_id='pri_launch' where tier='launch'; update price_tiers set paddle_price_id='pri_regular' where tier='regular';"
 cat > $T/config.php <<CONF
 <?php
@@ -152,7 +152,7 @@ expect "admin offers the thank-you to those who haven't had it" "$(curl -s -c $J
 expect "admin sends the thank-you to the rest" "$(curl -s -c $J -b $J -L -d "do=welcome_rest&csrf=$CSRF" $BASE/admin/)" 'Thank-you sent to 1 person'
 expect "everyone has had it" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'Everyone on the list has had it'
 GRACE=$(mysql -uroot --socket=$SOCK bondi -N -e "select id from signups where email='grace@example.com'")
-expect "admin removes a sign-up" "$(curl -s -c $J -b $J -L -d "do=delete_signup&signup=$GRACE&csrf=$CSRF" $BASE/admin/)" 'Removed grace@example.com'
+expect "admin removes a sign-up" "$(curl -s -c $J -b $J -L -d "do=delete_signup&signup=$GRACE&csrf=$CSRF" $BASE/admin/)" 'Deleted grace@example.com.*Confirmation number BR-'
 
 # Country from the visitor's IP address, looked up in bondi/ip-country-*.bin
 LOOKUPS=$(php -r 'function config($p, $d = null) { return $d; } require "bondi/lib/signups.php";
@@ -163,6 +163,52 @@ expect "sign-up country comes from the IP before the time zone" "$(mysql -uroot 
 mysql -uroot --socket=$SOCK bondi -e "insert into signups (email, name, ip, country, country_source, time_zone) values ('old@example.com', 'Old', '8.8.8.8', 'JP', 'timezone', 'Asia/Tokyo')"
 expect "admin shows country names" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'United Kingdom'
 expect "older sign-ups get their IP's country" "$(mysql -uroot --socket=$SOCK bondi -N -e "select concat_ws('|', country, country_source) from signups where email='old@example.com'")" 'US|ip'
+
+# Privacy: unsubscribing, the Your data page, and the record of each request
+post signup '{"name":"Priv Acy","email":"privacy@example.com","time_zone":"Europe/Berlin"}' >/dev/null
+q() { mysql -uroot --socket=$SOCK bondi -N -e "$1"; }
+UNSUB=$(grep -o 'Unsubscribe: [^ ]*unsubscribe/?id=[0-9]*&s=[a-f0-9]*' bondi/mail.log | tail -1 | sed 's/Unsubscribe: //')
+expect "thank-you carries an Unsubscribe link" "$UNSUB" '/unsubscribe/?id='
+PID=$(echo "$UNSUB" | sed 's/.*id=\([0-9]*\).*/\1/'); PSIG=$(echo "$UNSUB" | sed 's/.*s=//')
+expect "opening the link only asks" "$(curl -s "$UNSUB")" 'Unsubscribe from Bondi emails?'
+expect "nothing changes until the button" "$(q "select ifnull(unsubscribed_at,'none') from signups where id=$PID")" '^none$'
+expect "a made-up signature is refused" "$(curl -s "$BASE/unsubscribe/?id=$PID&s=0000")" "doesn't work"
+UNSUBBED=$(curl -s -d "do=unsubscribe&id=$PID&s=$PSIG" "$BASE/unsubscribe/")
+expect "unsubscribe gives a confirmation number" "$UNSUBBED" "You're unsubscribed.*BR-[0-9A-Z]\{5\}-[0-9A-Z]\{4\}"
+expect "unsubscribe is recorded" "$(q "select ifnull(unsubscribed_at,'none') from signups where id=$PID")" '^20'
+expect "a thank-you confirms it" "$(cat bondi/mail.log)" "Subject: You're unsubscribed"
+expect "the page offers to undo it" "$UNSUBBED" 'Stay on the list'
+expect "admin marks them unsubscribed" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'unsubscribed'
+expect "undo puts them back" "$(curl -s -d "do=resubscribe&id=$PID&s=$PSIG" "$BASE/unsubscribe/")" 'Welcome back'
+expect "back on the list" "$(q "select ifnull(unsubscribed_at,'none') from signups where id=$PID")" '^none$'
+expect "mail apps' one-click button works" "$(curl -s -X POST -d 'List-Unsubscribe=One-Click' "$BASE/api/unsubscribe?id=$PID&s=$PSIG")" '"status":"unsubscribed"'
+expect "one-click needs POST" "$(curl -s "$BASE/api/unsubscribe?id=$PID&s=$PSIG")" '"error":"method"'
+post signup '{"name":"Priv Acy","email":"privacy@example.com"}' >/dev/null
+expect "signing up again re-subscribes" "$(q "select ifnull(unsubscribed_at,'none') from signups where id=$PID")" '^none$'
+
+LINKS_BEFORE=$(grep -c '/your-data/?t=' bondi/mail.log)
+expect "Your data: an unknown email gets the same answer" "$(curl -s -d 'do=request&email=nobody@example.com' $BASE/your-data/)" 'Check your inbox'
+expect "and no email" "$(grep -c '/your-data/?t=' bondi/mail.log)" "^$LINKS_BEFORE\$"
+expect "Your data: a known email gets a link" "$(curl -s -d 'do=request&email=privacy@example.com' $BASE/your-data/)" 'Check your inbox'
+TOK=$(grep -o '/your-data/?t=[a-f0-9]*' bondi/mail.log | tail -1 | sed 's/.*t=//')
+expect "the link shows what we hold" "$(curl -s "$BASE/your-data/?t=$TOK")" 'Everything we hold about.*privacy@example.com'
+expect "the download has it all" "$(curl -s "$BASE/your-data/?t=$TOK&download=1")" '"sign_up"'
+expect "delete asks to confirm" "$(curl -s -d "do=delete&t=$TOK" $BASE/your-data/)" 'Tick the box'
+DELETED=$(curl -s -d "do=delete&t=$TOK&sure=1" $BASE/your-data/)
+expect "delete gives a confirmation number" "$DELETED" "Your data is deleted.*BR-[0-9A-Z]\{5\}-[0-9A-Z]\{4\}"
+DCODE=$(echo "$DELETED" | grep -o 'BR-[0-9A-Z]\{5\}-[0-9A-Z]\{4\}' | head -1)
+expect "the sign-up is gone" "$(q "select count(*) from signups where email='privacy@example.com'")" '^0$'
+expect "and the email history" "$(q "select count(*) from email_log where email='privacy@example.com'")" '^0$'
+expect "the record keeps no email" "$(q "select concat_ws('|', kind, channel, length(email_hmac)) from data_requests where code='$DCODE'")" '^delete|web|64$'
+expect "a confirmation email" "$(cat bondi/mail.log)" 'Subject: Your data is deleted'
+expect "the link works only once" "$(curl -s "$BASE/your-data/?t=$TOK")" 'This link has expired'
+curl -s -d 'do=request' --data-urlencode 'email=test+ctm_1@example.com' $BASE/your-data/ >/dev/null
+BTOK=$(grep -o '/your-data/?t=[a-f0-9]*' bondi/mail.log | tail -1 | sed 's/.*t=//')
+expect "a buyer sees their purchase" "$(curl -s "$BASE/your-data/?t=$BTOK")" 'Your purchases'
+expect "a buyer's deletion keeps the purchase record" "$(curl -s -d "do=delete&t=$BTOK&sure=1" $BASE/your-data/)" 'We kept your purchase record'
+expect "and the license" "$(q "select count(*) from licenses l join customers c on c.id=l.customer_id where c.email='test+ctm_1@example.com'")" '^1$'
+expect "admin finds a request by its number" "$(curl -s -c $J -b $J "$BASE/admin/?requests&q=$DCODE")" "$DCODE.*Your data page"
+expect "admin finds requests by email" "$(curl -s -c $J -b $J "$BASE/admin/?requests&q=privacy@example.com")" "$DCODE"
 
 # Beta page: sign-ups marked beta, and the live counts it shows
 BEFORE=$(curl -s $BASE/api/interest)
@@ -180,6 +226,18 @@ expect "counts without sql/005" "$(curl -s $BASE/api/interest)" '"beta":null'
 if [ -n "${SNAP:-}" ]; then
   curl -s -c $J -b $J $BASE/admin/ > "$SNAP/admin-licenses.html"
   curl -s -c $J -b $J "$BASE/admin/?signups" > "$SNAP/admin-signups.html"
+  post signup '{"name":"Sam Snap","email":"snap@example.com"}' >/dev/null
+  SU=$(grep -o 'Unsubscribe: [^ ]*unsubscribe/?id=[0-9]*&s=[a-f0-9]*' bondi/mail.log | tail -1 | sed 's/Unsubscribe: //')
+  curl -s "$SU" > "$SNAP/unsubscribe-ask.html"
+  curl -s -d "do=unsubscribe&id=$(echo "$SU" | sed 's/.*id=\([0-9]*\).*/\1/')&s=$(echo "$SU" | sed 's/.*s=//')" "$BASE/unsubscribe/" > "$SNAP/unsubscribe-done.html"
+  curl -s "$BASE/your-data/" > "$SNAP/your-data-form.html"
+  curl -s -d 'do=request' --data-urlencode 'email=test+ctm_1@example.com' "$BASE/your-data/" >/dev/null
+  ST=$(grep -o '/your-data/?t=[a-f0-9]*' bondi/mail.log | tail -1 | sed 's/.*t=//')
+  curl -s "$BASE/your-data/?t=$ST" > "$SNAP/your-data-view.html"
+  curl -s -d 'do=request&email=snap@example.com' "$BASE/your-data/" >/dev/null
+  ST=$(grep -o '/your-data/?t=[a-f0-9]*' bondi/mail.log | tail -1 | sed 's/.*t=//')
+  curl -s -d "do=delete&t=$ST&sure=1" "$BASE/your-data/" > "$SNAP/your-data-deleted.html"
+  curl -s -c $J -b $J "$BASE/admin/?requests" > "$SNAP/admin-requests.html"
 fi
 grep -iE "fatal|warning|deprecated" $T/php.log | head -5
 echo "$PASS passed, $FAILS failed"
