@@ -47,3 +47,17 @@ footer { align-items: center; } .askai-row { margin-left: auto; }
 .made .heart { color: var(--bondi); }
 .made .x-link { display: inline-flex; align-items: center; gap: 5px; }
 .made .x-logo { width: 11px; height: 11px; fill: currentColor; }
+
+/* Phones: the menu on its own line, and the privacy table as one card per row */
+@media (max-width: 600px) {
+  header { flex-wrap: wrap; gap: 6px 0; padding-block: 16px 6px; }
+  header nav { width: 100%; justify-content: flex-start; gap: 4px 18px; }
+  header nav a { margin-left: 0; padding: 8px 0; }
+  .theme-toggle { margin-left: auto; }
+  table.stack, table.stack tbody, table.stack tr, table.stack td { display: block; width: 100%; }
+  table.stack tr:first-child { display: none; }
+  table.stack tr { border-bottom: 1px solid var(--line); padding: 10px 0; }
+  table.stack td { border: 0; padding: 4px 0; }
+  table.stack td::before { content: attr(data-label); display: block; font-weight: 600; color: var(--ink); font-size: .85rem; }
+  footer a { padding: 6px 0; }
+}

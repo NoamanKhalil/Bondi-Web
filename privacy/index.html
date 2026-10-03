@@ -27,11 +27,11 @@
 <p>Bondi's AI features run on your Mac: Apple's on-device model where Apple Intelligence is available, or a small open model you choose to download. Your questions, your history and the AI's answers are never uploaded. If you press Download for the open model in Settings, your Mac downloads it from its publisher (currently Qwen's official page on Hugging Face), which sees a normal download request from your internet address.</p>
 
 <h2>What Bondi sends</h2>
-<div class="table-wrap"><table>
+<div class="table-wrap"><table class="stack">
 <tr><th>When</th><th>What is sent</th><th>Why</th></tr>
-<tr><td>Starting and checking the free trial</td><td>An anonymous device ID (a one-way code made on your Mac, not your Mac's serial number) and Bondi's version</td><td>So the 7-day trial can't restart on reinstall</td></tr>
-<tr><td>Activating or checking a license (about once a day)</td><td>Your license key or activation token, the anonymous device ID, and your Mac's name</td><td>To keep one license on one Mac, and show you which Mac holds it</td></tr>
-<tr><td>Checking for updates</td><td>Bondi's version</td><td>To offer new versions</td></tr>
+<tr><td data-label="When">Starting and checking the free trial</td><td data-label="What is sent">An anonymous device ID (a one-way code made on your Mac, not your Mac's serial number) and Bondi's version</td><td data-label="Why">So the 7-day trial can't restart on reinstall</td></tr>
+<tr><td data-label="When">Activating or checking a license (about once a day)</td><td data-label="What is sent">Your license key or activation token, the anonymous device ID, and your Mac's name</td><td data-label="Why">To keep one license on one Mac, and show you which Mac holds it</td></tr>
+<tr><td data-label="When">Checking for updates</td><td data-label="What is sent">Bondi's version</td><td data-label="Why">To offer new versions</td></tr>
 </table></div>
 <p>Our server also receives your internet address with each request, as every web server does. We use it only to prevent abuse (for example, too many activation attempts) and don't keep it with your license.</p>
 

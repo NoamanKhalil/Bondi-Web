@@ -353,7 +353,7 @@
   .w-membar i.on { background: #9b7ae0; } .w-membar i.part { background: linear-gradient(90deg, #9b7ae0 55%, var(--w-meter) 55%); }
   .w-membar .swap { flex: 0 0 26px; height: 10px; border-radius: 3px; border: 1.5px solid #f2a200; margin-left: 5px; background: repeating-linear-gradient(135deg, rgba(242,162,0,.6) 0 2px, transparent 2px 4px); }
   .w-fill { height: 7px; border-radius: 4px; background: var(--w-meter); margin-top: auto; overflow: hidden; } .w-fill i { display: block; height: 100%; border-radius: 4px; background: var(--tint); }
-  .rings { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 10px; }
+  .rings { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 10px; }
   @media (min-width: 940px) { .win .rings { grid-template-columns: repeat(4, minmax(0, 1fr)); } .win .ring-card { grid-template-columns: 62px minmax(0, 1fr); gap: 6px 10px; padding: 11px; } .win .ring-card svg { width: 62px; height: 62px; } }
   @media (min-width: 1180px) { .win .ring-card { grid-template-columns: 76px minmax(0, 1fr); gap: 6px 12px; padding: 12px 13px; } .win .ring-card svg { width: 76px; height: 76px; } }
   .ring-card { background: var(--w-card); border: 1px solid var(--w-line); border-radius: 12px; padding: 12px 13px; display: grid; grid-template-columns: 96px 1fr; gap: 6px 14px; align-items: center; }
@@ -532,6 +532,24 @@
   .mac .picker .ic img + img { clip-path: polygon(100% 0, 100% 100%, 0 100%); }
   .mac .picker button[aria-pressed="true"] { color: var(--t1); } .mac .picker button[aria-pressed="true"] .ic { outline-color: #2f7cf6; }
   .tile .vis .mac { margin-top: 4px; }
+
+  /* Phones: everything fits the screen, nothing scrolls sideways, and taps land. Desktop is untouched. */
+  .mac .field input { min-width: 0; }
+  .mac > *, .mac .card > * { min-width: 0; } /* long text wraps or trims inside its panel instead of widening it */
+  @media (max-width: 640px) {
+    .facts { flex-direction: column; align-items: center; gap: 4px; }
+    .facts > * + *::before { display: none; }
+    .compare-top { flex-wrap: wrap; } .toggle button { white-space: nowrap; padding: 7px 11px; } .compare .count { white-space: nowrap; }
+    .foot-cols ul { gap: 2px; } .foot-cols ul a { display: inline-block; padding: 7px 0; } .foot-cols .askai-col ul a { display: inline-flex; }
+    .made-line .made a, .made .x-link { padding: 6px 0; }
+    .win-tabs { -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent); mask-image: linear-gradient(90deg, #000 82%, transparent); scroll-snap-type: x proximity; } /* more tabs: swipe */
+  }
+  @media (max-width: 480px) {
+    .mac .proc { grid-template-columns: 16px minmax(0, 1fr) 40px 62px 16px; gap: 6px; font-size: 12px; }
+    .mac .proc > span:nth-child(2) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .w-grid { gap: 8px; } .w-card { min-width: 0; }
+    .mac .picker { gap: 8px; } .mac .picker .ic { width: 44px; height: 44px; }
+  }
 </style>
 </head>
 <body>
