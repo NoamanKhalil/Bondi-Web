@@ -43,6 +43,7 @@ The owner reviews the site as a private claude.ai artifact: **https://claude.ai/
 - "Ask AI about Bondi" in every footer (a column with logos and names on the homepage, a row of logos elsewhere): plain links to ChatGPT, Claude, Perplexity, Google AI Mode and Grok that open with a prepared question. The question and the list live in `dev/ask-ai.php`; run it to update every page. Logos: `dev/ai-logos` (Lobe Icons, MIT), drawn inline.
 - Competitors named (owner): Activity Monitor, iStat Menus, Stats and Vitals. Re-check what's said about them, and that each Ask-AI link still opens its assistant, every few months.
 - Every new sign-up gets a thank-you email from Noaman (`welcome_email()` in `bondi/lib/mail.php`, sent once per email, logged as `welcome`); the admin sign-ups page sends it to anyone who hasn't had it. Noaman's X: @khalilnoaman (`MAKER_X`), also in every footer.
+- Homepage search tags target "why is my Mac slow", "system monitor for Mac" and "Activity Monitor alternative". Its JSON-LD has SoftwareApplication and an FAQPage copied word for word from the FAQ section: change both together.
 - Guide pages (process pages from the app's guide, topic guides, comparisons): later, one page at a time, as the owner decides.
 
 ## Design
