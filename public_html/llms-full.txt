@@ -675,3 +675,727 @@ Each entry: what the process is, why it gets busy, and whether to quit it.
 - What it is: Launch Services: keeps track of installed apps and which app opens which kind of file.
 - Why it gets busy: After installing or updating apps.
 - Quitting it: Leave it running: macOS needs it.
+
+<!-- blog -->
+## Articles from the Bondi blog
+The full text of each article, by Noaman Khalil, maker of Bondi.
+
+### Why is my Mac slow? How to find the real cause
+
+> Mac running slow? It usually comes down to one of a handful of causes. Here's how to tell which one it is, with real readings from a real MacBook Pro.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+Web page: https://trybondi.app/blog/why-is-my-mac-slow/
+
+A slow Mac, whether it's a MacBook Air, a MacBook Pro or an iMac, almost always has one specific cause: memory running short, one app working hard, macOS doing background work, or the Mac protecting itself from heat. The trick is finding which one, because the fix for each is different.
+
+#### Key points
+
+- A slow Mac usually has one cause: low memory, one busy app, macOS background work, or heat.
+- Check memory pressure first (Activity Monitor → Memory). A high "Memory Used" on its own is normal.
+- Apps like Chrome split into many processes, so add them up before deciding which app is to blame.
+
+Here are the usual suspects, in the order I'd check them, and how to spot each one.
+
+#### 1. Memory is running short
+
+When the apps you have open need more memory than your Mac has, macOS starts compressing memory and moving some of it to the disk (swap). Everything still works, just slower: switching apps stutters and the beach ball appears.
+
+**How to tell:** open Activity Monitor (press Command-Space and type "Activity Monitor"), choose the **Memory** tab, and look at the **Memory Pressure** graph at the bottom. Green is fine. Yellow means macOS is working to keep up. Red means it's out of room.
+
+A high "Memory Used" number on its own is *not* a problem: macOS deliberately fills spare memory with cached files. Pressure is what matters. There's more in [Memory pressure on Mac, explained](https://trybondi.app/blog/memory-pressure-explained/).
+
+#### 2. One app is using more than you think
+
+Modern apps are many processes. On the Mac I measure on, Google Chrome was **80 separate processes using 12.23 GB of memory** in total, while Activity Monitor showed it as dozens of rows of a few hundred megabytes each. No single row looked big, so the real culprit was easy to miss.
+
+**How to tell:** in Activity Monitor, choose **View → All Processes, Hierarchically**, or add up the helper processes that share an app's name. [Which app is using my Mac's memory?](https://trybondi.app/blog/which-app-is-using-my-mac-memory/) walks through it.
+
+#### 3. macOS is doing background work
+
+After an update, a big download or importing photos, macOS catches up in the background:
+
+- **Spotlight** re-indexes your files (the processes `mds_stores` and `mdworker`).
+- **Photos** analyzes your library for people, places and Memories (`photoanalysisd`).
+- **iCloud** syncs files (`cloudd` and `bird`).
+
+These finish on their own, usually within hours. Keeping the Mac plugged in and awake helps them finish sooner. See [Why is my Mac slow after a macOS update?](https://trybondi.app/blog/mac-slow-after-update/)
+
+#### 4. Your Mac is hot
+
+When the chip gets hot, macOS deliberately slows things down to cool it. In Activity Monitor this shows up as **kernel_task** using a lot of CPU. It isn't a bug: it's macOS taking CPU time away from apps so the heat drops. Charging in a warm room or working on a soft surface makes it more likely. More in [kernel_task using lots of CPU?](https://trybondi.app/blog/kernel-task-high-cpu/)
+
+#### 5. Something is quietly holding on
+
+Developers know this one: a dev server, a Docker container or a local AI model you started hours ago and forgot. On my Mac, a Vite dev server had been **idle for 3 hours 20 minutes and was still holding 612.0 MB**. None of these show up as an app in the Dock, so they're easy to forget.
+
+#### 6. The disk is nearly full
+
+macOS needs free space for swap, caches and updates. When the startup disk is close to full, everything that touches the disk slows down. Check it in **System Settings → General → Storage**.
+
+#### Mac running slow? The quick checklist
+
+| Symptom | Most likely cause | Where to look |
+| --- | --- | --- |
+| Beach ball when switching apps | Memory pressure | Activity Monitor → Memory |
+| Fans loud, everything sluggish | Heat (kernel_task) or one busy app | Activity Monitor → CPU |
+| Slow for a day after updating | Spotlight, Photos or iCloud catching up | Activity Monitor → CPU |
+| Slow only with certain apps open | That app's helper processes | View → All Processes, Hierarchically |
+| Everything slow, Mac nearly out of space | Disk nearly full, or heavy swap | System Settings → Storage |
+
+#### Why I built Bondi for this
+
+All of this is detective work, and Activity Monitor gives you the clues but not the answer. Bondi does the detective work for you and says it in one sentence. On that same Mac, it said:
+
+![Bondi explaining why a MacBook Pro is slow: Everything is fine. Memory pressure is Normal, with 44.73 GB of 64.00 GB used. Google Chrome is using the most memory, 13.09 GB across 82 processes.](https://trybondi.app/assets/features/why.png)
+*Bondi's one-sentence answer, from a real reading on a MacBook Pro (M1 Max, 64 GB).*
+
+Every number in that sentence is measured by Bondi itself, and the sentence is written on your Mac, so nothing about your apps ever leaves it.
+
+#### Questions
+
+##### How do I find out why my Mac is slow?
+
+Open Activity Monitor. On the Memory tab, look at the Memory Pressure graph; on the CPU tab, sort by % CPU. Yellow or red pressure means memory is short; a process near the top that you're not using is the busy app.
+
+##### Is high memory usage on a Mac bad?
+
+No. macOS fills spare memory with cached files and gives it back when apps need it. Memory pressure, not Memory Used, tells you whether you need more.
+
+##### Why is my Mac slow after an update?
+
+macOS rebuilds the Spotlight index, re-analyzes photos and syncs iCloud in the background. It settles on its own, usually within hours.
+
+---
+Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+
+### Which app is using my Mac's memory?
+
+> Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here's how to see which app is really using your Mac's memory.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+Web page: https://trybondi.app/blog/which-app-is-using-my-mac-memory/
+
+To see which app is really using your Mac's memory, you need to add up all of its processes, not look at the biggest row. Browsers and code editors split themselves into dozens of helper processes, so the real total is usually hidden.
+
+#### Key points
+
+- Add up all of an app's processes: browsers and code editors split into dozens of helpers.
+- In one real reading, Chrome was 80 processes using 12.23 GB, more than all of macOS (8.85 GB).
+- In Activity Monitor, View → All Processes, Hierarchically groups helpers under their app.
+
+#### Why the biggest row isn't the answer
+
+On the Mac I measure on, Activity Monitor's Memory tab listed **966 processes**. The top rows looked like this: a handful of "Google Chrome Helper (Renderer)" processes at around 370 to 640 MB each, Finder at 495 MB, Notes at 436 MB, and some "Code Helper" processes.
+
+Nothing over a gigabyte. Nothing alarming.
+
+Added up by app, the picture was completely different:
+
+| App | Processes | Memory |
+| --- | --- | --- |
+| Google Chrome | 80 | 12.23 GB |
+| macOS | 745 | 8.85 GB |
+| Visual Studio Code | 44 | 4.24 GB |
+| Safari | 16 | 1.42 GB |
+| Notes | 9 | 526.7 MB |
+| Finder | 3 | 499.9 MB |
+
+*One real reading of a MacBook Pro (M1 Max, 64 GB), grouped by Bondi.*
+
+Chrome was using more memory than all of macOS, spread across 80 processes so no single row stood out.
+
+#### Why Chrome and other apps split into helper processes
+
+Browsers run each tab, extension and site in its own process, so one misbehaving page can't crash the rest. Code editors do the same for extensions and language tools. It's good for stability, and bad for anyone trying to read Activity Monitor.
+
+#### How to add it up in Activity Monitor
+
+1. Open Activity Monitor and choose the **Memory** tab.
+2. Choose **View → All Processes, Hierarchically**. Helper processes now sit under the app that started them.
+3. Expand the app and add up its rows. There's no total, so it's a little arithmetic.
+
+Typing an app's name in the search field also filters to its processes, which helps for browsers whose helpers share its name.
+
+#### Does it matter?
+
+Only if memory pressure is high. If the **Memory Pressure** graph is green, a big app is fine. It's using memory macOS has spare. If it's yellow or red, the app at the top of the grouped list is your best lever: close tabs, quit it, or restart it. More in [Memory pressure on Mac, explained](https://trybondi.app/blog/memory-pressure-explained/).
+
+#### How Bondi shows it
+
+Bondi does the grouping for you: every helper counts toward the app that started it, so Chrome is one row. Switch between CPU, memory and energy to see who's busiest by each.
+
+![Which app is using the most memory on a MacBook Pro: Bondi's Busiest Right Now list.](https://trybondi.app/assets/features/busiest.png)
+*Bondi's busiest apps, each a single row with all its helpers included.*
+
+#### Questions
+
+##### Why does Google Chrome have so many processes on my Mac?
+
+Chrome runs each tab, extension and site in its own process so one bad page can't crash the rest. Each shows as a separate Google Chrome Helper row in Activity Monitor.
+
+##### How do I see the total memory an app uses on a Mac?
+
+In Activity Monitor's Memory tab, choose View → All Processes, Hierarchically, expand the app and add up its rows. Bondi does this for you and shows each app as one row.
+
+##### Should I worry if one app uses a lot of memory?
+
+Only if memory pressure is yellow or red. With green pressure, the app is using memory macOS has spare.
+
+---
+Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+
+### Memory pressure on Mac, explained
+
+> "Memory Used" being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here's how to read them.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+Web page: https://trybondi.app/blog/memory-pressure-explained/
+
+Memory pressure tells you how hard macOS is working to fit everything you're running into your Mac's memory. Green means it's comfortable, yellow means it's compressing and juggling, and red means it's out of room and leaning on the disk. It's a far better guide than "Memory Used", which is high on almost every Mac, and that's fine.
+
+#### Key points
+
+- Memory pressure (green, yellow or red) shows how hard macOS is working to fit everything into memory.
+- A high "Memory Used" is normal: macOS fills spare memory with cached files.
+- Yellow means heavy compression; red means swapping to disk, which is when a Mac slows down.
+
+#### Why "Memory Used" being high is normal
+
+macOS treats empty memory as wasted memory. It fills spare memory with **cached files** (things you've opened recently, kept in case you need them again) and hands that space back the moment an app needs it.
+
+So on a healthy Mac, Memory Used can look alarming. On the Mac I measure on, Bondi reported **44.73 GB of 64.00 GB used, and memory pressure Normal**. Plenty used, no problem.
+
+#### What macOS does as memory fills up
+
+1. **Uses free memory**, then **drops cached files** it doesn't need.
+2. **Compresses memory**: squeezes the memory of apps you're not using right now, so more fits. This costs a little CPU but is fast.
+3. **Swaps to disk**: when compression isn't enough, it moves memory to the startup disk. This is where things get slow, because the disk is far slower than memory.
+
+Memory pressure rises through those stages: green while macOS can do this easily, yellow when it's compressing a lot, red when it's swapping heavily.
+
+#### How to read it in Activity Monitor
+
+Open Activity Monitor and choose the **Memory** tab. At the bottom:
+
+| What you see | What it means |
+| --- | --- |
+| **Memory Pressure** graph | The one to watch: green, yellow or red. |
+| **App Memory** | Memory apps are actively using. |
+| **Wired Memory** | Memory macOS itself must keep in place. |
+| **Compressed** | App memory squeezed to save room. |
+| **Cached Files** | Recently used files, given back when needed. |
+| **Swap Used** | Memory moved to the disk. A little is normal; a lot, with yellow or red pressure, is why things feel slow. |
+
+#### What to do when memory pressure is yellow or red
+
+1. **Find the app using the most.** Usually it's a browser with many tabs, but helper processes hide this. See [Which app is using my Mac's memory?](https://trybondi.app/blog/which-app-is-using-my-mac-memory/)
+2. **Quit it or close what you don't need**, then watch the graph drop.
+3. **Look for things left running**: dev servers, containers and local AI models hold memory even when idle.
+4. **Restart** if swap has grown large over days of uptime.
+
+If it's red every day with your normal set of apps, your work needs more memory than this Mac has.
+
+#### How Bondi says it
+
+Bondi watches memory pressure for you. When it rises, the menu bar says so and names the cause, with one fix that always asks first:
+
+![Memory pressure warning on a MacBook Pro, from Bondi: Memory pressure is Elevated. Google Chrome is using 13.09 GB. Quit Google Chrome.](https://trybondi.app/assets/features/warning.png)
+*A real warning from Bondi. It suggests one fix at a time and never quits anything without asking.*
+
+#### Questions
+
+##### What does yellow memory pressure mean on a Mac?
+
+macOS is compressing a lot of memory to fit everything in. The Mac still works; closing the app using the most memory helps.
+
+##### What is swap used on a Mac?
+
+Memory macOS has moved to the startup disk because RAM ran short. A little is normal; a lot, with yellow or red pressure, makes the Mac slow.
+
+##### Do I need more RAM?
+
+If memory pressure is red every day with the apps you normally use, your work needs more memory than this Mac has.
+
+---
+Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+
+### Why are my Mac's fans so loud?
+
+> Loud fans on a MacBook or any Mac mean the chip is working hard or running hot. Here's how to find what's heating it, and what to do if they won't settle.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+Web page: https://trybondi.app/blog/mac-fans-loud/
+
+On a MacBook Pro or a desktop Mac, the fans get loud for one reason: the chip is producing more heat than the Mac can lose quietly. Find what's making it work hard, give it some air, and the fans settle within minutes.
+
+#### Key points
+
+- Loud fans mean the chip is working hard or running hot.
+- Check Activity Monitor's CPU tab: a busy app, kernel_task, or Spotlight and Photos indexing are the usual causes.
+- A hard surface, quitting unused apps and letting indexing finish usually quiets them.
+
+#### First: is something working hard?
+
+Open Activity Monitor (Command-Space, then type "Activity Monitor"), choose the **CPU** tab and sort by **% CPU**. Look at the top of the list:
+
+- **An app you're using**, like a video export, a build or a game: the fans are doing their job. They'll calm down when it finishes.
+- **An app you're not using**: often a browser tab or a helper process stuck at high CPU. Quit it, or close the tab.
+- **kernel_task near the top**: the Mac is already hot and slowing apps to cool down. See [kernel_task using lots of CPU?](https://trybondi.app/blog/kernel-task-high-cpu/)
+- **mds_stores, mdworker or photoanalysisd**: Spotlight or Photos catching up after an update or import. It finishes on its own. See [Is Spotlight indexing slowing down your Mac?](https://trybondi.app/blog/spotlight-indexing-slow-mac/)
+
+Also check the **GPU** (in Activity Monitor: **Window → GPU History**). Games, video and some web pages heat the graphics side more than the CPU.
+
+#### MacBook fans loud with nothing open
+
+This is the most frustrating version. The usual causes:
+
+1. **Background indexing** after a macOS update or a big download (Spotlight, Photos, iCloud).
+2. **A process left running**: a dev server, a Docker container, a local AI model, or an app that kept running after you closed its window.
+3. **Charging in a warm room**, or the Mac sitting on a soft surface that blocks airflow.
+4. **External displays** keeping the graphics busy.
+
+#### What helps
+
+- **Hard, flat surface**, vents uncovered.
+- **Quit what you're not using**, especially browsers with many tabs.
+- **Let indexing finish**: leave the Mac plugged in and awake for a while after an update.
+- **Restart** if the fans stay high with nothing busy. It clears stuck processes.
+- On **Intel Macs**, resetting the SMC can fix fans that misbehave. Apple silicon Macs don't have one to reset; a shut down does the equivalent.
+
+#### The opposite problem: wanting more fan
+
+Sometimes you'd rather have *more* cooling: during a long export or a hot afternoon. macOS doesn't offer a fan control. Bondi's **Fan boost** does, with three rules: it's never slower than your fans already were, it goes to full speed whenever macOS reports the Mac running hot, and it returns to Apple's automatic control when you quit Bondi, sleep or crash.
+
+![Mac fan control in Bondi: Auto, with a slider to boost the fans.](https://trybondi.app/assets/features/fans.png)
+*Bondi's Fan boost on a Mac whose fans range from about 1,180 to 5,779 rpm.*
+
+#### Questions
+
+##### Why are my MacBook's fans loud with nothing open?
+
+Usually macOS background work after an update (Spotlight, Photos, iCloud), a process left running, charging in a warm room, or a soft surface blocking the airflow.
+
+##### Is it bad if my Mac's fans run loud?
+
+No. The fans are protecting the chip. If they stay loud for no clear reason, find the busy process in Activity Monitor, or restart.
+
+##### Can I control my Mac's fan speed?
+
+macOS doesn't offer fan control. Bondi's Fan boost can raise it, never slower than your fans already were, and returns to automatic control when you quit Bondi.
+
+---
+Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+
+### kernel_task using lots of CPU? Your Mac is cooling itself down
+
+> kernel_task at high CPU usually means your Mac is hot, and macOS is slowing apps on purpose to cool it. Here's why it happens and what actually helps.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+Web page: https://trybondi.app/blog/kernel-task-high-cpu/
+
+When kernel_task shows a high CPU figure, your Mac is almost always running hot, or close to overheating. macOS is taking CPU time on purpose so that apps slow down and the heat drops. It's a safety feature, not a bug or malware.
+
+#### Key points
+
+- High kernel_task CPU usually means the Mac is hot: macOS slows apps on purpose to cool it.
+- It's a safety feature. You can't quit kernel_task, and you wouldn't want to.
+- Cool the Mac instead: find the app heating it, use a hard surface, and unplug if it's warm and charged.
+
+#### What kernel_task is on a Mac
+
+kernel_task is the core of macOS: the part that manages memory, hardware and every other process. You can't quit it, and you wouldn't want to.
+
+The confusing part is its CPU figure. Besides its normal work, kernel_task's number **also includes time macOS deliberately sets aside to cool the Mac**. When the chip gets hot, macOS gives that time to kernel_task instead of your apps, which keeps them from making the chip any hotter. So a big kernel_task number is a symptom of heat, not its cause.
+
+Normally it's quiet. On the Mac I measure on, kernel_task was using **1.0% of the CPU** in an ordinary moment. Its memory figure is also large on most Macs, and that's normal too.
+
+#### Why your Mac is getting hot
+
+The common reasons:
+
+- **Charging in a warm room.** Charging adds heat, and a warm room leaves less headroom.
+- **A soft surface.** A bed, sofa or lap blocks airflow under the Mac.
+- **Sustained heavy work.** Video export, compiling, games, or a browser tab running something heavy.
+- **One app stuck in a loop.** An app or helper process using 100% of a core for no good reason.
+- **External displays.** Driving several or very high-resolution displays adds steady load.
+
+#### What actually helps
+
+1. **Find the app heating it.** In Activity Monitor's **CPU** tab, sort by **% CPU**. Ignore kernel_task itself and look at what's next. If one app is high while you're not using it, quit it.
+2. **Let air in.** Put the Mac on a hard, flat surface. On a laptop, don't cover the vents.
+3. **Unplug for a while** if it's warm and fully charged.
+4. **Wait a few minutes.** Once the heat drops, kernel_task gives the time back on its own.
+
+On Intel Macs, resetting the SMC (the chip that manages power and fans) can help if fans and heat behave strangely. Apple silicon Macs have no separate SMC to reset: shutting down and starting up again does the equivalent.
+
+#### What not to do
+
+Don't try to quit or limit kernel_task, and be wary of "cleaner" apps that promise to fix it. The heat is real; slowing down is how macOS protects the hardware. Fix the heat and kernel_task fixes itself.
+
+#### How Bondi explains it
+
+Bondi's own note on kernel_task says it plainly: *"High CPU usually means the Mac is hot, for example charging in a warm room or on a soft surface. It can't be quit. If it stays busy, let the Mac cool down or close the apps that heat it."* Bondi also groups every process under the app that started it, so the app heating your Mac is one row instead of dozens.
+
+![Mac CPU usage in Bondi: 7% of 10 cores on an M1 Max MacBook Pro, with load average and top apps.](https://trybondi.app/assets/features/cpu.png)
+*Bondi's CPU view on the same Mac, in a calm moment.*
+
+#### Questions
+
+##### Is kernel_task a virus?
+
+No. kernel_task is the core of macOS. Its high CPU figure includes time macOS reserves to cool the Mac.
+
+##### Can I quit kernel_task?
+
+No, it can't be quit. Let the Mac cool down or close the apps that heat it.
+
+##### Why does kernel_task use so much memory?
+
+Its large memory figure is normal: it's the core of macOS, managing memory and hardware for everything else.
+
+---
+Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+
+### WindowServer using high CPU on Mac: what it means and what helps
+
+> WindowServer draws everything on your Mac's screens. Here's why it gets busy, what normal looks like, and the settings that actually calm it down.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+Web page: https://trybondi.app/blog/windowserver-high-cpu/
+
+WindowServer is the part of macOS that draws everything you see: windows, the Dock, the menu bar and every animation. When it's busy, it's because your screens are asking a lot of it, usually from many open windows, several or very high-resolution displays, screen recording or video.
+
+#### Key points
+
+- WindowServer draws everything on your screens; a few percent of CPU is normal.
+- Many windows, external or high-resolution displays, screen recording and animation make it busy.
+- Turning on Reduce transparency and Reduce motion (System Settings → Accessibility → Display) lightens it.
+
+#### How much CPU and memory WindowServer should use
+
+WindowServer always uses some CPU and a fair amount of memory, because every pixel on every screen goes through it. On the Mac I measure on, an ordinary moment looked like this:
+
+![WindowServer on Mac, explained by Bondi: what it is, why it gets busy, whether you can stop it, and what it's using right now.](https://trybondi.app/assets/features/guide.png)
+*Bondi's process guide on WindowServer, with a real reading: 1.0% of the CPU and 639.9 MB of memory.*
+
+A few percent of CPU is normal. It becomes a problem when it stays high (say, 30% or more) while you're not doing anything visual.
+
+#### Why it gets busy
+
+- **Many open windows**, especially across many desktops (Spaces).
+- **External displays**, particularly several at once, very high resolutions, or "scaled" resolutions that macOS has to render larger and shrink.
+- **Screen recording or sharing**: video calls sharing your screen, and recording apps.
+- **Video and animation**: playing video, animated wallpapers, and busy web pages.
+- **Transparency and motion effects** in macOS itself.
+
+#### What helps
+
+1. **Close windows you're not using.** Apps with dozens of windows or tabs left open add up.
+2. **Check your display resolution.** In **System Settings → Displays**, a scaled resolution on an external monitor costs more than its default.
+3. **Turn down the effects.** In **System Settings → Accessibility → Display**, turn on **Reduce transparency** and **Reduce motion**. Both lighten WindowServer's load noticeably on busy setups.
+4. **Stop screen sharing and recording** when you're done; some apps keep capturing in the background.
+5. **Look for the app driving it.** WindowServer works on behalf of other apps. If its CPU jumps when one app is in front, that app is the real cause.
+
+#### Can I quit WindowServer?
+
+No. Quitting it logs you out and closes every app. Leave it running: macOS needs it, and it settles as soon as the load on your screens drops.
+
+#### How Bondi helps
+
+Bondi has notes on 125 common macOS processes, like the one above, and shows what each one is using right now. When your Mac is busy, it tells you in one plain sentence which app is using the most, with all its helper processes added up.
+
+#### Questions
+
+##### What is WindowServer on Mac?
+
+The part of macOS that draws windows, the Dock, the menu bar and animations on every display.
+
+##### Why is WindowServer using so much memory?
+
+It holds what's on every screen, so more and larger displays and more open windows need more. In one real reading it used 639.9 MB.
+
+##### Can I quit WindowServer?
+
+No. Quitting it logs you out and closes every app.
+
+---
+Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+
+### Why is my Mac slow after a macOS update?
+
+> Mac slow after a macOS Sequoia or Tahoe update? It's re-indexing Spotlight, re-scanning photos and syncing iCloud. Here's what's running and how long it lasts.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+Web page: https://trybondi.app/blog/mac-slow-after-update/
+
+A Mac is often slow for a day or so after a macOS update (to macOS Sequoia, Tahoe or any other version) because macOS is catching up in the background: rebuilding the Spotlight search index, re-analyzing your photos, re-checking apps and syncing with iCloud. It settles on its own, usually within hours, and faster if you leave the Mac plugged in and awake.
+
+#### Key points
+
+- After a macOS update, Spotlight, Photos and iCloud catch up in the background.
+- It usually settles within hours; a large photo library or a full disk can make it take a day.
+- Keep the Mac plugged in and awake, and don't force-quit these processes.
+
+#### What's running after a macOS update
+
+Open Activity Monitor (Command-Space, then type "Activity Monitor"), choose the **CPU** tab and sort by **% CPU**. After an update you'll often see these near the top:
+
+| Process | What it's doing | Can you stop it? |
+| --- | --- | --- |
+| **mds_stores**, **mds** | Spotlight's indexer, rebuilding the index of your files so searches are instant. | Leave it running: it finishes on its own. |
+| **mdworker**, **mdworker_shared** | Spotlight helpers reading the contents of your files. | Stopping them doesn't help for long: macOS starts them again. |
+| **photoanalysisd** | Photos analyzing your library for people, places and Memories. It prefers to work while the Mac is idle and plugged in. | It restarts when needed. |
+| **mediaanalysisd** | Analyzing photos and videos for search and Live Text. | It restarts when needed. |
+| **cloudd**, **bird** | iCloud syncing, especially after signing in again or turning on a feature. | They restart when needed. |
+| **syspolicyd**, **XProtect** | Gatekeeper and Apple's malware protection checking apps and applying new rules. | Leave them running: macOS needs them. |
+| **softwareupdated** | Finishing or preparing an update. | Leave it running. |
+
+*These descriptions are Bondi's own process notes, which cover 125 common macOS processes.*
+
+#### How long it takes
+
+It depends on how many files and photos you have. A Mac with a large photo library and a full disk can take a day; a lightly used Mac, an hour or two. The signs it's done: fans quiet, the processes above back near zero, and Spotlight searches answering instantly.
+
+#### How to help it finish
+
+1. **Plug in and leave it awake.** Photos analysis in particular waits for the Mac to be idle and on power.
+2. **Don't fight it.** Force-quitting these processes just makes macOS start over.
+3. **Give it room.** If your disk is nearly full, free some space; indexing and updates need it.
+4. **Restart once** after the update has fully installed, if things still feel stuck the next day.
+
+#### When it's not the update
+
+If it's still slow after a day or two, the update probably isn't the cause. Check memory pressure and which app is busiest: [Why is my Mac slow?](https://trybondi.app/blog/why-is-my-mac-slow/) walks through the other usual suspects.
+
+#### How Bondi helps
+
+Bondi's process guide explains each of these processes in plain words and shows what it's using right now, so you can see it's Spotlight or Photos catching up rather than an app gone wrong.
+
+#### Questions
+
+##### How long is a Mac slow after a macOS update?
+
+Usually a few hours. With a large photo library or a nearly full disk, up to a day.
+
+##### What is mds_stores and why is it using CPU after an update?
+
+Spotlight's indexer, rebuilding the index of your files. Leave it running: it finishes on its own.
+
+##### Should I force quit processes after an update?
+
+No. macOS starts them again and the work starts over.
+
+---
+Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+
+### Is Spotlight indexing slowing down your Mac?
+
+> When mds_stores and mdworker are busy, Spotlight is rebuilding its index. Here's how to tell, how long it lasts, and how to keep folders out of it.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+Web page: https://trybondi.app/blog/spotlight-indexing-slow-mac/
+
+If **mds_stores**, **mds** or **mdworker** are near the top of Activity Monitor, Spotlight is indexing: reading your files so searches can be instant. It's busiest after a macOS update, after adding lots of files, or when you connect a new disk, and it settles on its own, usually within a few hours.
+
+#### Key points
+
+- Busy mds, mds_stores or mdworker means Spotlight is indexing your files.
+- It happens after updates, big downloads or connecting a new disk, and settles within hours.
+- Folders that don't need searching can be left out in System Settings → Spotlight.
+
+#### What each process does
+
+- **mds** and **mds_stores**: Spotlight's indexer. They keep the index of your files.
+- **mdworker** and **mdworker_shared**: helpers that open your files and read their contents for the index.
+- **corespotlightd**: keeps the index for content inside apps, such as messages, mail and notes.
+
+Normally they're quiet. On the Mac I measure on, mds_stores was using **0.0% of the CPU and 105.3 MB of memory** on an ordinary day. It's only when there's a lot to (re)index that they show up.
+
+#### How to tell Spotlight is indexing (mds_stores high CPU)
+
+- **mds_stores** or several **mdworker** processes high in Activity Monitor's **CPU** tab.
+- Fans louder than usual, with nothing else busy.
+- Spotlight searches that miss files you know exist, or show a note that indexing is in progress.
+
+#### How long it lasts
+
+From minutes to a few hours, depending on how many files you have and how fast the disk is. A first index of a large external drive can take longer. It's worth letting it finish: a complete index makes every search instant afterwards.
+
+#### How to help
+
+1. **Leave it running.** Force-quitting just restarts the work later.
+2. **Keep the Mac plugged in and awake** until it's done.
+3. **Keep folders out of the index** if they don't need searching: big build folders, caches, virtual machines, or backups. You can leave folders out in **System Settings → Spotlight** (look for the privacy option there; its exact name varies by macOS version).
+
+#### When Spotlight indexing is stuck
+
+If Spotlight is still busy after a day, something keeps giving it new files: a folder that changes constantly (logs, builds, a sync folder mid-sync) is the usual cause. Adding that folder to Spotlight's privacy list stops the churn.
+
+#### How Bondi helps
+
+Bondi's process guide explains each of these processes and what it's using right now, so when Spotlight is the reason your Mac is busy, you can see it and know to wait rather than worry.
+
+#### Questions
+
+##### What is mds_stores on Mac?
+
+Spotlight's indexer. It keeps the index that makes searches instant.
+
+##### How long does Spotlight indexing take?
+
+From minutes to a few hours. A first index of a large external drive can take longer.
+
+##### How do I stop Spotlight indexing a folder?
+
+Add it to Spotlight's privacy list in System Settings → Spotlight.
+
+---
+Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+
+### Bondi vs Activity Monitor: what each one is for
+
+> Looking for an Activity Monitor alternative for Mac? Activity Monitor shows every process; Bondi tells you what they mean. When to use which.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+Web page: https://trybondi.app/blog/bondi-vs-activity-monitor/
+
+Activity Monitor is the task manager built into every Mac, a detailed instrument panel: it lists every process and every figure. Bondi is the interpreter: it groups those processes into the apps you know, keeps 30 days of history, and tells you in one sentence what's slowing your Mac down. Most people will use both.
+
+#### Key points
+
+- Activity Monitor lists every process; Bondi groups them into apps and explains the cause in one sentence.
+- In one real reading, 966 processes in Activity Monitor became 39 apps in Bondi.
+- Bondi keeps 30 days of history on the Mac; Activity Monitor keeps only recent CPU and 12 hours of energy.
+
+#### What Activity Monitor does well
+
+Activity Monitor is free, built in, and thorough:
+
+- **Every process**, with CPU, memory, energy, disk and network figures, in five tabs.
+- **Memory pressure** graph and a breakdown of how memory is used.
+- **Some history**: a CPU History window (Window menu) for recent load, and a 12-hour power column in the Energy tab on laptops.
+- **Deep tools** for developers: sample a process, run a spindump, inspect open files and ports.
+- **Force quit** for anything that's stuck.
+
+If you know what you're looking for, it has the data.
+
+#### Where it leaves you on your own
+
+- **Processes, not apps.** A modern app is many processes. On the Mac I measure on, Activity Monitor listed **966 processes**. Google Chrome alone was **80 of them**, adding up to **12.23 GB**, but split into rows of a few hundred megabytes each. Nothing looked big.
+- **Numbers, not answers.** It shows the figures and leaves the conclusion to you.
+- **Little memory of the past.** "What slowed my Mac yesterday afternoon?" isn't something it can answer.
+
+#### What Bondi adds as an Activity Monitor alternative
+
+- **Apps, not processes.** Every helper counts toward the app that started it. That same Mac's 966 processes became **39 apps you recognise**.
+- **One plain sentence.** Bondi works out what matters and says it, written on your Mac by an on-device AI, with every number measured by Bondi itself.
+- **30 days of history**, kept on your Mac, that you can ask about in plain words.
+- **Warnings with one fix**, always asking before it quits anything.
+- **Developer and local AI awareness**: dev servers by project and port, Docker containers and local models, with the memory each holds.
+- **Extras Activity Monitor doesn't do**: per-app volume and a fan boost.
+
+![Bondi's Busiest Right Now: Google Chrome, macOS and Visual Studio Code, by memory.](https://trybondi.app/assets/features/busiest.png)
+*Bondi's busiest apps, grouped: Chrome is one row, not 80.*
+
+#### Side by side
+
+| | Activity Monitor | Bondi |
+| --- | --- | --- |
+| Price | Free, built into macOS | At launch: 7-day free trial, then a one-time purchase (from $6.99) |
+| Shows | Every process | Apps (and their processes when you want them) |
+| Explains the cause | No | Yes, in one sentence |
+| History | Recent CPU, 12 hours of energy | 30 days, on your Mac |
+| Warnings | No | Memory pressure and more, one fix at a time |
+| Lives in the menu bar | No (a Dock icon can show a graph) | Yes |
+| Developer tools | Sample, spindump, open files and ports | Dev servers, ports, containers and local AI models |
+| Data leaves the Mac | No | No |
+
+#### Which should you use?
+
+Keep Activity Monitor for deep, process-level digging: it's excellent at that, and Bondi doesn't replace it. Use Bondi for the everyday question, "why is my Mac slow right now, and what changed?", answered without the detective work.
+
+#### Questions
+
+##### Is Bondi an Activity Monitor alternative?
+
+It's a companion. Bondi explains what Activity Monitor's numbers mean and keeps history; Activity Monitor stays the tool for deep, process-level digging.
+
+##### How much does Bondi cost?
+
+At launch: a 7-day free trial, then a one-time purchase, $6.99 for the first 250 licenses and $29.99 after that. After the trial, the menu bar keeps showing CPU for free.
+
+##### Does Bondi send my data anywhere?
+
+No. History and the AI stay on the Mac. Bondi only contacts its server to check the trial or license and to look for updates.
+
+---
+Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+
+### How Bondi's AI explains your Mac without making up a number
+
+> How Bondi's on-device AI, with Apple Intelligence where available, explains your Mac in one sentence while every figure stays measured and checked.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+Web page: https://trybondi.app/blog/ai-that-never-makes-up-a-number/
+
+Bondi uses an on-device AI model, private to your Mac, to write one plain sentence about it, but the AI never decides a single number. Bondi measures everything itself, decides what matters, lets the model write the words around those facts, and then checks the sentence before you see it.
+
+#### Key points
+
+- Bondi measures every number in code; the on-device AI only writes the words around them.
+- On Macs with Apple Intelligence it uses Apple's on-device model; other Macs can download Qwen2.5 0.5B.
+- Bondi checks every sentence and uses its own if a number, the tone or the subject is wrong.
+
+#### The problem with asking an AI about your Mac
+
+Language models are good at sounding right. That's exactly the risk with system monitoring: a confident sentence with a wrong number ("Chrome is using 4 GB" when it's using 12) is worse than no sentence at all. And sending your process list to a cloud model to ask means your apps and habits leave your Mac.
+
+So I set two rules for Bondi's AI: it runs on your Mac, and it never gets to make up a number.
+
+#### How Bondi's on-device AI writes a sentence
+
+**1. Bondi measures.** Every figure is worked out in code from your Mac's own readings: memory pressure, which app is using what (with all its helper processes added up), CPU, disk, battery and more.
+
+**2. Bondi picks the point.** Bondi decides what the sentence is about: a problem, the disk, the battery, something sitting idle, or all calm. It also picks the tone, for example a gentle note.
+
+**3. The on-device model writes.** On Macs with Apple Intelligence, Bondi uses Apple's on-device foundation model, built into macOS and running on your Mac's Apple silicon. Other Macs can download a small free open model (Qwen2.5 0.5B) from Bondi's Settings. Either way the model only adds the plain English; the facts it's given are Bondi's.
+
+**4. Bondi checks it.** Before you see the sentence, Bondi checks it: wrong tone, wrong subject, or any number that doesn't match what Bondi measured, and Bondi throws it away and uses its own sentence instead.
+
+#### What it looks like
+
+On a calm moment on the Mac I measure on, Bondi wrote:
+
+![Everything is fine. Memory pressure is Normal, with 44.73 GB of 64.00 GB used. Google Chrome is using the most memory, 13.09 GB across 82 processes.](https://trybondi.app/assets/features/why.png)
+*Every number here was measured by Bondi; the model only wrote the words around them.*
+
+And when a forgotten dev server was holding memory: *"A dev server is sitting idle. Vite in shop has been idle for 3h 20m and holds 612.0 MB."*
+
+#### Asking about the past
+
+The same rules apply when you ask Bondi a question about its 30 days of history. Bondi looks up the figures in the history file on your Mac, and the model phrases the answer. Asked "What slowed my Mac yesterday?", Bondi answered:
+
+> Yesterday, memory used averaged 35.29 GB and peaked at 54.26 GB at 1:51 PM, and the CPU averaged 19.8% and peaked at 40.0% at 7:02 PM. Google Chrome used the most memory, 9.63 GB on average, then macOS (6.39 GB) and Visual Studio Code (3.48 GB).
+
+#### What leaves your Mac
+
+Nothing about your apps or your usage. The model runs on your Mac, offline; your history stays in a file on your Mac. Bondi only contacts our server to check its trial or license and to look for updates. The details are in the [privacy policy](https://trybondi.app/privacy/).
+
+#### Questions
+
+##### Does Bondi send my data to an AI in the cloud?
+
+No. The model runs on your Mac, offline, and your history stays on your Mac.
+
+##### Which AI model does Bondi use?
+
+Apple's on-device foundation model on Macs with Apple Intelligence (macOS 26, Apple silicon). Other Macs can download Qwen2.5 0.5B from Bondi's Settings.
+
+##### Can Bondi's AI get numbers wrong?
+
+The AI never decides a number. Bondi measures every figure and rejects any sentence whose numbers don't match.
+
+---
+Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+<!-- /blog -->

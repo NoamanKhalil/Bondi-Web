@@ -1,13 +1,10 @@
----
-title: Why is my Mac slow after a macOS update?
-description: Mac slow after a macOS Sequoia or Tahoe update? It's re-indexing Spotlight, re-scanning photos and syncing iCloud. Here's what's running and how long it lasts.
-date: 2026-10-03
-updated: 2026-10-03
-status: published
-order: 7
-image: /assets/features/guide.png
-related: spotlight-indexing-slow-mac, mac-fans-loud, why-is-my-mac-slow
----
+# Why is my Mac slow after a macOS update?
+
+> Mac slow after a macOS Sequoia or Tahoe update? It's re-indexing Spotlight, re-scanning photos and syncing iCloud. Here's what's running and how long it lasts.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+Web page: https://trybondi.app/blog/mac-slow-after-update/
+
 A Mac is often slow for a day or so after a macOS update (to macOS Sequoia, Tahoe or any other version) because macOS is catching up in the background: rebuilding the Spotlight search index, re-analyzing your photos, re-checking apps and syncing with iCloud. It settles on its own, usually within hours, and faster if you leave the Mac plugged in and awake.
 
 ## Key points
@@ -45,7 +42,7 @@ It depends on how many files and photos you have. A Mac with a large photo libra
 
 ## When it's not the update
 
-If it's still slow after a day or two, the update probably isn't the cause. Check memory pressure and which app is busiest: [Why is my Mac slow?](/blog/why-is-my-mac-slow/) walks through the other usual suspects.
+If it's still slow after a day or two, the update probably isn't the cause. Check memory pressure and which app is busiest: [Why is my Mac slow?](https://trybondi.app/blog/why-is-my-mac-slow/) walks through the other usual suspects.
 
 ## How Bondi helps
 
@@ -64,3 +61,6 @@ Spotlight's indexer, rebuilding the index of your files. Leave it running: it fi
 ### Should I force quit processes after an update?
 
 No. macOS starts them again and the work starts over.
+
+---
+Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/

@@ -1,13 +1,10 @@
----
-title: Memory pressure on Mac, explained
-description: "Memory Used" being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here's how to read them.
-date: 2026-10-03
-updated: 2026-10-03
-status: published
-order: 3
-image: /assets/features/warning.png
-related: which-app-is-using-my-mac-memory, why-is-my-mac-slow, bondi-vs-activity-monitor
----
+# Memory pressure on Mac, explained
+
+> "Memory Used" being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here's how to read them.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+Web page: https://trybondi.app/blog/memory-pressure-explained/
+
 Memory pressure tells you how hard macOS is working to fit everything you're running into your Mac's memory. Green means it's comfortable, yellow means it's compressing and juggling, and red means it's out of room and leaning on the disk. It's a far better guide than "Memory Used", which is high on almost every Mac, and that's fine.
 
 ## Key points
@@ -45,7 +42,7 @@ Open Activity Monitor and choose the **Memory** tab. At the bottom:
 
 ## What to do when memory pressure is yellow or red
 
-1. **Find the app using the most.** Usually it's a browser with many tabs, but helper processes hide this. See [Which app is using my Mac's memory?](/blog/which-app-is-using-my-mac-memory/)
+1. **Find the app using the most.** Usually it's a browser with many tabs, but helper processes hide this. See [Which app is using my Mac's memory?](https://trybondi.app/blog/which-app-is-using-my-mac-memory/)
 2. **Quit it or close what you don't need**, then watch the graph drop.
 3. **Look for things left running**: dev servers, containers and local AI models hold memory even when idle.
 4. **Restart** if swap has grown large over days of uptime.
@@ -56,7 +53,7 @@ If it's red every day with your normal set of apps, your work needs more memory 
 
 Bondi watches memory pressure for you. When it rises, the menu bar says so and names the cause, with one fix that always asks first:
 
-![Memory pressure warning on a MacBook Pro, from Bondi: Memory pressure is Elevated. Google Chrome is using 13.09 GB. Quit Google Chrome.](/assets/features/warning.png)
+![Memory pressure warning on a MacBook Pro, from Bondi: Memory pressure is Elevated. Google Chrome is using 13.09 GB. Quit Google Chrome.](https://trybondi.app/assets/features/warning.png)
 *A real warning from Bondi. It suggests one fix at a time and never quits anything without asking.*
 
 ## Questions
@@ -72,3 +69,6 @@ Memory macOS has moved to the startup disk because RAM ran short. A little is no
 ### Do I need more RAM?
 
 If memory pressure is red every day with the apps you normally use, your work needs more memory than this Mac has.
+
+---
+Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/

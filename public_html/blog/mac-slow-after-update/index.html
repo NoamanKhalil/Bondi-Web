@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://trybondi.app/blog/mac-slow-after-update/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@khalilnoaman">
-<meta property="og:type" content="article"><meta property="og:title" content="Why is my Mac slow after a macOS update?"><meta property="og:description" content="Mac slow after a macOS Sequoia or Tahoe update? It&#039;s re-indexing Spotlight, re-scanning photos and syncing iCloud. Here&#039;s what&#039;s running and how long it lasts."><meta property="og:image" content="https://trybondi.app/assets/features/guide.png"><meta property="article:published_time" content="2026-10-03"><meta property="article:author" content="https://x.com/khalilnoaman">
+<meta property="og:type" content="article"><meta property="og:title" content="Why is my Mac slow after a macOS update?"><meta property="og:description" content="Mac slow after a macOS Sequoia or Tahoe update? It&#039;s re-indexing Spotlight, re-scanning photos and syncing iCloud. Here&#039;s what&#039;s running and how long it lasts."><meta property="og:image" content="https://trybondi.app/assets/features/guide.png"><meta property="article:published_time" content="2026-10-03"><meta property="article:author" content="https://x.com/khalilnoaman"><link rel="alternate" type="text/markdown" title="Plain text, for AI assistants" href="/blog/mac-slow-after-update.md">
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
@@ -63,6 +63,35 @@
                     "item": "https://trybondi.app/blog/mac-slow-after-update/"
                 }
             ]
+        },
+        {
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "How long is a Mac slow after a macOS update?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Usually a few hours. With a large photo library or a nearly full disk, up to a day."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What is mds_stores and why is it using CPU after an update?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Spotlight's indexer, rebuilding the index of your files. Leave it running: it finishes on its own."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Should I force quit processes after an update?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "No. macOS starts them again and the work starts over."
+                    }
+                }
+            ]
         }
     ]
 }
@@ -81,9 +110,15 @@
   <nav class="crumbs" aria-label="Breadcrumb"><a href="/blog/">Blog</a></nav>
   
   <h1>Why is my Mac slow after a macOS update?</h1>
-  <p class="byline">By <a href="https://x.com/khalilnoaman" target="_blank" rel="me noopener">Noaman Khalil</a>, maker of Bondi · <time datetime="2026-10-03">October 3, 2026</time> · 2 min read</p>
+  <p class="byline">By <a href="https://x.com/khalilnoaman" target="_blank" rel="me noopener">Noaman Khalil</a>, maker of Bondi · <time datetime="2026-10-03">October 3, 2026</time> · 3 min read</p>
   <div class="prose">
 <p>A Mac is often slow for a day or so after a macOS update (to macOS Sequoia, Tahoe or any other version) because macOS is catching up in the background: rebuilding the Spotlight search index, re-analyzing your photos, re-checking apps and syncing with iCloud. It settles on its own, usually within hours, and faster if you leave the Mac plugged in and awake.</p>
+<h2>Key points</h2>
+<ul>
+<li>After a macOS update, Spotlight, Photos and iCloud catch up in the background.</li>
+<li>It usually settles within hours; a large photo library or a full disk can make it take a day.</li>
+<li>Keep the Mac plugged in and awake, and don't force-quit these processes.</li>
+</ul>
 <h2>What's running after a macOS update</h2>
 <p>Open Activity Monitor (Command-Space, then type &quot;Activity Monitor&quot;), choose the <strong>CPU</strong> tab and sort by <strong>% CPU</strong>. After an update you'll often see these near the top:</p>
 <table>
@@ -146,7 +181,15 @@
 <p>If it's still slow after a day or two, the update probably isn't the cause. Check memory pressure and which app is busiest: <a href="/blog/why-is-my-mac-slow/">Why is my Mac slow?</a> walks through the other usual suspects.</p>
 <h2>How Bondi helps</h2>
 <p>Bondi's process guide explains each of these processes in plain words and shows what it's using right now, so you can see it's Spotlight or Photos catching up rather than an app gone wrong.</p>
+<h2>Questions</h2>
+<h3>How long is a Mac slow after a macOS update?</h3>
+<p>Usually a few hours. With a large photo library or a nearly full disk, up to a day.</p>
+<h3>What is mds_stores and why is it using CPU after an update?</h3>
+<p>Spotlight's indexer, rebuilding the index of your files. Leave it running: it finishes on its own.</p>
+<h3>Should I force quit processes after an update?</h3>
+<p>No. macOS starts them again and the work starts over.</p>
   </div>
+  <p class="plain-copy">Also as <a href="/blog/mac-slow-after-update.md">plain text</a>, for AI assistants and readers.</p>
   <aside class="cta">
     <img src="/assets/icon-blue.png" alt="" width="56" height="56">
     <div><p class="cta-title">Bondi tells you why your Mac is slow, in one plain sentence.</p>

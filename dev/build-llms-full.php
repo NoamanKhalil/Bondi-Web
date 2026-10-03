@@ -86,6 +86,11 @@ foreach ($guide as $entry) {
     $text .= "\n### $names\n- What it is: {$entry['what']}\n- Why it gets busy: {$entry['busy']}\n- Quitting it: $advice\n";
 }
 
+// The blog's articles (added by dev/build-blog.php between <!-- blog --> markers) stay when this file is rebuilt
+if (preg_match('~\n*<!-- blog -->.*?<!-- /blog -->\n?~s', (string)@file_get_contents("$root/public_html/llms-full.txt"), $blog)) {
+    $text = rtrim($text) . "\n" . $blog[0];
+}
+
 foreach (["$root/public_html/llms-full.txt", "$root/llms-full.txt"] as $out) {
     file_put_contents($out, $text);
 }

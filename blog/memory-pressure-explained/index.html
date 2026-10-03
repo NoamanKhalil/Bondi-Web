@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://trybondi.app/blog/memory-pressure-explained/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@khalilnoaman">
-<meta property="og:type" content="article"><meta property="og:title" content="Memory pressure on Mac, explained"><meta property="og:description" content="&quot;Memory Used&quot; being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here&#039;s how to read them."><meta property="og:image" content="https://trybondi.app/assets/features/warning.png"><meta property="article:published_time" content="2026-10-03"><meta property="article:author" content="https://x.com/khalilnoaman">
+<meta property="og:type" content="article"><meta property="og:title" content="Memory pressure on Mac, explained"><meta property="og:description" content="&quot;Memory Used&quot; being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here&#039;s how to read them."><meta property="og:image" content="https://trybondi.app/assets/features/warning.png"><meta property="article:published_time" content="2026-10-03"><meta property="article:author" content="https://x.com/khalilnoaman"><link rel="alternate" type="text/markdown" title="Plain text, for AI assistants" href="/blog/memory-pressure-explained.md">
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
@@ -63,6 +63,35 @@
                     "item": "https://trybondi.app/blog/memory-pressure-explained/"
                 }
             ]
+        },
+        {
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "What does yellow memory pressure mean on a Mac?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "macOS is compressing a lot of memory to fit everything in. The Mac still works; closing the app using the most memory helps."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What is swap used on a Mac?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Memory macOS has moved to the startup disk because RAM ran short. A little is normal; a lot, with yellow or red pressure, makes the Mac slow."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Do I need more RAM?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "If memory pressure is red every day with the apps you normally use, your work needs more memory than this Mac has."
+                    }
+                }
+            ]
         }
     ]
 }
@@ -81,9 +110,15 @@
   <nav class="crumbs" aria-label="Breadcrumb"><a href="/blog/">Blog</a></nav>
   
   <h1>Memory pressure on Mac, explained</h1>
-  <p class="byline">By <a href="https://x.com/khalilnoaman" target="_blank" rel="me noopener">Noaman Khalil</a>, maker of Bondi · <time datetime="2026-10-03">October 3, 2026</time> · 2 min read</p>
+  <p class="byline">By <a href="https://x.com/khalilnoaman" target="_blank" rel="me noopener">Noaman Khalil</a>, maker of Bondi · <time datetime="2026-10-03">October 3, 2026</time> · 3 min read</p>
   <div class="prose">
 <p>Memory pressure tells you how hard macOS is working to fit everything you're running into your Mac's memory. Green means it's comfortable, yellow means it's compressing and juggling, and red means it's out of room and leaning on the disk. It's a far better guide than &quot;Memory Used&quot;, which is high on almost every Mac, and that's fine.</p>
+<h2>Key points</h2>
+<ul>
+<li>Memory pressure (green, yellow or red) shows how hard macOS is working to fit everything into memory.</li>
+<li>A high &quot;Memory Used&quot; is normal: macOS fills spare memory with cached files.</li>
+<li>Yellow means heavy compression; red means swapping to disk, which is when a Mac slows down.</li>
+</ul>
 <h2>Why &quot;Memory Used&quot; being high is normal</h2>
 <p>macOS treats empty memory as wasted memory. It fills spare memory with <strong>cached files</strong> (things you've opened recently, kept in case you need them again) and hands that space back the moment an app needs it.</p>
 <p>So on a healthy Mac, Memory Used can look alarming. On the Mac I measure on, Bondi reported <strong>44.73 GB of 64.00 GB used, and memory pressure Normal</strong>. Plenty used, no problem.</p>
@@ -142,7 +177,15 @@
 <p>Bondi watches memory pressure for you. When it rises, the menu bar says so and names the cause, with one fix that always asks first:</p>
 <p><img loading="lazy" src="/assets/features/warning.png" alt="Memory pressure warning on a MacBook Pro, from Bondi: Memory pressure is Elevated. Google Chrome is using 13.09 GB. Quit Google Chrome." />
 <em>A real warning from Bondi. It suggests one fix at a time and never quits anything without asking.</em></p>
+<h2>Questions</h2>
+<h3>What does yellow memory pressure mean on a Mac?</h3>
+<p>macOS is compressing a lot of memory to fit everything in. The Mac still works; closing the app using the most memory helps.</p>
+<h3>What is swap used on a Mac?</h3>
+<p>Memory macOS has moved to the startup disk because RAM ran short. A little is normal; a lot, with yellow or red pressure, makes the Mac slow.</p>
+<h3>Do I need more RAM?</h3>
+<p>If memory pressure is red every day with the apps you normally use, your work needs more memory than this Mac has.</p>
   </div>
+  <p class="plain-copy">Also as <a href="/blog/memory-pressure-explained.md">plain text</a>, for AI assistants and readers.</p>
   <aside class="cta">
     <img src="/assets/icon-blue.png" alt="" width="56" height="56">
     <div><p class="cta-title">Bondi tells you why your Mac is slow, in one plain sentence.</p>

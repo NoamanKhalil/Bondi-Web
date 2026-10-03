@@ -1,13 +1,10 @@
----
-title: Which app is using my Mac's memory?
-description: Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here's how to see which app is really using your Mac's memory.
-date: 2026-10-03
-updated: 2026-10-03
-status: published
-order: 2
-image: /assets/features/busiest.png
-related: memory-pressure-explained, bondi-vs-activity-monitor, why-is-my-mac-slow
----
+# Which app is using my Mac's memory?
+
+> Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here's how to see which app is really using your Mac's memory.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+Web page: https://trybondi.app/blog/which-app-is-using-my-mac-memory/
+
 To see which app is really using your Mac's memory, you need to add up all of its processes, not look at the biggest row. Browsers and code editors split themselves into dozens of helper processes, so the real total is usually hidden.
 
 ## Key points
@@ -51,13 +48,13 @@ Typing an app's name in the search field also filters to its processes, which he
 
 ## Does it matter?
 
-Only if memory pressure is high. If the **Memory Pressure** graph is green, a big app is fine. It's using memory macOS has spare. If it's yellow or red, the app at the top of the grouped list is your best lever: close tabs, quit it, or restart it. More in [Memory pressure on Mac, explained](/blog/memory-pressure-explained/).
+Only if memory pressure is high. If the **Memory Pressure** graph is green, a big app is fine. It's using memory macOS has spare. If it's yellow or red, the app at the top of the grouped list is your best lever: close tabs, quit it, or restart it. More in [Memory pressure on Mac, explained](https://trybondi.app/blog/memory-pressure-explained/).
 
 ## How Bondi shows it
 
 Bondi does the grouping for you: every helper counts toward the app that started it, so Chrome is one row. Switch between CPU, memory and energy to see who's busiest by each.
 
-![Which app is using the most memory on a MacBook Pro: Bondi's Busiest Right Now list.](/assets/features/busiest.png)
+![Which app is using the most memory on a MacBook Pro: Bondi's Busiest Right Now list.](https://trybondi.app/assets/features/busiest.png)
 *Bondi's busiest apps, each a single row with all its helpers included.*
 
 ## Questions
@@ -73,3 +70,6 @@ In Activity Monitor's Memory tab, choose View → All Processes, Hierarchically,
 ### Should I worry if one app uses a lot of memory?
 
 Only if memory pressure is yellow or red. With green pressure, the app is using memory macOS has spare.
+
+---
+Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/

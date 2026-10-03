@@ -1,13 +1,10 @@
----
-title: WindowServer using high CPU on Mac: what it means and what helps
-description: WindowServer draws everything on your Mac's screens. Here's why it gets busy, what normal looks like, and the settings that actually calm it down.
-date: 2026-10-03
-updated: 2026-10-03
-status: published
-order: 6
-image: /assets/features/guide.png
-related: kernel-task-high-cpu, why-is-my-mac-slow, mac-fans-loud
----
+# WindowServer using high CPU on Mac: what it means and what helps
+
+> WindowServer draws everything on your Mac's screens. Here's why it gets busy, what normal looks like, and the settings that actually calm it down.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+Web page: https://trybondi.app/blog/windowserver-high-cpu/
+
 WindowServer is the part of macOS that draws everything you see: windows, the Dock, the menu bar and every animation. When it's busy, it's because your screens are asking a lot of it, usually from many open windows, several or very high-resolution displays, screen recording or video.
 
 ## Key points
@@ -20,7 +17,7 @@ WindowServer is the part of macOS that draws everything you see: windows, the Do
 
 WindowServer always uses some CPU and a fair amount of memory, because every pixel on every screen goes through it. On the Mac I measure on, an ordinary moment looked like this:
 
-![WindowServer on Mac, explained by Bondi: what it is, why it gets busy, whether you can stop it, and what it's using right now.](/assets/features/guide.png)
+![WindowServer on Mac, explained by Bondi: what it is, why it gets busy, whether you can stop it, and what it's using right now.](https://trybondi.app/assets/features/guide.png)
 *Bondi's process guide on WindowServer, with a real reading: 1.0% of the CPU and 639.9 MB of memory.*
 
 A few percent of CPU is normal. It becomes a problem when it stays high (say, 30% or more) while you're not doing anything visual.
@@ -62,3 +59,6 @@ It holds what's on every screen, so more and larger displays and more open windo
 ### Can I quit WindowServer?
 
 No. Quitting it logs you out and closes every app.
+
+---
+Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/

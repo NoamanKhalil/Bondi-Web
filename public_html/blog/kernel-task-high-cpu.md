@@ -1,13 +1,10 @@
----
-title: kernel_task using lots of CPU? Your Mac is cooling itself down
-description: kernel_task at high CPU usually means your Mac is hot, and macOS is slowing apps on purpose to cool it. Here's why it happens and what actually helps.
-date: 2026-10-03
-updated: 2026-10-03
-status: published
-order: 5
-image: /assets/features/cpu.png
-related: mac-fans-loud, why-is-my-mac-slow, windowserver-high-cpu
----
+# kernel_task using lots of CPU? Your Mac is cooling itself down
+
+> kernel_task at high CPU usually means your Mac is hot, and macOS is slowing apps on purpose to cool it. Here's why it happens and what actually helps.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+Web page: https://trybondi.app/blog/kernel-task-high-cpu/
+
 When kernel_task shows a high CPU figure, your Mac is almost always running hot, or close to overheating. macOS is taking CPU time on purpose so that apps slow down and the heat drops. It's a safety feature, not a bug or malware.
 
 ## Key points
@@ -51,7 +48,7 @@ Don't try to quit or limit kernel_task, and be wary of "cleaner" apps that promi
 
 Bondi's own note on kernel_task says it plainly: *"High CPU usually means the Mac is hot, for example charging in a warm room or on a soft surface. It can't be quit. If it stays busy, let the Mac cool down or close the apps that heat it."* Bondi also groups every process under the app that started it, so the app heating your Mac is one row instead of dozens.
 
-![Mac CPU usage in Bondi: 7% of 10 cores on an M1 Max MacBook Pro, with load average and top apps.](/assets/features/cpu.png)
+![Mac CPU usage in Bondi: 7% of 10 cores on an M1 Max MacBook Pro, with load average and top apps.](https://trybondi.app/assets/features/cpu.png)
 *Bondi's CPU view on the same Mac, in a calm moment.*
 
 ## Questions
@@ -67,3 +64,6 @@ No, it can't be quit. Let the Mac cool down or close the apps that heat it.
 ### Why does kernel_task use so much memory?
 
 Its large memory figure is normal: it's the core of macOS, managing memory and hardware for everything else.
+
+---
+Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/

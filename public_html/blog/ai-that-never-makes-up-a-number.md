@@ -1,13 +1,10 @@
----
-title: How Bondi's AI explains your Mac without making up a number
-description: How Bondi's on-device AI, with Apple Intelligence where available, explains your Mac in one sentence while every figure stays measured and checked.
-date: 2026-10-03
-updated: 2026-10-03
-status: published
-order: 10
-image: /assets/features/why.png
-related: bondi-vs-activity-monitor, why-is-my-mac-slow, memory-pressure-explained
----
+# How Bondi's AI explains your Mac without making up a number
+
+> How Bondi's on-device AI, with Apple Intelligence where available, explains your Mac in one sentence while every figure stays measured and checked.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+Web page: https://trybondi.app/blog/ai-that-never-makes-up-a-number/
+
 Bondi uses an on-device AI model, private to your Mac, to write one plain sentence about it, but the AI never decides a single number. Bondi measures everything itself, decides what matters, lets the model write the words around those facts, and then checks the sentence before you see it.
 
 ## Key points
@@ -36,7 +33,7 @@ So I set two rules for Bondi's AI: it runs on your Mac, and it never gets to mak
 
 On a calm moment on the Mac I measure on, Bondi wrote:
 
-![Everything is fine. Memory pressure is Normal, with 44.73 GB of 64.00 GB used. Google Chrome is using the most memory, 13.09 GB across 82 processes.](/assets/features/why.png)
+![Everything is fine. Memory pressure is Normal, with 44.73 GB of 64.00 GB used. Google Chrome is using the most memory, 13.09 GB across 82 processes.](https://trybondi.app/assets/features/why.png)
 *Every number here was measured by Bondi; the model only wrote the words around them.*
 
 And when a forgotten dev server was holding memory: *"A dev server is sitting idle. Vite in shop has been idle for 3h 20m and holds 612.0 MB."*
@@ -49,7 +46,7 @@ The same rules apply when you ask Bondi a question about its 30 days of history.
 
 ## What leaves your Mac
 
-Nothing about your apps or your usage. The model runs on your Mac, offline; your history stays in a file on your Mac. Bondi only contacts our server to check its trial or license and to look for updates. The details are in the [privacy policy](/privacy/).
+Nothing about your apps or your usage. The model runs on your Mac, offline; your history stays in a file on your Mac. Bondi only contacts our server to check its trial or license and to look for updates. The details are in the [privacy policy](https://trybondi.app/privacy/).
 
 ## Questions
 
@@ -64,3 +61,6 @@ Apple's on-device foundation model on Macs with Apple Intelligence (macOS 26, Ap
 ### Can Bondi's AI get numbers wrong?
 
 The AI never decides a number. Bondi measures every figure and rejects any sentence whose numbers don't match.
+
+---
+Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/

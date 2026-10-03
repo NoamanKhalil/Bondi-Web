@@ -73,6 +73,34 @@ $askRow = trim((string)shell_exec('php ' . escapeshellarg(__DIR__ . '/ask-ai.php
 
 // MARK: Pages
 
+/** Markdown to plain text, for structured data: links keep their words, emphasis and code marks go. */
+function plain(string $md): string
+{
+    $t = preg_replace('/!\[[^\]]*\]\([^)]*\)/', '', $md);
+    $t = preg_replace('/\[([^\]]+)\]\([^)]*\)/', '$1', $t);
+    $t = str_replace(['**', '`'], '', $t);
+    return trim(preg_replace('/\s+/', ' ', $t));
+}
+
+/** The article's "## Questions" section as [question, answer] pairs (each question is a ### heading). */
+function questions(string $md): array
+{
+    if (!preg_match('/^## Questions\s*$(.*?)(?=^## |\z)/ms', $md, $m)) {
+        return [];
+    }
+    preg_match_all('/^### (.+?)\s*$\n(.*?)(?=^### |\z)/ms', $m[1], $qs, PREG_SET_ORDER);
+    return array_map(fn($q) => [plain($q[1]), plain($q[2])], $qs);
+}
+
+/** The article as clean Markdown with full addresses, for AI assistants and other tools (/blog/<slug>.md). */
+function markdown_copy(array $post): string
+{
+    $md = preg_replace('~\]\(/~', '](' . SITE . '/', $post['markdown']);
+    $dates = 'Published ' . nice_date($post['date']) . ($post['updated'] !== $post['date'] ? ', updated ' . nice_date($post['updated']) : '');
+    return "# {$post['title']}\n\n> {$post['description']}\n\nBy " . AUTHOR . ", maker of Bondi. $dates.\nWeb page: " . SITE . "/blog/{$post['slug']}/\n\n"
+         . trim($md) . "\n\n---\nBondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: " . SITE . "/\n";
+}
+
 function nice_date(string $ymd): string
 {
     return date('F j, Y', strtotime($ymd . ' 12:00 UTC'));
@@ -153,10 +181,16 @@ foreach ($shown as $slug => $post) {
                 ['@type' => 'ListItem', 'position' => 3, 'name' => $post['title'], 'item' => $url]]],
         ],
     ];
+    $qa = questions($post['markdown']);
+    if ($qa) {
+        $ld['@graph'][] = ['@type' => 'FAQPage', 'mainEntity' => array_map(fn($q) => ['@type' => 'Question', 'name' => $q[0],
+            'acceptedAnswer' => ['@type' => 'Answer', 'text' => $q[1]]], $qa)];
+    }
     $head = '<meta property="og:type" content="article"><meta property="og:title" content="' . $h($post['title']) . '">'
           . '<meta property="og:description" content="' . $h($post['description']) . '">'
           . '<meta property="og:image" content="' . $h(SITE . ($image ?: '/assets/og-image.jpg')) . '">'
           . '<meta property="article:published_time" content="' . $h($post['date']) . '"><meta property="article:author" content="' . AUTHOR_URL . '">'
+          . '<link rel="alternate" type="text/markdown" title="Plain text, for AI assistants" href="/blog/' . $h($slug) . '.md">'
           . ($post['status'] !== 'published' ? '<meta name="robots" content="noindex">' : '')
           . "\n<script type=\"application/ld+json\">\n" . json_encode($ld, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . "\n</script>";
     $updated = $post['updated'] !== $post['date'] ? ' · Updated ' . $h(nice_date($post['updated'])) : '';
@@ -170,6 +204,7 @@ foreach ($shown as $slug => $post) {
   <div class="prose">
 $html
   </div>
+  <p class="plain-copy">Also as <a href="/blog/{$h($slug)}.md">plain text</a>, for AI assistants and readers.</p>
   <aside class="cta">
     <img src="/assets/icon-blue.png" alt="" width="56" height="56">
     <div><p class="cta-title">Bondi tells you why your Mac is slow, in one plain sentence.</p>
@@ -184,6 +219,7 @@ HTML;
     $file = "$out/blog/$slug/index.html";
     @mkdir(dirname($file), 0755, true);
     file_put_contents($file, page($post['title'] . ' · Bondi blog', $post['description'], $url, $body, $head, $askRow));
+    file_put_contents("$out/blog/$slug.md", markdown_copy($post));
     $written[] = $file;
 }
 
@@ -240,19 +276,36 @@ $llms = (string)file_get_contents("$root/public_html/llms.txt");
 $llms = preg_replace('~\n?<!-- blog -->.*?<!-- /blog -->\n?~s', "\n", $llms);
 if ($live) {
     $section = "<!-- blog -->\n## Blog\n";
-    foreach ($live as $slug => $post) {
-        $section .= '- [' . $post['title'] . '](' . SITE . "/blog/$slug/): " . $post['description'] . "\n";
+    $ordered = $live;
+    uasort($ordered, fn($a, $b) => ((int)($a['order'] ?? 99) <=> (int)($b['order'] ?? 99)) ?: strcmp($a['title'], $b['title']));
+    foreach ($ordered as $slug => $post) {
+        $section .= '- [' . $post['title'] . '](' . SITE . "/blog/$slug.md): " . $post['description'] . "\n";
     }
     $llms = rtrim($llms) . "\n\n$section<!-- /blog -->\n";
 }
 file_put_contents("$root/public_html/llms.txt", $llms);
 $written[] = "$root/public_html/llms.txt";
 
+$full = (string)file_get_contents("$root/public_html/llms-full.txt");
+$full = rtrim(preg_replace('~\n*<!-- blog -->.*?<!-- /blog -->\n?~s', '', $full)) . "\n";
+if ($live) {
+    $full .= "\n<!-- blog -->\n## Articles from the Bondi blog\nThe full text of each article, by " . AUTHOR . ", maker of Bondi.\n";
+    foreach ($ordered as $slug => $post) {
+        $full .= "\n" . preg_replace('/^#/m', '###', markdown_copy($post)); // the article's headings sit under this section
+    }
+    $full .= "<!-- /blog -->\n";
+}
+file_put_contents("$root/public_html/llms-full.txt", $full);
+
+// Plain-text copies may be read even though the site blocks .md files elsewhere (notes and drafts)
+file_put_contents("$root/public_html/blog/.htaccess", "# The articles' plain-text copies (/blog/<slug>.md) are public, unlike .md files elsewhere on the site.\n<FilesMatch \"\\.md$\">\n  Require all granted\n</FilesMatch>\nAddType \"text/markdown; charset=utf-8\" .md\n");
+
 // Remove pages of articles that are no longer published
 foreach (glob("$root/public_html/blog/*/index.html") ?: [] as $page) {
     if (!isset($live[basename(dirname($page))])) {
         unlink($page);
         @rmdir(dirname($page));
+        @unlink(dirname($page) . '.md');
     }
 }
 if (!$live) {
@@ -261,7 +314,7 @@ if (!$live) {
 }
 
 // The top-level copy that Hostinger serves mirrors public_html for these files
-foreach (['blog', 'sitemap.xml', 'llms.txt'] as $item) {
+foreach (['blog', 'sitemap.xml', 'llms.txt', 'llms-full.txt'] as $item) {
     shell_exec('rm -rf ' . escapeshellarg("$root/$item") . ' && cp -R ' . escapeshellarg("$root/public_html/$item") . ' ' . escapeshellarg("$root/$item") . ' 2>/dev/null');
 }
 echo 'Published ' . count($live) . " articles.\n";

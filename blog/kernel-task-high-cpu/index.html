@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://trybondi.app/blog/kernel-task-high-cpu/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@khalilnoaman">
-<meta property="og:type" content="article"><meta property="og:title" content="kernel_task using lots of CPU? Your Mac is cooling itself down"><meta property="og:description" content="kernel_task at high CPU usually means your Mac is hot, and macOS is slowing apps on purpose to cool it. Here&#039;s why it happens and what actually helps."><meta property="og:image" content="https://trybondi.app/assets/features/cpu.png"><meta property="article:published_time" content="2026-10-03"><meta property="article:author" content="https://x.com/khalilnoaman">
+<meta property="og:type" content="article"><meta property="og:title" content="kernel_task using lots of CPU? Your Mac is cooling itself down"><meta property="og:description" content="kernel_task at high CPU usually means your Mac is hot, and macOS is slowing apps on purpose to cool it. Here&#039;s why it happens and what actually helps."><meta property="og:image" content="https://trybondi.app/assets/features/cpu.png"><meta property="article:published_time" content="2026-10-03"><meta property="article:author" content="https://x.com/khalilnoaman"><link rel="alternate" type="text/markdown" title="Plain text, for AI assistants" href="/blog/kernel-task-high-cpu.md">
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
@@ -63,6 +63,35 @@
                     "item": "https://trybondi.app/blog/kernel-task-high-cpu/"
                 }
             ]
+        },
+        {
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "Is kernel_task a virus?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "No. kernel_task is the core of macOS. Its high CPU figure includes time macOS reserves to cool the Mac."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can I quit kernel_task?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "No, it can't be quit. Let the Mac cool down or close the apps that heat it."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Why does kernel_task use so much memory?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Its large memory figure is normal: it's the core of macOS, managing memory and hardware for everything else."
+                    }
+                }
+            ]
         }
     ]
 }
@@ -81,9 +110,15 @@
   <nav class="crumbs" aria-label="Breadcrumb"><a href="/blog/">Blog</a></nav>
   
   <h1>kernel_task using lots of CPU? Your Mac is cooling itself down</h1>
-  <p class="byline">By <a href="https://x.com/khalilnoaman" target="_blank" rel="me noopener">Noaman Khalil</a>, maker of Bondi · <time datetime="2026-10-03">October 3, 2026</time> · 2 min read</p>
+  <p class="byline">By <a href="https://x.com/khalilnoaman" target="_blank" rel="me noopener">Noaman Khalil</a>, maker of Bondi · <time datetime="2026-10-03">October 3, 2026</time> · 3 min read</p>
   <div class="prose">
 <p>When kernel_task shows a high CPU figure, your Mac is almost always running hot, or close to overheating. macOS is taking CPU time on purpose so that apps slow down and the heat drops. It's a safety feature, not a bug or malware.</p>
+<h2>Key points</h2>
+<ul>
+<li>High kernel_task CPU usually means the Mac is hot: macOS slows apps on purpose to cool it.</li>
+<li>It's a safety feature. You can't quit kernel_task, and you wouldn't want to.</li>
+<li>Cool the Mac instead: find the app heating it, use a hard surface, and unplug if it's warm and charged.</li>
+</ul>
 <h2>What kernel_task is on a Mac</h2>
 <p>kernel_task is the core of macOS: the part that manages memory, hardware and every other process. You can't quit it, and you wouldn't want to.</p>
 <p>The confusing part is its CPU figure. Besides its normal work, kernel_task's number <strong>also includes time macOS deliberately sets aside to cool the Mac</strong>. When the chip gets hot, macOS gives that time to kernel_task instead of your apps, which keeps them from making the chip any hotter. So a big kernel_task number is a symptom of heat, not its cause.</p>
@@ -111,7 +146,15 @@
 <p>Bondi's own note on kernel_task says it plainly: <em>&quot;High CPU usually means the Mac is hot, for example charging in a warm room or on a soft surface. It can't be quit. If it stays busy, let the Mac cool down or close the apps that heat it.&quot;</em> Bondi also groups every process under the app that started it, so the app heating your Mac is one row instead of dozens.</p>
 <p><img loading="lazy" src="/assets/features/cpu.png" alt="Mac CPU usage in Bondi: 7% of 10 cores on an M1 Max MacBook Pro, with load average and top apps." />
 <em>Bondi's CPU view on the same Mac, in a calm moment.</em></p>
+<h2>Questions</h2>
+<h3>Is kernel_task a virus?</h3>
+<p>No. kernel_task is the core of macOS. Its high CPU figure includes time macOS reserves to cool the Mac.</p>
+<h3>Can I quit kernel_task?</h3>
+<p>No, it can't be quit. Let the Mac cool down or close the apps that heat it.</p>
+<h3>Why does kernel_task use so much memory?</h3>
+<p>Its large memory figure is normal: it's the core of macOS, managing memory and hardware for everything else.</p>
   </div>
+  <p class="plain-copy">Also as <a href="/blog/kernel-task-high-cpu.md">plain text</a>, for AI assistants and readers.</p>
   <aside class="cta">
     <img src="/assets/icon-blue.png" alt="" width="56" height="56">
     <div><p class="cta-title">Bondi tells you why your Mac is slow, in one plain sentence.</p>

@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://trybondi.app/blog/why-is-my-mac-slow/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@khalilnoaman">
-<meta property="og:type" content="article"><meta property="og:title" content="Why is my Mac slow? How to find the real cause"><meta property="og:description" content="Mac running slow? It usually comes down to one of a handful of causes. Here&#039;s how to tell which one it is, with real readings from a real MacBook Pro."><meta property="og:image" content="https://trybondi.app/assets/features/why.png"><meta property="article:published_time" content="2026-10-03"><meta property="article:author" content="https://x.com/khalilnoaman">
+<meta property="og:type" content="article"><meta property="og:title" content="Why is my Mac slow? How to find the real cause"><meta property="og:description" content="Mac running slow? It usually comes down to one of a handful of causes. Here&#039;s how to tell which one it is, with real readings from a real MacBook Pro."><meta property="og:image" content="https://trybondi.app/assets/features/why.png"><meta property="article:published_time" content="2026-10-03"><meta property="article:author" content="https://x.com/khalilnoaman"><link rel="alternate" type="text/markdown" title="Plain text, for AI assistants" href="/blog/why-is-my-mac-slow.md">
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
@@ -63,6 +63,35 @@
                     "item": "https://trybondi.app/blog/why-is-my-mac-slow/"
                 }
             ]
+        },
+        {
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "How do I find out why my Mac is slow?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Open Activity Monitor. On the Memory tab, look at the Memory Pressure graph; on the CPU tab, sort by % CPU. Yellow or red pressure means memory is short; a process near the top that you're not using is the busy app."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is high memory usage on a Mac bad?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "No. macOS fills spare memory with cached files and gives it back when apps need it. Memory pressure, not Memory Used, tells you whether you need more."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Why is my Mac slow after an update?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "macOS rebuilds the Spotlight index, re-analyzes photos and syncs iCloud in the background. It settles on its own, usually within hours."
+                    }
+                }
+            ]
         }
     ]
 }
@@ -81,9 +110,15 @@
   <nav class="crumbs" aria-label="Breadcrumb"><a href="/blog/">Blog</a></nav>
   
   <h1>Why is my Mac slow? How to find the real cause</h1>
-  <p class="byline">By <a href="https://x.com/khalilnoaman" target="_blank" rel="me noopener">Noaman Khalil</a>, maker of Bondi · <time datetime="2026-10-03">October 3, 2026</time> · 3 min read</p>
+  <p class="byline">By <a href="https://x.com/khalilnoaman" target="_blank" rel="me noopener">Noaman Khalil</a>, maker of Bondi · <time datetime="2026-10-03">October 3, 2026</time> · 4 min read</p>
   <div class="prose">
 <p>A slow Mac, whether it's a MacBook Air, a MacBook Pro or an iMac, almost always has one specific cause: memory running short, one app working hard, macOS doing background work, or the Mac protecting itself from heat. The trick is finding which one, because the fix for each is different.</p>
+<h2>Key points</h2>
+<ul>
+<li>A slow Mac usually has one cause: low memory, one busy app, macOS background work, or heat.</li>
+<li>Check memory pressure first (Activity Monitor → Memory). A high &quot;Memory Used&quot; on its own is normal.</li>
+<li>Apps like Chrome split into many processes, so add them up before deciding which app is to blame.</li>
+</ul>
 <p>Here are the usual suspects, in the order I'd check them, and how to spot each one.</p>
 <h2>1. Memory is running short</h2>
 <p>When the apps you have open need more memory than your Mac has, macOS starts compressing memory and moving some of it to the disk (swap). Everything still works, just slower: switching apps stutters and the beach ball appears.</p>
@@ -148,7 +183,15 @@
 <p><img loading="lazy" src="/assets/features/why.png" alt="Bondi explaining why a MacBook Pro is slow: Everything is fine. Memory pressure is Normal, with 44.73 GB of 64.00 GB used. Google Chrome is using the most memory, 13.09 GB across 82 processes." />
 <em>Bondi's one-sentence answer, from a real reading on a MacBook Pro (M1 Max, 64 GB).</em></p>
 <p>Every number in that sentence is measured by Bondi itself, and the sentence is written on your Mac, so nothing about your apps ever leaves it.</p>
+<h2>Questions</h2>
+<h3>How do I find out why my Mac is slow?</h3>
+<p>Open Activity Monitor. On the Memory tab, look at the Memory Pressure graph; on the CPU tab, sort by % CPU. Yellow or red pressure means memory is short; a process near the top that you're not using is the busy app.</p>
+<h3>Is high memory usage on a Mac bad?</h3>
+<p>No. macOS fills spare memory with cached files and gives it back when apps need it. Memory pressure, not Memory Used, tells you whether you need more.</p>
+<h3>Why is my Mac slow after an update?</h3>
+<p>macOS rebuilds the Spotlight index, re-analyzes photos and syncs iCloud in the background. It settles on its own, usually within hours.</p>
   </div>
+  <p class="plain-copy">Also as <a href="/blog/why-is-my-mac-slow.md">plain text</a>, for AI assistants and readers.</p>
   <aside class="cta">
     <img src="/assets/icon-blue.png" alt="" width="56" height="56">
     <div><p class="cta-title">Bondi tells you why your Mac is slow, in one plain sentence.</p>

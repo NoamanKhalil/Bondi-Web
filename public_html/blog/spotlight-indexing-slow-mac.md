@@ -1,13 +1,10 @@
----
-title: Is Spotlight indexing slowing down your Mac?
-description: When mds_stores and mdworker are busy, Spotlight is rebuilding its index. Here's how to tell, how long it lasts, and how to keep folders out of it.
-date: 2026-10-03
-updated: 2026-10-03
-status: published
-order: 8
-image: /assets/features/guide.png
-related: mac-slow-after-update, mac-fans-loud, why-is-my-mac-slow
----
+# Is Spotlight indexing slowing down your Mac?
+
+> When mds_stores and mdworker are busy, Spotlight is rebuilding its index. Here's how to tell, how long it lasts, and how to keep folders out of it.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+Web page: https://trybondi.app/blog/spotlight-indexing-slow-mac/
+
 If **mds_stores**, **mds** or **mdworker** are near the top of Activity Monitor, Spotlight is indexing: reading your files so searches can be instant. It's busiest after a macOS update, after adding lots of files, or when you connect a new disk, and it settles on its own, usually within a few hours.
 
 ## Key points
@@ -61,3 +58,6 @@ From minutes to a few hours. A first index of a large external drive can take lo
 ### How do I stop Spotlight indexing a folder?
 
 Add it to Spotlight's privacy list in System Settings → Spotlight.
+
+---
+Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/

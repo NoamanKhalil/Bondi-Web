@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://trybondi.app/blog/spotlight-indexing-slow-mac/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@khalilnoaman">
-<meta property="og:type" content="article"><meta property="og:title" content="Is Spotlight indexing slowing down your Mac?"><meta property="og:description" content="When mds_stores and mdworker are busy, Spotlight is rebuilding its index. Here&#039;s how to tell, how long it lasts, and how to keep folders out of it."><meta property="og:image" content="https://trybondi.app/assets/features/guide.png"><meta property="article:published_time" content="2026-10-03"><meta property="article:author" content="https://x.com/khalilnoaman">
+<meta property="og:type" content="article"><meta property="og:title" content="Is Spotlight indexing slowing down your Mac?"><meta property="og:description" content="When mds_stores and mdworker are busy, Spotlight is rebuilding its index. Here&#039;s how to tell, how long it lasts, and how to keep folders out of it."><meta property="og:image" content="https://trybondi.app/assets/features/guide.png"><meta property="article:published_time" content="2026-10-03"><meta property="article:author" content="https://x.com/khalilnoaman"><link rel="alternate" type="text/markdown" title="Plain text, for AI assistants" href="/blog/spotlight-indexing-slow-mac.md">
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
@@ -63,6 +63,35 @@
                     "item": "https://trybondi.app/blog/spotlight-indexing-slow-mac/"
                 }
             ]
+        },
+        {
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "What is mds_stores on Mac?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Spotlight's indexer. It keeps the index that makes searches instant."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How long does Spotlight indexing take?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "From minutes to a few hours. A first index of a large external drive can take longer."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How do I stop Spotlight indexing a folder?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Add it to Spotlight's privacy list in System Settings → Spotlight."
+                    }
+                }
+            ]
         }
     ]
 }
@@ -84,6 +113,12 @@
   <p class="byline">By <a href="https://x.com/khalilnoaman" target="_blank" rel="me noopener">Noaman Khalil</a>, maker of Bondi · <time datetime="2026-10-03">October 3, 2026</time> · 2 min read</p>
   <div class="prose">
 <p>If <strong>mds_stores</strong>, <strong>mds</strong> or <strong>mdworker</strong> are near the top of Activity Monitor, Spotlight is indexing: reading your files so searches can be instant. It's busiest after a macOS update, after adding lots of files, or when you connect a new disk, and it settles on its own, usually within a few hours.</p>
+<h2>Key points</h2>
+<ul>
+<li>Busy mds, mds_stores or mdworker means Spotlight is indexing your files.</li>
+<li>It happens after updates, big downloads or connecting a new disk, and settles within hours.</li>
+<li>Folders that don't need searching can be left out in System Settings → Spotlight.</li>
+</ul>
 <h2>What each process does</h2>
 <ul>
 <li><strong>mds</strong> and <strong>mds_stores</strong>: Spotlight's indexer. They keep the index of your files.</li>
@@ -109,7 +144,15 @@
 <p>If Spotlight is still busy after a day, something keeps giving it new files: a folder that changes constantly (logs, builds, a sync folder mid-sync) is the usual cause. Adding that folder to Spotlight's privacy list stops the churn.</p>
 <h2>How Bondi helps</h2>
 <p>Bondi's process guide explains each of these processes and what it's using right now, so when Spotlight is the reason your Mac is busy, you can see it and know to wait rather than worry.</p>
+<h2>Questions</h2>
+<h3>What is mds_stores on Mac?</h3>
+<p>Spotlight's indexer. It keeps the index that makes searches instant.</p>
+<h3>How long does Spotlight indexing take?</h3>
+<p>From minutes to a few hours. A first index of a large external drive can take longer.</p>
+<h3>How do I stop Spotlight indexing a folder?</h3>
+<p>Add it to Spotlight's privacy list in System Settings → Spotlight.</p>
   </div>
+  <p class="plain-copy">Also as <a href="/blog/spotlight-indexing-slow-mac.md">plain text</a>, for AI assistants and readers.</p>
   <aside class="cta">
     <img src="/assets/icon-blue.png" alt="" width="56" height="56">
     <div><p class="cta-title">Bondi tells you why your Mac is slow, in one plain sentence.</p>

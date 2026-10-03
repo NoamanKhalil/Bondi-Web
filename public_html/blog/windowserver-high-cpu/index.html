@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://trybondi.app/blog/windowserver-high-cpu/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@khalilnoaman">
-<meta property="og:type" content="article"><meta property="og:title" content="WindowServer using high CPU on Mac: what it means and what helps"><meta property="og:description" content="WindowServer draws everything on your Mac&#039;s screens. Here&#039;s why it gets busy, what normal looks like, and the settings that actually calm it down."><meta property="og:image" content="https://trybondi.app/assets/features/guide.png"><meta property="article:published_time" content="2026-10-03"><meta property="article:author" content="https://x.com/khalilnoaman">
+<meta property="og:type" content="article"><meta property="og:title" content="WindowServer using high CPU on Mac: what it means and what helps"><meta property="og:description" content="WindowServer draws everything on your Mac&#039;s screens. Here&#039;s why it gets busy, what normal looks like, and the settings that actually calm it down."><meta property="og:image" content="https://trybondi.app/assets/features/guide.png"><meta property="article:published_time" content="2026-10-03"><meta property="article:author" content="https://x.com/khalilnoaman"><link rel="alternate" type="text/markdown" title="Plain text, for AI assistants" href="/blog/windowserver-high-cpu.md">
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
@@ -63,6 +63,35 @@
                     "item": "https://trybondi.app/blog/windowserver-high-cpu/"
                 }
             ]
+        },
+        {
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "What is WindowServer on Mac?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The part of macOS that draws windows, the Dock, the menu bar and animations on every display."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Why is WindowServer using so much memory?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "It holds what's on every screen, so more and larger displays and more open windows need more. In one real reading it used 639.9 MB."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can I quit WindowServer?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "No. Quitting it logs you out and closes every app."
+                    }
+                }
+            ]
         }
     ]
 }
@@ -84,6 +113,12 @@
   <p class="byline">By <a href="https://x.com/khalilnoaman" target="_blank" rel="me noopener">Noaman Khalil</a>, maker of Bondi · <time datetime="2026-10-03">October 3, 2026</time> · 2 min read</p>
   <div class="prose">
 <p>WindowServer is the part of macOS that draws everything you see: windows, the Dock, the menu bar and every animation. When it's busy, it's because your screens are asking a lot of it, usually from many open windows, several or very high-resolution displays, screen recording or video.</p>
+<h2>Key points</h2>
+<ul>
+<li>WindowServer draws everything on your screens; a few percent of CPU is normal.</li>
+<li>Many windows, external or high-resolution displays, screen recording and animation make it busy.</li>
+<li>Turning on Reduce transparency and Reduce motion (System Settings → Accessibility → Display) lightens it.</li>
+</ul>
 <h2>How much CPU and memory WindowServer should use</h2>
 <p>WindowServer always uses some CPU and a fair amount of memory, because every pixel on every screen goes through it. On the Mac I measure on, an ordinary moment looked like this:</p>
 <p><img loading="lazy" src="/assets/features/guide.png" alt="WindowServer on Mac, explained by Bondi: what it is, why it gets busy, whether you can stop it, and what it&#039;s using right now." />
@@ -109,7 +144,15 @@
 <p>No. Quitting it logs you out and closes every app. Leave it running: macOS needs it, and it settles as soon as the load on your screens drops.</p>
 <h2>How Bondi helps</h2>
 <p>Bondi has notes on 125 common macOS processes, like the one above, and shows what each one is using right now. When your Mac is busy, it tells you in one plain sentence which app is using the most, with all its helper processes added up.</p>
+<h2>Questions</h2>
+<h3>What is WindowServer on Mac?</h3>
+<p>The part of macOS that draws windows, the Dock, the menu bar and animations on every display.</p>
+<h3>Why is WindowServer using so much memory?</h3>
+<p>It holds what's on every screen, so more and larger displays and more open windows need more. In one real reading it used 639.9 MB.</p>
+<h3>Can I quit WindowServer?</h3>
+<p>No. Quitting it logs you out and closes every app.</p>
   </div>
+  <p class="plain-copy">Also as <a href="/blog/windowserver-high-cpu.md">plain text</a>, for AI assistants and readers.</p>
   <aside class="cta">
     <img src="/assets/icon-blue.png" alt="" width="56" height="56">
     <div><p class="cta-title">Bondi tells you why your Mac is slow, in one plain sentence.</p>
