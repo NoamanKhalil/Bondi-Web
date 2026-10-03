@@ -16,7 +16,7 @@ function send_key_email(string $email, string $key, string $kind, ?int $licenseI
 
 /**
  * Sends one email: plain text, plus HTML when given, plus PNG images the HTML shows as cid:<id>, plus any
- * extra headers (such as List-Unsubscribe).
+ * extra headers (such as List-Unsubscribe; a From: there replaces the usual sender).
  * Returns false only when nothing could send it.
  */
 function send_mail(string $to, string $subject, string $text, ?string $html = null, array $images = [], array $extraHeaders = []): bool
@@ -48,8 +48,9 @@ function send_mail(string $to, string $subject, string $text, ?string $html = nu
         }
         $headers = [];
     }
+    $customFrom = (bool)array_filter($extraHeaders, fn($line) => stripos($line, 'From:') === 0);
     $headers = array_merge([
-        'From: ' . config('mail_from'),
+        ...($customFrom ? [] : ['From: ' . config('mail_from')]),
         'Reply-To: ' . config('support_email'),
         'MIME-Version: 1.0',
         "Content-Type: $type",
@@ -211,6 +212,81 @@ HTML;
     $preview = mb_substr(preg_replace('/\s+/', ' ', $message), 0, 120);
 
     return ['subject' => $subject, 'text' => $text, 'html' => email_html($subject, $preview, $inner)];
+}
+
+/** Noaman, Bondi's maker, on X. */
+const MAKER_X = 'khalilnoaman';
+
+/**
+ * The thank-you for joining the beta list, from Noaman, sent once per sign-up (sign_up_welcome()).
+ * Returns ['subject', 'text', 'html'].
+ */
+function welcome_email(string $name): array
+{
+    $e = static fn(string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+    $first = explode(' ', trim($name))[0] ?: 'friend';
+    $support = (string)config('support_email');
+    $x = 'https://x.com/' . MAKER_X;
+    $post = 'https://x.com/intent/post?text=' . rawurlencode("I just joined the beta for Bondi, a Mac app that tells you why your Mac is slow in one plain sentence. Come join the tribe: https://trybondi.app/beta/ (made by @" . MAKER_X . ")");
+    $mail = 'mailto:?subject=' . rawurlencode('Join me on the Bondi beta') . '&body='
+          . rawurlencode("I just joined the beta for Bondi, a Mac app that tells you why your Mac is slow in one plain sentence, right on your Mac. I think you'd love it:\n\nhttps://trybondi.app/beta/");
+    $subject = "You're in, $first. Thank you.";
+    $paras = [
+        "Thank you for signing up for the Bondi beta. I mean that with my whole heart.",
+        "I made Bondi because everyone with a Mac deserves a straight answer to a simple question: why is my Mac slow? Bondi answers in one plain sentence, right on your Mac, and nothing ever leaves it. I've poured so much love into every detail, and you're one of the very first people to believe in it. That means more to me than I can say.",
+        "I'll email you the moment the beta opens. Until then, two small things would mean the world to me:",
+    ];
+    $why = "You're getting this because you signed up for the Bondi beta at trybondi.app. To stop hearing from us, reply with \"unsubscribe\".";
+
+    $text = "Hi $first,\n\n" . implode("\n\n", $paras) . "\n\n"
+          . "1. Follow along on X. I'm @" . MAKER_X . ", and I share Bondi's journey there: $x\n\n"
+          . "2. Invite a friend. Know someone whose Mac drives them up the wall? Bring them into the tribe: https://trybondi.app/beta/\n\n"
+          . "With love and gratitude,\nNoaman\nMaker of Bondi\n\n--\n$why\nQuestions: $support\n";
+
+    $p = fn(string $t): string => '<p class="ink" style="margin:0 0 16px;font-size:16px;line-height:1.55;color:#1d1d1f;">' . $e($t) . '</p>';
+    $body = implode('', array_map($p, $paras));
+    $font = EMAIL_FONT;
+    $inner = <<<HTML
+    <h1 class="ink" style="margin:24px 0 18px;font-size:28px;line-height:1.15;font-weight:700;letter-spacing:-.02em;color:#1d1d1f;">You're in, {$e($first)}.</h1>
+    $body
+    <div class="key" style="margin:8px 0 14px;padding:18px 20px;background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.08);border-radius:14px;">
+      <p class="ink" style="margin:0 0 4px;font-size:16px;font-weight:600;color:#1d1d1f;">Follow along on X</p>
+      <p class="soft" style="margin:0 0 14px;font-size:15px;line-height:1.5;color:#6e6e73;">I'm @{$e(MAKER_X)}, and I share Bondi's journey there.</p>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-radius:10px;background:#0e86a6;">
+        <a href="{$e($x)}" style="display:inline-block;padding:12px 22px;font-family:$font;font-size:15px;line-height:1;font-weight:600;color:#ffffff;text-decoration:none;border-radius:10px;">Follow @{$e(MAKER_X)}</a>
+      </td></tr></table>
+    </div>
+    <div class="key" style="margin:0 0 24px;padding:18px 20px;background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.08);border-radius:14px;">
+      <p class="ink" style="margin:0 0 4px;font-size:16px;font-weight:600;color:#1d1d1f;">Invite a friend</p>
+      <p class="soft" style="margin:0 0 12px;font-size:15px;line-height:1.5;color:#6e6e73;">Know someone whose Mac drives them up the wall? Bring them into the tribe.</p>
+      <p style="margin:0;font-size:15px;font-weight:600;"><a class="link" href="{$e($post)}" style="color:#0e86a6;text-decoration:none;">Share on X</a> <span class="soft" style="color:#6e6e73;">&nbsp;·&nbsp;</span> <a class="link" href="{$e($mail)}" style="color:#0e86a6;text-decoration:none;">Email a friend</a></p>
+    </div>
+    <p class="ink" style="margin:0;font-size:16px;line-height:1.55;color:#1d1d1f;">With love and gratitude,<br><strong>Noaman</strong><br><span class="soft" style="color:#6e6e73;">Maker of Bondi</span></p>
+    <hr class="rule" style="margin:28px 0 20px;border:0;border-top:1px solid rgba(0,0,0,.08);">
+    <p class="soft" style="margin:0;font-size:13px;line-height:1.5;color:#6e6e73;">{$e($why)} Questions? <a class="link" href="mailto:{$e($support)}" style="color:#0e86a6;text-decoration:none;">{$e($support)}</a></p>
+HTML;
+    return ['subject' => $subject, 'text' => $text, 'html' => email_html($subject, "Thank you for signing up for the Bondi beta. A note from Noaman.", $inner)];
+}
+
+/**
+ * Sends one sign-up the thank-you from Noaman, unless they've had it. Logged in email_log as 'welcome'.
+ * Returns true if it was sent now.
+ */
+function sign_up_welcome(string $email, string $name): bool
+{
+    if (one("SELECT id FROM email_log WHERE email = ? AND kind = 'welcome' LIMIT 1", [$email]) !== null) {
+        return false;
+    }
+    $mail = welcome_email($name);
+    $support = (string)config('support_email');
+    $sent = send_mail($email, $mail['subject'], $mail['text'], $mail['html'], email_images(), [
+        "From: Noaman Khalil <$support>",
+        "List-Unsubscribe: <mailto:$support?subject=unsubscribe>",
+    ]);
+    if ($sent) {
+        run("INSERT INTO email_log (email, kind, license_id) VALUES (?, 'welcome', NULL)", [$email]);
+    }
+    return $sent;
 }
 
 const EMAIL_FONT = "-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',Helvetica,Arial,sans-serif";

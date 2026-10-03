@@ -147,6 +147,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             go($back, "Sent to $sent " . ($sent === 1 ? 'person' : 'people') . '.'
                 . ($failed ? " $failed could not be sent." : '')
                 . ($left > 0 ? " $left still to go: press Send again (same subject and message) to carry on." : ''));
+        case 'welcome_rest':
+            // The thank-you from Noaman to everyone on the list who hasn't had it (new sign-ups get it by themselves).
+            $todo = all("SELECT s.email, s.name FROM signups s WHERE NOT EXISTS
+                         (SELECT 1 FROM email_log e WHERE e.email = s.email AND e.kind = 'welcome') ORDER BY s.id");
+            ignore_user_abort(true);
+            set_time_limit(0);
+            $started = microtime(true);
+            $sent = $failed = 0;
+            foreach ($todo as $row) {
+                if (microtime(true) - $started > 40) {
+                    break;
+                }
+                sign_up_welcome($row['email'], $row['name']) ? $sent++ : $failed++;
+            }
+            $left = count($todo) - $sent - $failed;
+            go('signups', "Thank-you sent to $sent " . ($sent === 1 ? 'person' : 'people') . '.'
+                . ($failed ? " $failed could not be sent." : '') . ($left > 0 ? " $left still to go: press it again." : ''));
         case 'delete_signup':
             $row = one('SELECT email FROM signups WHERE id = ?', [(int)($_POST['signup'] ?? 0)]);
             run('DELETE FROM signups WHERE id = ?', [(int)($_POST['signup'] ?? 0)]);
@@ -320,6 +337,7 @@ function signups_page(string $query, ?string $flash): never
     $matching = signups_matching($query);
     $rows = array_slice($matching, 0, 500);
     if ($matching) { write_to_signups($query, count($matching)); }
+    welcome_box();
     if (!$rows) { echo '<p class="muted">None.</p>'; page_end(); }
     $hasPage = signups_have_page();
     echo '<table><tr><th>Name</th><th>Email</th>' . ($hasPage ? '<th>Page</th>' : '') . '<th>Country</th><th>IP</th><th>Signed up</th><th></th></tr>';
@@ -335,6 +353,24 @@ function signups_page(string $query, ?string $flash): never
     }
     echo '</table>';
     page_end();
+}
+
+/** The thank-you from Noaman: who has had it, and a button for those who haven't. */
+function welcome_box(): void
+{
+    $waiting = (int)one("SELECT COUNT(*) AS n FROM signups s WHERE NOT EXISTS
+                         (SELECT 1 FROM email_log e WHERE e.email = s.email AND e.kind = 'welcome')")['n'];
+    $had = (int)one("SELECT COUNT(DISTINCT email) AS n FROM email_log WHERE kind = 'welcome'")['n'];
+    echo '<div class="card compose welcome"><p><b>Thank-you email from Noaman</b> <span class="muted">· sent by itself to every new sign-up · '
+       . $had . ' sent so far</span></p>';
+    if ($waiting > 0) {
+        echo '<form method="post" class="inline" style="margin-top:10px">' . csrf_field() . '<input type="hidden" name="do" value="welcome_rest">'
+           . '<button onclick="return confirm(' . h(json_encode("Send the thank-you email to the $waiting " . ($waiting === 1 ? 'person' : 'people') . ' who haven\'t had it?')) . ')">'
+           . 'Send it to the ' . $waiting . ' who haven\'t had it</button></form>';
+    } else {
+        echo '<p class="muted" style="margin-top:6px">Everyone on the list has had it.</p>';
+    }
+    echo '</div>';
 }
 
 /** Everyone on the sign-up list, or those whose name, email or country matches the search; newest first. */

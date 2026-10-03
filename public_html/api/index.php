@@ -240,5 +240,10 @@ function signup(): never
                  country_source = VALUES(country_source), time_zone = VALUES(time_zone), updated_at = CURRENT_TIMESTAMP',
             $values);
     }
+    try {
+        sign_up_welcome($email, $name); // the thank-you from Noaman, once per email
+    } catch (Throwable $error) {
+        error_log('Bondi sign-up welcome to ' . $email . ': ' . $error->getMessage()); // the sign-up still counts
+    }
     json_out($done);
 }

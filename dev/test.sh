@@ -107,6 +107,9 @@ ROWS=$(mysql -uroot --socket=$SOCK bondi -N -e "select concat_ws('|', email, nam
 expect "one row per email, name updated, email lowercased" "$ROWS" 'ada@example.com|Ada L.|127.0.0.1|IN|timezone'
 expect "country from the CDN header wins over the time zone" "$ROWS" 'grace@example.com|Grace|127.0.0.1|DE|ip'
 [ "$(echo "$ROWS" | wc -l | tr -d ' ')" = "2" ] && { PASS=$((PASS+1)); echo "ok   bot not saved"; } || { FAILS=$((FAILS+1)); echo "FAIL rows: $ROWS"; }
+expect "sign-up gets the thank-you from Noaman" "$(cat bondi/mail.log)" "Subject: You're in, Ada. Thank you."
+expect "thank-you invites to follow on X" "$(cat bondi/mail.log)" 'https://x.com/khalilnoaman'
+expect "signing up again sends no second thank-you" "$(mysql -uroot --socket=$SOCK bondi -N -e "select count(*) from email_log where kind='welcome' and email='ada@example.com'")" '^1$'
 
 # Admin page
 J=$T/cookies
@@ -144,6 +147,10 @@ expect "update emails sent" "$(curl -s -c $J -b $J -L -d "do=news_send&$NEWS&csr
 expect "update email uses their name" "$(cat bondi/mail.log)" 'Subject: Beta for Ada L.'
 expect "update email says how to stop" "$(cat bondi/mail.log)" 'reply with "unsubscribe"'
 expect "sending again skips who already has it" "$(curl -s -c $J -b $J -L -d "do=news_send&$NEWS&csrf=$CSRF" $BASE/admin/)" 'Sent to 0 people'
+mysql -uroot --socket=$SOCK bondi -e "insert into signups (email, name, ip) values ('early@example.com', 'Early Bird', '127.0.0.1')"
+expect "admin offers the thank-you to those who haven't had it" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" "Send it to the 1 who haven"
+expect "admin sends the thank-you to the rest" "$(curl -s -c $J -b $J -L -d "do=welcome_rest&csrf=$CSRF" $BASE/admin/)" 'Thank-you sent to 1 person'
+expect "everyone has had it" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'Everyone on the list has had it'
 GRACE=$(mysql -uroot --socket=$SOCK bondi -N -e "select id from signups where email='grace@example.com'")
 expect "admin removes a sign-up" "$(curl -s -c $J -b $J -L -d "do=delete_signup&signup=$GRACE&csrf=$CSRF" $BASE/admin/)" 'Removed grace@example.com'
 
