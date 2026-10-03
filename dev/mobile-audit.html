@@ -11,7 +11,7 @@ const p = new URLSearchParams(location.search), W = +(p.get('w')||390), OFF = +(
 const f = document.getElementById('f');
 f.addEventListener('load', () => setTimeout(() => {
   const d = f.contentDocument, root = d.documentElement;
-  const foot = d.querySelector('footer'); const H = foot ? Math.ceil(foot.getBoundingClientRect().bottom) : root.scrollHeight; f.style.height = H + 'px'; f.style.top = (-OFF) + 'px';
+  const foot = d.querySelector('footer'); const H = foot ? Math.ceil(foot.getBoundingClientRect().bottom) : root.scrollHeight; f.style.height = H + 'px'; const A = p.get('anchor') ? d.querySelector(p.get('anchor')) : null; f.style.top = (-(A ? A.getBoundingClientRect().top + OFF : OFF)) + 'px';
   const bad = [];
   d.querySelectorAll('body *').forEach(el => {
     const r = el.getBoundingClientRect(); if (!r.width) return;

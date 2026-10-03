@@ -158,6 +158,40 @@
   .step .viz { margin-top: auto; font: 500 0.82rem/1.45 var(--mono); color: var(--ink); background: var(--tile-2); border-radius: 12px; padding: 10px 12px; }
   .step .viz em { font-style: normal; color: var(--bondi-ink); }
   .step:not(:last-child)::after { content: "›"; position: absolute; right: -12px; top: 50%; transform: translateY(-50%); color: var(--faint); font-size: 1.4rem; }
+  /* "Watch Bondi write a sentence": while the four steps are in view, each lights up in turn (the script near the
+     end of the page). An aurora in Bondi's own colours drifts behind them. Reduce Motion: the finished cards, still. */
+  @property --ai-a { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+  .intel { overflow-x: clip; }
+  .flow { position: relative; isolation: isolate; }
+  .aurora { position: absolute; inset: -14% -8%; z-index: -1; pointer-events: none; filter: blur(52px); opacity: .6; }
+  :root[data-theme="light"] .aurora { opacity: .4; }
+  .aurora i { position: absolute; width: 48%; height: 75%; border-radius: 50%; }
+  .aurora i:nth-child(1) { left: 2%; top: 8%; background: radial-gradient(closest-side, rgba(44,192,222,.6), transparent); animation: ai-drift-a 13s ease-in-out infinite alternate; }
+  .aurora i:nth-child(2) { right: 0; top: 0; background: radial-gradient(closest-side, rgba(124,120,238,.5), transparent); animation: ai-drift-b 17s ease-in-out infinite alternate; }
+  .aurora i:nth-child(3) { left: 30%; bottom: -6%; background: radial-gradient(closest-side, rgba(155,107,214,.38), transparent); animation: ai-drift-c 21s ease-in-out infinite alternate; }
+  @keyframes ai-drift-a { to { transform: translate(28%, 14%) scale(1.15); } }
+  @keyframes ai-drift-b { to { transform: translate(-24%, 22%) scale(.9); } }
+  @keyframes ai-drift-c { to { transform: translate(-18%, -26%) scale(1.2); } }
+  .step { transition: transform .6s cubic-bezier(.2, .8, .2, 1), box-shadow .6s; }
+  .step .ring { position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; pointer-events: none; opacity: 0; transition: opacity .6s;
+    background: conic-gradient(from var(--ai-a), #2cc0de, #7c78ee, #9b6bd6, #5fd4ea, #2cc0de);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+    animation: ai-spin 3.2s linear infinite; }
+  @keyframes ai-spin { to { --ai-a: 360deg; } }
+  .flow.live .step.on { transform: translateY(-4px); box-shadow: 0 22px 60px -24px rgba(44,192,222,.6), 0 8px 24px -14px rgba(124,120,238,.5); }
+  .flow.live .step.on .ring { opacity: 1; }
+  .flow.live .step.done .ring { opacity: .3; }
+  .flow.live .step.done::after { color: var(--bondi); text-shadow: 0 0 14px var(--bondi); transition: color .4s, text-shadow .4s; }
+  .flow.live [data-later] { opacity: 0; transition: opacity .5s; } .flow.live [data-later].shown { opacity: 1; }
+  .step [data-cycle] { display: inline-block; transition: color .2s; }
+  .step [data-type].writing { background: linear-gradient(90deg, var(--ink) 0%, var(--bondi) 35%, #9b8cf0 55%, var(--ink) 80%); background-size: 220% 100%;
+    -webkit-background-clip: text; background-clip: text; color: transparent; animation: ai-shimmer 1.4s linear infinite; }
+  @keyframes ai-shimmer { from { background-position: 120% 0; } to { background-position: -100% 0; } }
+  .step .viz b { font-weight: inherit; border-radius: 4px; transition: background .5s, box-shadow .5s, color .5s; }
+  .flow.live .step .viz b.ok { background: rgba(44,192,222,.18); box-shadow: 0 0 0 2px rgba(44,192,222,.22); color: var(--bondi-ink); }
+  .flow.live .tick { display: inline-block; transform: scale(0); transition: transform .45s cubic-bezier(.3, 1.6, .5, 1); }
+  .flow.live .step.on .tick, .flow.live .step.done .tick { transform: scale(1); }
+  @media (prefers-reduced-motion: reduce) { .aurora i, .step .ring { animation: none; } }
   .promise { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
   .promise div { background: var(--tile); border-radius: 22px; padding: 26px; display: grid; gap: 8px; }
   .promise strong { font: 700 2.4rem/1 var(--display); letter-spacing: -0.03em; }
@@ -282,7 +316,7 @@
 
   @media (max-width: 1000px) {
     nav.links { display: none; }
-    .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); } .step:nth-child(2)::after { display: none; }
+    .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); } .step:nth-of-type(2)::after { display: none; }
     .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tile.w2, .tile.w3, .tile.w4 { grid-column: span 1; } .tile.w6, .tile.big { grid-column: span 2; }
     .split { grid-template-columns: minmax(0, 1fr); } .promise { grid-template-columns: minmax(0, 1fr); }
     .foot-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -614,11 +648,12 @@
           <h2 id="ai-title">Apple's on-device model. Bondi's numbers.</h2>
           <p class="sub">On Macs with Apple Intelligence, Bondi writes with Apple's own on-device model: the one built into macOS, running on your Mac's Apple silicon. It never goes to the cloud, and it never gets to make up a number.</p>
         </div>
-        <div class="flow" aria-label="How Bondi writes a sentence, in four steps">
-          <div class="step"><h3>Bondi measures</h3><p>Every figure is worked out in code from your Mac's own readings.</p><div class="viz">Chrome <em>12.23 GB</em><br>80 processes<br>pressure <em>Normal</em></div></div>
-          <div class="step"><h3>Bondi picks the point</h3><p>A problem, the disk, the battery, something idle, or all calm: Bondi decides what matters.</p><div class="viz">topic: <em>idle server</em><br>tone: <em>gentle note</em></div></div>
-          <div class="step"><h3>Apple's model writes</h3><p>The on-device model adds the plain English, on your Mac. The figures stay Bondi's.</p><div class="viz">"A dev server is sitting idle."</div></div>
-          <div class="step"><h3>Bondi checks it</h3><p>Wrong tone, wrong subject or any number: Bondi uses its own sentence instead.</p><div class="viz"><em>✓</em> A dev server is sitting idle. Vite in shop has been idle for 3h 20m and holds 612.0 MB.</div></div>
+        <div class="flow" data-ai-flow aria-label="How Bondi writes a sentence, in four steps">
+          <span class="aurora" aria-hidden="true"><i></i><i></i><i></i></span>
+          <div class="step"><span class="ring" aria-hidden="true"></span><h3>Bondi measures</h3><p>Every figure is worked out in code from your Mac's own readings.</p><div class="viz">Chrome <em data-count="12.23" data-places="2">12.23</em><em> GB</em><br><span data-count="80" data-places="0">80</span> processes<br><span data-later>pressure <em>Normal</em></span></div></div>
+          <div class="step"><span class="ring" aria-hidden="true"></span><h3>Bondi picks the point</h3><p>A problem, the disk, the battery, something idle, or all calm: Bondi decides what matters.</p><div class="viz">topic: <em data-cycle="a problem|the disk|the battery|all calm|idle server">idle server</em><br><span data-later>tone: <em>gentle note</em></span></div></div>
+          <div class="step"><span class="ring" aria-hidden="true"></span><h3>Apple's model writes</h3><p>The on-device model adds the plain English, on your Mac. The figures stay Bondi's.</p><div class="viz"><span data-type>"A dev server is sitting idle."</span></div></div>
+          <div class="step"><span class="ring" aria-hidden="true"></span><h3>Bondi checks it</h3><p>Wrong tone, wrong subject or any number: Bondi uses its own sentence instead.</p><div class="viz"><em class="tick">✓</em> A dev server is sitting idle. Vite in shop has been idle for <b data-verify>3h 20m</b> and holds <b data-verify>612.0 MB</b>.</div></div>
         </div>
         <div class="promise">
           <div><strong>0 bytes</strong><span>of your data leave your Mac. The model runs on it, offline.</span></div>
@@ -1476,6 +1511,53 @@
     }
   })();
 
+
+  // "Watch Bondi write a sentence": while the four AI steps are in view they play in turn, then hold and replay.
+  // Without the script, or with Reduce Motion, the cards simply show their finished state.
+  (() => {
+    const flow = document.querySelector('[data-ai-flow]');
+    if (!flow || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const steps = [...flow.querySelectorAll('.step')], counts = [...flow.querySelectorAll('[data-count]')];
+    const laters = [...flow.querySelectorAll('[data-later]')], verify = [...flow.querySelectorAll('[data-verify]')];
+    const cycle = flow.querySelector('[data-cycle]'), topics = cycle.dataset.cycle.split('|');
+    const typer = flow.querySelector('[data-type]'), sentence = typer.textContent, words = sentence.split(' ');
+    let timers = [], running = false, visible = false;
+    const at = (ms, fn) => timers.push(setTimeout(fn, ms));
+    const light = i => steps.forEach((step, j) => { step.classList.toggle('on', j === i); step.classList.toggle('done', j < i); });
+    const countUp = (el, ms) => {
+      const to = +el.dataset.count, places = +el.dataset.places, start = performance.now();
+      const frame = now => { const k = Math.min(1, (now - start) / ms); el.textContent = (to * (1 - Math.pow(1 - k, 3))).toFixed(places); if (k < 1) requestAnimationFrame(frame); };
+      requestAnimationFrame(frame);
+    };
+    const reset = () => {
+      timers.forEach(clearTimeout); timers = [];
+      steps.forEach(step => step.classList.remove('on', 'done'));
+      counts.forEach(el => { el.textContent = (0).toFixed(+el.dataset.places); });
+      laters.forEach(el => el.classList.remove('shown'));
+      verify.forEach(el => el.classList.remove('ok'));
+      cycle.textContent = '…'; typer.textContent = '…'; typer.classList.remove('writing');
+    };
+    const play = () => {
+      reset(); running = true;
+      at(300, () => { light(0); counts.forEach(el => countUp(el, 1200)); });
+      at(1500, () => laters[0].classList.add('shown'));
+      at(2200, () => { light(1); topics.forEach((topic, k) => at(k * 280, () => { cycle.textContent = topic; })); });
+      at(2200 + topics.length * 280 + 150, () => laters[1].classList.add('shown'));
+      at(4100, () => { light(2); typer.classList.add('writing'); words.forEach((w, k) => at(k * 190, () => { typer.textContent = words.slice(0, k + 1).join(' '); })); });
+      at(4100 + words.length * 190 + 400, () => typer.classList.remove('writing'));
+      at(6000, () => light(3));
+      at(6500, () => verify[0] && verify[0].classList.add('ok'));
+      at(6950, () => verify[1] && verify[1].classList.add('ok'));
+      at(7900, () => steps.forEach(step => { step.classList.remove('on'); step.classList.add('done'); }));
+      at(11000, () => { if (visible) play(); else running = false; });
+    };
+    flow.classList.add('live');
+    reset();
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible && !running) play();
+    }, { threshold: 0.35 }).observe(flow);
+  })();
 </script>
 </body>
 </html>
