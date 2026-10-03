@@ -2,7 +2,7 @@
 title: Memory pressure on Mac, explained
 description: "Memory Used" being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here's how to read them.
 date: 2026-10-03
-status: draft
+status: published
 order: 3
 image: /assets/features/warning.png
 related: which-app-is-using-my-mac-memory, why-is-my-mac-slow, bondi-vs-activity-monitor

@@ -257,7 +257,7 @@ label.check { display: flex; gap: 10px; align-items: flex-start; margin-top: 12p
 
 function privacy_page_end(): never
 {
-    echo '</main><footer><span>© 2026 Jabble Super Intelligence Inc.</span><a href="/privacy/">Privacy policy</a>'
+    echo '</main><footer><span>© 2026 Jabble Super Intelligence Inc.</span><a href="/blog/">Blog</a><a href="/privacy/">Privacy policy</a>'
        . '<a href="mailto:' . htmlspecialchars((string)config('support_email')) . '">' . htmlspecialchars((string)config('support_email')) . '</a><a href="/">trybondi.app</a></footer></body></html>';
     exit;
 }

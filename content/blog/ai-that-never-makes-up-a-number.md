@@ -2,7 +2,7 @@
 title: How Bondi's AI explains your Mac without making up a number
 description: How Bondi's on-device AI, with Apple Intelligence where available, explains your Mac in one sentence while every figure stays measured and checked.
 date: 2026-10-03
-status: draft
+status: published
 order: 10
 image: /assets/features/why.png
 related: bondi-vs-activity-monitor, why-is-my-mac-slow, memory-pressure-explained

@@ -2,7 +2,7 @@
 title: WindowServer using high CPU on Mac: what it means and what helps
 description: WindowServer draws everything on your Mac's screens. Here's why it gets busy, what normal looks like, and the settings that actually calm it down.
 date: 2026-10-03
-status: draft
+status: published
 order: 6
 image: /assets/features/guide.png
 related: kernel-task-high-cpu, why-is-my-mac-slow, mac-fans-loud

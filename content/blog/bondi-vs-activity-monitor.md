@@ -2,7 +2,7 @@
 title: "Bondi vs Activity Monitor: what each one is for"
 description: Looking for an Activity Monitor alternative for Mac? Activity Monitor shows every process; Bondi tells you what they mean. When to use which.
 date: 2026-10-03
-status: draft
+status: published
 order: 9
 image: /assets/features/busiest.png
 related: which-app-is-using-my-mac-memory, why-is-my-mac-slow, ai-that-never-makes-up-a-number

@@ -2,7 +2,7 @@
 title: Why is my Mac slow? How to find the real cause
 description: Mac running slow? It usually comes down to one of a handful of causes. Here's how to tell which one it is, with real readings from a real MacBook Pro.
 date: 2026-10-03
-status: draft
+status: published
 order: 1
 image: /assets/features/why.png
 related: memory-pressure-explained, which-app-is-using-my-mac-memory, mac-slow-after-update

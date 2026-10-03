@@ -2,7 +2,7 @@
 title: Why are my Mac's fans so loud?
 description: Loud fans on a MacBook or any Mac mean the chip is working hard or running hot. Here's how to find what's heating it, and what to do if they won't settle.
 date: 2026-10-03
-status: draft
+status: published
 order: 4
 image: /assets/features/fans.png
 related: kernel-task-high-cpu, why-is-my-mac-slow, mac-slow-after-update

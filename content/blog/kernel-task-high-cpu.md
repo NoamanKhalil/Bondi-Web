@@ -2,7 +2,7 @@
 title: kernel_task using lots of CPU? Your Mac is cooling itself down
 description: kernel_task at high CPU usually means your Mac is hot, and macOS is slowing apps on purpose to cool it. Here's why it happens and what actually helps.
 date: 2026-10-03
-status: draft
+status: published
 order: 5
 image: /assets/features/cpu.png
 related: mac-fans-loud, why-is-my-mac-slow, windowserver-high-cpu
