@@ -157,6 +157,130 @@
   .facts li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--bondi); }
   .counter .sep { margin: 0 10px; color: var(--faint); }
 
+  /* The main-window demo: Bondi's own window, drawn in HTML with the app's colours: dark, or light when the page is
+     (the intro film over it stays dark, as it was filmed) */
+  .appshow { display: grid; gap: 16px; padding-block: 8px 72px; }
+  .win { --w-ground: #1c1d20; --w-card: #26272b; --w-card-2: #2e2f34; --w-line: #36373c; --w-ink: #f2f2f4; --w-soft: #9d9da5; --w-faint: #6c6c74;
+    --w-bar: #232427; --w-edge: #000; --w-foot: #000; --w-track: #3a3b40; --fg-rgb: 255, 255, 255;
+    --w-pill: #2f3034; --w-pill-line: #3c3d42; --w-icon: #c7c7cc; --w-meter: #45464c; --w-row: #212226;
+    --w-body: radial-gradient(ellipse at 50% 60%, #0b1a20 0%, #000 70%); --w-ai-bg: #1f3b45; --w-ai: #2cc0de; --w-link: #58a6ff;
+    --m-overview: #2cc0de; --m-cpu: #4a90e2; --m-memory: #9b7ae0; --m-disk: #f2a57c; --m-network: #8fcf4f; --m-gpu: #e27aa0;
+    --m-neural: #7b6cf6; --m-battery: #5cc26a; --m-sound: #e0305a; --m-bluetooth: #4a90e2;
+    background: var(--w-ground); color: var(--w-ink); border-radius: 18px; border: 1px solid var(--w-edge); box-shadow: var(--shadow); overflow: hidden;
+    font: 13px/1.35 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; }
+  /* Wider than the page column; its content area is 16:9 like the intro film, with nothing to scroll inside. */
+  .win { position: relative; --win-w: min(1240px, calc(100vw - 44px)); width: var(--win-w); margin-left: calc((100% - var(--win-w)) / 2); box-sizing: border-box; }
+  .win .win-body { min-height: 0; }
+  /* Intro film over the window's content (16:9, the same shape as the film): waits on a dim first frame, starts
+     once the window is 60% in view with a slow eased fade in, and fades out the same way to the clickable window. */
+  .win .win-body { min-height: calc((var(--win-w) - 2px) * 9 / 16 - var(--win-foot-h, 34px) - 4px); } /* 2px: the window border; 4px: toolbar edge and borders */
+  .win-intro { position: absolute; left: 0; right: 0; bottom: 0; top: calc(var(--win-bar-h, 56px) - 1px); background: #000; z-index: 5; overflow: hidden;
+    transition: opacity 1.6s cubic-bezier(.45, 0, .25, 1); }
+  .win-intro.done { opacity: 0; pointer-events: none; }
+  .win-intro.skip { transition-duration: .7s; }
+  .win-intro video { width: 100%; height: 100%; object-fit: cover; display: block; opacity: .35; transition: opacity 1.6s cubic-bezier(.33, 0, .2, 1); }
+  .win-intro.playing video { opacity: 1; }
+  .intro-skip { position: absolute; right: 14px; top: 12px; border: 1px solid rgba(255,255,255,.18); background: rgba(40,40,44,.75); color: #f2f2f4; font: 500 12px/1 -apple-system, sans-serif; padding: 7px 12px; border-radius: 999px; cursor: pointer; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .intro-skip:hover { background: rgba(60,60,66,.85); }
+  .intro-replay { border: 0; background: none; padding: 0; margin-right: 6px; color: var(--bondi-ink); font: inherit; cursor: pointer; }
+  .win-bar { display: grid; grid-template-columns: auto auto 1fr auto; align-items: center; gap: 14px; padding: 12px 16px; border-bottom: 1px solid var(--w-edge); background: var(--w-bar); }
+  .lights { display: flex; gap: 8px; } .lights i { width: 12px; height: 12px; border-radius: 50%; }
+  .lights i:nth-child(1) { background: #ff5f57; } .lights i:nth-child(2) { background: #febc2e; } .lights i:nth-child(3) { background: #28c840; }
+  .win-title { font-weight: 600; color: var(--w-soft); }
+  .win-tabs { justify-self: center; display: flex; gap: 2px; padding: 3px; border-radius: 999px; background: var(--w-pill); border: 1px solid var(--w-pill-line); overflow-x: auto; max-width: 100%; scrollbar-width: none; }
+  .win-tabs button { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border: 0; border-radius: 999px; background: transparent; color: var(--w-soft); font: 500 12.5px/1 -apple-system, sans-serif; cursor: pointer; white-space: nowrap; }
+  .win-tabs button svg { width: 16px; height: 16px; flex: none; }
+  .win-tabs button .label { display: none; }
+  .win-tabs button[aria-selected="true"] { background: color-mix(in srgb, var(--tint) 22%, var(--w-pill)); color: var(--tint); }
+  .win-tabs button[aria-selected="true"] .label { display: inline; }
+  .win-tools { display: flex; gap: 8px; } .win-tools i { width: 34px; height: 34px; border-radius: 50%; background: var(--w-pill); border: 1px solid var(--w-pill-line); display: grid; place-items: center; font-style: normal; color: var(--w-icon); box-sizing: border-box; }
+  .win-body { padding: 18px; display: grid; gap: 18px; min-height: 560px; align-content: start; }
+  .win-foot { display: flex; gap: 8px; padding: 8px 16px; font-size: 11.5px; color: var(--w-faint); border-top: 1px solid rgba(var(--fg-rgb), .06); background: var(--w-foot); }
+  /* The same backdrop as the intro film (radial-gradient(ellipse at 50% 60%, #0b1a20, #000 70%)), so the app sits where the film was. */
+  .win .win-body { background: var(--w-body); }
+  .w-h { font-size: 15px; font-weight: 600; }
+  .w-status { background: var(--w-ai-bg); border-radius: 10px; padding: 12px 14px; display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; font-size: 14px; }
+  .w-status .spark { color: var(--w-ai); } .w-status small { grid-column: 2; color: var(--w-link); font-size: 12px; }
+  .w-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  .w-grid .wide { grid-column: span 2; }
+  .w-card { background: var(--w-card); border: 1px solid var(--w-line); border-radius: 12px; padding: 12px 13px; display: grid; gap: 3px; align-content: start; min-height: 128px; }
+  .win .head { display: flex; justify-content: space-between; gap: 8px; font-size: 11.5px; font-weight: 600; color: var(--w-soft); }
+  .win .head b { color: var(--tint); font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+  .win .head b svg { width: 14px; height: 14px; }
+  .win .head span { font-weight: 400; }
+  .w-big { font-size: 28px; font-weight: 700; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+  .w-big small { font-size: 15px; font-weight: 500; color: var(--w-soft); margin-left: 3px; }
+  .w-sub { font-size: 11.5px; color: var(--w-soft); font-variant-numeric: tabular-nums; }
+  .w-chart { width: 100%; height: 30px; margin-top: auto; display: block; }
+  .w-membar { display: flex; gap: 3px; align-items: center; margin-top: auto; }
+  .w-membar i { flex: 1; height: 8px; border-radius: 2px; background: var(--w-meter); }
+  .w-membar i.on { background: #9b7ae0; } .w-membar i.part { background: linear-gradient(90deg, #9b7ae0 55%, var(--w-meter) 55%); }
+  .w-membar .swap { flex: 0 0 26px; height: 10px; border-radius: 3px; border: 1.5px solid #f2a200; margin-left: 5px; background: repeating-linear-gradient(135deg, rgba(242,162,0,.6) 0 2px, transparent 2px 4px); }
+  .w-fill { height: 7px; border-radius: 4px; background: var(--w-meter); margin-top: auto; overflow: hidden; } .w-fill i { display: block; height: 100%; border-radius: 4px; background: var(--tint); }
+  .rings { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 10px; }
+  @media (min-width: 940px) { .win .rings { grid-template-columns: repeat(4, minmax(0, 1fr)); } .win .ring-card { grid-template-columns: 62px minmax(0, 1fr); gap: 6px 10px; padding: 11px; } .win .ring-card svg { width: 62px; height: 62px; } }
+  @media (min-width: 1180px) { .win .ring-card { grid-template-columns: 76px minmax(0, 1fr); gap: 6px 12px; padding: 12px 13px; } .win .ring-card svg { width: 76px; height: 76px; } }
+  .ring-card { background: var(--w-card); border: 1px solid var(--w-line); border-radius: 12px; padding: 12px 13px; display: grid; grid-template-columns: 96px 1fr; gap: 6px 14px; align-items: center; }
+  .ring-card .head { grid-column: 1 / -1; font-size: 11.5px; font-weight: 600; color: var(--tint); }
+  .ring-card svg { width: 96px; height: 96px; }
+  .ring-card ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 11.5px; }
+  .ring-card li { display: grid; grid-template-columns: 8px minmax(0, 1fr) auto; gap: 7px; align-items: center; color: var(--w-soft); }
+  .ring-card li span:nth-child(2) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ring-card li i { width: 8px; height: 8px; border-radius: 50%; } .ring-card li span:last-child { color: var(--w-ink); font-variant-numeric: tabular-nums; }
+  .hero-row { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr); gap: 10px; }
+  .hero-card { background: var(--w-card); border: 1px solid var(--w-line); border-radius: 12px; padding: 14px; display: grid; grid-template-columns: 170px 1fr; gap: 14px; min-height: 220px; }
+  .hero-card .hl { display: grid; align-content: space-between; }
+  .hero-card .w-big { font-size: 44px; }
+  .ranges { display: flex; justify-content: flex-end; gap: 2px; margin-bottom: 6px; } .ranges span { font-size: 10.5px; padding: 3px 7px; border-radius: 5px; color: var(--w-soft); } .ranges span.on { background: #3a3b40; color: var(--w-ink); }
+  .hero-card svg { width: 100%; height: 160px; }
+  .side { background: var(--w-card); border: 1px solid var(--w-line); border-radius: 12px; padding: 14px; display: grid; gap: 8px; align-content: start; }
+  .w-cores { display: flex; gap: 5px; height: 130px; align-items: flex-end; } .w-cores div { flex: 1; height: 100%; border-radius: 3px; background: var(--w-track); position: relative; }
+  .w-cores i { position: absolute; left: 0; right: 0; bottom: 0; border-radius: 3px; background: var(--tint); transition: height .5s ease; }
+  .stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+  .stat { background: var(--w-card); border: 1px solid var(--w-line); border-radius: 10px; padding: 10px 12px; } .stat div { color: var(--w-soft); font-size: 11.5px; } .stat b { font-size: 16px; font-variant-numeric: tabular-nums; }
+  .w-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .w-table th { text-align: right; font-weight: 500; color: var(--w-soft); font-size: 12px; padding: 6px 10px; border-bottom: 1px solid var(--w-line); }
+  .w-table th:first-child, .w-table td:first-child { text-align: left; }
+  .w-table td { text-align: right; padding: 7px 10px; font-variant-numeric: tabular-nums; } .w-table tr:nth-child(even) td { background: var(--w-row); }
+  .w-app { display: inline-flex; align-items: center; gap: 9px; } .w-app i { width: 18px; height: 18px; border-radius: 5px; display: grid; place-items: center; font: 700 10px/1 -apple-system, sans-serif; color: #fff; font-style: normal; }
+  .w-table svg { width: 110px; height: 16px; display: inline-block; vertical-align: middle; }
+  .w-scroll { overflow-x: auto; }
+  .vol { display: grid; grid-template-columns: 150px 1fr 48px; gap: 12px; align-items: center; padding: 8px 0; border-top: 1px solid var(--w-line); }
+  .stack-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; } @media (max-width: 760px) { .stack-cols { grid-template-columns: 1fr; } }
+  .dev { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 10px 0; border-top: 1px solid var(--w-line); } .dev small { color: var(--w-soft); }
+  @media (max-width: 760px) {
+    .win-bar { grid-template-columns: auto 1fr; } .win-title, .win-tools { display: none; }
+    .hero-row { grid-template-columns: minmax(0, 1fr); } .hero-card { grid-template-columns: minmax(0, 1fr); }
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .win-body { padding: 12px; }
+    .w-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  .appshow { padding-top: clamp(48px, 7vw, 88px); }
+  .app-head { display: grid; gap: 8px; text-align: center; margin-bottom: 18px; }
+  .app-head h2 { font-size: clamp(2rem, 4.6vw, 3.2rem); line-height: 1.06; font-weight: 700; letter-spacing: -0.035em; }
+  .app-cta { text-align: center; margin-top: 8px; }
+  .demo-note { color: var(--faint); font-size: 0.9rem; text-align: center; max-width: 36rem; margin-inline: auto; }
+  :root[data-theme="light"] .win { --w-ground: #ffffff; --w-card: #ffffff; --w-card-2: #f4f4f6; --w-line: #e0e0e4; --w-ink: #1d1d1f; --w-soft: #6e6e73; --w-faint: #8a8a8e;
+    --w-bar: #f6f6f6; --w-edge: rgba(0,0,0,.14); --w-foot: #f6f6f6; --w-track: #e5e5ea; --fg-rgb: 0, 0, 0;
+    --w-pill: #ececef; --w-pill-line: #dcdce0; --w-icon: #3a3a3c; --w-meter: #e0e0e5; --w-row: #f8f8fa;
+    --w-body: radial-gradient(ellipse at 50% 60%, #e8f4f7 0%, #f2f2f5 70%); --w-ai-bg: #e3f3f8; --w-ai: #0e86a6; --w-link: #0058d6;
+    --m-overview: #0e86a6; --m-cpu: #1f6bbf; --m-memory: #7446b0; --m-disk: #d9774e; --m-network: #4f9a1a; --m-gpu: #c7457a;
+    --m-neural: #4e48c0; --m-battery: #248a3d; --m-sound: #d6173f; --m-bluetooth: #0058d6; }
+  /* Sliders drawn like macOS (the Sound tab) */
+  :is(.mac, .vol) input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 20px; margin: 0; background: none; cursor: pointer; --p: 50%; --fill: var(--accent, #1fa9cc); --tick: none; }
+  :is(.mac, .vol) input[type=range]::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: var(--tick), linear-gradient(to right, var(--fill) var(--p), rgba(var(--fg-rgb), .16) var(--p)); }
+  :is(.mac, .vol) input[type=range]::-moz-range-track { height: 4px; border-radius: 2px; background: var(--tick), rgba(var(--fg-rgb), .16); }
+  :is(.mac, .vol) input[type=range]::-moz-range-progress { height: 4px; border-radius: 2px; background: var(--fill); }
+  :is(.mac, .vol) input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; margin-top: -6px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 0 0 .5px rgba(0,0,0,.25), 0 1px 3px rgba(0,0,0,.45); transition: transform .12s; }
+  :is(.mac, .vol) input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 0 0 .5px rgba(0,0,0,.25), 0 1px 3px rgba(0,0,0,.45); }
+  :is(.mac, .vol) input[type=range]:active::-webkit-slider-thumb { transform: scale(1.1); }
+  :is(.mac, .vol) input[type=range]:focus-visible { outline: none; }
+  :is(.mac, .vol) input[type=range]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px rgba(31,169,204,.55), 0 1px 3px rgba(0,0,0,.45); }
+  :is(.mac, .vol) input[type=range]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px rgba(31,169,204,.55), 0 1px 3px rgba(0,0,0,.45); }
+  :is(.mac input.vol300, .vol input) { --fill: var(--sound, #fa2d55); --tick: linear-gradient(to right, transparent calc(33.33% - 1px), rgba(var(--fg-rgb), .45) calc(33.33% - 1px) calc(33.33% + 1px), transparent calc(33.33% + 1px)); }
+  @media (max-width: 640px) {
+    .win-tabs { -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent); mask-image: linear-gradient(90deg, #000 82%, transparent); scroll-snap-type: x proximity; }
+  }
+
   /* Ask AI about Bondi (dev/ask-ai.php): a row of logos in the footer line */
   .askai-row { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
   .askai-label { margin-right: 4px; cursor: help; }
@@ -245,6 +369,27 @@
       <svg class="l2" viewBox="0 0 2880 200" preserveAspectRatio="none"><path fill="var(--sea-2)" d="M0 110 C240 60 480 60 720 110 S1200 160 1440 110 C1680 60 1920 60 2160 110 S2640 160 2880 110 L2880 200 L0 200 Z"/></svg>
       <svg class="l3" viewBox="0 0 2880 200" preserveAspectRatio="none"><path fill="var(--sea-3)" d="M0 150 C240 115 480 115 720 150 S1200 185 1440 150 C1680 115 1920 115 2160 150 S2640 185 2880 150 L2880 200 L0 200 Z"/></svg>
     </div>
+  </section>
+
+  <section class="appshow wrap" id="app" aria-labelledby="app-title">
+    <div class="app-head"><p class="eyebrow">Try it</p><h2 id="app-title">This is Bondi. Click around.</h2></div>
+    <div class="win" role="group" aria-label="Bondi window demo">
+      <div class="win-bar">
+        <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="win-title">Bondi</span>
+        <div class="win-tabs" role="tablist" aria-label="Sections" data-wtabs></div>
+        <span class="win-tools" aria-hidden="true"><i title="Search"><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8.6" cy="8.6" r="5.6"/><path d="M12.8 12.8l4.4 4.4"/></svg></i><i title="Settings"><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M16.28 8.33 L18.18 8.60 L18.18 11.40 L16.28 11.67 L15.62 13.26 L16.78 14.79 L14.79 16.78 L13.26 15.62 L11.67 16.28 L11.40 18.18 L8.60 18.18 L8.33 16.28 L6.74 15.62 L5.21 16.78 L3.22 14.79 L4.38 13.26 L3.72 11.67 L1.82 11.40 L1.82 8.60 L3.72 8.33 L4.38 6.74 L3.22 5.21 L5.21 3.22 L6.74 4.38 L8.33 3.72 L8.60 1.82 L11.40 1.82 L11.67 3.72 L13.26 4.38 L14.79 3.22 L16.78 5.21 L15.62 6.74Z"/><circle cx="10" cy="10" r="2.6"/></svg></i></span>
+      </div>
+      <div class="win-body" data-wbody></div>
+      <div class="win-intro" data-intro hidden>
+        <video src="/assets/bondi-window.mp4" poster="/assets/bondi-window-poster.jpg" muted playsinline preload="auto" width="1920" height="1080"
+               aria-label="Intro film: 955 processes on a real Mac, drawn as stars, pull together into 43 apps, each shown with its app icon and process count. It ends on Bondi for Apple Mac."></video>
+        <button type="button" class="intro-skip" data-intro-skip>Skip intro</button>
+      </div>
+      <div class="win-foot"><span>Bondi: <span data-v="self">0.3</span>% CPU, 104 MB</span><span>·</span><span>39 apps, <span data-v="procs">966</span> processes</span></div>
+    </div>
+    <p class="demo-note"><button type="button" class="intro-replay" data-intro-replay hidden>▶ Replay intro</button> Click any tab. This is Bondi's window running on made-up numbers; on your Mac it reads the real ones, and they never leave it.</p>
+    <p class="app-cta"><a class="pillbtn primary" href="#join">Like it? Save my spot</a></p>
   </section>
 </main>
 
@@ -359,6 +504,242 @@
     button.disabled = false;
   });
 })();
+</script>
+<script>
+  // Intro film over the app window: stars become apps, then the real, clickable window shows through. Starts
+  // when 60% of the window is in view; skipped with Reduce Motion and on phones.
+  (() => {
+    const $ = (s, r = document) => r.querySelector(s);
+    const intro = $('[data-intro]');
+    if (!intro) return;
+    const video = $('video', intro), win = intro.closest('.win'), bar = $('.win-bar', win), foot = $('.win-foot', win), replay = $('[data-intro-replay]');
+    const fit = () => { win.style.setProperty('--win-bar-h', bar.offsetHeight + 'px'); if (foot) win.style.setProperty('--win-foot-h', foot.offsetHeight + 'px'); };
+    fit(); addEventListener('resize', fit);
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || win.clientWidth < 700) return;
+    const finish = skipped => {
+      if (intro.classList.contains('done')) return;
+      video.pause();
+      intro.classList.toggle('skip', skipped);
+      intro.classList.add('done');
+      setTimeout(() => { if (intro.classList.contains('done')) intro.hidden = true; }, skipped ? 750 : 1650);
+      replay.hidden = false;
+    };
+    const play = () => {
+      intro.hidden = false; intro.classList.remove('done', 'skip', 'playing'); replay.hidden = true;
+      video.currentTime = 0;
+      requestAnimationFrame(() => intro.classList.add('playing'));
+      video.play().catch(() => finish(true)); // a browser that won't autoplay just shows the window
+    };
+    intro.hidden = false; // the dim first frame waits over the window until it's in view
+    video.addEventListener('ended', () => finish(false));
+    $('[data-intro-skip]').addEventListener('click', () => finish(true));
+    $('[data-wtabs]').addEventListener('click', () => finish(true), true);
+    replay.addEventListener('click', () => { play(); win.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+    // 60% of the window in view (or 60% of the screen filled by it, on short screens).
+    const seen = new IntersectionObserver(entries => {
+      const e = entries[entries.length - 1];
+      if (e.intersectionRatio >= 0.6 || e.intersectionRect.height >= innerHeight * 0.6) { seen.disconnect(); play(); }
+    }, { threshold: Array.from({ length: 21 }, (_, i) => i / 20) });
+    seen.observe(win);
+  })();
+</script>
+<script>
+  // The main-window demo. Made-up figures that drift, drawn the way Bondi draws them.
+  (() => {
+    const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+    const body = $('[data-wbody]'), tabsEl = $('[data-wtabs]');
+    if (!body) return;
+    const icon = {
+      overview: '<circle cx="10" cy="10" r="7.5"/><path d="M10 10l3.5-3.5" stroke-linecap="round"/>',
+      cpu: '<rect x="4.5" y="4.5" width="11" height="11" rx="2"/><rect x="8" y="8" width="4" height="4"/><path d="M8 2v2.5M12 2v2.5M8 15.5V18M12 15.5V18M2 8h2.5M2 12h2.5M15.5 8H18M15.5 12H18"/>',
+      memory: '<rect x="2.5" y="6" width="15" height="8" rx="1.5"/><path d="M5 14v2.5M8.3 14v2.5M11.7 14v2.5M15 14v2.5"/>',
+      disk: '<rect x="2.5" y="8" width="15" height="7" rx="2"/><path d="M4.5 8l2-4h7l2 4M6 12h1"/>',
+      network: '<circle cx="10" cy="10" r="7.5"/><path d="M2.5 10h15M10 2.5c2.5 2.5 2.5 12.5 0 15M10 2.5c-2.5 2.5-2.5 12.5 0 15"/>',
+      gpu: '<path d="M10 3l7 3.5-7 3.5-7-3.5z"/><path d="M3 10l7 3.5 7-3.5M3 13.5L10 17l7-3.5"/>',
+      neural: '<path d="M7 4a3 3 0 00-3 3 3 3 0 00-1 5.5A3 3 0 007 16h1V4zM13 4a3 3 0 013 3 3 3 0 011 5.5A3 3 0 0113 16h-1V4z"/>',
+      battery: '<rect x="2.5" y="6.5" width="13" height="7" rx="2"/><path d="M17.5 9v2"/><rect x="4.5" y="8.5" width="6" height="3" fill="currentColor" stroke="none"/>',
+      sound: '<path d="M3.6 7.4h2.5L9.8 4.3c.4-.3 1-.1 1 .4v10.6c0 .5-.6.7-1 .4l-3.7-3.1H3.6c-.6 0-1.1-.5-1.1-1.1V8.5c0-.6.5-1.1 1.1-1.1z" fill="currentColor" stroke="none"/><path d="M13.6 7.6a3.4 3.4 0 010 4.8M15.9 5.3a6.6 6.6 0 010 9.4"/>',
+      bluetooth: '<path d="M6 6.5l8 7L10 17V3l4 3.5-8 7"/>',
+      stack: '<rect x="3" y="3.5" width="14" height="5" rx="1.5"/><rect x="3" y="11.5" width="14" height="5" rx="1.5"/><path d="M6 6h.5M6 14h.5"/>',
+    };
+    const svg = (name) => `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">${icon[name]}</svg>`;
+    const tabs = [
+      ['overview', 'Overview', 'var(--m-overview)'], ['cpu', 'CPU', 'var(--m-cpu)'], ['memory', 'Memory', 'var(--m-memory)'], ['disk', 'Disk', 'var(--m-disk)'],
+      ['network', 'Network', 'var(--m-network)'], ['gpu', 'GPU', 'var(--m-gpu)'], ['neural', 'Neural Engine', 'var(--m-neural)'], ['battery', 'Battery', 'var(--m-battery)'],
+      ['sound', 'Sound', 'var(--m-sound)'], ['bluetooth', 'Bluetooth', 'var(--m-bluetooth)'], ['stack', 'Stack', 'var(--m-overview)'],
+    ];
+    const tint = Object.fromEntries(tabs.map(([k, , c]) => [k, c]));
+
+    // State: series of 60 readings each, plus apps.
+    const N = 60, rnd = (a, b) => a + Math.random() * (b - a);
+    const walk = (v, step, lo, hi) => Math.min(hi, Math.max(lo, v + (Math.random() - 0.5) * step));
+    const series = { cpu: [], mem: [], down: [], read: [], gpu: [], ane: [], batt: [] };
+    let v = { cpu: 18, mem: 45.3, down: 820, up: 12, read: 2.4, write: 1.1, gpu: 38, ane: 0, batt: 71, procs: 966, self: 0.3 };
+    for (let i = 0; i < N; i++) step(true);
+    function step(seed) {
+      v.cpu = walk(v.cpu, 9, 5, 62); v.mem = walk(v.mem, 0.5, 42, 49); v.down = walk(v.down, 700, 20, 4200); v.up = walk(v.up, 20, 2, 180);
+      v.read = walk(v.read, 2.5, 0.1, 18); v.write = walk(v.write, 1.2, 0.1, 9); v.gpu = walk(v.gpu, 12, 3, 88);
+      v.ane = Math.random() < 0.12 ? rnd(0.2, 1.4) : Math.max(0, v.ane * 0.4); v.batt = Math.max(5, v.batt - (seed ? 0.02 : 0.01));
+      v.procs = Math.round(walk(v.procs, 6, 950, 985)); v.self = seed ? 0.3 : +(walk(v.self, 0.1, 0.2, 0.5)).toFixed(1);
+      const push = (k, x) => { series[k].push(x); if (series[k].length > N) series[k].shift(); };
+      push('cpu', v.cpu); push('mem', v.mem); push('down', v.down); push('read', v.read); push('gpu', v.gpu); push('ane', v.ane); push('batt', v.batt);
+    }
+    const apps = [
+      { n: 'Google Chrome', c: '#e8453c', cpu: 6.8, mem: 12.23, en: 1.9, p: 80, rd: 0.9 },
+      { n: 'macOS', c: '#6e6e76', cpu: 5.9, mem: 8.85, en: 0.8, p: 745, rd: 1.2 },
+      { n: 'Visual Studio Code', c: '#2f7cf6', cpu: 3.0, mem: 4.24, en: 0.9, p: 44, rd: 0.3 },
+      { n: 'Safari', c: '#1e9bf0', cpu: 0.3, mem: 1.42, en: 0.2, p: 16, rd: 0.1 },
+      { n: 'Docker Desktop', c: '#1d63ed', cpu: 1.4, mem: 2.1, en: 0.5, p: 9, rd: 0.4 },
+      { n: 'Slack', c: '#8a3f8f', cpu: 0.6, mem: 1.06, en: 0.3, p: 13, rd: 0.1 },
+      { n: 'Notes', c: '#e6b400', cpu: 0.1, mem: 0.51, en: 0.05, p: 9, rd: 0 },
+      { n: 'Finder', c: '#3aa0f0', cpu: 0.0, mem: 0.49, en: 0.02, p: 3, rd: 0.05 },
+    ];
+    apps.forEach(a => a.hist = Array.from({ length: 20 }, () => a.cpu * rnd(0.6, 1.4)));
+    const drift = () => apps.forEach(a => {
+      a.cpu = walk(a.cpu, a.cpu * 0.5 + 0.3, 0, 24); a.mem = walk(a.mem, 0.06, 0.2, 14); a.en = walk(a.en, 0.3, 0.02, 4); a.rd = walk(a.rd, 0.4, 0, 6);
+      a.hist.push(a.cpu); a.hist.shift();
+    });
+
+    const f1 = x => x.toFixed(1), f2 = x => x.toFixed(2);
+    const gb = x => x >= 1 ? f2(x) + ' GB' : (x * 1024).toFixed(1) + ' MB';
+    const rate = kb => kb >= 1024 ? f1(kb / 1024) + ' MB/s' : Math.round(kb) + ' KB/s';
+    const area = (data, max, w, h, color, fill = true) => {
+      const pts = data.map((y, i) => [(i / (data.length - 1)) * w, h - Math.min(1, y / max) * (h - 2) - 1]);
+      const line = pts.map(p => p.map(n => n.toFixed(1)).join(',')).join(' ');
+      return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">`
+        + (fill ? `<polygon points="0,${h} ${line} ${w},${h}" fill="${color}" opacity=".18"/>` : '')
+        + `<polyline points="${line}" fill="none" stroke="${color}" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg>`;
+    };
+    const head = (k, title, note = '') => `<div class="head"><b style="color:${tint[k]}">${svg(k)}${title}</b><span>${note}</span></div>`;
+    const membar = used => { const s = used / 8; return `<div class="w-membar">${Array.from({ length: 8 }, (_, i) => `<i class="${i < Math.floor(s) ? 'on' : i === Math.floor(s) ? 'part' : ''}"></i>`).join('')}<span class="swap"></span></div>`; };
+    const ring = (parts, total, center, caption) => {
+      let off = 0; const C = 2 * Math.PI * 38;
+      const arcs = parts.map(([, val, col]) => { const len = (val / total) * C; const s = `<circle cx="48" cy="48" r="38" fill="none" stroke="${col}" stroke-width="12" stroke-dasharray="${Math.max(0, len - 2)} ${C}" stroke-dashoffset="${-off}" transform="rotate(-90 48 48)"/>`; off += len; return s; });
+      return `<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="38" fill="none" stroke="var(--w-track)" stroke-width="12"/>${arcs.join('')}<text x="48" y="47" text-anchor="middle" fill="var(--w-ink)" font-size="14" font-weight="700">${center}</text><text x="48" y="61" text-anchor="middle" fill="var(--w-soft)" font-size="9">${caption}</text></svg>`;
+    };
+    const legend = rows => `<ul>${rows.map(([n, val, col, txt]) => `<li><i style="background:${col}"></i><span>${n}</span><span>${txt}</span></li>`).join('')}</ul>`;
+    const iconFile = { 'Google Chrome': 'chrome', 'Visual Studio Code': 'vscode', 'Safari': 'safari', 'Docker Desktop': 'docker', 'Notes': 'notes', 'Finder': 'finder', 'Music': 'music', 'zoom.us': 'zoom' };
+    const appCell = a => iconFile[a.n] ? `<span class="w-app"><img src="/assets/apps/${iconFile[a.n]}.png" alt="" style="width:18px;height:18px">${a.n}</span>`
+      : a.n === 'macOS' ? `<span class="w-app"><svg viewBox="0 0 20 20" style="width:18px;height:18px;color:var(--w-soft)" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3l7 3.5-7 3.5-7-3.5z"/><path d="M3 10l7 3.5 7-3.5M3 13.5L10 17l7-3.5"/></svg>${a.n}</span>`
+      : `<span class="w-app"><i style="background:${a.c}">${a.n[0]}</i>${a.n}</span>`;
+    const cpuOf = a => f1(a.cpu) + '%';
+    const statusLines = [
+      ['Everything looks normal.', ' Google Chrome is using the most memory, 12.23 GB across 80 processes.'],
+      ['A dev server is sitting idle.', ' Vite in shop has been idle for 3h 20m and holds 612.0 MB.'],
+      ['Running on battery.', ' The battery is at 71% with 3h 31m left.'],
+    ];
+    let statusIndex = 0;
+
+    const views = {
+      overview: () => {
+        const [lead, rest] = statusLines[statusIndex % statusLines.length];
+        const byMem = [...apps].sort((a, b) => b.mem - a.mem), byCpu = [...apps].sort((a, b) => b.cpu - a.cpu), byEn = [...apps].sort((a, b) => b.en - a.en);
+        const top = (list, key, cols, fmt) => list.slice(0, 4).map((a, i) => [a.n, a[key], cols[i], fmt(a[key])]);
+        const memTotal = byMem.reduce((s, a) => s + a.mem, 0), cpuTotal = byCpu.reduce((s, a) => s + a.cpu, 0) || 1, enTotal = byEn.reduce((s, a) => s + a.en, 0);
+        const purple = ['#9b7ae0', '#b69bf0', '#7d5cc9', '#cbb8f5'], blue = ['#4a90e2', '#74aaf0', '#3471bd', '#a6c8f5'], green = ['#5cc26a', '#86d68f', '#3f9b4c', '#b3e6b8'];
+        const types = [['App', 38.56, '#9b7ae0', '38.56 GB'], ['Wired', 3.32, '#e8793a', '3.32 GB'], ['Compressed', 3.39, '#5cc26a', '3.39 GB'], ['Cached Files', 16.81, '#6e6e76', '16.81 GB']];
+        return `
+          <div class="w-status"><span class="spark">✦</span><span><b>${lead}</b>${rest}</span><small>Why is my Mac slow?</small></div>
+          <div class="w-h">At a glance</div>
+          <div class="w-grid">
+            <div class="w-card" style="--tint:${tint.cpu}">${head('cpu', 'CPU', 'load 3.48')}<div class="w-big">${Math.round(v.cpu)}<small>%</small></div><div class="w-sub">User ${f1(v.cpu * 0.7)}% · System ${f1(v.cpu * 0.3)}%</div><div class="w-chart">${area(series.cpu, 100, 200, 30, tint.cpu)}</div></div>
+            <div class="w-card" style="--tint:${tint.memory}">${head('memory', 'Memory', 'Normal')}<div class="w-big">${f1(v.mem)}<small>GB</small></div><div class="w-sub">of 64 GB · 0.5 GB swap</div>${membar(v.mem)}</div>
+            <div class="w-card" style="--tint:${tint.network}">${head('network', 'Network', 'active')}<div class="w-big">${rate(v.down).split(' ')[0]}<small>${rate(v.down).split(' ')[1]} down</small></div><div class="w-sub">${rate(v.up)} up · 2.13 GB today</div><div class="w-chart">${area(series.down, 4200, 200, 30, tint.network)}</div></div>
+            <div class="w-card" style="--tint:${tint.disk}">${head('disk', 'Disk', '78% full')}<div class="w-big">222<small>GB free</small></div><div class="w-sub">of 995 GB</div><div class="w-fill"><i style="width:78%"></i></div></div>
+            <div class="w-card" style="--tint:${tint.gpu}">${head('gpu', 'GPU')}<div class="w-big">${Math.round(v.gpu)}<small>%</small></div><div class="w-sub">M1 Max · 24 cores</div><div class="w-chart">${area(series.gpu, 100, 200, 30, tint.gpu)}</div></div>
+            <div class="w-card" style="--tint:${tint.neural}">${head('neural', 'Neural Engine', v.ane > 0.05 ? 'Working' : 'Idle')}<div class="w-big">${f2(v.ane)}<small>W</small></div><div class="w-sub">16 cores · 11 TOPS</div><div class="w-chart">${area(series.ane, 1.5, 200, 30, tint.neural)}</div></div>
+            <div class="w-card wide" style="--tint:${tint.battery}">${head('battery', 'Battery', '3h 31m left')}<div class="w-big">${Math.round(v.batt)}<small>%</small></div><div class="w-sub">Drawing 11.8 W</div><div class="w-fill"><i style="width:${v.batt}%"></i></div></div>
+          </div>
+          <div class="w-h">Right now</div>
+          <div class="rings">
+            <div class="ring-card"><div class="head" style="color:${tint.memory}">Memory by type</div>${ring(types, 64, Math.round(v.mem / 64 * 100) + '%', 'in use')}${legend(types)}</div>
+            <div class="ring-card"><div class="head" style="color:${tint.memory}">Memory by app</div>${ring(top(byMem, 'mem', purple, gb), memTotal, f1(memTotal) + ' GB', 'all apps')}${legend(top(byMem, 'mem', purple, gb))}</div>
+            <div class="ring-card"><div class="head" style="color:${tint.cpu}">CPU by app</div>${ring(top(byCpu, 'cpu', blue, x => f1(x) + '%'), cpuTotal, Math.round(v.cpu) + '%', 'in use')}${legend(top(byCpu, 'cpu', blue, x => f1(x) + '%'))}</div>
+            <div class="ring-card"><div class="head" style="color:${tint.battery}">Power by app</div>${ring(top(byEn, 'en', green, x => f1(x) + ' W'), enTotal, f1(enTotal) + ' W', 'all apps')}${legend(top(byEn, 'en', green, x => f1(x) + ' W'))}</div>
+          </div>`;
+      },
+      cpu: () => section('cpu', 'CPU', Math.round(v.cpu) + '<small>%</small>', 'Apple M1 Max', series.cpu, 100, ['Average', '17%', 'Peak', '51%'],
+        `<div class="w-h" style="color:var(--w-soft);font-size:12px">Cores</div><div class="w-cores">${Array.from({ length: 10 }, (_, i) => `<div><i style="height:${Math.round(i < 2 ? rnd(35, 80) : Math.max(2, v.cpu * (1.5 - i * 0.14) + rnd(0, 8)))}%"></i></div>`).join('')}</div><div class="w-sub">2 efficiency · 8 performance</div>`,
+        [['User', f1(v.cpu * 0.7) + '%'], ['System', f1(v.cpu * 0.3) + '%'], ['Load average', '2.70 3.42 4.33'], ['Uptime', '34d 13h'], ['Busiest', [...apps].sort((a, b) => b.cpu - a.cpu)[0].n]],
+        ['% CPU', 'Last hour', 'Memory', 'Processes'], a => [cpuOf(a), area(a.hist, 24, 110, 16, tint.cpu, false), gb(a.mem), a.p], (a, b) => b.cpu - a.cpu),
+      memory: () => section('memory', 'Memory', f1(v.mem) + '<small>GB</small>', 'of 64 GB used', series.mem, 64, ['Average', '33 GB', 'Peak', '54 GB'],
+        `<div class="w-h" style="color:var(--w-soft);font-size:12px">By type · Pressure Normal</div>${membar(v.mem)}<div class="w-sub">App 38.56 · Wired 3.32 · Compressed 3.39 · Cached 16.81 GB</div>`,
+        [['App Memory', '38.56 GB'], ['Wired Memory', '3.32 GB'], ['Compressed', '3.39 GB'], ['Cached Files', '16.81 GB'], ['Swap Used', '484.9 MB']],
+        ['Memory', 'Last hour', 'Change', '% CPU'], a => [gb(a.mem), area(a.hist.map(x => x + a.mem), 30, 110, 16, tint.memory, false), '—', cpuOf(a)], (a, b) => b.mem - a.mem),
+      disk: () => section('disk', 'Disk', '222<small>GB free</small>', 'of 995 GB · Macintosh HD', series.read, 18, ['Read', f1(v.read) + ' MB/s', 'Write', f1(v.write) + ' MB/s'],
+        `<div class="w-h" style="color:var(--w-soft);font-size:12px">Startup disk</div><div class="w-fill" style="--tint:${tint.disk};height:12px"><i style="width:78%"></i></div><div class="w-sub">773 GB used · 78% full</div>`,
+        [['Reading', f1(v.read) + ' MB/s'], ['Writing', f1(v.write) + ' MB/s'], ['Read today', '14.2 GB'], ['Written today', '6.8 GB'], ['Busiest', 'macOS']],
+        ['Read', 'Write', 'Memory', 'Processes'], a => [f1(a.rd) + ' MB/s', f1(a.rd * 0.4) + ' MB/s', gb(a.mem), a.p], (a, b) => b.rd - a.rd),
+      network: () => section('network', 'Network', rate(v.down).replace(' ', '<small>') + ' down</small>', rate(v.up) + ' up · Wi-Fi', series.down, 4200, ['Today', '2.13 GB', 'This week', '14.8 GB'],
+        `<div class="w-h" style="color:var(--w-soft);font-size:12px">Wi-Fi</div><div class="w-sub">Home · 5 GHz · signal good</div>`,
+        [['Downloading', rate(v.down)], ['Uploading', rate(v.up)], ['Today', '2.13 GB'], ['This week', '14.8 GB'], ['Interface', 'Wi-Fi']], null),
+      gpu: () => section('gpu', 'GPU', Math.round(v.gpu) + '<small>%</small>', 'Apple M1 Max · 24 cores', series.gpu, 100, ['Average', '31%', 'Peak', '77%'],
+        `<div class="w-h" style="color:var(--w-soft);font-size:12px">Now</div><div class="w-fill" style="--tint:${tint.gpu};height:12px"><i style="width:${v.gpu}%"></i></div>`,
+        [['Utilization', Math.round(v.gpu) + '%'], ['Cores', '24'], ['Average today', '31%'], ['Peak today', '77%'], ['Chip', 'M1 Max']], null),
+      neural: () => section('neural', 'Neural Engine', f2(v.ane) + '<small>W</small>', v.ane > 0.05 ? 'Working' : 'Idle', series.ane, 1.5, ['Peak', '1.40 W', 'Rated', '11 TOPS'],
+        `<div class="w-h" style="color:var(--w-soft);font-size:12px">What uses it</div><div class="w-sub">Photos analysis, Live Text, dictation and Apple Intelligence run here.</div>`,
+        [['Power', f2(v.ane) + ' W'], ['Cores', '16'], ['Rated', '11 TOPS'], ['State', v.ane > 0.05 ? 'Working' : 'Idle'], ['Chip', 'M1 Max']], null),
+      battery: () => section('battery', 'Battery', Math.round(v.batt) + '<small>%</small>', 'On battery · 3h 31m left', series.batt, 100, ['Drawing', '11.8 W', 'Health', '86%'],
+        `<div class="w-h" style="color:var(--w-soft);font-size:12px">Charge</div><div class="w-fill" style="--tint:${tint.battery};height:12px"><i style="width:${v.batt}%"></i></div><div class="w-sub">412 cycles · health 86%</div>`,
+        [['Time left', '3h 31m'], ['Drawing', '11.8 W'], ['Health', '86%'], ['Cycles', '412'], ['Busiest', [...apps].sort((a, b) => b.en - a.en)[0].n]],
+        ['Energy', 'Last hour', 'Memory', '% CPU'], a => [f1(a.en) + ' W', area(a.hist, 24, 110, 16, tint.battery, false), gb(a.mem), cpuOf(a)], (a, b) => b.en - a.en),
+      sound: () => `<div class="w-card" style="--tint:${tint.sound};min-height:0">${head('sound', 'Sound', 'MacBook Pro Speakers')}
+          <div class="w-sub" style="margin-bottom:6px">Each app's own volume, up to 300%. Try the sliders.</div>
+          ${[['Music', 80], ['Google Chrome', 100], ['zoom.us', 140], ['Slack', 40]].map(([n, val], i) => `<div class="vol">${appCell({ n, c: ['#fa3e5c', '#e8453c', '#2d8cff', '#8a3f8f'][i] })}<input type="range" min="0" max="300" value="${val}" aria-label="${n} volume" data-vol><span data-volv>${val}%</span></div>`).join('')}</div>`,
+      bluetooth: () => `<div class="w-card" style="--tint:${tint.bluetooth};min-height:0">${head('bluetooth', 'Bluetooth', '3 connected')}
+          ${[['AirPods Pro', 'Left 80% · Right 75% · Case 60%'], ['Magic Keyboard', 'Battery 64%'], ['Magic Mouse', 'Battery 22%']].map(([n, d]) => `<div class="dev"><b>${n}</b><span class="w-sub">Connected</span><small>${d}</small></div>`).join('')}</div>`,
+      stack: () => {
+        const group = (title, rows, note = '') => `<div class="w-h" style="font-size:12px;color:var(--w-soft);margin-top:10px">${title}${note}</div>`
+          + rows.map(([n, d, action]) => `<div class="dev"><b>${n}</b><span class="w-sub">${action}</span><small>${d}</small></div>`).join('');
+        const soon = ' <span style="font-size:10.5px;font-weight:600;color:#2cc0de;background:rgba(44,192,222,.14);padding:2px 7px;border-radius:999px;margin-left:6px">Coming soon</span>';
+        return `<div class="w-card" style="--tint:${tint.stack};min-height:0">${head('stack', 'Stack', '4 servers · 3 containers · 1 model')}
+          <div class="stack-cols"><div>
+          ${group('Dev servers', [['Node.js · api', 'localhost:4000 · 184.3 MB · active', 'Stop…'], ['Vite · shop', 'localhost:5173 · 612.0 MB · <span style="color:#ff9f0a">idle 3h 20m</span>', 'Stop…'],
+                                  ['Next.js · site', 'localhost:3000 · 480.2 MB · active', 'Stop…'], ['Wrangler · Talim', 'localhost:8787 · 331.5 MB · active', 'Stop…']])}
+          ${group('Docker', [['postgres', 'container · 212.0 MB · port 5432', 'Stop…'], ['redis', 'container · 18.4 MB · port 6379', 'Stop…'], ['nginx', 'container · 9.6 MB · port 8080', 'Stop…']])}
+          </div><div>
+          ${group('Local AI', [['LM Studio · Llama 3.1 8B', 'model loaded · 8.54 GB · working now', 'Unload…']])}
+          <div style="opacity:.55">${group('Kubernetes', [['web-7d9f · default', 'pod · Running · 2 restarts', ''], ['worker-5c2b · default', 'pod · Running', '']], soon)}</div></div></div></div>`;
+      },
+    };
+
+    function section(k, title, big, sub, data, max, pair, side, stats, cols, cells, sort) {
+      const ranges = ['10 min', '1 h', '24 h', '7 d', '30 d'].map((r, i) => `<span class="${i === 2 ? 'on' : ''}">${r}</span>`).join('');
+      const table = cols ? `<div class="w-scroll"><table class="w-table"><thead><tr><th>App Name</th>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>`
+        + [...apps].sort(sort).slice(0, 4).map(a => `<tr><td>${appCell(a)}</td>${cells(a).map(c => `<td>${c}</td>`).join('')}</tr>`).join('') + '</tbody></table></div>' : '';
+      return `<div class="hero-row">
+          <div class="hero-card" style="--tint:${tint[k]}"><div class="hl">${head(k, title)}<div><div class="w-big">${big}</div><div class="w-sub">${sub}</div></div>
+            <div class="w-sub">${pair[0]} <b style="color:var(--w-ink)">${pair[1]}</b> · ${pair[2]} <b style="color:var(--w-ink)">${pair[3]}</b></div></div>
+            <div><div class="ranges">${ranges}</div>${area(data, max, 600, 160, tint[k])}</div></div>
+          <div class="side" style="--tint:${tint[k]}">${side}</div></div>
+        <div class="stats">${stats.map(([l, val]) => `<div class="stat"><div>${l}</div><b>${val}</b></div>`).join('')}</div>${table}`;
+    }
+
+    let current = 'overview';
+    tabsEl.innerHTML = tabs.map(([k, label, col]) => `<button role="tab" aria-selected="${k === current}" data-t="${k}" style="--tint:${col}" aria-label="${label}">${svg(k)}<span class="label">${label}</span></button>`).join('');
+    const render = () => {
+      body.innerHTML = views[current]();
+      bindLive();
+      // On smaller screens the Overview can be taller than 16:9; every tab then keeps its height, so the window doesn't jump.
+      if (current === 'overview' && body.offsetHeight > 0) body.style.minHeight = body.offsetHeight + 'px';
+    };
+    const bindLive = () => $$('[data-vol]', body).forEach(r => { const paint = () => r.style.setProperty('--p', r.value / 3 + '%'); paint(); r.addEventListener('input', () => { paint(); r.nextElementSibling.textContent = r.value + '%'; }); });
+    $$('button', tabsEl).forEach(b => b.addEventListener('click', () => {
+      current = b.dataset.t;
+      $$('button', tabsEl).forEach(x => x.setAttribute('aria-selected', String(x === b)));
+      render();
+    }));
+    render();
+    const live = () => {
+      step(false); drift();
+      $$('[data-v]').forEach(el => { const key = el.dataset.v; if (key in v) el.textContent = v[key]; });
+      if (!['sound', 'bluetooth', 'stack'].includes(current)) render();
+    };
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setInterval(live, 1600);
+      setInterval(() => { statusIndex++; if (current === 'overview') render(); }, 6400);
+    }
+  })();
 </script>
 </body>
 </html>
