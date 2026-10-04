@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Join the Bondi beta</title>
-<meta name="description" content="Join the beta of Bondi, the Mac system monitor that explains why your Mac is slow in one plain sentence, written on your Mac. Be one of the first.">
+<meta name="description" content="Join the limited beta of Bondi, the Mac system monitor that explains why your Mac is slow in one plain sentence, written on your Mac. Places are limited.">
 <link rel="canonical" href="https://trybondi.app/beta/">
 <link rel="icon" type="image/png" href="/assets/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Bondi">
 <meta property="og:url" content="https://trybondi.app/beta/">
 <meta property="og:title" content="Join the Bondi beta">
-<meta property="og:description" content="Your Mac has been trying to tell you something. Bondi lets it. Be one of the first.">
+<meta property="og:description" content="Your Mac has been trying to tell you something. Bondi lets it. A limited beta: places are limited.">
 <meta property="og:image" content="https://trybondi.app/assets/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -64,7 +64,6 @@
   .eyebrow { font-size: 1.15rem; font-weight: 600; color: var(--bondi-ink); letter-spacing: -0.01em; }
   .pillbtn { display: inline-flex; align-items: center; justify-content: center; border-radius: 980px; padding: 12px 24px; font: 500 1.05rem/1.2 var(--sans); letter-spacing: -0.01em; border: 1px solid transparent; cursor: pointer; }
   .pillbtn.primary { background: var(--bondi); color: var(--on-bondi); } .pillbtn.primary:hover { background: var(--bondi-ink); text-decoration: none; }
-  .pillbtn.secondary { color: var(--bondi-ink); border-color: var(--bondi); } .pillbtn.secondary:hover { background: var(--bondi-soft); text-decoration: none; }
   .pillbtn.small { padding: 5px 13px; font-size: 0.78rem; }
 
   /* Light / dark switch (assets/theme.js): a moon in light mode, a sun in dark */
@@ -90,7 +89,6 @@
   .stage svg { width: 100%; height: 100%; display: block; overflow: visible; }
   .hero h1 { font-size: clamp(2.5rem, 6.2vw, 4.6rem); line-height: 1.04; font-weight: 700; letter-spacing: -0.04em; max-width: 18ch; }
   .hero .sub { font-size: clamp(1.15rem, 2.2vw, 1.5rem); line-height: 1.35; color: var(--soft); font-weight: 500; letter-spacing: -0.02em; max-width: 34rem; }
-  .ctas { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: 6px; }
   .grad { background: linear-gradient(100deg, var(--bondi) 10%, var(--bondi-ink) 50%, var(--bondi) 90%); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
   #icon .needle, #icon .progress, #icon .track { transform-box: view-box; transform-origin: 512px 512px; }
@@ -128,69 +126,36 @@
   .sea .l1 { animation: sea 26s linear infinite; } .sea .l2 { animation: sea 19s linear infinite reverse; } .sea .l3 { animation: sea 14s linear infinite; }
   @keyframes sea { to { transform: translateX(-50%); } }
 
-  /* Sections */
-  section.block { padding-block: clamp(64px, 9vw, 112px); }
-  .center { text-align: center; margin-inline: auto; }
-  h2 { font-size: clamp(2.2rem, 5.4vw, 3.8rem); line-height: 1.06; font-weight: 700; letter-spacing: -0.035em; }
-  .lede { font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.4; color: var(--soft); font-weight: 500; letter-spacing: -0.02em; max-width: 40rem; }
-
-  /* The count: big and bold */
-  .count { text-align: center; display: grid; justify-items: center; gap: 14px; }
-  .live { display: inline-flex; align-items: center; gap: 8px; font-size: .85rem; font-weight: 600; color: var(--bondi-ink); text-transform: uppercase; letter-spacing: .08em; }
-  .live::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--bondi); box-shadow: 0 0 0 0 var(--glow); animation: ping 2s ease-out infinite; }
-  @keyframes ping { 0% { box-shadow: 0 0 0 0 var(--glow); } 100% { box-shadow: 0 0 0 12px transparent; } }
-  .big { font: 800 clamp(5.5rem, 22vw, 15rem)/.9 var(--display); letter-spacing: -0.06em; font-variant-numeric: tabular-nums;
-    background: linear-gradient(180deg, var(--ink) 30%, var(--bondi) 110%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .count .what { font: 700 clamp(1.5rem, 3.6vw, 2.5rem)/1.15 var(--display); letter-spacing: -0.03em; max-width: 22ch; }
-  .beta-pill { display: inline-flex; align-items: baseline; gap: 10px; margin-top: 10px; padding: 14px 26px; border-radius: 980px; background: var(--bondi-soft); color: var(--bondi-ink); font-size: 1.15rem; font-weight: 600; }
-  .beta-pill b { font: 800 1.9rem/1 var(--display); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
-
-  /* You know the feeling */
-  .moments { list-style: none; margin: 56px auto 0; padding: 0; display: grid; gap: 14px; max-width: 760px; }
-  .moments li { background: var(--tile); border-radius: 22px; padding: 26px 30px; font: 600 clamp(1.25rem, 2.6vw, 1.75rem)/1.25 var(--display); letter-spacing: -0.025em; box-shadow: var(--shadow); display: flex; gap: 18px; align-items: center; text-align: left; }
-  .moments .mi { flex: none; width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; background: var(--bondi-soft); color: var(--bondi-ink); }
-  .moments li:nth-child(2) { margin-left: clamp(0px, 6vw, 70px); } .moments li:nth-child(3) { margin-left: clamp(0px, 12vw, 140px); }
-  .turn { margin-top: 56px; font: 600 clamp(1.3rem, 2.6vw, 1.8rem)/1.3 var(--display); letter-spacing: -0.025em; color: var(--soft); }
-  .turn b { color: var(--ink); }
-
-  /* Bondi tells you why */
-  .why { margin: 48px auto 0; max-width: 720px; background: var(--tile); border-radius: 26px; padding: 30px 34px; box-shadow: var(--shadow); text-align: left; border: 1px solid color-mix(in srgb, var(--bondi) 30%, transparent); }
-  .why .who { display: flex; align-items: center; gap: 10px; color: var(--soft); font-size: .9rem; font-weight: 600; }
-  .why .who img { width: 28px; height: 28px; }
-  .why p.say { margin-top: 16px; font: 600 clamp(1.3rem, 2.8vw, 1.85rem)/1.32 var(--display); letter-spacing: -0.025em; min-height: 2.64em; }
-  .why .spark { color: var(--bondi); margin-right: 6px; }
-  .why .caret { display: inline-block; width: 2px; height: 1.05em; vertical-align: -0.15em; margin-left: 2px; background: var(--bondi); animation: blink 1s steps(1) infinite; }
-  @keyframes blink { 50% { opacity: 0; } }
-  .why small { display: block; margin-top: 16px; color: var(--faint); font-size: .85rem; }
-
-  /* Help shape it */
-  .perks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 56px; }
-  .perk { background: var(--tile); border-radius: 22px; padding: 28px; box-shadow: var(--shadow); text-align: left; }
-  .perk .ic { width: 44px; height: 44px; border-radius: 12px; background: var(--bondi-soft); color: var(--bondi-ink); display: grid; place-items: center; margin-bottom: 18px; }
-  .perk h3 { font-size: 1.3rem; letter-spacing: -0.02em; } .perk p { margin-top: 8px; color: var(--soft); }
-
-  /* Join */
-  .join { position: relative; max-width: 720px; margin: 0 auto; background: var(--tile); border-radius: 32px; padding: clamp(32px, 6vw, 56px); text-align: center; display: grid; gap: 12px; box-shadow: var(--shadow); overflow: hidden; isolation: isolate; }
-  .join::after { content: ""; position: absolute; left: -10%; right: -10%; bottom: -60%; height: 60%; z-index: -1; border-radius: 45% 55% 0 0; background: linear-gradient(180deg, var(--sea-3), var(--sea-2)); transition: bottom 1.4s cubic-bezier(.2, .8, .2, 1); }
-  .join.done::after { bottom: -28%; }
-  .join h2 { font-size: clamp(2.2rem, 5vw, 3.2rem); }
-  .join .lede { margin: 0 auto; }
-  .fields { display: grid; grid-template-columns: 1fr 1.3fr auto; gap: 10px; margin-top: 18px; }
-  .fields input { font: inherit; font-size: 1rem; padding: 13px 18px; border-radius: 14px; border: 1px solid var(--line); background: var(--ground); color: var(--ink); min-width: 0; width: 100%; }
+  /* The sign-up, right in the hero */
+  .join { position: relative; width: min(100%, 640px); margin-top: 8px; background: var(--tile); border-radius: 24px; padding: 14px; display: grid; gap: 8px; box-shadow: var(--shadow); overflow: hidden; isolation: isolate;
+    border: 1px solid color-mix(in srgb, var(--bondi) 22%, transparent); }
+  .join::after { content: ""; position: absolute; left: -10%; right: -10%; bottom: -100%; height: 100%; z-index: -1; border-radius: 45% 55% 0 0; background: linear-gradient(180deg, var(--sea-3), var(--sea-2)); transition: bottom 1.4s cubic-bezier(.2, .8, .2, 1); }
+  .join.done::after { bottom: -55%; }
+  .join.done { padding-block: 26px; }
+  .fields { display: grid; grid-template-columns: 1fr 1.3fr auto; gap: 8px; }
+  .fields input { font: inherit; font-size: 1rem; padding: 12px 16px; border-radius: 14px; border: 1px solid var(--line); background: var(--ground); color: var(--ink); min-width: 0; width: 100%; }
   .fields input:focus { outline: 3px solid var(--bondi-soft); border-color: var(--bondi); }
   .fields input[aria-invalid="true"] { border-color: var(--attention); }
   .fields button { position: relative; } .fields button[disabled] { opacity: .6; cursor: default; }
-  .msg { min-height: 1.5em; font-weight: 600; } .msg.ok { color: var(--bondi-ink); font-size: 1.25rem; } .msg.err { color: var(--attention); }
-  .fine { font-size: .8rem; color: var(--faint); }
+  .msg { font-weight: 600; } .msg:empty { display: none; } .msg.ok { color: var(--bondi-ink); font-size: 1.15rem; } .msg.err { color: var(--attention); }
+  .fine { font-size: .78rem; color: var(--faint); }
   .ripple { position: absolute; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--bondi); pointer-events: none; transform: translate(-50%, -50%); animation: ripple 1.2s ease-out forwards; }
   @keyframes ripple { to { width: 900px; height: 900px; opacity: 0; } }
-  .closing { margin-top: 44px; font: 700 clamp(1.4rem, 3vw, 2rem)/1.25 var(--display); letter-spacing: -0.03em; }
 
-  /* Scroll reveals (only once the script runs, so nothing hides without it) */
-  .js .reveal { opacity: 0; transform: translateY(26px); transition: opacity .9s cubic-bezier(.2, .8, .2, 1), transform .9s cubic-bezier(.2, .8, .2, 1); }
-  .js .reveal.seen { opacity: 1; transform: none; }
-  .js .moments li.reveal:nth-child(2) { transition-delay: .12s; } .js .moments li.reveal:nth-child(3) { transition-delay: .24s; }
-  .js .perk.reveal:nth-child(2) { transition-delay: .1s; } .js .perk.reveal:nth-child(3) { transition-delay: .2s; }
+  .limited { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 980px; border: 1px solid color-mix(in srgb, var(--bondi) 45%, transparent); background: var(--bondi-soft); font-size: .95rem; letter-spacing: .01em; }
+  .limited::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--attention); animation: ping 2s ease-out infinite; }
+
+  /* The real count, and three facts */
+  .counter { display: inline-flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 0; padding: 8px 18px; border-radius: 980px; background: var(--bondi-soft); color: var(--bondi-ink); font-size: .95rem; font-weight: 600; }
+  .counter b { font: 800 1.15rem/1 var(--display); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: var(--ink); }
+  .counter .dot { width: 8px; height: 8px; margin-right: 10px; border-radius: 50%; background: var(--bondi); animation: ping 2s ease-out infinite; }
+  @keyframes ping { 0% { box-shadow: 0 0 0 0 var(--glow); } 100% { box-shadow: 0 0 0 10px transparent; } }
+  .play .counter { animation: up .8s cubic-bezier(.2, .8, .2, 1) both; }
+  .facts { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 0; color: var(--soft); font-size: .9rem; font-weight: 500; }
+  .facts { gap: 6px 22px; }
+  .facts li { display: inline-flex; align-items: center; gap: 8px; }
+  .facts li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--bondi); }
+  .counter .sep { margin: 0 10px; color: var(--faint); }
 
   /* Ask AI about Bondi (dev/ask-ai.php): a row of logos in the footer line */
   .askai-row { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
@@ -198,7 +163,7 @@
   .askai-row a { width: 30px; height: 30px; display: inline-grid; place-items: center; border-radius: 50%; border: 1px solid var(--line); color: var(--soft); }
   .askai-row a:hover { color: var(--ink); border-color: var(--bondi); text-decoration: none; }
   .askai-row .ai-logo { width: 15px; height: 15px; }
-  footer { border-top: 1px solid var(--line); margin-top: 40px; padding: 28px 22px 40px; display: grid; gap: 22px; max-width: 1080px; margin-inline: auto; font-size: .85rem; color: var(--faint); }
+  footer { border-top: 1px solid var(--line); padding: 28px 22px 40px; display: grid; gap: 22px; max-width: 1080px; margin-inline: auto; font-size: .85rem; color: var(--faint); }
   footer .foot-line { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; justify-content: center; }
   /* Made with love by Noaman, with his X */
   .made { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
@@ -209,16 +174,14 @@
 
   @media (max-width: 760px) {
     .nav-right > a:not(.pillbtn) { display: none; }
-    .perks { grid-template-columns: 1fr; }
     .fields { grid-template-columns: 1fr; }
-    .moments li { padding: 20px 22px; } .moments li:nth-child(n) { margin-left: 0; }
-    .hero { padding-bottom: 130px; } .sea { height: 110px; }
-    .beta-pill { font-size: .95rem; gap: 8px; padding: 12px 20px; } .beta-pill b { font-size: 1.5rem; }
+    .counter { font-size: .85rem; padding: 8px 14px; } .counter b { font-size: 1rem; }
+    .counter { border-radius: 18px; } .counter [data-beta] { flex-basis: 100%; } .counter .sep { display: none; }
+    .hero { padding-bottom: 120px; gap: 16px; } .sea { height: 100px; }
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     *, *::before, *::after { animation: none !important; transition: none !important; }
-    .js .reveal { opacity: 1; transform: none; }
   }
 </style>
 </head>
@@ -262,82 +225,26 @@
         <circle class="hub" cx="512" cy="512" r="34" fill="#FFFFFF"/>
       </svg>
     </button>
-    <p class="eyebrow in-1">The Bondi beta</p>
+    <p class="eyebrow in-1"><span class="limited">Limited beta</span></p>
     <h1 class="in-2">Your Mac has been trying to tell you <span class="grad">something.</span></h1>
-    <p class="sub in-3">Bondi finally lets it. One plain sentence that explains what's slowing your Mac down, written on your Mac. Be one of the first to hear it.</p>
-    <div class="ctas in-4">
-      <a class="pillbtn primary" href="#join">Join the beta</a>
-      <a class="pillbtn secondary" href="#feeling">Why Bondi</a>
-    </div>
+    <p class="sub in-3">Bondi explains what's slowing your Mac down in one plain sentence, written on your Mac. The beta is small and places are limited. Save yours now.</p>
+    <form class="join in-4" id="join" data-signup novalidate>
+      <div class="fields">
+        <label><span class="vh">Name</span><input name="name" autocomplete="name" placeholder="Name" maxlength="100" required></label>
+        <label><span class="vh">Email</span><input name="email" type="email" autocomplete="email" placeholder="Email" maxlength="254" required></label>
+        <label class="vh" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
+        <button class="pillbtn primary" type="submit">Save my spot</button>
+      </div>
+      <p class="msg" role="status" aria-live="polite" data-msg></p>
+      <p class="fine">We'll only email you about Bondi, and you can stop anytime. <a href="/privacy/">Privacy policy</a></p>
+    </form>
+    <p class="counter" data-count hidden><span class="dot" aria-hidden="true"></span><b data-total>0</b>&nbsp;<span data-total-label>people on the list</span><span data-beta hidden><span class="sep" aria-hidden="true">·</span><b data-beta-num>0</b>&nbsp;asked for the beta</span></p>
+    <ul class="facts in-4"><li>On-device AI</li><li>No account, no analytics</li><li>macOS 15 or later</li></ul>
     <div class="sea" aria-hidden="true">
       <svg class="l1" viewBox="0 0 2880 200" preserveAspectRatio="none"><path fill="var(--sea-1)" d="M0 70 C240 10 480 10 720 70 S1200 130 1440 70 C1680 10 1920 10 2160 70 S2640 130 2880 70 L2880 200 L0 200 Z"/></svg>
       <svg class="l2" viewBox="0 0 2880 200" preserveAspectRatio="none"><path fill="var(--sea-2)" d="M0 110 C240 60 480 60 720 110 S1200 160 1440 110 C1680 60 1920 60 2160 110 S2640 160 2880 110 L2880 200 L0 200 Z"/></svg>
       <svg class="l3" viewBox="0 0 2880 200" preserveAspectRatio="none"><path fill="var(--sea-3)" d="M0 150 C240 115 480 115 720 150 S1200 185 1440 150 C1680 115 1920 115 2160 150 S2640 185 2880 150 L2880 200 L0 200 Z"/></svg>
     </div>
-  </section>
-
-  <section class="block count wrap" data-count hidden aria-labelledby="count-title">
-    <p class="live reveal">Live count</p>
-    <p class="big reveal" data-total aria-hidden="true">0</p>
-    <h2 id="count-title" class="what reveal"><span class="vh" data-total-text></span><span data-total-label>people are waiting for Bondi.</span></h2>
-    <p class="beta-pill reveal" data-beta hidden><b data-beta-num>0</b><span data-beta-label>of them asked for the beta.</span></p>
-  </section>
-
-  <section class="block wrap center" id="feeling">
-    <p class="eyebrow reveal">You know the feeling</p>
-    <h2 class="reveal">It always happens at the worst moment.</h2>
-    <ul class="moments">
-      <li class="reveal"><span class="mi" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3c-2.5 3-2.5 15 0 18M3 12c3-2.5 15-2.5 18 0M5.6 5.6c3.5 1 11.8 9.3 12.8 12.8"/></svg></span>The beach ball spins right when it matters.</li>
-      <li class="reveal"><span class="mi" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M12 10c0-4 1-7 4-7s3 4-2 7M14 12c4 0 7 1 7 4s-4 3-7-2M12 14c0 4-1 7-4 7s-3-4 2-7M10 12c-4 0-7-1-7-4s4-3 7 2"/></svg></span>The fans roar, and nothing is even open.</li>
-      <li class="reveal"><span class="mi" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg></span>It was fine yesterday. Today it crawls.</li>
-    </ul>
-    <p class="turn reveal">Activity Monitor shows you hundreds of processes. <b>It never tells you why.</b></p>
-  </section>
-
-  <section class="block wrap center">
-    <p class="eyebrow reveal">Then Bondi says it plainly</p>
-    <h2 class="reveal">One sentence. The whole story.</h2>
-    <div class="why reveal" data-why>
-      <div class="who"><img src="/assets/icon-blue.png" alt="" width="28" height="28">Bondi</div>
-      <p class="say"><span class="spark" aria-hidden="true">✦</span><span data-say>Everything is fine. Google Chrome is using the most memory, 13.09 GB across 82 processes.</span><span class="caret" aria-hidden="true" hidden data-caret></span></p>
-      <small>A real sentence from Bondi, about a real Mac. Written on that Mac by an on-device AI: nothing left it.</small>
-    </div>
-  </section>
-
-  <section class="block wrap center">
-    <p class="eyebrow reveal">Why join now</p>
-    <h2 class="reveal">Help shape what Bondi becomes.</h2>
-    <p class="lede center reveal" style="margin-top:18px">The first people in use Bondi on their own Macs and tell us what's missing. What they say decides what ships.</p>
-    <div class="perks">
-      <div class="perk reveal">
-        <div class="ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 6.9H21l-5.5 4.2 2.1 6.9L12 15.8 6.4 20l2.1-6.9L3 8.9h6.6z"/></svg></div>
-        <h3>First in line</h3><p>Use Bondi on your own Mac before it launches to everyone.</p>
-      </div>
-      <div class="perk reveal">
-        <div class="ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-        <h3>Your voice counts</h3><p>Your feedback goes straight to the people building Bondi.</p>
-      </div>
-      <div class="perk reveal">
-        <div class="ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
-        <h3>Your Mac stays yours</h3><p>No account, no analytics. The AI runs on your Mac, and nothing leaves it.</p>
-      </div>
-    </div>
-    <p class="closing reveal">Your Mac works hard for you.<br><span class="grad">It's time you understood it.</span></p>
-  </section>
-
-  <section class="block wrap" id="join">
-    <form class="join reveal" data-signup novalidate>
-      <h2>Join the beta.</h2>
-      <p class="lede">We'll email you the moment it opens. For any Mac with macOS 15 or later.</p>
-      <div class="fields">
-        <label><span class="vh">Name</span><input name="name" autocomplete="name" placeholder="Name" maxlength="100" required></label>
-        <label><span class="vh">Email</span><input name="email" type="email" autocomplete="email" placeholder="Email" maxlength="254" required></label>
-        <label class="vh" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
-        <button class="pillbtn primary" type="submit">Join the beta</button>
-      </div>
-      <p class="msg" role="status" aria-live="polite" data-msg></p>
-      <p class="fine">We'll only email you about Bondi, and you can stop anytime. <a href="/privacy/">Privacy policy</a></p>
-    </form>
   </section>
 </main>
 
@@ -366,8 +273,8 @@
     const target = document.getElementById(link.getAttribute('href').slice(1));
     if (!target) return;
     event.preventDefault();
-    target.scrollIntoView({ block: 'start' });
-    if (target.id === 'join') setTimeout(() => $('input[name=name]', target).focus({ preventScroll: true }), reduced ? 0 : 600);
+    target.scrollIntoView({ block: 'center' });
+    if (target.id === 'join' && !target.classList.contains('done')) setTimeout(() => $('input[name=name]', target).focus({ preventScroll: true }), reduced ? 0 : 400);
   });
   if (location.hash) {
     const id = decodeURIComponent(location.hash.slice(1));
@@ -382,31 +289,6 @@
     root.classList.remove('play'); void root.offsetWidth; root.classList.add('play');
   });
 
-  // Sections rise in as they come into view.
-  const seen = new IntersectionObserver(entries => entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    entry.target.classList.add('seen');
-    seen.unobserve(entry.target);
-    entry.target.dispatchEvent(new Event('seen'));
-  }), { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
-  $$('.reveal').forEach(el => seen.observe(el));
-
-  // Bondi's sentence types itself out the first time it's seen.
-  const say = $('[data-say]'), caret = $('[data-caret]'), sentence = say.textContent;
-  $('[data-why]').addEventListener('seen', () => {
-    if (reduced) return;
-    say.setAttribute('aria-label', sentence);
-    say.textContent = ''; caret.hidden = false;
-    const words = sentence.split(' ');
-    let i = 0;
-    const next = () => {
-      say.textContent = words.slice(0, ++i).join(' ');
-      if (i < words.length) setTimeout(next, 70 + Math.random() * 90);
-      else setTimeout(() => { caret.hidden = true; say.removeAttribute('aria-label'); }, 1600);
-    };
-    setTimeout(next, 500);
-  }, { once: true });
-
   // The real count of sign-ups, from the server. Nothing is shown until it arrives.
   const counter = $('[data-count]');
   const plural = (n, one, many) => (n === 1 ? one : many);
@@ -420,22 +302,17 @@
     };
     requestAnimationFrame(step);
   };
-  let shown = false;
   const showCounts = ({ signups, beta }, animate) => {
     if (typeof signups !== 'number' || signups < 1) return;
+    // On first load, wait for the hero to finish building before the count rises in.
+    const wait = animate && !reduced ? Math.max(0, 2500 - performance.now()) : 0;
+    if (wait) { setTimeout(() => showCounts({ signups, beta }, animate), wait); return; }
     counter.hidden = false;
-    $('[data-total-text]').textContent = signups.toLocaleString('en-US') + ' ';
-    $('[data-total-label]').textContent = plural(signups, 'person is waiting for Bondi.', 'people are waiting for Bondi.');
+    $('[data-total-label]').textContent = plural(signups, 'person on the list', 'people on the list');
     const hasBeta = typeof beta === 'number' && beta > 0;
     $('[data-beta]').hidden = !hasBeta;
-    if (hasBeta) $('[data-beta-label]').textContent = plural(beta, 'of them asked for the beta.', 'of them asked for the beta.');
-    const run = () => {
-      countUp($('[data-total]'), signups, animate ? 1800 : 400);
-      if (hasBeta) countUp($('[data-beta-num]'), beta, animate ? 1800 : 400);
-    };
-    const big = $('[data-total]');
-    if (reduced || big.classList.contains('seen') || !animate) run(); else big.addEventListener('seen', run, { once: true });
-    shown = true;
+    countUp($('[data-total]'), signups, animate ? 1600 : 400);
+    if (hasBeta) countUp($('[data-beta-num]'), beta, animate ? 1600 : 400);
   };
   const loadCounts = animate => fetch('/api/interest', { cache: 'no-store' }).then(r => r.ok ? r.json() : null)
     .then(data => data && showCounts(data, animate)).catch(() => {});
@@ -471,7 +348,7 @@
         }
         form.classList.add('done');
         $('.fields', form).hidden = true;
-        tell(`You're on the list, ${name}. We'll email you the moment the beta opens.`, true);
+        tell(`You're on the list, ${name}. Places are limited, so watch your inbox: we'll email you the moment the beta opens.`, true);
         loadCounts(false);
       } else {
         tell(answer.message || "Couldn't sign you up just now. Try again in a minute.");
