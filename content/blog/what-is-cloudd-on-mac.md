@@ -2,6 +2,7 @@
 title: What is cloudd on Mac?
 description: cloudd syncs your data with iCloud for Apple's apps and iCloud Drive. Here's why cloudd uses CPU or network, and what happens if you quit it.
 date: 2026-10-04
+topic: processes
 status: draft
 order: 15
 related: what-is-bird-on-mac, mac-slow-after-update, why-is-my-mac-slow

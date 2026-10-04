@@ -3,6 +3,7 @@ title: Why is my Mac slow? How to find the real cause
 description: Mac running slow? It usually comes down to one of a handful of causes. Here's how to tell which one it is, with real readings from a real MacBook Pro.
 date: 2026-10-03
 updated: 2026-10-03
+topic: slow
 status: published
 order: 1
 image: /assets/features/why.png

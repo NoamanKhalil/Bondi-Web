@@ -34,6 +34,33 @@ const AUTHOR = 'Noaman Khalil';
 const AUTHOR_URL = 'https://x.com/khalilnoaman';
 $h = fn(string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 
+// Topics: the blog index and llms.txt group articles under these, in this order. An article's "topic:" header names
+// one; an article without a known topic goes under "More".
+const TOPICS = [
+    'slow' => ['Why is my Mac slow?', 'Start here: the usual causes, and how to tell which one it is.'],
+    'memory' => ['Memory', "What's using your Mac's memory, and when it matters."],
+    'heat' => ['Heat, fans and busy processes', 'Why the fans spin up, and what macOS is doing when your Mac gets hot.'],
+    'processes' => ['What is this process?', 'The macOS processes people ask about most, in plain words.'],
+    'bondi' => ['Bondi and other tools', 'How Bondi compares with Activity Monitor, and how its on-device AI works.'],
+    'more' => ['More', ''],
+];
+/** Articles grouped by topic, in TOPICS order, each group in its "order:" order. */
+function by_topic(array $posts): array
+{
+    $groups = [];
+    foreach ($posts as $slug => $post) {
+        $groups[isset(TOPICS[$post['topic'] ?? '']) ? $post['topic'] : 'more'][$slug] = $post;
+    }
+    $sorted = [];
+    foreach (array_keys(TOPICS) as $key) {
+        if (!empty($groups[$key])) {
+            uasort($groups[$key], fn($a, $b) => ((int)($a['order'] ?? 99) <=> (int)($b['order'] ?? 99)) ?: strcmp($a['title'], $b['title']));
+            $sorted[$key] = $groups[$key];
+        }
+    }
+    return $sorted;
+}
+
 // MARK: Read the articles
 
 $posts = [];
@@ -207,7 +234,7 @@ $html
   <p class="plain-copy">Also as <a href="/blog/{$h($slug)}.md">plain text</a>, for AI assistants and readers.</p>
   <aside class="cta">
     <img src="/assets/icon-blue.png" alt="" width="56" height="56">
-    <div><p class="cta-title">Bondi tells you why your Mac is slow, in one plain sentence.</p>
+    <div><p class="cta-title">Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence.</p>
     <p>It runs on your Mac, groups every process into the apps you know, and keeps 30 days of history. Nothing leaves your Mac.</p>
     <p><a class="pillbtn primary" href="/beta/">Join the beta</a> <a class="pillbtn secondary" href="/">See how it works</a></p></div>
   </aside>
@@ -223,12 +250,18 @@ HTML;
     $written[] = $file;
 }
 
-// The index of articles
+// The index of articles, grouped by topic
 if ($shown) {
-    $cards = '';
-    foreach ($shown as $slug => $post) {
-        $cards .= '<li><a class="card" href="/blog/' . $h($slug) . '/"><span class="card-date">' . $h(nice_date($post['date'])) . ' · ' . $post['minutes'] . ' min read</span>'
-                . '<span class="card-title">' . $h($post['title']) . '</span><span class="card-desc">' . $h($post['description']) . '</span></a></li>';
+    $groups = '';
+    foreach (by_topic($shown) as $key => $group) {
+        $cards = '';
+        foreach ($group as $slug => $post) {
+            $cards .= '<li><a class="card" href="/blog/' . $h($slug) . '/"><span class="card-date">' . $h(nice_date($post['date'])) . ' · ' . $post['minutes'] . ' min read</span>'
+                    . '<span class="card-title">' . $h($post['title']) . '</span><span class="card-desc">' . $h($post['description']) . '</span></a></li>';
+        }
+        [$name, $intro] = TOPICS[$key];
+        $groups .= '<section class="topic" id="' . $h($key) . '" aria-labelledby="topic-' . $h($key) . '"><h2 id="topic-' . $h($key) . '">' . $h($name) . '</h2>'
+                 . ($intro !== '' ? '<p class="topic-intro">' . $h($intro) . '</p>' : '') . '<ul class="cards">' . $cards . '</ul></section>';
     }
     $ld = ['@context' => 'https://schema.org', '@type' => 'Blog', 'name' => 'Bondi blog', 'url' => SITE . '/blog/',
            'publisher' => ['@type' => 'Organization', 'name' => 'Jabble Super Intelligence Inc.']];
@@ -236,7 +269,7 @@ if ($shown) {
           . "\n<script type=\"application/ld+json\">" . json_encode($ld, JSON_UNESCAPED_SLASHES) . '</script>';
     $body = '<section class="blog-head"><p class="eyebrow">Bondi blog</p><h1>Why your Mac does what it does.</h1>'
           . '<p class="lede">Plain answers about Mac performance, from real readings of a real Mac, by the maker of Bondi.</p></section>'
-          . '<ul class="cards">' . $cards . '</ul>';
+          . $groups;
     file_put_contents("$out/blog/index.html", page('Bondi blog: why your Mac is slow, and what to do about it',
         'Plain answers about Mac performance: slowdowns, memory pressure, loud fans, kernel_task, WindowServer and Spotlight, from real readings of a real Mac.',
         SITE . '/blog/', $body, $head, $askRow));
@@ -275,12 +308,17 @@ $written[] = "$root/public_html/sitemap.xml";
 $llms = (string)file_get_contents("$root/public_html/llms.txt");
 $llms = preg_replace('~\n?<!-- blog -->.*?<!-- /blog -->\n?~s', "\n", $llms);
 if ($live) {
-    $section = "<!-- blog -->\n## Blog\n";
-    $ordered = $live;
-    uasort($ordered, fn($a, $b) => ((int)($a['order'] ?? 99) <=> (int)($b['order'] ?? 99)) ?: strcmp($a['title'], $b['title']));
-    foreach ($ordered as $slug => $post) {
-        $section .= '- [' . $post['title'] . '](' . SITE . "/blog/$slug.md): " . $post['description'] . "\n";
+    $section = "<!-- blog -->\n";
+    $ordered = [];
+    foreach (by_topic($live) as $key => $group) {
+        $section .= '## Guides: ' . TOPICS[$key][0] . "\n";
+        foreach ($group as $slug => $post) {
+            $section .= '- [' . $post['title'] . '](' . SITE . "/blog/$slug.md): " . $post['description'] . "\n";
+            $ordered[$slug] = $post;
+        }
+        $section .= "\n";
     }
+    $section = rtrim($section) . "\n";
     $llms = rtrim($llms) . "\n\n$section<!-- /blog -->\n";
 }
 file_put_contents("$root/public_html/llms.txt", $llms);

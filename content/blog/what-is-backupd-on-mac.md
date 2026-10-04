@@ -2,6 +2,7 @@
 title: What is backupd on Mac?
 description: backupd runs Time Machine backups on your Mac. Here's why it gets busy, how long a backup takes, and how to stop one safely.
 date: 2026-10-04
+topic: processes
 status: draft
 order: 17
 related: mac-fans-loud, why-is-my-mac-slow, what-is-mds-stores-on-mac

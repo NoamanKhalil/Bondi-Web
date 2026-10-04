@@ -2,6 +2,7 @@
 title: What is syspolicyd on Mac?
 description: syspolicyd is Gatekeeper on your Mac: it checks apps the first time you open them. Here's why it gets busy and why you should leave it running.
 date: 2026-10-04
+topic: processes
 status: draft
 order: 19
 related: what-is-xprotect-on-mac, mac-slow-after-update, why-is-my-mac-slow

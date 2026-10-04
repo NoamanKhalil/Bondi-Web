@@ -3,6 +3,7 @@ title: Is Spotlight indexing slowing down your Mac?
 description: When mds_stores and mdworker are busy, Spotlight is rebuilding its index. Here's how to tell, how long it lasts, and how to keep folders out of it.
 date: 2026-10-03
 updated: 2026-10-03
+topic: slow
 status: published
 order: 8
 image: /assets/features/guide.png

@@ -2,6 +2,7 @@
 title: What is photoanalysisd on Mac?
 description: photoanalysisd analyzes your Photos library for people, places and Memories. Here's why it uses CPU after imports or updates, and how to help it finish.
 date: 2026-10-04
+topic: processes
 status: draft
 order: 14
 related: mac-slow-after-update, mac-fans-loud, what-is-cloudd-on-mac

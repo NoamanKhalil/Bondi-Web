@@ -3,6 +3,7 @@ title: How Bondi's AI explains your Mac without making up a number
 description: How Bondi's on-device AI, with Apple Intelligence where available, explains your Mac in one sentence while every figure stays measured and checked.
 date: 2026-10-03
 updated: 2026-10-03
+topic: bondi
 status: published
 order: 10
 image: /assets/features/why.png

@@ -2,6 +2,7 @@
 title: What is trustd on Mac?
 description: trustd checks the security certificates of websites and servers your apps connect to. Here's why trustd gets busy and why it's safe to leave running.
 date: 2026-10-04
+topic: processes
 status: draft
 order: 20
 related: what-is-mdnsresponder-on-mac, why-is-my-mac-slow, what-is-xprotect-on-mac
