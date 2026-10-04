@@ -17,6 +17,7 @@ cleanup() {
   rm -rf "$T" bondi/mail.log
 }
 trap cleanup EXIT
+rm -f bondi/mail.log # a run that was interrupted leaves its emails, and their old keys would be read as this run's
 
 mysqld --initialize-insecure --datadir=$T/data --log-error=$T/init.log >/dev/null 2>&1
 mysqld --datadir=$T/data --socket=$SOCK --port=33098 --mysqlx=OFF --log-error=$T/err.log --pid-file=$T/pid >/dev/null 2>&1 &
