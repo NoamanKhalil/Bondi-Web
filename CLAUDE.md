@@ -50,7 +50,7 @@ The owner reviews the site as a private claude.ai artifact: **https://claude.ai/
 ## Design
 
 - Apple's design language: SF Pro (the system font), large tight headlines, dark theme. Page background `#131315`; cards `#161617`; Bondi Blue `#2cc0de` (ink `#5fd4ea`).
-- The demo window is a replica of the app's main window with the app's own colours: take them from `../TryBondi/Bondi/Resources/Colors.xcassets` (dark values), named as in the app's `docs/PLAN.md`. Its content area is 16:9, every tab keeps one height, nothing scrolls inside it. Overview = AI summary, At a glance, Right now.
+- The demo window is a replica of the app's main window with the app's own colours: take them from `../TryBondi/Bondi/Resources/Colors.xcassets` (dark values), named as in the app's `docs/PLAN.md`. Its content area is 16:9, every tab keeps one height, nothing scrolls inside it. Overview = AI summary, At a glance, Right now. `beta/` has a copy of it (styles, markup, intro-film and demo scripts): change both together.
 - App icons: `../TryBondi/Bondi-Icons/` (Black default, White, Bondi Blue) and `../TryBondi/Bondi/Resources/Assets.xcassets`. Other apps' icons are exported from the Mac with `NSWorkspace` (see `video/scripts/refresh-reading.swift`).
 - Screens to replicate live in `../TryBondi/Bondi/UI/` (MenuBar, Window, Settings, Components). The app's Debug build can render real screens without screen recording: `--render-screenshots DIR` and `--render-feature-shots DIR`.
 - Support light and dark mode, Reduce Motion, keyboard and screen readers; phone width with no sideways scroll.
