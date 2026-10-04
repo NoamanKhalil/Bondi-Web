@@ -308,6 +308,7 @@
   .vs th:first-child { position: sticky; left: 0; background: var(--tile); z-index: 1; }
   .vs .me, .vs td:nth-child(2) { background: var(--bondi-soft); }
   .vs thead .me { color: var(--bondi-ink); font-size: 1rem; }
+  .vs thead img { width: 32px; height: 32px; margin: 0 auto 8px; } /* each app's own icon, exported from the Mac (NSWorkspace) */
   .vs .y { color: var(--bondi-ink); font-weight: 700; font-size: 1.15rem; }
   .vs .n { color: var(--faint); }
   .vs small { display: block; color: var(--soft); font-size: 0.78rem; margin-top: 2px; }
@@ -916,7 +917,7 @@
         <p class="vs-hint" aria-hidden="true">Swipe to see Activity Monitor, iStat Menus, Stats and Vitals ›</p>
         <div class="vs-scroll" role="region" aria-label="Comparison table: Bondi, Activity Monitor, iStat Menus, Stats and Vitals" tabindex="0">
           <table class="vs">
-            <thead><tr><th scope="col"><span class="vh">Feature</span></th><th scope="col" class="me">Bondi</th><th scope="col">Activity Monitor</th><th scope="col">iStat Menus</th><th scope="col">Stats</th><th scope="col">Vitals</th></tr></thead>
+            <thead><tr><th scope="col"><span class="vh">Feature</span></th><th scope="col" class="me"><img src="assets/icon-blue.png" alt="" width="32" height="32">Bondi</th><th scope="col"><img src="assets/apps/activitymonitor.png" alt="" width="32" height="32">Activity Monitor</th><th scope="col"><img src="assets/apps/istatmenus.png" alt="" width="32" height="32">iStat Menus</th><th scope="col"><img src="assets/apps/stats.png" alt="" width="32" height="32">Stats</th><th scope="col"><img src="assets/apps/vitals.png" alt="" width="32" height="32">Vitals</th></tr></thead>
             <tbody>
               <tr><th scope="row">Tells you why your Mac is slow, in a plain sentence</th><td><span class="y" aria-hidden="true">✓</span><span class="vh">Yes</span><small>On-device AI</small></td><td><span class="n" aria-hidden="true">—</span><span class="vh">Not listed</span></td><td><span class="n" aria-hidden="true">—</span><span class="vh">Not listed</span></td><td><span class="n" aria-hidden="true">—</span><span class="vh">Not listed</span></td><td><span class="n" aria-hidden="true">—</span><span class="vh">Not listed</span></td></tr>
               <tr><th scope="row">Explains what each macOS process is</th><td><span class="y" aria-hidden="true">✓</span><span class="vh">Yes</span><small>125 processes</small></td><td><span class="n" aria-hidden="true">—</span><span class="vh">Not listed</span></td><td><span class="n" aria-hidden="true">—</span><span class="vh">Not listed</span></td><td><span class="n" aria-hidden="true">—</span><span class="vh">Not listed</span></td><td><span class="n" aria-hidden="true">—</span><span class="vh">Not listed</span></td></tr>
@@ -1394,7 +1395,7 @@
     let pick = 'auto';
     const apply = () => {
       const file = pick === 'auto' ? (dark.matches ? 'black' : 'white') : pick;
-      $$('.hero-icon, .brand img').forEach(img => img.src = `assets/icon-${file}.png`);
+      $$('.hero-icon, .brand img, .vs .me img').forEach(img => img.src = `assets/icon-${file}.png`);
       const fav = document.querySelector('link[rel="icon"]'); if (fav) fav.href = `assets/icon-${file}.png`;
     };
     $$('[data-pick]', picker).forEach(b => b.onclick = () => { pick = b.dataset.pick; $$('[data-pick]', picker).forEach(x => x.setAttribute('aria-pressed', String(x === b))); apply(); });
