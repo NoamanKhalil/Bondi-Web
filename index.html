@@ -672,7 +672,7 @@
         </div>
         <div class="win-body" data-wbody></div>
         <div class="win-intro" data-intro hidden>
-          <video src="assets/bondi-window.mp4" poster="assets/bondi-window-poster.jpg" muted playsinline preload="auto" width="1920" height="1080"
+          <video src="assets/bondi-window.mp4" poster="assets/bondi-window-poster.jpg" muted playsinline preload="none" width="1920" height="1080"
                  aria-label="Intro film: 955 processes on a real Mac, drawn as stars, pull together into 43 apps, each shown with its app icon and process count. It ends on Bondi for Apple Mac."></video>
           <button type="button" class="intro-skip" data-intro-skip>Skip intro</button>
         </div>
@@ -885,7 +885,7 @@
     <div class="wrap">
       <section class="sec stars" id="stars" aria-label="Film: 955 processes become 43 apps">
         <div class="film">
-          <video src="assets/bondi-stars.mp4" poster="assets/bondi-stars-poster.jpg" autoplay muted loop playsinline width="1920" height="1080"
+          <video src="assets/bondi-stars.mp4" poster="assets/bondi-stars-poster.jpg" muted loop playsinline preload="none" data-lazy width="1920" height="1080"
                  aria-label="Every process on a real Mac drawn as a star: 955 of them. They pull together into the apps they belong to, and become 43 app icons, each with its process count: macOS 719, Google Chrome 80, Visual Studio Code 44 and more. It ends on Bondi for Apple Mac."></video>
         </div>
         <p class="stars-note">Every star is a real process from one reading of a working Mac, and each app gets exactly its own.</p>
@@ -941,7 +941,7 @@
         <h2 id="film-title">From a thousand processes to one plain sentence.</h2>
       </div>
       <div class="film">
-        <video src="assets/bondi-film.mp4" poster="assets/bondi-film-poster.png" autoplay muted loop playsinline width="1920" height="1080"
+        <video src="assets/bondi-film.mp4" poster="assets/bondi-film-poster.png" muted loop playsinline preload="none" data-lazy width="1920" height="1080"
                aria-label="A 24-second film: a Mac running 931 processes, grouped by Bondi into 39 apps; Bondi's one-sentence explanations; and a question about the last week answered from history."></video>
       </div>
     </section>
@@ -1073,7 +1073,8 @@
   }).catch(() => {});
 
   // Intro film over the app window: stars become apps, then the real, clickable window shows through. Starts
-  // when 60% of the window is in view; skipped with Reduce Motion and on phones.
+  // when 60% of the window is in view; skipped with Reduce Motion and on phones. The film downloads only then
+  // (preload="none"), so it isn't part of the page's first load, and phones never download it.
   (() => {
     const intro = $('[data-intro]');
     if (!intro) return;
@@ -1092,7 +1093,7 @@
     const play = () => {
       intro.hidden = false; intro.classList.remove('done', 'skip', 'playing'); replay.hidden = true;
       video.currentTime = 0;
-      requestAnimationFrame(() => intro.classList.add('playing'));
+      video.addEventListener('playing', () => intro.classList.add('playing'), { once: true }); // brightens once the film is really running
       video.play().catch(() => finish(true)); // a browser that won't autoplay just shows the window
     };
     intro.hidden = false; // the dim first frame waits over the window until it's in view
@@ -1106,6 +1107,24 @@
       if (e.intersectionRatio >= 0.6 || e.intersectionRect.height >= innerHeight * 0.6) { seen.disconnect(); play(); }
     }, { threshold: Array.from({ length: 21 }, (_, i) => i / 20) });
     seen.observe(win);
+  })();
+
+  // The two films load only as they come near the screen, play while they're on it and pause when scrolled away,
+  // so the page's first load doesn't carry them. With Reduce Motion they wait on their first frame with controls,
+  // and load only if someone presses play.
+  (() => {
+    const films = $$('video[data-lazy]');
+    if (!films.length) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { films.forEach(v => { v.controls = true; }); return; }
+    const ready = v => { if (v.dataset.lazy !== 'loaded') { v.dataset.lazy = 'loaded'; v.preload = 'auto'; v.load(); } };
+    if (!('IntersectionObserver' in window)) { films.forEach(v => { v.autoplay = true; ready(v); }); return; }
+    const near = new IntersectionObserver(entries => entries.forEach(e => {
+      if (e.isIntersecting) { near.unobserve(e.target); ready(e.target); }
+    }), { rootMargin: '0px 0px 600px 0px' });
+    const onScreen = new IntersectionObserver(entries => entries.forEach(e => {
+      if (e.isIntersecting) { ready(e.target); e.target.play().catch(() => {}); } else e.target.pause();
+    }), { threshold: 0.25 });
+    films.forEach(v => { near.observe(v); onScreen.observe(v); });
   })();
 
   // Sign up for updates: name and email to the license server, with the browser's time zone for the
