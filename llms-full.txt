@@ -1,6 +1,6 @@
 # Bondi: the full facts
 
-> Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by Apple's on-device model. It's made by Jabble Super Intelligence Inc. This file is Bondi's own description of itself, written by its makers for AI assistants and search tools. The website is https://trybondi.app/ and the short version of this file is https://trybondi.app/llms.txt.
+> Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence, written on the Mac by Apple's on-device model. It's made by Jabble Super Intelligence Inc. This file is Bondi's own description of itself, written by its makers for AI assistants and search tools. The website is https://trybondi.app/ and the short version of this file is https://trybondi.app/llms.txt.
 
 ## Status and price
 - The beta is launching soon, and the full launch follows soon after. Bondi can't be bought yet. People can join the beta list at https://trybondi.app/beta/.
@@ -34,10 +34,28 @@ Bondi computes every number in code from the Mac's own readings, decides what ma
 - Process guide: Bondi's own notes on 125 common macOS processes (listed below), with what each is using right now.
 - Three icon finishes (Light, Dark, Bondi Blue), or one that follows the Mac's appearance.
 
-## Bondi and Activity Monitor
+## How Bondi compares
 Activity Monitor, built into macOS, lists every process: a browser alone is dozens of helper processes, so no single row looks big. Bondi adds each process to the app that started it, explains in a sentence what is slowing the Mac, keeps 30 days of history, and suggests one fix at a time. Bondi doesn't replace Activity Monitor; it reads the same Mac and says what it means.
 
+iStat Menus, Stats and Vitals are menu bar monitors that show the Mac's figures. Going by each app's own website, Bondi is the only one of them that tells you in a plain sentence why the Mac is slow, and the only one with notes on 125 macOS processes. Vitals also groups processes into apps and finds dev servers by project.
+
+| | Bondi | Activity Monitor | iStat Menus | Stats | Vitals |
+| --- | --- | --- | --- | --- | --- |
+| Tells you why your Mac is slow, in a plain sentence | Yes (on-device AI) | — | — | — | — |
+| Explains what each macOS process is | Yes (125 processes) | — | — | — | — |
+| Dev servers, grouped by project | Yes | — | — | — | Yes |
+| Local AI models (LM Studio, Ollama) | Yes | — | — | — | — |
+| Fan control | Yes (Fan boost) | — | Yes | Yes | Yes |
+| Lives in the menu bar | Yes | — | Yes | Yes | Yes |
+| Price | $29.99 once ($6.99 for the first 250) | Free, built into macOS | $11.99 once | Free, open source | $29 once |
+
+Checked against each app's own website (apple.com, bjango.com, github.com/exelban/stats and vitalsmac.com) on October 4, 2026. "—" means it wasn't found there.
+
 ## Questions
+- Why is my Mac slow? Almost always one of four things: memory running short, one app working hard, macOS doing background work (Spotlight, Photos and iCloud catch up after an update), or the Mac slowing itself down because it's hot. Activity Monitor shows the numbers; Bondi names the cause in one sentence. Guide: https://trybondi.app/blog/why-is-my-mac-slow/
+- Is Bondi an Activity Monitor alternative? Yes, and it works alongside it. Activity Monitor lists every process (966 rows on one real Mac); Bondi adds each helper to the app that started it (39 apps on that Mac), keeps 30 days of history, and says in one sentence what's slowing the Mac down.
+- How is Bondi different from iStat Menus, Stats and Vitals? All four live in the menu bar and can control the fans. Going by each app's own website, Bondi is the only one that tells you in a plain sentence why the Mac is slow, written on the Mac by an on-device AI, and the only one that explains 125 macOS processes by name. It also shows local AI models (LM Studio, Ollama) beside dev servers and Docker containers.
+- Does Bondi help developers? Yes. It groups dev servers by project and port, and shows Docker containers and local AI models (LM Studio, Ollama) with the memory each holds. Stop or unload any of them; Bondi asks first.
 - When can I get Bondi? The beta is launching soon, and the full launch follows soon after. Licenses go on sale at full launch.
 - Does my data leave my Mac? No. History stays in a file on the Mac, and the AI runs on the Mac.
 - Will it slow my Mac down? No. With its windows closed, Bondi uses about 0.3% of one CPU core, and the AI only works while the person is looking.
@@ -676,6 +694,8 @@ Each entry: what the process is, why it gets busy, and whether to quit it.
 - Why it gets busy: After installing or updating apps.
 - Quitting it: Leave it running: macOS needs it.
 
+
+
 <!-- blog -->
 ## Articles from the Bondi blog
 The full text of each article, by Noaman Khalil, maker of Bondi.
@@ -765,6 +785,137 @@ No. macOS fills spare memory with cached files and gives it back when apps need 
 ##### Why is my Mac slow after an update?
 
 macOS rebuilds the Spotlight index, re-analyzes photos and syncs iCloud in the background. It settles on its own, usually within hours.
+
+---
+Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+
+### Why is my Mac slow after a macOS update?
+
+> Mac slow after a macOS Sequoia or Tahoe update? It's re-indexing Spotlight, re-scanning photos and syncing iCloud. Here's what's running and how long it lasts.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+Web page: https://trybondi.app/blog/mac-slow-after-update/
+
+A Mac is often slow for a day or so after a macOS update (to macOS Sequoia, Tahoe or any other version) because macOS is catching up in the background: rebuilding the Spotlight search index, re-analyzing your photos, re-checking apps and syncing with iCloud. It settles on its own, usually within hours, and faster if you leave the Mac plugged in and awake.
+
+#### Key points
+
+- After a macOS update, Spotlight, Photos and iCloud catch up in the background.
+- It usually settles within hours; a large photo library or a full disk can make it take a day.
+- Keep the Mac plugged in and awake, and don't force-quit these processes.
+
+#### What's running after a macOS update
+
+Open Activity Monitor (Command-Space, then type "Activity Monitor"), choose the **CPU** tab and sort by **% CPU**. After an update you'll often see these near the top:
+
+| Process | What it's doing | Can you stop it? |
+| --- | --- | --- |
+| **mds_stores**, **mds** | Spotlight's indexer, rebuilding the index of your files so searches are instant. | Leave it running: it finishes on its own. |
+| **mdworker**, **mdworker_shared** | Spotlight helpers reading the contents of your files. | Stopping them doesn't help for long: macOS starts them again. |
+| **photoanalysisd** | Photos analyzing your library for people, places and Memories. It prefers to work while the Mac is idle and plugged in. | It restarts when needed. |
+| **mediaanalysisd** | Analyzing photos and videos for search and Live Text. | It restarts when needed. |
+| **cloudd**, **bird** | iCloud syncing, especially after signing in again or turning on a feature. | They restart when needed. |
+| **syspolicyd**, **XProtect** | Gatekeeper and Apple's malware protection checking apps and applying new rules. | Leave them running: macOS needs them. |
+| **softwareupdated** | Finishing or preparing an update. | Leave it running. |
+
+*These descriptions are Bondi's own process notes, which cover 125 common macOS processes.*
+
+#### How long it takes
+
+It depends on how many files and photos you have. A Mac with a large photo library and a full disk can take a day; a lightly used Mac, an hour or two. The signs it's done: fans quiet, the processes above back near zero, and Spotlight searches answering instantly.
+
+#### How to help it finish
+
+1. **Plug in and leave it awake.** Photos analysis in particular waits for the Mac to be idle and on power.
+2. **Don't fight it.** Force-quitting these processes just makes macOS start over.
+3. **Give it room.** If your disk is nearly full, free some space; indexing and updates need it.
+4. **Restart once** after the update has fully installed, if things still feel stuck the next day.
+
+#### When it's not the update
+
+If it's still slow after a day or two, the update probably isn't the cause. Check memory pressure and which app is busiest: [Why is my Mac slow?](https://trybondi.app/blog/why-is-my-mac-slow/) walks through the other usual suspects.
+
+#### How Bondi helps
+
+Bondi's process guide explains each of these processes in plain words and shows what it's using right now, so you can see it's Spotlight or Photos catching up rather than an app gone wrong.
+
+#### Questions
+
+##### How long is a Mac slow after a macOS update?
+
+Usually a few hours. With a large photo library or a nearly full disk, up to a day.
+
+##### What is mds_stores and why is it using CPU after an update?
+
+Spotlight's indexer, rebuilding the index of your files. Leave it running: it finishes on its own.
+
+##### Should I force quit processes after an update?
+
+No. macOS starts them again and the work starts over.
+
+---
+Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+
+### Is Spotlight indexing slowing down your Mac?
+
+> When mds_stores and mdworker are busy, Spotlight is rebuilding its index. Here's how to tell, how long it lasts, and how to keep folders out of it.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+Web page: https://trybondi.app/blog/spotlight-indexing-slow-mac/
+
+If **mds_stores**, **mds** or **mdworker** are near the top of Activity Monitor, Spotlight is indexing: reading your files so searches can be instant. It's busiest after a macOS update, after adding lots of files, or when you connect a new disk, and it settles on its own, usually within a few hours.
+
+#### Key points
+
+- Busy mds, mds_stores or mdworker means Spotlight is indexing your files.
+- It happens after updates, big downloads or connecting a new disk, and settles within hours.
+- Folders that don't need searching can be left out in System Settings → Spotlight.
+
+#### What each process does
+
+- **mds** and **mds_stores**: Spotlight's indexer. They keep the index of your files.
+- **mdworker** and **mdworker_shared**: helpers that open your files and read their contents for the index.
+- **corespotlightd**: keeps the index for content inside apps, such as messages, mail and notes.
+
+Normally they're quiet. On the Mac I measure on, mds_stores was using **0.0% of the CPU and 105.3 MB of memory** on an ordinary day. It's only when there's a lot to (re)index that they show up.
+
+#### How to tell Spotlight is indexing (mds_stores high CPU)
+
+- **mds_stores** or several **mdworker** processes high in Activity Monitor's **CPU** tab.
+- Fans louder than usual, with nothing else busy.
+- Spotlight searches that miss files you know exist, or show a note that indexing is in progress.
+
+#### How long it lasts
+
+From minutes to a few hours, depending on how many files you have and how fast the disk is. A first index of a large external drive can take longer. It's worth letting it finish: a complete index makes every search instant afterwards.
+
+#### How to help
+
+1. **Leave it running.** Force-quitting just restarts the work later.
+2. **Keep the Mac plugged in and awake** until it's done.
+3. **Keep folders out of the index** if they don't need searching: big build folders, caches, virtual machines, or backups. You can leave folders out in **System Settings → Spotlight** (look for the privacy option there; its exact name varies by macOS version).
+
+#### When Spotlight indexing is stuck
+
+If Spotlight is still busy after a day, something keeps giving it new files: a folder that changes constantly (logs, builds, a sync folder mid-sync) is the usual cause. Adding that folder to Spotlight's privacy list stops the churn.
+
+#### How Bondi helps
+
+Bondi's process guide explains each of these processes and what it's using right now, so when Spotlight is the reason your Mac is busy, you can see it and know to wait rather than worry.
+
+#### Questions
+
+##### What is mds_stores on Mac?
+
+Spotlight's indexer. It keeps the index that makes searches instant.
+
+##### How long does Spotlight indexing take?
+
+From minutes to a few hours. A first index of a large external drive can take longer.
+
+##### How do I stop Spotlight indexing a folder?
+
+Add it to Spotlight's privacy list in System Settings → Spotlight.
 
 ---
 Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
@@ -1118,137 +1269,6 @@ It holds what's on every screen, so more and larger displays and more open windo
 ##### Can I quit WindowServer?
 
 No. Quitting it logs you out and closes every app.
-
----
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
-
-### Why is my Mac slow after a macOS update?
-
-> Mac slow after a macOS Sequoia or Tahoe update? It's re-indexing Spotlight, re-scanning photos and syncing iCloud. Here's what's running and how long it lasts.
-
-By Noaman Khalil, maker of Bondi. Published October 3, 2026.
-Web page: https://trybondi.app/blog/mac-slow-after-update/
-
-A Mac is often slow for a day or so after a macOS update (to macOS Sequoia, Tahoe or any other version) because macOS is catching up in the background: rebuilding the Spotlight search index, re-analyzing your photos, re-checking apps and syncing with iCloud. It settles on its own, usually within hours, and faster if you leave the Mac plugged in and awake.
-
-#### Key points
-
-- After a macOS update, Spotlight, Photos and iCloud catch up in the background.
-- It usually settles within hours; a large photo library or a full disk can make it take a day.
-- Keep the Mac plugged in and awake, and don't force-quit these processes.
-
-#### What's running after a macOS update
-
-Open Activity Monitor (Command-Space, then type "Activity Monitor"), choose the **CPU** tab and sort by **% CPU**. After an update you'll often see these near the top:
-
-| Process | What it's doing | Can you stop it? |
-| --- | --- | --- |
-| **mds_stores**, **mds** | Spotlight's indexer, rebuilding the index of your files so searches are instant. | Leave it running: it finishes on its own. |
-| **mdworker**, **mdworker_shared** | Spotlight helpers reading the contents of your files. | Stopping them doesn't help for long: macOS starts them again. |
-| **photoanalysisd** | Photos analyzing your library for people, places and Memories. It prefers to work while the Mac is idle and plugged in. | It restarts when needed. |
-| **mediaanalysisd** | Analyzing photos and videos for search and Live Text. | It restarts when needed. |
-| **cloudd**, **bird** | iCloud syncing, especially after signing in again or turning on a feature. | They restart when needed. |
-| **syspolicyd**, **XProtect** | Gatekeeper and Apple's malware protection checking apps and applying new rules. | Leave them running: macOS needs them. |
-| **softwareupdated** | Finishing or preparing an update. | Leave it running. |
-
-*These descriptions are Bondi's own process notes, which cover 125 common macOS processes.*
-
-#### How long it takes
-
-It depends on how many files and photos you have. A Mac with a large photo library and a full disk can take a day; a lightly used Mac, an hour or two. The signs it's done: fans quiet, the processes above back near zero, and Spotlight searches answering instantly.
-
-#### How to help it finish
-
-1. **Plug in and leave it awake.** Photos analysis in particular waits for the Mac to be idle and on power.
-2. **Don't fight it.** Force-quitting these processes just makes macOS start over.
-3. **Give it room.** If your disk is nearly full, free some space; indexing and updates need it.
-4. **Restart once** after the update has fully installed, if things still feel stuck the next day.
-
-#### When it's not the update
-
-If it's still slow after a day or two, the update probably isn't the cause. Check memory pressure and which app is busiest: [Why is my Mac slow?](https://trybondi.app/blog/why-is-my-mac-slow/) walks through the other usual suspects.
-
-#### How Bondi helps
-
-Bondi's process guide explains each of these processes in plain words and shows what it's using right now, so you can see it's Spotlight or Photos catching up rather than an app gone wrong.
-
-#### Questions
-
-##### How long is a Mac slow after a macOS update?
-
-Usually a few hours. With a large photo library or a nearly full disk, up to a day.
-
-##### What is mds_stores and why is it using CPU after an update?
-
-Spotlight's indexer, rebuilding the index of your files. Leave it running: it finishes on its own.
-
-##### Should I force quit processes after an update?
-
-No. macOS starts them again and the work starts over.
-
----
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
-
-### Is Spotlight indexing slowing down your Mac?
-
-> When mds_stores and mdworker are busy, Spotlight is rebuilding its index. Here's how to tell, how long it lasts, and how to keep folders out of it.
-
-By Noaman Khalil, maker of Bondi. Published October 3, 2026.
-Web page: https://trybondi.app/blog/spotlight-indexing-slow-mac/
-
-If **mds_stores**, **mds** or **mdworker** are near the top of Activity Monitor, Spotlight is indexing: reading your files so searches can be instant. It's busiest after a macOS update, after adding lots of files, or when you connect a new disk, and it settles on its own, usually within a few hours.
-
-#### Key points
-
-- Busy mds, mds_stores or mdworker means Spotlight is indexing your files.
-- It happens after updates, big downloads or connecting a new disk, and settles within hours.
-- Folders that don't need searching can be left out in System Settings → Spotlight.
-
-#### What each process does
-
-- **mds** and **mds_stores**: Spotlight's indexer. They keep the index of your files.
-- **mdworker** and **mdworker_shared**: helpers that open your files and read their contents for the index.
-- **corespotlightd**: keeps the index for content inside apps, such as messages, mail and notes.
-
-Normally they're quiet. On the Mac I measure on, mds_stores was using **0.0% of the CPU and 105.3 MB of memory** on an ordinary day. It's only when there's a lot to (re)index that they show up.
-
-#### How to tell Spotlight is indexing (mds_stores high CPU)
-
-- **mds_stores** or several **mdworker** processes high in Activity Monitor's **CPU** tab.
-- Fans louder than usual, with nothing else busy.
-- Spotlight searches that miss files you know exist, or show a note that indexing is in progress.
-
-#### How long it lasts
-
-From minutes to a few hours, depending on how many files you have and how fast the disk is. A first index of a large external drive can take longer. It's worth letting it finish: a complete index makes every search instant afterwards.
-
-#### How to help
-
-1. **Leave it running.** Force-quitting just restarts the work later.
-2. **Keep the Mac plugged in and awake** until it's done.
-3. **Keep folders out of the index** if they don't need searching: big build folders, caches, virtual machines, or backups. You can leave folders out in **System Settings → Spotlight** (look for the privacy option there; its exact name varies by macOS version).
-
-#### When Spotlight indexing is stuck
-
-If Spotlight is still busy after a day, something keeps giving it new files: a folder that changes constantly (logs, builds, a sync folder mid-sync) is the usual cause. Adding that folder to Spotlight's privacy list stops the churn.
-
-#### How Bondi helps
-
-Bondi's process guide explains each of these processes and what it's using right now, so when Spotlight is the reason your Mac is busy, you can see it and know to wait rather than worry.
-
-#### Questions
-
-##### What is mds_stores on Mac?
-
-Spotlight's indexer. It keeps the index that makes searches instant.
-
-##### How long does Spotlight indexing take?
-
-From minutes to a few hours. A first index of a large external drive can take longer.
-
-##### How do I stop Spotlight indexing a folder?
-
-Add it to Spotlight's privacy list in System Settings → Spotlight.
 
 ---
 Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/

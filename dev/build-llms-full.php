@@ -24,7 +24,7 @@ $count = count($guide);
 $text = <<<MD
 # Bondi: the full facts
 
-> Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by Apple's on-device model. It's made by Jabble Super Intelligence Inc. This file is Bondi's own description of itself, written by its makers for AI assistants and search tools. The website is https://trybondi.app/ and the short version of this file is https://trybondi.app/llms.txt.
+> Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence, written on the Mac by Apple's on-device model. It's made by Jabble Super Intelligence Inc. This file is Bondi's own description of itself, written by its makers for AI assistants and search tools. The website is https://trybondi.app/ and the short version of this file is https://trybondi.app/llms.txt.
 
 ## Status and price
 - The beta is launching soon, and the full launch follows soon after. Bondi can't be bought yet. People can join the beta list at https://trybondi.app/beta/.
@@ -58,10 +58,28 @@ Bondi computes every number in code from the Mac's own readings, decides what ma
 - Process guide: Bondi's own notes on $count common macOS processes (listed below), with what each is using right now.
 - Three icon finishes (Light, Dark, Bondi Blue), or one that follows the Mac's appearance.
 
-## Bondi and Activity Monitor
+## How Bondi compares
 Activity Monitor, built into macOS, lists every process: a browser alone is dozens of helper processes, so no single row looks big. Bondi adds each process to the app that started it, explains in a sentence what is slowing the Mac, keeps 30 days of history, and suggests one fix at a time. Bondi doesn't replace Activity Monitor; it reads the same Mac and says what it means.
 
+iStat Menus, Stats and Vitals are menu bar monitors that show the Mac's figures. Going by each app's own website, Bondi is the only one of them that tells you in a plain sentence why the Mac is slow, and the only one with notes on $count macOS processes. Vitals also groups processes into apps and finds dev servers by project.
+
+| | Bondi | Activity Monitor | iStat Menus | Stats | Vitals |
+| --- | --- | --- | --- | --- | --- |
+| Tells you why your Mac is slow, in a plain sentence | Yes (on-device AI) | — | — | — | — |
+| Explains what each macOS process is | Yes (125 processes) | — | — | — | — |
+| Dev servers, grouped by project | Yes | — | — | — | Yes |
+| Local AI models (LM Studio, Ollama) | Yes | — | — | — | — |
+| Fan control | Yes (Fan boost) | — | Yes | Yes | Yes |
+| Lives in the menu bar | Yes | — | Yes | Yes | Yes |
+| Price | \$29.99 once (\$6.99 for the first 250) | Free, built into macOS | \$11.99 once | Free, open source | \$29 once |
+
+Checked against each app's own website (apple.com, bjango.com, github.com/exelban/stats and vitalsmac.com) on October 4, 2026. "—" means it wasn't found there.
+
 ## Questions
+- Why is my Mac slow? Almost always one of four things: memory running short, one app working hard, macOS doing background work (Spotlight, Photos and iCloud catch up after an update), or the Mac slowing itself down because it's hot. Activity Monitor shows the numbers; Bondi names the cause in one sentence. Guide: https://trybondi.app/blog/why-is-my-mac-slow/
+- Is Bondi an Activity Monitor alternative? Yes, and it works alongside it. Activity Monitor lists every process (966 rows on one real Mac); Bondi adds each helper to the app that started it (39 apps on that Mac), keeps 30 days of history, and says in one sentence what's slowing the Mac down.
+- How is Bondi different from iStat Menus, Stats and Vitals? All four live in the menu bar and can control the fans. Going by each app's own website, Bondi is the only one that tells you in a plain sentence why the Mac is slow, written on the Mac by an on-device AI, and the only one that explains $count macOS processes by name. It also shows local AI models (LM Studio, Ollama) beside dev servers and Docker containers.
+- Does Bondi help developers? Yes. It groups dev servers by project and port, and shows Docker containers and local AI models (LM Studio, Ollama) with the memory each holds. Stop or unload any of them; Bondi asks first.
 - When can I get Bondi? The beta is launching soon, and the full launch follows soon after. Licenses go on sale at full launch.
 - Does my data leave my Mac? No. History stays in a file on the Mac, and the AI runs on the Mac.
 - Will it slow my Mac down? No. With its windows closed, Bondi uses about 0.3% of one CPU core, and the AI only works while the person is looking.

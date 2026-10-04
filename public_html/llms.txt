@@ -1,6 +1,6 @@
 # Bondi
 
-> Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by Apple's on-device model. It's made by Jabble Super Intelligence Inc.
+> Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence, written on the Mac by Apple's on-device model. It's made by Jabble Super Intelligence Inc.
 
 - Status: the beta is launching soon, and the full launch follows it. Bondi can't be bought yet.
 - What it does: groups every running process under the app that started it, finds what's holding memory, warns about one cause at a time and asks before it quits or stops anything, and keeps 30 days of history on the Mac.
@@ -8,6 +8,19 @@
 - Data: history stays in a file on the Mac. The app contacts Jabble's server only to check its trial or license and to look for updates. There's no account and no analytics.
 - Requirements: macOS 15 or later, on Apple silicon or Intel.
 - Pricing at full launch: a 7-day free trial, then a one-time purchase for one Mac, with no subscription. The first 250 licenses cost $6.99, and after that the price is $29.99. Paddle is the merchant of record. Refunds are available within 14 days.
+
+## How Bondi compares
+| | Bondi | Activity Monitor | iStat Menus | Stats | Vitals |
+| --- | --- | --- | --- | --- | --- |
+| Tells you why your Mac is slow, in a plain sentence | Yes (on-device AI) | — | — | — | — |
+| Explains what each macOS process is | Yes (125 processes) | — | — | — | — |
+| Dev servers, grouped by project | Yes | — | — | — | Yes |
+| Local AI models (LM Studio, Ollama) | Yes | — | — | — | — |
+| Fan control | Yes (Fan boost) | — | Yes | Yes | Yes |
+| Lives in the menu bar | Yes | — | Yes | Yes | Yes |
+| Price | $29.99 once ($6.99 for the first 250) | Free, built into macOS | $11.99 once | Free, open source | $29 once |
+
+Checked against each app's own website (apple.com, bjango.com, github.com/exelban/stats and vitalsmac.com) on October 4, 2026. "—" means it wasn't found there.
 
 ## Product
 - [Bondi for Mac](https://trybondi.app/): features, on-device AI, launch plans, pricing and FAQ
@@ -21,15 +34,21 @@
 - [Refund policy](https://trybondi.app/refunds/): a full refund within 14 days of buying
 
 <!-- blog -->
-## Blog
+## Guides: Why is my Mac slow?
 - [Why is my Mac slow? How to find the real cause](https://trybondi.app/blog/why-is-my-mac-slow.md): Mac running slow? It usually comes down to one of a handful of causes. Here's how to tell which one it is, with real readings from a real MacBook Pro.
+- [Why is my Mac slow after a macOS update?](https://trybondi.app/blog/mac-slow-after-update.md): Mac slow after a macOS Sequoia or Tahoe update? It's re-indexing Spotlight, re-scanning photos and syncing iCloud. Here's what's running and how long it lasts.
+- [Is Spotlight indexing slowing down your Mac?](https://trybondi.app/blog/spotlight-indexing-slow-mac.md): When mds_stores and mdworker are busy, Spotlight is rebuilding its index. Here's how to tell, how long it lasts, and how to keep folders out of it.
+
+## Guides: Memory
 - [Which app is using my Mac's memory?](https://trybondi.app/blog/which-app-is-using-my-mac-memory.md): Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here's how to see which app is really using your Mac's memory.
 - [Memory pressure on Mac, explained](https://trybondi.app/blog/memory-pressure-explained.md): "Memory Used" being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here's how to read them.
+
+## Guides: Heat, fans and busy processes
 - [Why are my Mac's fans so loud?](https://trybondi.app/blog/mac-fans-loud.md): Loud fans on a MacBook or any Mac mean the chip is working hard or running hot. Here's how to find what's heating it, and what to do if they won't settle.
 - [kernel_task using lots of CPU? Your Mac is cooling itself down](https://trybondi.app/blog/kernel-task-high-cpu.md): kernel_task at high CPU usually means your Mac is hot, and macOS is slowing apps on purpose to cool it. Here's why it happens and what actually helps.
 - [WindowServer using high CPU on Mac: what it means and what helps](https://trybondi.app/blog/windowserver-high-cpu.md): WindowServer draws everything on your Mac's screens. Here's why it gets busy, what normal looks like, and the settings that actually calm it down.
-- [Why is my Mac slow after a macOS update?](https://trybondi.app/blog/mac-slow-after-update.md): Mac slow after a macOS Sequoia or Tahoe update? It's re-indexing Spotlight, re-scanning photos and syncing iCloud. Here's what's running and how long it lasts.
-- [Is Spotlight indexing slowing down your Mac?](https://trybondi.app/blog/spotlight-indexing-slow-mac.md): When mds_stores and mdworker are busy, Spotlight is rebuilding its index. Here's how to tell, how long it lasts, and how to keep folders out of it.
+
+## Guides: Bondi and other tools
 - [Bondi vs Activity Monitor: what each one is for](https://trybondi.app/blog/bondi-vs-activity-monitor.md): Looking for an Activity Monitor alternative for Mac? Activity Monitor shows every process; Bondi tells you what they mean. When to use which.
 - [How Bondi's AI explains your Mac without making up a number](https://trybondi.app/blog/ai-that-never-makes-up-a-number.md): How Bondi's on-device AI, with Apple Intelligence where available, explains your Mac in one sentence while every figure stays measured and checked.
 <!-- /blog -->
