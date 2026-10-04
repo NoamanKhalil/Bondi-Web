@@ -1,8 +1,8 @@
 ---
-title: Memory pressure on Mac, explained
+title: "Memory pressure on Mac: what yellow and red mean"
 description: "Memory Used" being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here's how to read them.
 date: 2026-10-03
-updated: 2026-10-03
+updated: 2026-10-04
 topic: memory
 status: published
 order: 3
@@ -46,7 +46,7 @@ Open Activity Monitor and choose the **Memory** tab. At the bottom:
 
 ## What to do when memory pressure is yellow or red
 
-1. **Find the app using the most.** Usually it's a browser with many tabs, but helper processes hide this. See [Which app is using my Mac's memory?](/blog/which-app-is-using-my-mac-memory/)
+1. **Find the app using the most.** Usually it's a browser with many tabs, but helper processes hide this. See [What is using memory on my Mac?](/blog/which-app-is-using-my-mac-memory/)
 2. **Quit it or close what you don't need**, then watch the graph drop.
 3. **Look for things left running**: dev servers, containers and local AI models hold memory even when idle.
 4. **Restart** if swap has grown large over days of uptime.

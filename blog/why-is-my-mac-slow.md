@@ -1,8 +1,8 @@
-# Why is my Mac slow? How to find the real cause
+# Why is my Mac so slow? How to find the real cause
 
 > Mac running slow? It usually comes down to one of a handful of causes. Here's how to tell which one it is, with real readings from a real MacBook Pro.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 4, 2026.
 Web page: https://trybondi.app/blog/why-is-my-mac-slow/
 
 A slow Mac, whether it's a MacBook Air, a MacBook Pro or an iMac, almost always has one specific cause: memory running short, one app working hard, macOS doing background work, or the Mac protecting itself from heat. The trick is finding which one, because the fix for each is different.
@@ -21,13 +21,13 @@ When the apps you have open need more memory than your Mac has, macOS starts com
 
 **How to tell:** open Activity Monitor (press Command-Space and type "Activity Monitor"), choose the **Memory** tab, and look at the **Memory Pressure** graph at the bottom. Green is fine. Yellow means macOS is working to keep up. Red means it's out of room.
 
-A high "Memory Used" number on its own is *not* a problem: macOS deliberately fills spare memory with cached files. Pressure is what matters. There's more in [Memory pressure on Mac, explained](https://trybondi.app/blog/memory-pressure-explained/).
+A high "Memory Used" number on its own is *not* a problem: macOS deliberately fills spare memory with cached files. Pressure is what matters. There's more in [Memory pressure on Mac: what yellow and red mean](https://trybondi.app/blog/memory-pressure-explained/).
 
 ## 2. One app is using more than you think
 
 Modern apps are many processes. On the Mac I measure on, Google Chrome was **80 separate processes using 12.23 GB of memory** in total, while Activity Monitor showed it as dozens of rows of a few hundred megabytes each. No single row looked big, so the real culprit was easy to miss.
 
-**How to tell:** in Activity Monitor, choose **View → All Processes, Hierarchically**, or add up the helper processes that share an app's name. [Which app is using my Mac's memory?](https://trybondi.app/blog/which-app-is-using-my-mac-memory/) walks through it.
+**How to tell:** in Activity Monitor, choose **View → All Processes, Hierarchically**, or add up the helper processes that share an app's name. [What is using memory on my Mac?](https://trybondi.app/blog/which-app-is-using-my-mac-memory/) walks through it.
 
 ## 3. macOS is doing background work
 
@@ -41,7 +41,7 @@ These finish on their own, usually within hours. Keeping the Mac plugged in and 
 
 ## 4. Your Mac is hot
 
-When the chip gets hot, macOS deliberately slows things down to cool it. In Activity Monitor this shows up as **kernel_task** using a lot of CPU. It isn't a bug: it's macOS taking CPU time away from apps so the heat drops. Charging in a warm room or working on a soft surface makes it more likely. More in [kernel_task using lots of CPU?](https://trybondi.app/blog/kernel-task-high-cpu/)
+When the chip gets hot, macOS deliberately slows things down to cool it. In Activity Monitor this shows up as **kernel_task** using a lot of CPU. It isn't a bug: it's macOS taking CPU time away from apps so the heat drops. Charging in a warm room or working on a soft surface makes it more likely. More in [kernel_task high CPU on Mac?](https://trybondi.app/blog/kernel-task-high-cpu/)
 
 ## 5. Something is quietly holding on
 

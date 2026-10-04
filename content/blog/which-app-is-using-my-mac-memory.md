@@ -1,8 +1,8 @@
 ---
-title: Which app is using my Mac's memory?
+title: What is using memory on my Mac?
 description: Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here's how to see which app is really using your Mac's memory.
 date: 2026-10-03
-updated: 2026-10-03
+updated: 2026-10-04
 topic: memory
 status: published
 order: 2
@@ -52,7 +52,7 @@ Typing an app's name in the search field also filters to its processes, which he
 
 ## Does it matter?
 
-Only if memory pressure is high. If the **Memory Pressure** graph is green, a big app is fine. It's using memory macOS has spare. If it's yellow or red, the app at the top of the grouped list is your best lever: close tabs, quit it, or restart it. More in [Memory pressure on Mac, explained](/blog/memory-pressure-explained/).
+Only if memory pressure is high. If the **Memory Pressure** graph is green, a big app is fine. It's using memory macOS has spare. If it's yellow or red, the app at the top of the grouped list is your best lever: close tabs, quit it, or restart it. More in [Memory pressure on Mac: what yellow and red mean](/blog/memory-pressure-explained/).
 
 ## How Bondi shows it
 

@@ -1,8 +1,8 @@
 ---
-title: Why are my Mac's fans so loud?
+title: Why is my Mac so hot and loud?
 description: Loud fans on a MacBook or any Mac mean the chip is working hard or running hot. Here's how to find what's heating it, and what to do if they won't settle.
 date: 2026-10-03
-updated: 2026-10-03
+updated: 2026-10-04
 topic: heat
 status: published
 order: 4
@@ -23,7 +23,7 @@ Open Activity Monitor (Command-Space, then type "Activity Monitor"), choose the 
 
 - **An app you're using**, like a video export, a build or a game: the fans are doing their job. They'll calm down when it finishes.
 - **An app you're not using**: often a browser tab or a helper process stuck at high CPU. Quit it, or close the tab.
-- **kernel_task near the top**: the Mac is already hot and slowing apps to cool down. See [kernel_task using lots of CPU?](/blog/kernel-task-high-cpu/)
+- **kernel_task near the top**: the Mac is already hot and slowing apps to cool down. See [kernel_task high CPU on Mac?](/blog/kernel-task-high-cpu/)
 - **mds_stores, mdworker or photoanalysisd**: Spotlight or Photos catching up after an update or import. It finishes on its own. See [Is Spotlight indexing slowing down your Mac?](/blog/spotlight-indexing-slow-mac/)
 
 Also check the **GPU** (in Activity Monitor: **Window → GPU History**). Games, video and some web pages heat the graphics side more than the CPU.
