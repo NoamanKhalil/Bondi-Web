@@ -695,18 +695,15 @@ Each entry: what the process is, why it gets busy, and whether to quit it.
 - Why it gets busy: After installing or updating apps.
 - Quitting it: Leave it running: macOS needs it.
 
-
-
-
 <!-- blog -->
 ## Articles from the Bondi blog
 The full text of each article, by Noaman Khalil, maker of Bondi.
 
-### Why is my Mac slow? How to find the real cause
+### Why is my Mac so slow? How to find the real cause
 
 > Mac running slow? It usually comes down to one of a handful of causes. Here's how to tell which one it is, with real readings from a real MacBook Pro.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 4, 2026.
 Web page: https://trybondi.app/blog/why-is-my-mac-slow/
 
 A slow Mac, whether it's a MacBook Air, a MacBook Pro or an iMac, almost always has one specific cause: memory running short, one app working hard, macOS doing background work, or the Mac protecting itself from heat. The trick is finding which one, because the fix for each is different.
@@ -725,13 +722,13 @@ When the apps you have open need more memory than your Mac has, macOS starts com
 
 **How to tell:** open Activity Monitor (press Command-Space and type "Activity Monitor"), choose the **Memory** tab, and look at the **Memory Pressure** graph at the bottom. Green is fine. Yellow means macOS is working to keep up. Red means it's out of room.
 
-A high "Memory Used" number on its own is *not* a problem: macOS deliberately fills spare memory with cached files. Pressure is what matters. There's more in [Memory pressure on Mac, explained](https://trybondi.app/blog/memory-pressure-explained/).
+A high "Memory Used" number on its own is *not* a problem: macOS deliberately fills spare memory with cached files. Pressure is what matters. There's more in [Memory pressure on Mac: what yellow and red mean](https://trybondi.app/blog/memory-pressure-explained/).
 
 #### 2. One app is using more than you think
 
 Modern apps are many processes. On the Mac I measure on, Google Chrome was **80 separate processes using 12.23 GB of memory** in total, while Activity Monitor showed it as dozens of rows of a few hundred megabytes each. No single row looked big, so the real culprit was easy to miss.
 
-**How to tell:** in Activity Monitor, choose **View → All Processes, Hierarchically**, or add up the helper processes that share an app's name. [Which app is using my Mac's memory?](https://trybondi.app/blog/which-app-is-using-my-mac-memory/) walks through it.
+**How to tell:** in Activity Monitor, choose **View → All Processes, Hierarchically**, or add up the helper processes that share an app's name. [What is using memory on my Mac?](https://trybondi.app/blog/which-app-is-using-my-mac-memory/) walks through it.
 
 #### 3. macOS is doing background work
 
@@ -745,7 +742,7 @@ These finish on their own, usually within hours. Keeping the Mac plugged in and 
 
 #### 4. Your Mac is hot
 
-When the chip gets hot, macOS deliberately slows things down to cool it. In Activity Monitor this shows up as **kernel_task** using a lot of CPU. It isn't a bug: it's macOS taking CPU time away from apps so the heat drops. Charging in a warm room or working on a soft surface makes it more likely. More in [kernel_task using lots of CPU?](https://trybondi.app/blog/kernel-task-high-cpu/)
+When the chip gets hot, macOS deliberately slows things down to cool it. In Activity Monitor this shows up as **kernel_task** using a lot of CPU. It isn't a bug: it's macOS taking CPU time away from apps so the heat drops. Charging in a warm room or working on a soft surface makes it more likely. More in [kernel_task high CPU on Mac?](https://trybondi.app/blog/kernel-task-high-cpu/)
 
 #### 5. Something is quietly holding on
 
@@ -922,11 +919,11 @@ Add it to Spotlight's privacy list in System Settings → Spotlight.
 ---
 Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
 
-### Which app is using my Mac's memory?
+### What is using memory on my Mac?
 
 > Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here's how to see which app is really using your Mac's memory.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 4, 2026.
 Web page: https://trybondi.app/blog/which-app-is-using-my-mac-memory/
 
 To see which app is really using your Mac's memory, you need to add up all of its processes, not look at the biggest row. Browsers and code editors split themselves into dozens of helper processes, so the real total is usually hidden.
@@ -972,7 +969,7 @@ Typing an app's name in the search field also filters to its processes, which he
 
 #### Does it matter?
 
-Only if memory pressure is high. If the **Memory Pressure** graph is green, a big app is fine. It's using memory macOS has spare. If it's yellow or red, the app at the top of the grouped list is your best lever: close tabs, quit it, or restart it. More in [Memory pressure on Mac, explained](https://trybondi.app/blog/memory-pressure-explained/).
+Only if memory pressure is high. If the **Memory Pressure** graph is green, a big app is fine. It's using memory macOS has spare. If it's yellow or red, the app at the top of the grouped list is your best lever: close tabs, quit it, or restart it. More in [Memory pressure on Mac: what yellow and red mean](https://trybondi.app/blog/memory-pressure-explained/).
 
 #### How Bondi shows it
 
@@ -998,11 +995,11 @@ Only if memory pressure is yellow or red. With green pressure, the app is using 
 ---
 Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
 
-### Memory pressure on Mac, explained
+### Memory pressure on Mac: what yellow and red mean
 
 > "Memory Used" being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here's how to read them.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 4, 2026.
 Web page: https://trybondi.app/blog/memory-pressure-explained/
 
 Memory pressure tells you how hard macOS is working to fit everything you're running into your Mac's memory. Green means it's comfortable, yellow means it's compressing and juggling, and red means it's out of room and leaning on the disk. It's a far better guide than "Memory Used", which is high on almost every Mac, and that's fine.
@@ -1042,7 +1039,7 @@ Open Activity Monitor and choose the **Memory** tab. At the bottom:
 
 #### What to do when memory pressure is yellow or red
 
-1. **Find the app using the most.** Usually it's a browser with many tabs, but helper processes hide this. See [Which app is using my Mac's memory?](https://trybondi.app/blog/which-app-is-using-my-mac-memory/)
+1. **Find the app using the most.** Usually it's a browser with many tabs, but helper processes hide this. See [What is using memory on my Mac?](https://trybondi.app/blog/which-app-is-using-my-mac-memory/)
 2. **Quit it or close what you don't need**, then watch the graph drop.
 3. **Look for things left running**: dev servers, containers and local AI models hold memory even when idle.
 4. **Restart** if swap has grown large over days of uptime.
@@ -1073,11 +1070,11 @@ If memory pressure is red every day with the apps you normally use, your work ne
 ---
 Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
 
-### Why are my Mac's fans so loud?
+### Why is my Mac so hot and loud?
 
 > Loud fans on a MacBook or any Mac mean the chip is working hard or running hot. Here's how to find what's heating it, and what to do if they won't settle.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 4, 2026.
 Web page: https://trybondi.app/blog/mac-fans-loud/
 
 On a MacBook Pro or a desktop Mac, the fans get loud for one reason: the chip is producing more heat than the Mac can lose quietly. Find what's making it work hard, give it some air, and the fans settle within minutes.
@@ -1094,7 +1091,7 @@ Open Activity Monitor (Command-Space, then type "Activity Monitor"), choose the 
 
 - **An app you're using**, like a video export, a build or a game: the fans are doing their job. They'll calm down when it finishes.
 - **An app you're not using**: often a browser tab or a helper process stuck at high CPU. Quit it, or close the tab.
-- **kernel_task near the top**: the Mac is already hot and slowing apps to cool down. See [kernel_task using lots of CPU?](https://trybondi.app/blog/kernel-task-high-cpu/)
+- **kernel_task near the top**: the Mac is already hot and slowing apps to cool down. See [kernel_task high CPU on Mac?](https://trybondi.app/blog/kernel-task-high-cpu/)
 - **mds_stores, mdworker or photoanalysisd**: Spotlight or Photos catching up after an update or import. It finishes on its own. See [Is Spotlight indexing slowing down your Mac?](https://trybondi.app/blog/spotlight-indexing-slow-mac/)
 
 Also check the **GPU** (in Activity Monitor: **Window → GPU History**). Games, video and some web pages heat the graphics side more than the CPU.
@@ -1140,11 +1137,11 @@ macOS doesn't offer fan control. Bondi's Fan boost can raise it, never slower th
 ---
 Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
 
-### kernel_task using lots of CPU? Your Mac is cooling itself down
+### kernel_task high CPU on Mac? Your Mac is cooling itself down
 
 > kernel_task at high CPU usually means your Mac is hot, and macOS is slowing apps on purpose to cool it. Here's why it happens and what actually helps.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 4, 2026.
 Web page: https://trybondi.app/blog/kernel-task-high-cpu/
 
 When kernel_task shows a high CPU figure, your Mac is almost always running hot, or close to overheating. macOS is taking CPU time on purpose so that apps slow down and the heat drops. It's a safety feature, not a bug or malware.

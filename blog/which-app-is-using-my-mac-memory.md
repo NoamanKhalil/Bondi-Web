@@ -1,8 +1,8 @@
-# Which app is using my Mac's memory?
+# What is using memory on my Mac?
 
 > Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here's how to see which app is really using your Mac's memory.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 4, 2026.
 Web page: https://trybondi.app/blog/which-app-is-using-my-mac-memory/
 
 To see which app is really using your Mac's memory, you need to add up all of its processes, not look at the biggest row. Browsers and code editors split themselves into dozens of helper processes, so the real total is usually hidden.
@@ -48,7 +48,7 @@ Typing an app's name in the search field also filters to its processes, which he
 
 ## Does it matter?
 
-Only if memory pressure is high. If the **Memory Pressure** graph is green, a big app is fine. It's using memory macOS has spare. If it's yellow or red, the app at the top of the grouped list is your best lever: close tabs, quit it, or restart it. More in [Memory pressure on Mac, explained](https://trybondi.app/blog/memory-pressure-explained/).
+Only if memory pressure is high. If the **Memory Pressure** graph is green, a big app is fine. It's using memory macOS has spare. If it's yellow or red, the app at the top of the grouped list is your best lever: close tabs, quit it, or restart it. More in [Memory pressure on Mac: what yellow and red mean](https://trybondi.app/blog/memory-pressure-explained/).
 
 ## How Bondi shows it
 

@@ -36,17 +36,17 @@ Checked against each app's own website (apple.com, bjango.com, github.com/exelba
 
 <!-- blog -->
 ## Guides: Why is my Mac slow?
-- [Why is my Mac slow? How to find the real cause](https://trybondi.app/blog/why-is-my-mac-slow.md): Mac running slow? It usually comes down to one of a handful of causes. Here's how to tell which one it is, with real readings from a real MacBook Pro.
+- [Why is my Mac so slow? How to find the real cause](https://trybondi.app/blog/why-is-my-mac-slow.md): Mac running slow? It usually comes down to one of a handful of causes. Here's how to tell which one it is, with real readings from a real MacBook Pro.
 - [Why is my Mac slow after a macOS update?](https://trybondi.app/blog/mac-slow-after-update.md): Mac slow after a macOS Sequoia or Tahoe update? It's re-indexing Spotlight, re-scanning photos and syncing iCloud. Here's what's running and how long it lasts.
 - [Is Spotlight indexing slowing down your Mac?](https://trybondi.app/blog/spotlight-indexing-slow-mac.md): When mds_stores and mdworker are busy, Spotlight is rebuilding its index. Here's how to tell, how long it lasts, and how to keep folders out of it.
 
 ## Guides: Memory
-- [Which app is using my Mac's memory?](https://trybondi.app/blog/which-app-is-using-my-mac-memory.md): Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here's how to see which app is really using your Mac's memory.
-- [Memory pressure on Mac, explained](https://trybondi.app/blog/memory-pressure-explained.md): "Memory Used" being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here's how to read them.
+- [What is using memory on my Mac?](https://trybondi.app/blog/which-app-is-using-my-mac-memory.md): Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here's how to see which app is really using your Mac's memory.
+- [Memory pressure on Mac: what yellow and red mean](https://trybondi.app/blog/memory-pressure-explained.md): "Memory Used" being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here's how to read them.
 
 ## Guides: Heat, fans and busy processes
-- [Why are my Mac's fans so loud?](https://trybondi.app/blog/mac-fans-loud.md): Loud fans on a MacBook or any Mac mean the chip is working hard or running hot. Here's how to find what's heating it, and what to do if they won't settle.
-- [kernel_task using lots of CPU? Your Mac is cooling itself down](https://trybondi.app/blog/kernel-task-high-cpu.md): kernel_task at high CPU usually means your Mac is hot, and macOS is slowing apps on purpose to cool it. Here's why it happens and what actually helps.
+- [Why is my Mac so hot and loud?](https://trybondi.app/blog/mac-fans-loud.md): Loud fans on a MacBook or any Mac mean the chip is working hard or running hot. Here's how to find what's heating it, and what to do if they won't settle.
+- [kernel_task high CPU on Mac? Your Mac is cooling itself down](https://trybondi.app/blog/kernel-task-high-cpu.md): kernel_task at high CPU usually means your Mac is hot, and macOS is slowing apps on purpose to cool it. Here's why it happens and what actually helps.
 - [WindowServer using high CPU on Mac: what it means and what helps](https://trybondi.app/blog/windowserver-high-cpu.md): WindowServer draws everything on your Mac's screens. Here's why it gets busy, what normal looks like, and the settings that actually calm it down.
 
 ## Guides: Bondi and other tools
