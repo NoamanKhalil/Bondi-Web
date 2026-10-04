@@ -382,7 +382,7 @@
       </div>
       <div class="win-body" data-wbody></div>
       <div class="win-intro" data-intro hidden>
-        <video src="/assets/bondi-window.mp4" poster="/assets/bondi-window-poster.jpg" muted playsinline preload="auto" width="1920" height="1080"
+        <video src="/assets/bondi-window.mp4" poster="/assets/bondi-window-poster.jpg" muted playsinline preload="none" width="1920" height="1080"
                aria-label="Intro film: 955 processes on a real Mac, drawn as stars, pull together into 43 apps, each shown with its app icon and process count. It ends on Bondi for Apple Mac."></video>
         <button type="button" class="intro-skip" data-intro-skip>Skip intro</button>
       </div>
@@ -507,7 +507,8 @@
 </script>
 <script>
   // Intro film over the app window: stars become apps, then the real, clickable window shows through. Starts
-  // when 60% of the window is in view; skipped with Reduce Motion and on phones.
+  // when 60% of the window is in view; skipped with Reduce Motion and on phones. The film downloads only then
+  // (preload="none"), so it isn't part of the page's first load, and phones never download it.
   (() => {
     const $ = (s, r = document) => r.querySelector(s);
     const intro = $('[data-intro]');
@@ -527,7 +528,7 @@
     const play = () => {
       intro.hidden = false; intro.classList.remove('done', 'skip', 'playing'); replay.hidden = true;
       video.currentTime = 0;
-      requestAnimationFrame(() => intro.classList.add('playing'));
+      video.addEventListener('playing', () => intro.classList.add('playing'), { once: true }); // brightens once the film is really running
       video.play().catch(() => finish(true)); // a browser that won't autoplay just shows the window
     };
     intro.hidden = false; // the dim first frame waits over the window until it's in view

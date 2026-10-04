@@ -1,5 +1,8 @@
 # Send /api/<action> to index.php (Hostinger runs Apache-compatible LiteSpeed).
 RewriteEngine On
+# The repository's own copy at /public_html/api/ (see the top-level .htaccess) goes to the real API.
+RewriteCond %{REQUEST_URI} ^/public_html(/.*)?$
+RewriteRule ^ https://trybondi.app%1 [R=301,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.php [QSA,L]
 # Paddle's signature header must reach PHP.

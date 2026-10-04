@@ -356,3 +356,6 @@ foreach (['blog', 'sitemap.xml', 'llms.txt', 'llms-full.txt'] as $item) {
     shell_exec('rm -rf ' . escapeshellarg("$root/$item") . ' && cp -R ' . escapeshellarg("$root/public_html/$item") . ' ' . escapeshellarg("$root/$item") . ' 2>/dev/null');
 }
 echo 'Published ' . count($live) . " articles.\n";
+
+// The rest of the served copy (minified CSS, stamped films) comes from dev/build-site.php
+passthru(escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(__DIR__ . '/build-site.php'));

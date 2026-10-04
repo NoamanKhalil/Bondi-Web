@@ -8,7 +8,7 @@ The Mac app lives in its own repo next to this one: **`../TryBondi`** (readable 
 
 | Folder | What it is | On Hostinger |
 | --- | --- | --- |
-| `public_html/` | The website (`index.html`), the license API (`api/`), the admin page (`admin/`), the buy page (`buy/`, not linked until launch), legal pages, `assets/` | Contents go into Hostinger's `public_html` |
+| `public_html/` | The website's readable source (`index.html`), the license API (`api/`), the admin page (`admin/`), the buy page (`buy/`, not linked until launch), legal pages, `assets/` | Hostinger's Git deploy serves this repository's top level: `php dev/build-site.php` copies `public_html` there with CSS minified and the films' addresses version-stamped. `/public_html/…` redirects to the real pages |
 | `bondi/` | Private PHP: settings (`config.php`, never committed), database, Paddle, email, licenses, sign-ups | Live at `public_html/bondi/` (the owner's host wants everything in `public_html`); its `.htaccess` blocks web access. Beside `public_html` also works. After an upload, check `https://trybondi.app/bondi/config.php` answers 403 |
 | `sql/` | Database setup, imported in phpMyAdmin in order (001, 003, 004, 005, 006; 002 only for old installs) | — |
 | `dev/` | Local tests: `dev/test.sh` (a throwaway MySQL and PHP server, 110 checks) | Not uploaded |
@@ -22,6 +22,8 @@ The Mac app lives in its own repo next to this one: **`../TryBondi`** (readable 
 - Work on `main`. Commit small, working steps with clear messages. Never force-push. Never commit secrets (`bondi/config.php`).
 - Before a large change, say the plan in a few lines and wait for approval.
 - Run `dev/test.sh` after any change to `bondi/`, `api/`, `admin/` or `sql/`; commit only when it passes.
+- After changing anything in `public_html`, run `php dev/build-site.php` before committing (`dev/build-blog.php` runs it too). Never hand-edit the top-level copies.
+- Films load only near the screen (`preload="none"`, `data-lazy`) and are cached for a year by address: refer to them in HTML attributes (`src`, `poster`), never build their URLs in scripts, so `build-site.php` can stamp them.
 - Check page changes by rendering them (headless Chrome, `--user-data-dir` in the scratchpad) and looking at the screenshots before saying they're done. Never run screen recording, `osascript` or System Events without asking.
 
 ## Preview
