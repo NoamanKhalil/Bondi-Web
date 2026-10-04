@@ -6,7 +6,8 @@
 - What it does: groups every running process under the app that started it, finds what's holding memory, warns about one cause at a time and asks before it quits or stops anything, and keeps 30 days of history on the Mac.
 - AI: runs on the Mac. On Macs with Apple Intelligence (macOS 26, Apple silicon) it uses Apple's on-device foundation model. Other Macs can download a small open model (Qwen2.5 0.5B) from Settings. Bondi computes every number itself, and the AI only writes the words around them.
 - Data: history stays in a file on the Mac. The app contacts Jabble's server only to check its trial or license and to look for updates. There's no account and no analytics.
-- Requirements: macOS 15 or later, on Apple silicon or Intel.
+- Category: a system monitor and task manager for Mac, and an Activity Monitor alternative.
+- Requirements: macOS 15 or later, on Apple silicon or Intel: MacBook Air, MacBook Pro, iMac, Mac mini, Mac Studio and Mac Pro.
 - Pricing at full launch: a 7-day free trial, then a one-time purchase for one Mac, with no subscription. The first 250 licenses cost $6.99, and after that the price is $29.99. Paddle is the merchant of record. Refunds are available within 14 days.
 
 ## How Bondi compares
