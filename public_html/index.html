@@ -885,7 +885,7 @@
     <div class="wrap">
       <section class="sec stars" id="stars" aria-label="Film: 955 processes become 43 apps">
         <div class="film">
-          <video src="assets/bondi-stars.mp4" poster="assets/bondi-stars-poster.jpg" muted loop playsinline preload="none" data-lazy width="1920" height="1080"
+          <video src="assets/bondi-stars.mp4" data-small="assets/bondi-stars-small.mp4" poster="assets/bondi-stars-poster.jpg" muted loop playsinline preload="none" data-lazy width="1920" height="1080"
                  aria-label="Every process on a real Mac drawn as a star: 955 of them. They pull together into the apps they belong to, and become 43 app icons, each with its process count: macOS 719, Google Chrome 80, Visual Studio Code 44 and more. It ends on Bondi for Apple Mac."></video>
         </div>
         <p class="stars-note">Every star is a real process from one reading of a working Mac, and each app gets exactly its own.</p>
@@ -941,7 +941,7 @@
         <h2 id="film-title">From a thousand processes to one plain sentence.</h2>
       </div>
       <div class="film">
-        <video src="assets/bondi-film.mp4" poster="assets/bondi-film-poster.png" muted loop playsinline preload="none" data-lazy width="1920" height="1080"
+        <video src="assets/bondi-film.mp4" data-small="assets/bondi-film-small.mp4" poster="assets/bondi-film-poster.png" muted loop playsinline preload="none" data-lazy width="1920" height="1080"
                aria-label="A 24-second film: a Mac running 931 processes, grouped by Bondi into 39 apps; Bondi's one-sentence explanations; and a question about the last week answered from history."></video>
       </div>
     </section>
@@ -1115,6 +1115,8 @@
   (() => {
     const films = $$('video[data-lazy]');
     if (!films.length) return;
+    // Phones get the 1280 × 720 copies (data-small): about a third of the size, and still sharp on a phone screen.
+    if (matchMedia('(max-width: 700px)').matches) films.forEach(v => { if (v.dataset.small) v.src = v.dataset.small; });
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) { films.forEach(v => { v.controls = true; }); return; }
     const ready = v => { if (v.dataset.lazy !== 'loaded') { v.dataset.lazy = 'loaded'; v.preload = 'auto'; v.load(); } };
     if (!('IntersectionObserver' in window)) { films.forEach(v => { v.autoplay = true; ready(v); }); return; }

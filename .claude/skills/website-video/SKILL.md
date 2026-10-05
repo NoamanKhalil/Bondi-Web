@@ -10,8 +10,8 @@ Bondi's website has three films, all made in `video/` of this repo (Bondi-Web) w
 | Film | Composition | Output | On the page |
 | --- | --- | --- | --- |
 | Window intro | `WindowFilm` (1920×1080, **60 fps**, 15 s) | `bondi-window.mp4` + `-poster.jpg` | Over the app window (`#app`), plays once at 60% in view |
-| Star film | `Constellation` (1920×1080, 30 fps, 15 s) | `bondi-stars.mp4` + `-poster.jpg` | Section `#stars`, above the comparison, loops |
-| 24-second film | `BondiFilm` (1920×1080, 30 fps, 24 s) | `bondi-film.mp4` + `-poster.png` | Section `#film`, loops |
+| Star film | `Constellation` (1920×1080, 30 fps, 15 s) | `bondi-stars.mp4` + `-small.mp4` (phones) + `-poster.jpg` | Section `#stars`, above the comparison, loops while on screen |
+| 24-second film | `BondiFilm` (1920×1080, 30 fps, 24 s) | `bondi-film.mp4` + `-small.mp4` (phones) + `-poster.png` | Section `#film`, loops while on screen |
 
 The window intro and the star film are the same scene (`src/Constellation.tsx`): every process on the Mac is a star, the stars swirl into the apps they belong to and become each app's real icon, sized by process count, with the app's own colour glowing under it. Headlines: "955 processes." → "43 apps you know." → end card "Bondi for Apple Mac · Beta launching soon · trybondi.app".
 
@@ -21,6 +21,7 @@ The window intro and the star film are the same scene (`src/Constellation.tsx`):
 - **Colour:** always render with `--color-space=bt709` (untagged video looks washed out in browsers). Browsers still colour-manage video slightly differently from page CSS, so never rely on a video's background matching a page colour exactly. The window intro therefore uses the film's own teal-to-black backdrop, and the app window's content area uses the same CSS gradient: `radial-gradient(ellipse at 50% 60%, #0b1a20 0%, #000 70%)`.
 - **Window intro:** 60 fps ("slightly smooth"), standard widescreen, 15 s, no fade from or to black (its first frame is the poster; the page does the fades). It holds on the end card.
 - **The app window's content area is 16:9** so the intro fills it exactly (`.win .win-body` min-height in `index.html`). Every tab keeps one height; nothing scrolls inside the window. Overview = AI summary, At a glance, Right now (no Ask box; Ask has its own feature tile).
+- **Size on the page:** `npm run assets` re-encodes the renders for the web (x264 veryslow, aq-mode 3: window CRF 27, stars CRF 28; VMAF about 95, half the size or less, colour tags kept) and makes 1280 × 720 phone copies (`-small`, CRF 25) that the page uses on screens up to 700 px wide. The films load only when needed (`preload="none"`): the intro when it's about to play, the others as they come near the screen; they pause off screen. Refer to films only in HTML attributes (`src`, `data-small`, `poster`) so `dev/build-site.php` can stamp their addresses for the year-long cache.
 - **Playback on the page:** waits on the dimmed poster; starts when 60% of the window is in view (or it fills 60% of a short screen); fades in and out slowly with easing (1.6 s); Skip intro (top right) and "▶ Replay intro" under the window; skipped with Reduce Motion and on windows narrower than 700 px.
 - Remove nothing the owner asked for (the "+11" tile was removed on request: apps without an icon are stars that fade out).
 - "Bondi for Apple Mac" is the owner's wording. Apple's guidelines prefer "for Mac"; mention it once if it comes up, don't change it.
@@ -33,7 +34,7 @@ The window intro and the star film are the same scene (`src/Constellation.tsx`):
 3. `npm run studio` to preview (opens Remotion Studio in the browser).
 4. `npm run render:all` renders the star film and the window intro, with posters.
    The 24-second film: `npm run render` (its data is in `src/data.ts`, typed by hand from a reading; update it from the same dump if its numbers must match).
-5. `npm run assets` copies the films into `public_html/assets` and makes JPEG posters.
+5. `npm run assets` makes the web and phone copies of the films in `public_html/assets` and the JPEG posters. Then `php ../dev/build-site.php` (stamps the films' addresses).
 6. Check before showing the owner (see Verify).
 7. Publish the preview and commit (see Publish).
 
