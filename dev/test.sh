@@ -23,7 +23,7 @@ mysqld --initialize-insecure --datadir=$T/data --log-error=$T/init.log >/dev/nul
 mysqld --datadir=$T/data --socket=$SOCK --port=33098 --mysqlx=OFF --log-error=$T/err.log --pid-file=$T/pid >/dev/null 2>&1 &
 for i in $(seq 1 30); do mysql -uroot --socket=$SOCK -e 'select 1' >/dev/null 2>&1 && break; sleep 1; done
 mysql -uroot --socket=$SOCK -e "create database bondi; create user 'bondi'@'localhost' identified by 'test'; grant all on bondi.* to 'bondi'@'localhost';"
-for f in sql/001_schema.sql sql/002_one_mac_per_license.sql sql/003_checkout_claims.sql sql/004_signups.sql sql/005_signup_page.sql sql/006_privacy.sql; do mysql -uroot --socket=$SOCK bondi < $f; done
+for f in sql/001_schema.sql sql/002_one_mac_per_license.sql sql/003_checkout_claims.sql sql/004_signups.sql sql/005_signup_page.sql sql/006_privacy.sql sql/007_audit_log.sql; do mysql -uroot --socket=$SOCK bondi < $f; done
 mysql -uroot --socket=$SOCK bondi -e "update price_tiers set paddle_price_id='pri_launch' where tier='launch'; update price_tiers set paddle_price_id='pri_regular' where tier='regular';"
 cat > $T/config.php <<CONF
 <?php
@@ -120,6 +120,12 @@ expect "wrong username refused" "$(curl -s -c $J -b $J -d 'do=login&username=som
 curl -s -c $J -b $J -d 'do=login&username=owner&password=admin-test' $BASE/admin/ -o /dev/null
 DASH=$(curl -s -c $J -b $J $BASE/admin/)
 expect "admin dashboard" "$DASH" 'Launch licenses sold'
+expect "dashboard warns of failed sign-ins" "$DASH" '2 failed sign-ins to this page in the last day'
+expect "admin shows the live version" "$DASH" 'Live version: '
+expect "dashboard has the growth chart" "$DASH" 'Sign-ups over time.*<svg class="chart"'
+expect "growth by week" "$(curl -s -c $J -b $J "$BASE/admin/?growth=signups&period=week")" 'In these 12 weeks: [0-9]* sign-ups'
+expect "trials by month" "$(curl -s -c $J -b $J "$BASE/admin/?growth=trials&period=month")" 'Trials started over time.*In these 12 months: 1 trials started'
+expect "licenses by year" "$(curl -s -c $J -b $J "$BASE/admin/?growth=licenses&period=year")" 'Licenses sold over time.*In these 5 years'
 expect "admin shows the failed notification" "$DASH" 'not processed'
 CSRF=$(echo "$DASH" | grep -o 'name="csrf" value="[a-f0-9]*"' | head -1 | sed 's/.*value="//;s/"//')
 expect "admin search by email" "$(curl -s -c $J -b $J "$BASE/admin/?q=ctm_1")" 'test+ctm_1@example.com'
@@ -136,9 +142,15 @@ expect "licenses list has a revoke button per row" "$(curl -s -c $J -b $J $BASE/
 LISTED=$(curl -s -c $J -b $J -L -d "do=revoke&license=$COMPID&back=list&csrf=$CSRF" $BASE/admin/)
 expect "revoke from the list stays on the list" "$LISTED" "License #$COMPID revoked.*Latest licenses"
 expect "revoked row offers restore" "$LISTED" 'value="restore"'
+ACT=$(curl -s -c $J -b $J "$BASE/admin/?activity")
+expect "activity records failed sign-ins" "$ACT" 'class="error">Wrong username or password'
+expect "activity records sign-ins" "$ACT" '>Signed in<'
+expect "activity records revokes and restores" "$ACT" "Revoked license #$COMPID.*Restored license #1"
+expect "activity records free licenses" "$ACT" "Gave free license #$COMPID and emailed the key"
+expect "activity shows where from" "$ACT" '127.0.0.1'
 
 expect "admin lists sign-ups" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'grace@example.com'
-expect "admin sign-ups by country" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'By country: .*Germany 1'
+expect "where people are" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'Where people are.*Germany</a></td><td class="num">1</td>'
 expect "admin sign-ups CSV" "$(curl -s -c $J -b $J "$BASE/admin/?signups&csv")" '"Ada L.",ada@example.com,IN,India,timezone,Asia/Calcutta,home,127.0.0.1'
 NEWS="subject=Beta%20for%20{name}&message=Hi%20{name},%0A%0ASee%20https://trybondi.app&q="
 expect "sign-ups page can write to everyone" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'Write to everyone on the list'
@@ -180,6 +192,8 @@ expect "unsubscribe is recorded" "$(q "select ifnull(unsubscribed_at,'none') fro
 expect "a thank-you confirms it" "$(cat bondi/mail.log)" "Subject: You're unsubscribed"
 expect "the page offers to undo it" "$UNSUBBED" 'Stay on the list'
 expect "admin marks them unsubscribed" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'unsubscribed'
+expect "filter: unsubscribed only" "$(curl -s -c $J -b $J "$BASE/admin/?signups&status=unsubscribed")" '1 of [0-9]* match.*privacy@example.com'
+expect "filter: by country" "$(curl -s -c $J -b $J "$BASE/admin/?signups&country=GB")" '1 of [0-9]* match.*brit@example.com'
 expect "undo puts them back" "$(curl -s -d "do=resubscribe&id=$PID&s=$PSIG" "$BASE/unsubscribe/")" 'Welcome back'
 expect "back on the list" "$(q "select ifnull(unsubscribed_at,'none') from signups where id=$PID")" '^none$'
 expect "mail apps' one-click button works" "$(curl -s -X POST -d 'List-Unsubscribe=One-Click' "$BASE/api/unsubscribe?id=$PID&s=$PSIG")" '"status":"unsubscribed"'
@@ -220,6 +234,14 @@ expect "interest counts are the real ones" "$(curl -s $BASE/api/interest)" "$(my
 [ "$BEFORE" != "$(curl -s $BASE/api/interest)" ] && { PASS=$((PASS+1)); echo "ok   counts move with sign-ups"; } || { FAILS=$((FAILS+1)); echo "FAIL counts didn't change: $BEFORE"; }
 expect "admin shows beta sign-ups" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'By page: .*Beta page 1'
 expect "admin search beta lists only them" "$(curl -s -c $J -b $J "$BASE/admin/?signups&q=beta")" 'Write to the 1 shown by this search'
+expect "filter: beta page" "$(curl -s -c $J -b $J "$BASE/admin/?signups&page=beta")" 'Write to the 1 shown by this search'
+expect "filtered CSV has only them" "$(curl -s -c $J -b $J "$BASE/admin/?signups&csv&page=beta" | tail -n +2 | tr '\n' '|')" '^"Bea T.",bea@example.com,[^|]*|$'
+expect "activity keeps no email addresses" "$(mysql -uroot --socket=$SOCK bondi -N -e "select count(*) from audit_log where detail like '%@%'")" '^0$'
+expect "activity records emails sent" "$(curl -s -c $J -b $J "$BASE/admin/?activity")" 'Sent the thank-you to 1 person.*Sent &quot;Beta for {name}&quot; to 2 people'
+[ -n "${SNAP:-}" ] && curl -s -c $J -b $J "$BASE/admin/?activity" > "$SNAP/admin-activity.html"
+mysql -uroot --socket=$SOCK bondi -e "drop table audit_log"
+expect "admin works before sql/007" "$(curl -s -c $J -b $J "$BASE/admin/")" 'Launch licenses sold'
+expect "activity explains sql/007" "$(curl -s -c $J -b $J "$BASE/admin/?activity")" 'Import sql/007_audit_log.sql'
 mysql -uroot --socket=$SOCK bondi -e "alter table signups drop column page"
 expect "sign-ups still work before sql/005" "$(post signup '{"name":"Old DB","email":"olddb@example.com","page":"beta"}')" '"status":"ok"'
 expect "counts without sql/005" "$(curl -s $BASE/api/interest)" '"beta":null'

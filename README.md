@@ -29,7 +29,7 @@ Paddle, emails license keys, activates one Mac per license, and has an admin pag
 2. **Database.** hPanel → Databases → Management: create a database and a user. In phpMyAdmin, Import
    `sql/001_schema.sql`, then `sql/003_checkout_claims.sql`, then `sql/004_signups.sql`, then
    `sql/005_signup_page.sql`, then
-   `sql/006_privacy.sql`. (`002` only if you
+   `sql/006_privacy.sql`, then `sql/007_audit_log.sql`. (`002` only if you
    imported `001` before the one-Mac change on 2026-09-29.) Already imported the others? Just import `004`.
 3. **Email.** hPanel → Emails: create `support@trybondi.app`. License keys are sent from it too, so
    buyers' replies land in the one inbox (owner decision, 2026-09-30).
