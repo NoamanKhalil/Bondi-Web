@@ -2,7 +2,7 @@
 // Copies public_html/ to the top level of this repository, which is what trybondi.app serves (Hostinger's Git deploy
 // puts the repository's top level in the site's public_html). On the way:
 // - CSS is minified, in .css files and in the <style> blocks of .html pages; public_html keeps the readable source.
-// - Pages ask for the films, their phone copies and posters (assets/bondi-*.mp4, -small.mp4, -poster.jpg/png) with ?v=<content hash>, so
+// - Pages ask for the films, their phone and Retina copies and posters (assets/bondi-*.mp4, -small, -hd, -poster.jpg/png) with ?v=<content hash>, so
 //   browsers can keep them for a year (.htaccess) and a new render is still seen at once.
 // Run it after changing anything in public_html, before committing: php dev/build-site.php
 // (dev/build-blog.php runs it too.)
@@ -63,7 +63,7 @@ function minify_css(string $css): string
 function stamp_films(string $html, string $src): string
 {
     static $hashes = [];
-    return preg_replace_callback('~((?:src|poster|href|data-small)=")(/?assets/(bondi-[a-z]+(?:-(?:poster|small))?\.(?:mp4|jpg|png)))"~',
+    return preg_replace_callback('~((?:src|poster|href|data-small|data-hd)=")(/?assets/(bondi-[a-z]+(?:-(?:poster|small|hd))?\.(?:mp4|jpg|png)))"~',
         function (array $m) use ($src, &$hashes): string {
             $file = "$src/assets/{$m[3]}";
             if (!is_file($file)) {

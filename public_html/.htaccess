@@ -46,7 +46,7 @@ AddCharset utf-8 .txt .xml .webmanifest
 
 # The films, their phone copies and their first frames: a year. Pages ask for them with ?v=<content hash> (dev/build-site.php stamps it
 # into the served copy), so a new render is a new address and is seen at once.
-<FilesMatch "^bondi-[a-z]+(-poster|-small)?\.(mp4|jpg|png)$">
+<FilesMatch "^bondi-[a-z]+(-poster|-small|-hd)?\.(mp4|jpg|png)$">
   <IfModule mod_expires.c>
     ExpiresByType video/mp4 "access plus 1 year"
     ExpiresByType image/jpeg "access plus 1 year"

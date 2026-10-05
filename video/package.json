@@ -8,7 +8,8 @@
     "render:stars": "remotion render src/index.ts Constellation out/bondi-stars.mp4 --codec=h264 --crf=22 --color-space=bt709 && remotion still src/index.ts Constellation out/bondi-stars-poster.png --frame=280",
     "render:window": "remotion render src/index.ts WindowFilm out/bondi-window.mp4 --codec=h264 --crf=23 --color-space=bt709 && remotion still src/index.ts WindowFilm out/bondi-window-poster.png --frame=0",
     "reading": "bash scripts/refresh-reading.sh",
-    "render:all": "npm run render:stars && npm run render:window",
+    "render:window-hd": "remotion render src/index.ts WindowFilm out/bondi-window-hd.mp4 --codec=h264 --crf=18 --color-space=bt709 --scale=1.3333333333333333",
+    "render:all": "npm run render:stars && npm run render:window && npm run render:window-hd",
     "assets": "bash scripts/publish-assets.sh"
   },
   "dependencies": {

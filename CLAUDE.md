@@ -23,7 +23,7 @@ The Mac app lives in its own repo next to this one: **`../TryBondi`** (readable 
 - Before a large change, say the plan in a few lines and wait for approval.
 - Run `dev/test.sh` after any change to `bondi/`, `api/`, `admin/` or `sql/`; commit only when it passes.
 - After changing anything in `public_html`, run `php dev/build-site.php` before committing (`dev/build-blog.php` runs it too). Never hand-edit the top-level copies.
-- Films load only near the screen (`preload="none"`, `data-lazy`; phones get the 1280 × 720 `-small` copies via `data-small`) and are cached for a year by address: refer to them in HTML attributes (`src`, `data-small`, `poster`), never build their URLs in scripts, so `build-site.php` can stamp them. `npm run assets` in `video/` compresses new renders (see the website-video skill).
+- Films load only near the screen (`preload="none"`, `data-lazy`; phones get the 1280 × 720 `-small` copies via `data-small`; Retina screens with a wide window get the 2560 × 1440 window intro via `data-hd`) and are cached for a year by address: refer to them in HTML attributes (`src`, `data-small`, `data-hd`, `poster`), never build their URLs in scripts, so `build-site.php` can stamp them. `npm run assets` in `video/` compresses new renders (see the website-video skill).
 - Check page changes by rendering them (headless Chrome, `--user-data-dir` in the scratchpad) and looking at the screenshots before saying they're done. Never run screen recording, `osascript` or System Events without asking.
 
 ## Preview
