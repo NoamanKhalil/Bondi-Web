@@ -672,7 +672,7 @@
         </div>
         <div class="win-body" data-wbody></div>
         <div class="win-intro" data-intro hidden>
-          <video src="assets/bondi-window.mp4" poster="assets/bondi-window-poster.jpg" muted playsinline preload="none" width="1920" height="1080"
+          <video src="assets/bondi-window.mp4" data-hd="assets/bondi-window-hd.mp4" poster="assets/bondi-window-poster.jpg" muted playsinline preload="none" width="1920" height="1080"
                  aria-label="Intro film: 955 processes on a real Mac, drawn as stars, pull together into 43 apps, each shown with its app icon and process count. It ends on Bondi for Apple Mac."></video>
           <button type="button" class="intro-skip" data-intro-skip>Skip intro</button>
         </div>
@@ -1090,7 +1090,11 @@
       setTimeout(() => { if (intro.classList.contains('done')) intro.hidden = true; }, skipped ? 750 : 1650);
       replay.hidden = false;
     };
+    // A Retina screen with a wide window shows the film wider than its 1920 pixels: past 10% stretch (2,112 screen
+    // pixels), it gets the 2560 × 1440 copy (data-hd). Decided once, at the first play.
+    let sized = false;
     const play = () => {
+      if (!sized) { sized = true; if (video.dataset.hd && win.clientWidth * devicePixelRatio > 2112) video.src = video.dataset.hd; }
       intro.hidden = false; intro.classList.remove('done', 'skip', 'playing'); replay.hidden = true;
       video.currentTime = 0;
       video.addEventListener('playing', () => intro.classList.add('playing'), { once: true }); // brightens once the film is really running
