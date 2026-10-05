@@ -38,6 +38,7 @@ require __DIR__ . '/lib/mail.php';
 require __DIR__ . '/lib/licenses.php';
 require __DIR__ . '/lib/signups.php';
 require __DIR__ . '/lib/privacy.php';
+require __DIR__ . '/lib/audit.php';
 
 /** A setting from config.php, e.g. config('paddle.api_key'). */
 function config(string $path, mixed $default = null): mixed
