@@ -110,6 +110,8 @@ foreach (glob("$root/content/blog/*.md") as $file) {
     ]);
 }
 $live = array_filter($posts, fn($p) => $p['status'] === 'published');
+define('HAS_GUIDE', $preview !== null || (bool)array_filter(glob("$root/content/guide/*.md") ?: [],
+    fn($f) => (bool)preg_match('/^status:\s*published\s*$/m', (string)file_get_contents($f))));
 $shown = $preview !== null ? $posts : $live;
 uasort($shown, fn($a, $b) => strcmp($b['date'], $a['date']) ?: ((int)($a['order'] ?? 99) <=> (int)($b['order'] ?? 99)) ?: strcmp($a['title'], $b['title']));
 
@@ -155,6 +157,7 @@ function page(string $title, string $description, string $canonical, string $bod
 {
     $h = fn(string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
     $toggle = '<button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>';
+    $guideLink = HAS_GUIDE ? '<a href="/guide/">Guide</a>' : ''; // only once a guide page is live (or in a preview)
     $made = '<span class="made"><span>Made with <span class="heart" role="img" aria-label="love">♥</span> by <a href="' . AUTHOR_URL . '" target="_blank" rel="me noopener">' . AUTHOR . '</a></span></span>';
     return <<<HTML
 <!doctype html>
@@ -179,7 +182,7 @@ $extraHead
 <body>
 <header class="nav"><div class="nav-inner">
   <a class="brand" href="/"><img src="/assets/icon-blue.png" alt="" width="26" height="26">Bondi</a>
-  <nav class="links" aria-label="Site"><a href="/blog/">Blog</a><a href="/">What's Bondi?</a></nav>
+  <nav class="links" aria-label="Site"><a href="/blog/">Blog</a>{$guideLink}<a href="/">What's Bondi?</a></nav>
   <div class="nav-right">$toggle<a class="pillbtn primary small" href="/beta/">Join the beta</a></div>
 </div></header>
 <main>
@@ -354,6 +357,117 @@ foreach (glob("$root/content/pages/*.md") ?: [] as $file) {
     $written[] = "$out/$slug/index.html";
 }
 
+// MARK: The guide: content/guide/<slug>.md at /guide/<slug>/ (reference pages, e.g. "What is launchd on Mac?")
+// Built from the app's own process notes (TryBondi's ProcessGuide.json) and real readings; reviewed by the owner.
+// Header: title, name, group (processes|terms), description, answer, status draft|published, reviewed, related (guide slugs),
+// article (a blog slug). dev/guide-new.php scaffolds new pages.
+
+const GUIDE_GROUPS = ['processes' => ['Processes', 'What the processes in Activity Monitor are, why they get busy, and whether you can quit them.'],
+                      'terms' => ['Mac terms', 'The words Activity Monitor and macOS use, in plain English.']];
+$guide = [];
+foreach (glob("$root/content/guide/*.md") ?: [] as $file) {
+    if (!preg_match('/\A---\n(.*?)\n---\n(.*)\z/s', (string)file_get_contents($file), $m)) {
+        fwrite(STDERR, "No header block in $file\n");
+        exit(1);
+    }
+    $meta = [];
+    foreach (explode("\n", $m[1]) as $line) {
+        if (preg_match('/^([a-z]+):\s*(.*)$/', $line, $kv)) {
+            $meta[$kv[1]] = preg_replace('/^"(.*)"$/', '$1', trim($kv[2]));
+        }
+    }
+    foreach (['title', 'name', 'description', 'status'] as $need) {
+        if (($meta[$need] ?? '') === '') {
+            fwrite(STDERR, "$file needs \"$need:\"\n");
+            exit(1);
+        }
+    }
+    $slug = basename($file, '.md');
+    $guide[$slug] = array_merge($meta, ['slug' => $slug, 'markdown' => $m[2], 'group' => isset(GUIDE_GROUPS[$meta['group'] ?? '']) ? $meta['group'] : 'processes',
+        'related' => array_values(array_filter(array_map('trim', explode(',', $meta['related'] ?? ''))))]);
+}
+ksort($guide, SORT_NATURAL | SORT_FLAG_CASE);
+$guideLive = array_filter($guide, fn($g) => $g['status'] === 'published');
+$guideShown = $preview !== null ? $guide : $guideLive;
+
+foreach ($guideShown as $slug => $g) {
+    $url = SITE . "/guide/$slug/";
+    $groupName = GUIDE_GROUPS[$g['group']][0];
+    $html = preg_replace('~<a href="(https?://(?!trybondi\.app)[^"]+)"~', '<a href="$1" target="_blank" rel="noopener"', $parsedown->text($g['markdown']));
+    $answer = $g['answer'] ?? '';
+    $reviewed = $g['reviewed'] ?? null;
+    $related = '';
+    foreach ($g['related'] as $other) {
+        if (isset($guideShown[$other])) {
+            $related .= '<li><a href="/guide/' . $h($other) . '/">' . $h($guideShown[$other]['name']) . '</a><span>' . $h($guideShown[$other]['description']) . '</span></li>';
+        }
+    }
+    if (($g['article'] ?? '') !== '' && isset($shown[$g['article']])) {
+        $related .= '<li><a href="/blog/' . $h($g['article']) . '/">' . $h($shown[$g['article']]['title']) . '</a><span>' . $h($shown[$g['article']]['description']) . '</span></li>';
+    }
+    $ld = ['@context' => 'https://schema.org', '@graph' => [
+        array_filter(['@type' => 'WebPage', 'name' => $g['title'], 'description' => $g['description'], 'url' => $url,
+            'abstract' => $answer !== '' ? plain($answer) : null, 'lastReviewed' => $reviewed,
+            'reviewedBy' => ['@type' => 'Person', 'name' => AUTHOR, 'url' => AUTHOR_URL],
+            'publisher' => ['@type' => 'Organization', 'name' => 'Jabble Super Intelligence Inc.'],
+            'mainEntity' => ['@type' => 'DefinedTerm', 'name' => $g['name'], 'description' => plain($g['description']),
+                'inDefinedTermSet' => ['@type' => 'DefinedTermSet', 'name' => "Bondi's Mac guide", 'url' => SITE . '/guide/']]], fn($v) => $v !== null),
+        breadcrumb_ld([['Bondi', '/'], ['Guide', '/guide/'], [$g['title'], "/guide/$slug/"]]),
+    ]];
+    if ($qa = questions($g['markdown'])) {
+        $ld['@graph'][] = ['@type' => 'FAQPage', 'mainEntity' => array_map(fn($q) => ['@type' => 'Question', 'name' => $q[0],
+            'acceptedAnswer' => ['@type' => 'Answer', 'text' => $q[1]]], $qa)];
+    }
+    $head = '<meta property="og:type" content="article"><meta property="og:title" content="' . $h($g['title']) . '">'
+          . '<meta property="og:description" content="' . $h($g['description']) . '"><meta property="og:image" content="' . SITE . '/assets/og-image.jpg">'
+          . '<link rel="alternate" type="text/markdown" title="Plain text, for AI assistants" href="/guide/' . $h($slug) . '.md">'
+          . ($g['status'] !== 'published' ? '<meta name="robots" content="noindex">' : '')
+          . "\n<script type=\"application/ld+json\">\n" . json_encode($ld, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . "\n</script>";
+    $answerBox = $answer !== '' ? '<aside class="quick-answer" aria-label="Quick answer"><p class="qa-label">Quick answer</p><p>' . $parsedown->line($answer) . '</p></aside>' : '';
+    $draft = $g['status'] !== 'published' ? '<p class="draft-flag">Draft, for review: not on trybondi.app yet.</p>' : '';
+    $body = '<article class="post">' . crumbs([['Bondi', '/'], ['Guide', '/guide/'], [$groupName, '/guide/#' . $g['group']]]) . $draft
+          . '<h1>' . $h($g['title']) . '</h1>'
+          . '<p class="byline">Bondi\'s Mac guide · Reviewed by <a href="' . $h(AUTHOR_URL) . '" target="_blank" rel="me noopener">' . AUTHOR . '</a>'
+          . ($reviewed ? ' · <time datetime="' . $h($reviewed) . '">' . $h(nice_date($reviewed)) . '</time>' : '') . '</p>'
+          . $answerBox . '<div class="prose">' . $html . '</div>'
+          . '<p class="plain-copy">Also as <a href="/guide/' . $h($slug) . '.md">plain text</a>, for AI assistants and readers.</p>'
+          . '<aside class="cta"><img src="/assets/icon-blue.png" alt="" width="56" height="56"><div><p class="cta-title">' . $h(PITCH) . '</p>'
+          . '<p>Its process guide explains 125 macOS processes like this one, with what each is using on your Mac right now.</p>'
+          . '<p><a class="pillbtn primary" href="/beta/">Join the beta</a> <a class="pillbtn secondary" href="/">See how it works</a></p></div></aside>'
+          . ($related !== '' ? '<section class="related" aria-labelledby="related-title"><h2 id="related-title">Related</h2><ul>' . $related . '</ul></section>' : '')
+          . '</article>';
+    @mkdir("$out/guide/$slug", 0755, true);
+    file_put_contents("$out/guide/$slug/index.html", page($g['title'] . ' · Bondi guide', $g['description'], $url, $body, $head, $askRow));
+    $md = preg_replace('~\]\(/~', '](' . SITE . '/', $g['markdown']);
+    file_put_contents("$out/guide/$slug.md", "# {$g['title']}\n\n> {$g['description']}\n\n" . ($answer !== '' ? "**Quick answer:** $answer\n\n" : '')
+        . "From Bondi's Mac guide, reviewed by " . AUTHOR . ($reviewed ? ' on ' . nice_date($reviewed) : '') . ". Web page: $url\n\n" . trim($md) . "\n\n---\n" . PITCH . ' ' . SITE . "/\n");
+}
+if ($guideShown) {
+    $sections = '';
+    foreach (GUIDE_GROUPS as $key => [$name, $intro]) {
+        $items = array_filter($guideShown, fn($g) => $g['group'] === $key);
+        if (!$items) { continue; }
+        $cards = '';
+        foreach ($items as $slug => $g) {
+            $cards .= '<li><a class="card" href="/guide/' . $h($slug) . '/"><span class="card-title">' . $h($g['name']) . '</span><span class="card-desc">' . $h($g['description']) . '</span></a></li>';
+        }
+        $sections .= '<section class="topic" id="' . $h($key) . '" aria-labelledby="topic-' . $h($key) . '"><h2 id="topic-' . $h($key) . '">' . $h($name) . '</h2><p class="topic-intro">' . $h($intro) . '</p><ul class="cards">' . $cards . '</ul></section>';
+    }
+    $ld = ['@context' => 'https://schema.org', '@graph' => [
+        ['@type' => 'DefinedTermSet', 'name' => "Bondi's Mac guide", 'url' => SITE . '/guide/', 'hasDefinedTerm' => array_values(array_map(fn($g) => ['@type' => 'DefinedTerm', 'name' => $g['name'], 'url' => SITE . "/guide/{$g['slug']}/"], $guideShown))],
+        breadcrumb_ld([['Bondi', '/'], ['Guide', '/guide/']])]];
+    $head = '<meta property="og:type" content="website"><meta property="og:title" content="Bondi\'s Mac guide"><meta property="og:image" content="' . SITE . '/assets/og-image.jpg">'
+          . "\n<script type=\"application/ld+json\">" . json_encode($ld, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>';
+    $body = '<section class="blog-head">' . crumbs([['Bondi', '/'], ['Guide', '/guide/']]) . '<p class="eyebrow">Bondi\'s Mac guide</p><h1>What is this process?</h1>'
+          . '<p class="lede">The processes you see in Activity Monitor, in plain words: what each one does, why it gets busy, and whether you can quit it. From the notes in Bondi\'s process guide, with real readings of a real Mac.</p></section>' . $sections;
+    @mkdir("$out/guide", 0755, true);
+    file_put_contents("$out/guide/index.html", page("Bondi's Mac guide: what is this process on my Mac?",
+        'What the processes in Activity Monitor are, in plain words: what each does, why it gets busy, and whether you can quit it. With real readings of a real Mac.',
+        SITE . '/guide/', $body, $head, $askRow));
+    file_put_contents("$out/guide/.htaccess", "# The guide's plain-text copies (/guide/<slug>.md) are public, unlike .md files elsewhere on the site.\n"
+        . "<FilesMatch \"\\.md$\">\n  Require all granted\n</FilesMatch>\nAddType \"text/markdown; charset=utf-8\" .md\n");
+}
+
 if ($preview !== null) {
     @mkdir("$preview/assets", 0755, true);
     echo 'Preview: ' . count($shown) . " articles in $preview/blog/\n";
@@ -377,7 +491,13 @@ $sitemapEntries = $live ? '  <url><loc>' . SITE . '/blog/</loc><lastmod>' . max(
 foreach ($live as $slug => $post) {
     $sitemapEntries .= '  <url><loc>' . SITE . "/blog/$slug/</loc><lastmod>{$post['updated']}</lastmod></url>\n";
 }
+$guideEntries = $guideLive ? '  <url><loc>' . SITE . '/guide/</loc><lastmod>' . max(array_map(fn($g) => $g['reviewed'] ?? '2026-10-10', $guideLive)) . "</lastmod></url>\n" : '';
+foreach ($guideLive as $slug => $g) {
+    $guideEntries .= '  <url><loc>' . SITE . "/guide/$slug/</loc><lastmod>" . ($g['reviewed'] ?? '2026-10-10') . "</lastmod></url>\n";
+}
 $sitemap = (string)file_get_contents("$root/public_html/sitemap.xml");
+$sitemap = preg_replace('~\s*<!-- guide -->.*?<!-- /guide -->~s', '', $sitemap);
+$sitemap = str_replace('</urlset>', "  <!-- guide -->\n$guideEntries  <!-- /guide -->\n</urlset>", $sitemap);
 $sitemap = preg_replace('~\s*<!-- blog -->.*?<!-- /blog -->~s', '', $sitemap);
 $sitemap = str_replace('</urlset>', "  <!-- blog -->\n$sitemapEntries  <!-- /blog -->\n</urlset>", $sitemap);
 file_put_contents("$root/public_html/sitemap.xml", $sitemap);
@@ -398,6 +518,14 @@ if ($live) {
     }
     $section = rtrim($section) . "\n";
     $llms = rtrim($llms) . "\n\n$section<!-- /blog -->\n";
+}
+$llms = preg_replace('~\n?<!-- guide -->.*?<!-- /guide -->\n?~s', "\n", $llms);
+if ($guideLive) {
+    $section = "<!-- guide -->\n## Bondi's Mac guide: what is this process?\n";
+    foreach ($guideLive as $slug => $g) {
+        $section .= '- [' . $g['title'] . '](' . SITE . "/guide/$slug.md): " . $g['description'] . "\n";
+    }
+    $llms = rtrim($llms) . "\n\n$section<!-- /guide -->\n";
 }
 file_put_contents("$root/public_html/llms.txt", $llms);
 $written[] = "$root/public_html/llms.txt";
@@ -430,7 +558,10 @@ if (!$live) {
 }
 
 // The top-level copy that Hostinger serves mirrors public_html for these files
-foreach (['blog', 'sitemap.xml', 'llms.txt', 'llms-full.txt'] as $item) {
+if (!$guideLive) {
+    shell_exec('rm -rf ' . escapeshellarg("$root/public_html/guide")); // nothing published yet: no guide pages on the site
+}
+foreach (['blog', 'guide', 'sitemap.xml', 'llms.txt', 'llms-full.txt'] as $item) {
     shell_exec('rm -rf ' . escapeshellarg("$root/$item") . ' && cp -R ' . escapeshellarg("$root/public_html/$item") . ' ' . escapeshellarg("$root/$item") . ' 2>/dev/null');
 }
 echo 'Published ' . count($live) . " articles.\n";
