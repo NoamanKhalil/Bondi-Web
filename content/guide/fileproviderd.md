@@ -4,7 +4,7 @@ name: fileproviderd
 group: processes
 description: fileproviderd connects iCloud Drive, OneDrive, Dropbox and other cloud storage to Finder. Why it uses high CPU or memory, especially while OneDrive syncs.
 answer: fileproviderd connects cloud storage (iCloud Drive, OneDrive, Dropbox and others) to Finder. It's part of macOS and safe; high CPU or memory means a big sync, often the first one after signing in to a cloud app like OneDrive.
-status: draft
+status: published
 reviewed: 2026-10-10
 related: cloudd, fseventsd, mdworker
 searches: fileproviderd mac fileproviderd mac high memory fileproviderd mac high cpu onedrive fileproviderd mac os fileproviderd macbook fileproviderd process mac macos fileproviderd high cpu usage macos fileproviderd cpu fileproviderd onedrive mac mac fileproviderd と は what is fileproviderd on macos what is fileproviderd on my mac what is fileproviderd process what is fileproviderd on macbook what does fileproviderd do

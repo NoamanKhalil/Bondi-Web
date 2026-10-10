@@ -26,6 +26,7 @@ Checked against each app's own website (apple.com, bjango.com, github.com/exelba
 ## Product
 - [Bondi for Mac](https://trybondi.app/): features, on-device AI, launch plans, pricing and FAQ
 - [Join the beta](https://trybondi.app/beta/): the beta sign-up list
+- [Bondi's Mac guide](https://trybondi.app/guide/): what the processes in Activity Monitor are, why they get busy, and whether you can quit them
 - [Bondi vs Activity Monitor, iStat Menus, Stats and Vitals](https://trybondi.app/compare/compare.md): what each does, what each costs, and which to choose
 - [The full facts](https://trybondi.app/llms-full.txt): everything above in detail, with Bondi's notes on 125 macOS processes
 
@@ -60,3 +61,27 @@ Checked against each app's own website (apple.com, bjango.com, github.com/exelba
 - [Bondi vs Activity Monitor: what each one is for](https://trybondi.app/blog/bondi-vs-activity-monitor.md): Looking for an Activity Monitor alternative for Mac? Activity Monitor shows every process; Bondi tells you what they mean. When to use which.
 - [How Bondi's AI explains your Mac without making up a number](https://trybondi.app/blog/ai-that-never-makes-up-a-number.md): How Bondi's on-device AI, with Apple Intelligence where available, explains your Mac in one sentence while every figure stays measured and checked.
 <!-- /blog -->
+
+<!-- guide -->
+## Bondi's Mac guide: what is this process?
+- [What is apsd on Mac?](https://trybondi.app/guide/apsd.md): apsd is Apple's push notification service on your Mac. What it does, why it's rarely busy, and what to do when apsd asks for your keychain password.
+- [What is backupd on Mac?](https://trybondi.app/guide/backupd.md): backupd runs Time Machine backups on your Mac. Why it uses CPU during a backup, what backupd-helper is, and how to stop a backup safely.
+- [What is cloudd on Mac?](https://trybondi.app/guide/cloudd.md): cloudd syncs your data with iCloud for Apple's apps and iCloud Drive. Why cloudd uses high CPU on a Mac, and what to do when a sync seems stuck.
+- [What is CommCenter on Mac?](https://trybondi.app/guide/commcenter.md): CommCenter handles phone calls and text messages that work with your iPhone on a Mac. Why it asks for your keychain, and whether CommCenter is a virus.
+- [What is coreaudiod on Mac?](https://trybondi.app/guide/coreaudiod.md): coreaudiod handles all sound on your Mac. Why it uses CPU, how to restart coreaudiod when the sound stops or crackles, and why you shouldn't quit it.
+- [What is fileproviderd on Mac?](https://trybondi.app/guide/fileproviderd.md): fileproviderd connects iCloud Drive, OneDrive, Dropbox and other cloud storage to Finder. Why it uses high CPU or memory, especially while OneDrive syncs.
+- [What is fseventsd on Mac?](https://trybondi.app/guide/fseventsd.md): fseventsd keeps a record of file changes for Time Machine, Spotlight and other apps. Why fseventsd uses CPU or memory during builds, downloads and unpacking.
+- [What is launchd on Mac?](https://trybondi.app/guide/launchd.md): launchd is the first process macOS starts, and it starts every other service. Why launchd is rarely busy, and what high CPU from it usually means.
+- [What is loginwindow on Mac?](https://trybondi.app/guide/loginwindow.md): loginwindow is your Mac's login session. Why loginwindow can use hundreds of MB of memory, what loginwindow Secure Input means, and why not to quit it.
+- [What is mDNSResponder on Mac?](https://trybondi.app/guide/mdnsresponder.md): mDNSResponder finds devices on your network and looks up web addresses for every app. Why it uses network or CPU, how to restart it, and why not to disable it.
+- [What is mds_stores on Mac?](https://trybondi.app/guide/mds-stores.md): mds_stores is Spotlight's indexer. Why it uses high CPU, memory or disk on your Mac, how long indexing takes, and how to keep folders out of it.
+- [What is mdworker (mdworker_shared) on Mac?](https://trybondi.app/guide/mdworker.md): mdworker and mdworker_shared are Spotlight's helpers that read your files. Why there are many copies, why they use high CPU, and when they settle.
+- [What is mediaanalysisd on Mac?](https://trybondi.app/guide/mediaanalysisd.md): mediaanalysisd analyzes photos and videos on your Mac for search, Live Text and Visual Look Up. Why it uses CPU, memory and storage, and what to leave alone.
+- [What is photoanalysisd on Mac?](https://trybondi.app/guide/photoanalysisd.md): photoanalysisd analyzes your Photos library for people, places and Memories. Why it uses CPU after imports, and whether you can disable or stop it.
+- [What is rapportd on Mac?](https://trybondi.app/guide/rapportd.md): rapportd lets your Apple devices nearby find and talk to each other for Handoff and Continuity. Why it asks to accept incoming connections, and whether to allow it.
+- [What is spindump on Mac?](https://trybondi.app/guide/spindump.md): spindump records what an app was doing when it stopped responding. Why it uses CPU right after a hang, and where its reports go.
+- [What is syspolicyd on Mac?](https://trybondi.app/guide/syspolicyd.md): syspolicyd is Gatekeeper: it checks apps the first time you open them. Why syspolicyd uses CPU on your Mac, and why it's busy for developers.
+- [What is SystemUIServer on Mac?](https://trybondi.app/guide/systemuiserver.md): SystemUIServer runs some of the menu bar's icons on your Mac. Why it's rarely busy, and how to restart it when menu bar icons stop responding.
+- [What is trustd on Mac?](https://trybondi.app/guide/trustd.md): trustd checks the security certificates of the websites and servers your apps connect to. Why trustd uses CPU on a Mac, and why several copies are normal.
+- [What is XProtect (XprotectService) on Mac?](https://trybondi.app/guide/xprotectservice.md): XProtect is Apple's built-in malware protection on every Mac. What XprotectService does, why it uses CPU, and why you should leave it running.
+<!-- /guide -->

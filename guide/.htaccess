@@ -1,0 +1,5 @@
+# The guide's plain-text copies (/guide/<slug>.md) are public, unlike .md files elsewhere on the site.
+<FilesMatch "\.md$">
+  Require all granted
+</FilesMatch>
+AddType "text/markdown; charset=utf-8" .md

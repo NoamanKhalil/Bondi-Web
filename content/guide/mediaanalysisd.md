@@ -4,7 +4,7 @@ name: mediaanalysisd
 group: processes
 description: mediaanalysisd analyzes photos and videos on your Mac for search, Live Text and Visual Look Up. Why it uses CPU, memory and storage, and what to leave alone.
 answer: mediaanalysisd analyzes photos and videos on your Mac, for example to find text and objects for search and Live Text. It's part of macOS and safe; it's busy after you add many photos or videos, and it works on the Mac, not in the cloud.
-status: draft
+status: published
 reviewed: 2026-10-10
 related: photoanalysisd, mdworker, cloudd
 searches: mediaanalysisd mac mediaanalysisd macos mediaanalysisd macbook mediaanalysisd mac reddit mediaanalysisd mac storage mediaanalysisd macos 27 mediaanalysisd mac activity monitor mediaanalysisd macos 26 mediaanalysisd mac delete macos mediaanalysisd high cpu what is mediaanalysisd what is mediaanalysisd mac mediaanalysisd-access what is mediaanalysisd process what is mediaanalysisd access on mac what is mediaanalysisd on macbook what does mediaanalysisd do what does mediaanalysisd do on mac what is apple mediaanalysisd what is com apple mediaanalysisd cache

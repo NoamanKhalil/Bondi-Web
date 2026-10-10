@@ -4,7 +4,7 @@ name: apsd
 group: processes
 description: apsd is Apple's push notification service on your Mac. What it does, why it's rarely busy, and what to do when apsd asks for your keychain password.
 answer: apsd is Apple's push notification service: it receives notifications from the internet for your apps. It's part of macOS and safe. If it asks for your login keychain password, type your Mac's login password.
-status: draft
+status: published
 reviewed: 2026-10-10
 related: mdnsresponder, commcenter, cloudd
 searches: apsd mac apsd mac high cpu apsd macos apsd mac process apsd mac activity monitor apsd macbook apsd mac cpu apsd mac meaning apsd keychain mac apsd root mac what is apsd what is apsd on mac what is apsdaemon.exe what is apsdaemon what is apsd in router what is apsd wifi what is apsd capable what is apsdaemon in startup

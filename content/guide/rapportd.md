@@ -4,7 +4,7 @@ name: rapportd
 group: processes
 description: rapportd lets your Apple devices nearby find and talk to each other for Handoff and Continuity. Why it asks to accept incoming connections, and whether to allow it.
 answer: rapportd lets your Apple devices nearby find and talk to each other, for Handoff, Universal Clipboard and other Continuity features. It's part of macOS and safe. If the firewall asks about incoming connections, allow it if you use those features.
-status: draft
+status: published
 reviewed: 2026-10-10
 related: commcenter, mdnsresponder, apsd
 searches: rapportd mac rapportd mac firewall rapportd macos rapportd macbook rapportd mac incoming connections rapportd mac process rapportd mac remove rapportd mac activity monitor rapportd mac reddit rapportd mac que es what is rapportd what is rapportd on mac what is rapportd app what is rapportd in activity monitor what is rapportd macos what is rapportd on macbook what is rapportd on mac activity monitor what is rapportd incoming connection what is rapportd process on mac what does rapportd do

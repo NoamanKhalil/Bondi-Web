@@ -4,7 +4,7 @@ name: CommCenter
 group: processes
 description: CommCenter handles phone calls and text messages that work with your iPhone on a Mac. Why it asks for your keychain, and whether CommCenter is a virus.
 answer: CommCenter handles the phone and text message features that work with your iPhone, such as calls and SMS on your Mac. It's part of macOS and safe, not a virus. If it asks for your login keychain password, type your Mac's login password.
-status: draft
+status: published
 reviewed: 2026-10-10
 related: rapportd, apsd, loginwindow
 searches: commcenter mac commcenter mac virus commcenter macbook mac commcenter wants to use macbook commcenter keychain mac commcenter login keychain mac commcenter keychain commcenter apple mac que es commcenter mac mac commcenter キー チェーン what is commcenter on mac what is commcenter what is commcenter login keychain what is commcenter on macbook what is commcenter on my mac what is commcenter on iphone what is apple commcenter

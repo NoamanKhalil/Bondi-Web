@@ -4,7 +4,7 @@ name: loginwindow
 group: processes
 description: loginwindow is your Mac's login session. Why loginwindow can use hundreds of MB of memory, what loginwindow Secure Input means, and why not to quit it.
 answer: loginwindow runs your login session: logging in and out, the lock screen, and reopening apps after a restart. It's part of macOS and safe. Hundreds of MB of memory can be normal; quitting it logs you out.
-status: draft
+status: published
 reviewed: 2026-10-10
 related: launchd, systemuiserver, rapportd
 searches: loginwindow mac loginwindow macos loginwindow mac high memory loginwindow mac process loginwindow mac secure input loginwindow mac high cpu loginwindow mac activity monitor loginwindow macbook loginwindow mac что это loginwindow mac que es what is loginwindow on mac what is loginwindow on mac activity monitor what is loginwindow what is loginwindow in activity monitor what is loginwindow app

@@ -4,7 +4,7 @@ name: mDNSResponder
 group: processes
 description: mDNSResponder finds devices on your network and looks up web addresses for every app. Why it uses network or CPU, how to restart it, and why not to disable it.
 answer: mDNSResponder finds devices on your network (Bonjour) and looks up web addresses (DNS) for every app. It's essential and safe; don't disable it, or names stop working. Restarting it also clears your Mac's DNS cache.
-status: draft
+status: published
 reviewed: 2026-10-10
 related: rapportd, apsd, trustd
 searches: mdnsresponder mac mdnsresponder mac high network mdnsresponder macos mdnsresponder mac high cpu mdnsresponder macbook mdnsresponder mac activity monitor mdnsresponder mac disable mdnsresponder mac process mdnsresponder mac restart mdnsresponder mac reddit what is mdnsresponder on mac what is mdnsresponder what is mdnsresponder.exe what is mdnsresponder on windows what is mdnsresponder on mac activity monitor what is mdnsresponder on macbook mdnsresponder (65) what is mdnsresponder on macbook pro what is mdnsresponder process on mac what is mdnsresponder process

@@ -4,7 +4,7 @@ name: mdworker
 group: processes
 description: mdworker and mdworker_shared are Spotlight's helpers that read your files. Why there are many copies, why they use high CPU, and when they settle.
 answer: mdworker and mdworker_shared are Spotlight's helpers: they read the contents of new and changed files so Spotlight can find them. They're part of macOS and safe; many copies and high CPU after an update or a big download are normal.
-status: draft
+status: published
 reviewed: 2026-10-10
 related: mds-stores, fseventsd, mediaanalysisd
 article: spotlight-indexing-slow-mac

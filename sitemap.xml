@@ -7,6 +7,29 @@
   <url><loc>https://trybondi.app/terms/</loc><lastmod>2026-10-04</lastmod></url>
   <url><loc>https://trybondi.app/eula/</loc><lastmod>2026-10-04</lastmod></url>
   <url><loc>https://trybondi.app/refunds/</loc><lastmod>2026-09-29</lastmod></url>
+  <!-- guide -->
+  <url><loc>https://trybondi.app/guide/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/apsd/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/backupd/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/cloudd/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/commcenter/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/coreaudiod/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/fileproviderd/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/fseventsd/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/launchd/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/loginwindow/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/mdnsresponder/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/mds-stores/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/mdworker/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/mediaanalysisd/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/photoanalysisd/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/rapportd/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/spindump/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/syspolicyd/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/systemuiserver/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/trustd/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/xprotectservice/</loc><lastmod>2026-10-10</lastmod></url>
+  <!-- /guide -->
   <!-- blog -->
   <url><loc>https://trybondi.app/blog/</loc><lastmod>2026-10-10</lastmod></url>
   <url><loc>https://trybondi.app/blog/ai-that-never-makes-up-a-number/</loc><lastmod>2026-10-10</lastmod></url>

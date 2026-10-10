@@ -4,7 +4,7 @@ name: coreaudiod
 group: processes
 description: coreaudiod handles all sound on your Mac. Why it uses CPU, how to restart coreaudiod when the sound stops or crackles, and why you shouldn't quit it.
 answer: coreaudiod handles all sound on your Mac: playback, recording and audio devices. It's part of macOS and safe. If the sound stops or crackles, restarting it with sudo killall coreaudiod in Terminal often fixes it.
-status: draft
+status: published
 reviewed: 2026-10-10
 related: systemuiserver, spindump, launchd
 searches: coreaudiod mac coreaudiod mac missing coreaudiod macbook coreaudiod mac download coreaudiod mac restart coreaudiod mac activity monitor coreaudiod mac process coreaudiod mac kill coreaudiod mac cpu coreaudiod mac что это what is coreaudiod on mac what is coreaudiod what is coreaudiod in activity monitor what is coreaudiod on mac activity monitor what does coreaudiod do what is usr sbin coreaudiod what is sudo killall coreaudiod what is sudo pkill coreaudiod

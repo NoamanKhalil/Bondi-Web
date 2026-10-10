@@ -4,7 +4,7 @@ name: mds_stores
 group: processes
 description: mds_stores is Spotlight's indexer. Why it uses high CPU, memory or disk on your Mac, how long indexing takes, and how to keep folders out of it.
 answer: mds_stores is Spotlight's indexer: it keeps the index that makes searches instant. It's part of macOS and safe; high CPU, memory or disk use means it's rebuilding the index, which settles on its own, usually within hours.
-status: draft
+status: published
 reviewed: 2026-10-10
 related: mdworker, fseventsd, backupd
 article: spotlight-indexing-slow-mac

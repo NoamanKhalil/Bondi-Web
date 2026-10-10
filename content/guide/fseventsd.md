@@ -4,7 +4,7 @@ name: fseventsd
 group: processes
 description: fseventsd keeps a record of file changes for Time Machine, Spotlight and other apps. Why fseventsd uses CPU or memory during builds, downloads and unpacking.
 answer: fseventsd keeps a record of which files changed, so Time Machine, Spotlight and other apps know what to look at. It's part of macOS and safe; it's busy when many files change at once, like builds, downloads or unpacking archives.
-status: draft
+status: published
 reviewed: 2026-10-10
 related: mds-stores, mdworker, backupd
 searches: fseventsd mac fseventsd macos fseventsd mac cpu fseventsd macbook fseventsd mac process fseventsd mac activity monitor macos fseventsd high cpu macos fseventsd high memory fseventsd uuid mac mac fseventsd と は what is fseventsd on mac what is fseventsd what is fseventsd-uuid what is .fseventsd folder on usb what is .fseventsd folder what is fseventsd process on mac what is .fseventsd file what is fseventsd on my usb what is fseventsd on mac activity monitor what is .fseventsd and .spotlight-v100

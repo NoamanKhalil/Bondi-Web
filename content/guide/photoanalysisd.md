@@ -4,7 +4,7 @@ name: photoanalysisd
 group: processes
 description: photoanalysisd analyzes your Photos library for people, places and Memories. Why it uses CPU after imports, and whether you can disable or stop it.
 answer: photoanalysisd analyzes your Photos library for people, places and Memories. It's part of macOS and safe; it's busy after you add many photos or turn on iCloud Photos, and it works mostly while your Mac is idle and plugged in.
-status: draft
+status: published
 reviewed: 2026-10-10
 related: mediaanalysisd, cloudd, mds-stores
 searches: photoanalysisd mac photoanalysisd mac disable photoanalysisd macos photoanalysisd mac process photoanalysisd macbook mac photoanalysisd cpu photoanalysisd mac activity monitor macos photoanalysisd high cpu mac photoanalysisd stop macos photoanalysisd process what is photoanalysisd what is photoanalysisd on mac what is photoanalysisd in activity monitor what is photoanalysisd on mac activity monitor what is photoanalysisd on macbook what does photoanalysisd do what is the photoanalysisd process on mac macos what is photoanalysisd what is com apple photoanalysisd

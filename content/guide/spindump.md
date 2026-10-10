@@ -4,7 +4,7 @@ name: spindump
 group: processes
 description: spindump records what an app was doing when it stopped responding. Why it uses CPU right after a hang, and where its reports go.
 answer: spindump records what an app was doing when it stopped responding, for a hang report. It's part of macOS and safe; it's busy right after an app hangs and finishes quickly.
-status: draft
+status: published
 reviewed: 2026-10-10
 related: launchd, loginwindow, systemuiserver
 article: force-quit-mac

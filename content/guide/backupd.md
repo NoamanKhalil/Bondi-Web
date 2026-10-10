@@ -4,7 +4,7 @@ name: backupd
 group: processes
 description: backupd runs Time Machine backups on your Mac. Why it uses CPU during a backup, what backupd-helper is, and how to stop a backup safely.
 answer: backupd runs Time Machine backups. It's part of macOS and safe; it's busy while a backup runs, longest the first time. To stop a backup, use Skip This Backup in the Time Machine menu.
-status: draft
+status: published
 reviewed: 2026-10-10
 related: fseventsd, cloudd, mds-stores
 searches: backupd mac backupd macos what is backupd what is backupd on mac

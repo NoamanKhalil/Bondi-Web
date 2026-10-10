@@ -4,7 +4,7 @@ name: syspolicyd
 group: processes
 description: syspolicyd is Gatekeeper: it checks apps the first time you open them. Why syspolicyd uses CPU on your Mac, and why it's busy for developers.
 answer: syspolicyd is Gatekeeper: it checks apps the first time you open them, to make sure they come from an identified developer and haven't been changed. It's part of macOS and safe; it's busy when you open a new or very large app.
-status: draft
+status: published
 reviewed: 2026-10-10
 related: xprotectservice, trustd, launchd
 searches: syspolicyd mac syspolicyd mac cpu syspolicyd macbook syspolicyd mac process macos syspolicyd cpu usage macos syspolicyd high cpu mac syspolicyd とは what is syspolicyd what is syspolicyd on my mac what is syspolicyd on macbook what is usr libexec syspolicyd

@@ -4,7 +4,7 @@ name: launchd
 group: processes
 description: launchd is the first process macOS starts, and it starts every other service. Why launchd is rarely busy, and what high CPU from it usually means.
 answer: launchd is the first process macOS starts: it starts, stops and restarts every other background service. It's essential and can't be quit. It's rarely busy; when it is, another service is usually being restarted over and over.
-status: draft
+status: published
 reviewed: 2026-10-10
 related: loginwindow, spindump, systemuiserver
 searches: launchd mac launchd macos launchd mac high cpu launchd mac gui launchd macbook launchd mac activity monitor launchd mac tutorial launchd macos disk usage launchd macos gui launchd mac process what is launchdarkly what is launchd on mac what is launchdarkly used for what is launchd what is launchdaemons what is launchdarkly and how does it work what is launchdaemons mac what is launchd in macos what is launchdarkly feature flag

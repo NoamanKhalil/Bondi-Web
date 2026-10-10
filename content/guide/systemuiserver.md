@@ -4,7 +4,7 @@ name: SystemUIServer
 group: processes
 description: SystemUIServer runs some of the menu bar's icons on your Mac. Why it's rarely busy, and how to restart it when menu bar icons stop responding.
 answer: SystemUIServer runs some of the icons in your Mac's menu bar. It's part of macOS and safe, and rarely busy. If menu bar icons freeze, restarting it with killall SystemUIServer in Terminal reloads them.
-status: draft
+status: published
 reviewed: 2026-10-10
 related: loginwindow, coreaudiod, launchd
 searches: systemuiserver mac systemuiserver mac capture screen systemuiserver mac os systemuiserver macbook systemuiserver mac currently sharing systemuiserver mac microphone mac systemuiserver high cpu mac systemuiserver not responding killall systemuiserver mac systemuiserver app mac what is systemuiserver what is systemuiserver on mac what is systemuiserver app what is systemuiserver is capturing your screen what is com apple systemuiserver

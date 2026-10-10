@@ -4,7 +4,7 @@ name: cloudd
 group: processes
 description: cloudd syncs your data with iCloud for Apple's apps and iCloud Drive. Why cloudd uses high CPU on a Mac, and what to do when a sync seems stuck.
 answer: cloudd syncs your data with iCloud for Apple's apps and iCloud Drive. It's part of macOS and safe; high CPU means a large sync, such as after signing in to iCloud, and it settles when the sync finishes.
-status: draft
+status: published
 reviewed: 2026-10-10
 related: fileproviderd, photoanalysisd, apsd
 searches: cloudd mac high cpu cloudd mac cloudd macos cloudd mac process cloudd macbook cloudd mac activity monitor cloudd process mac what is clouddev what is cloudd on mac what is cloudd what is clouddocs on mac what is clouddeck what is clouddocs what is clouddrop by jamie paige about what is clouddrive

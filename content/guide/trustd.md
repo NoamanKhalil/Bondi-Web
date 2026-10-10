@@ -4,7 +4,7 @@ name: trustd
 group: processes
 description: trustd checks the security certificates of the websites and servers your apps connect to. Why trustd uses CPU on a Mac, and why several copies are normal.
 answer: trustd checks the security certificates of the websites and servers your apps connect to, so connections are what they claim to be. It's part of macOS and safe; it's busy when your Mac makes many new connections at once.
-status: draft
+status: published
 reviewed: 2026-10-10
 related: syspolicyd, xprotectservice, mdnsresponder
 searches: trustd mac trustd mac process trustd macos trustd macbook trustd mac activity monitor trustd mac cpu trustd process mac trustd macbook pro macos trustd high cpu macos trustd cpu what is trustd what is trustd on mac what is trustdale what is trustd process on mac
