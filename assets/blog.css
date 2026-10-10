@@ -43,6 +43,9 @@ nav.links { display: flex; gap: 20px; } nav.links a { color: var(--soft); text-d
 main { padding: 0 22px; }
 .post { max-width: 720px; margin: 0 auto; padding: 48px 0 40px; }
 .crumbs { font-size: .85rem; } .crumbs a { color: var(--bondi-ink); text-decoration: none; font-weight: 600; }
+.crumbs ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 2px 8px; } .crumbs li { display: inline-flex; gap: 8px; }
+.crumbs li + li::before { content: "›"; color: var(--faint); } .crumbs li:last-child a { color: var(--soft); font-weight: 500; }
+.blog-head .crumbs ol { justify-content: center; } .blog-head .crumbs { margin-bottom: 10px; }
 .draft-flag { display: inline-block; margin: 14px 0 0; padding: 6px 12px; border-radius: 980px; background: #ff9f0a22; color: #c76e00; font-size: .85rem; font-weight: 600; }
 .post h1 { font: 700 clamp(2.2rem, 5.5vw, 3.4rem)/1.08 var(--display); letter-spacing: -0.035em; margin: 14px 0 14px; text-wrap: balance; }
 .byline { color: var(--faint); font-size: .9rem; margin: 0 0 32px; } .byline a { color: var(--soft); }
