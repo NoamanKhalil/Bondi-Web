@@ -1,8 +1,9 @@
 ---
 title: Why is my Mac so hot and loud?
 description: Loud fans on a MacBook or any Mac mean the chip is working hard or running hot. Here's how to find what's heating it, and what to do if they won't settle.
+answer: Loud fans mean the chip is making more heat than the Mac can lose quietly. Find the busy app in Activity Monitor's CPU tab, put the Mac on a hard, flat surface, and the fans settle within minutes.
 date: 2026-10-03
-updated: 2026-10-04
+updated: 2026-10-10
 topic: heat
 status: published
 order: 4

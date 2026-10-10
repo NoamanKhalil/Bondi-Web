@@ -2,7 +2,9 @@
 
 > Mac running slow? It usually comes down to one of a handful of causes. Here's how to tell which one it is, with real readings from a real MacBook Pro.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 4, 2026.
+**Quick answer:** A slow Mac almost always has one cause: memory running short, one app working hard, macOS doing background work, or the Mac slowing itself down because it's hot. Activity Monitor's Memory and CPU tabs show which one.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 10, 2026.
 Web page: https://trybondi.app/blog/why-is-my-mac-slow/
 
 A slow Mac, whether it's a MacBook Air, a MacBook Pro or an iMac, almost always has one specific cause: memory running short, one app working hard, macOS doing background work, or the Mac protecting itself from heat. The trick is finding which one, because the fix for each is different.
@@ -85,4 +87,4 @@ No. macOS fills spare memory with cached files and gives it back when apps need 
 macOS rebuilds the Spotlight index, re-analyzes photos and syncs iCloud in the background. It settles on its own, usually within hours.
 
 ---
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/

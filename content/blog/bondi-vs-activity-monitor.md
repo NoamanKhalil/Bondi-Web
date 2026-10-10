@@ -1,8 +1,9 @@
 ---
 title: "Bondi vs Activity Monitor: what each one is for"
 description: Looking for an Activity Monitor alternative for Mac? Activity Monitor shows every process; Bondi tells you what they mean. When to use which.
+answer: Activity Monitor, built into every Mac, lists every process and every figure. Bondi groups those processes into the apps you know, keeps 30 days of history, and says in one sentence what's slowing your Mac down. Most people use both.
 date: 2026-10-03
-updated: 2026-10-03
+updated: 2026-10-10
 topic: bondi
 status: published
 order: 9

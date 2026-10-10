@@ -1,8 +1,9 @@
 ---
 title: Why is my Mac so slow? How to find the real cause
 description: Mac running slow? It usually comes down to one of a handful of causes. Here's how to tell which one it is, with real readings from a real MacBook Pro.
+answer: A slow Mac almost always has one cause: memory running short, one app working hard, macOS doing background work, or the Mac slowing itself down because it's hot. Activity Monitor's Memory and CPU tabs show which one.
 date: 2026-10-03
-updated: 2026-10-04
+updated: 2026-10-10
 topic: slow
 status: published
 order: 1

@@ -1,8 +1,9 @@
 ---
 title: How Bondi's AI explains your Mac without making up a number
 description: How Bondi's on-device AI, with Apple Intelligence where available, explains your Mac in one sentence while every figure stays measured and checked.
+answer: Bondi measures every number itself, picks what matters, and lets an on-device AI write only the words around those facts. Then it checks the sentence: if a number or the tone is wrong, Bondi uses its own sentence instead. Nothing leaves your Mac.
 date: 2026-10-03
-updated: 2026-10-03
+updated: 2026-10-10
 topic: bondi
 status: published
 order: 10

@@ -1,10 +1,11 @@
 ---
 title: How to check uptime on a Mac
 description: Three ways to see how long your Mac or MacBook has been running since its last restart, what the uptime command's numbers mean, and whether a long uptime matters.
+answer: Open Terminal and type `uptime`. Or hold Option, choose System Information from the Apple menu, and click Software to see Time since boot. A long uptime isn't a problem by itself.
 date: 2026-10-10
 updated: 2026-10-10
 topic: tools
-status: draft
+status: published
 order: 23
 image: /assets/features/cpu.png
 related: why-is-my-mac-slow, task-manager-for-mac, memory-pressure-explained

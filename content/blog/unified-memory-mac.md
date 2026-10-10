@@ -1,10 +1,11 @@
 ---
 title: What is unified memory on a Mac? Unified memory vs RAM
 description: Unified memory is the RAM in Apple silicon Macs, shared by the processor, graphics and Neural Engine. What it means, how it differs from RAM and storage, and how much you need.
+answer: Unified memory is the RAM in Apple silicon Macs, shared by the processor, graphics and Neural Engine. It isn't storage, and it can't be upgraded later. Memory pressure in Activity Monitor tells you whether you have enough.
 date: 2026-10-10
 updated: 2026-10-10
 topic: memory
-status: draft
+status: published
 order: 24
 image: /assets/features/popover-top.png
 related: memory-pressure-explained, which-app-is-using-my-mac-memory, why-is-my-mac-slow

@@ -2,7 +2,9 @@
 
 > kernel_task at high CPU usually means your Mac is hot, and macOS is slowing apps on purpose to cool it. Here's why it happens and what actually helps.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 4, 2026.
+**Quick answer:** High kernel_task CPU means your Mac is hot: macOS takes CPU time on purpose so apps slow down and the heat drops. It's a safety feature, not malware. Find the app heating the Mac and give it air, and it settles.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 10, 2026.
 Web page: https://trybondi.app/blog/kernel-task-high-cpu/
 
 When kernel_task shows a high CPU figure, your Mac is almost always running hot, or close to overheating. macOS is taking CPU time on purpose so that apps slow down and the heat drops. It's a safety feature, not a bug or malware.
@@ -66,4 +68,4 @@ No, it can't be quit. Let the Mac cool down or close the apps that heat it.
 Its large memory figure is normal: it's the core of macOS, managing memory and hardware for everything else.
 
 ---
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/

@@ -1,6 +1,7 @@
 ---
 title: What is mDNSResponder on Mac?
 description: mDNSResponder finds devices on your network (Bonjour) and looks up web addresses (DNS) for your Mac. Here's why it gets busy and whether you can quit it.
+answer: mDNSResponder finds devices on your network (Bonjour) and looks up web addresses (DNS) for your apps. It's essential and safe; when it's busy, your Mac is making a lot of network lookups.
 date: 2026-10-04
 topic: processes
 status: draft

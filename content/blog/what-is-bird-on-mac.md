@@ -1,6 +1,7 @@
 ---
 title: What is bird on Mac?
 description: bird is the process behind iCloud Drive syncing on your Mac, working with cloudd. Here's why bird gets busy and what to do about it.
+answer: bird syncs iCloud Drive on your Mac, together with cloudd. It's part of macOS and safe; when it's busy, it's uploading or downloading many files.
 date: 2026-10-04
 topic: processes
 status: draft

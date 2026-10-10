@@ -1,8 +1,9 @@
 ---
 title: "Memory pressure on Mac: what yellow and red mean"
 description: "Memory Used" being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here's how to read them.
+answer: Memory pressure shows how hard macOS is working to fit everything into memory: green is fine, yellow means heavy compression, and red means it's swapping to disk, which is when a Mac slows down. A high Memory Used figure on its own is normal.
 date: 2026-10-03
-updated: 2026-10-04
+updated: 2026-10-10
 topic: memory
 status: published
 order: 3

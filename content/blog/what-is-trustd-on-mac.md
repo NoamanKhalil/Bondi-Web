@@ -1,6 +1,7 @@
 ---
 title: What is trustd on Mac?
 description: trustd checks the security certificates of websites and servers your apps connect to. Here's why trustd gets busy and why it's safe to leave running.
+answer: trustd checks the security certificates of the websites and servers your apps connect to. It's part of macOS and safe; it's busy when your Mac makes many new connections at once.
 date: 2026-10-04
 topic: processes
 status: draft

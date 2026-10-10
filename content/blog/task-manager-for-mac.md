@@ -1,10 +1,11 @@
 ---
 title: Task manager for Mac: how to open it, and the shortcut
 description: The Mac's task manager is Activity Monitor. Here's how to open it on a MacBook or any Mac, the shortcut that works like Ctrl-Alt-Delete, and how to end a stuck process.
+answer: The Mac's task manager is **Activity Monitor**: press Command-Space, type Activity Monitor and press Return. To close a frozen app, the way Ctrl-Alt-Delete does on Windows, press **Option-Command-Esc**.
 date: 2026-10-10
 updated: 2026-10-10
 topic: tools
-status: draft
+status: published
 order: 21
 image: /assets/features/busiest.png
 related: force-quit-mac, which-app-is-using-my-mac-memory, bondi-vs-activity-monitor

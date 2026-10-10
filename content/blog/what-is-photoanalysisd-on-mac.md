@@ -1,6 +1,7 @@
 ---
 title: What is photoanalysisd on Mac?
 description: photoanalysisd analyzes your Photos library for people, places and Memories. Here's why it uses CPU after imports or updates, and how to help it finish.
+answer: photoanalysisd analyzes your Photos library for people, places and Memories. It's safe; it's busy after you add many photos or turn on iCloud Photos, and it prefers to work while your Mac is idle and plugged in.
 date: 2026-10-04
 topic: processes
 status: draft

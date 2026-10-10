@@ -1,6 +1,7 @@
 ---
 title: What is XProtect on Mac?
 description: XProtect is Apple's built-in malware protection on your Mac. Here's what XprotectService does, why it sometimes uses CPU, and why you should leave it running.
+answer: XProtect is Apple's built-in malware protection on every Mac. It's safe; when it's busy, it's scanning, usually after a rules update or a new download.
 date: 2026-10-04
 topic: processes
 status: draft

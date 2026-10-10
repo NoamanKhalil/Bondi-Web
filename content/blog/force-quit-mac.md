@@ -1,10 +1,11 @@
 ---
 title: How to force quit on a Mac, even when it's frozen
 description: How to force quit an app on a MacBook or any Mac: the keyboard shortcut, three other ways, and what to do when the whole screen is frozen.
+answer: Press **Option-Command-Esc**, select the app that isn't responding and click **Force Quit**. If the whole Mac is frozen, hold the power button for about 10 seconds until it turns off, then start it again.
 date: 2026-10-10
 updated: 2026-10-10
 topic: tools
-status: draft
+status: published
 order: 22
 image: /assets/features/warning.png
 related: task-manager-for-mac, why-is-my-mac-slow, check-mac-uptime

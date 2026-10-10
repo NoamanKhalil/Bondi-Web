@@ -43,11 +43,17 @@ Checked against each app's own website (apple.com, bjango.com, github.com/exelba
 ## Guides: Memory
 - [What is using memory on my Mac?](https://trybondi.app/blog/which-app-is-using-my-mac-memory.md): Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here's how to see which app is really using your Mac's memory.
 - [Memory pressure on Mac: what yellow and red mean](https://trybondi.app/blog/memory-pressure-explained.md): "Memory Used" being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here's how to read them.
+- [What is unified memory on a Mac? Unified memory vs RAM](https://trybondi.app/blog/unified-memory-mac.md): Unified memory is the RAM in Apple silicon Macs, shared by the processor, graphics and Neural Engine. What it means, how it differs from RAM and storage, and how much you need.
 
 ## Guides: Heat, fans and busy processes
 - [Why is my Mac so hot and loud?](https://trybondi.app/blog/mac-fans-loud.md): Loud fans on a MacBook or any Mac mean the chip is working hard or running hot. Here's how to find what's heating it, and what to do if they won't settle.
 - [kernel_task high CPU on Mac? Your Mac is cooling itself down](https://trybondi.app/blog/kernel-task-high-cpu.md): kernel_task at high CPU usually means your Mac is hot, and macOS is slowing apps on purpose to cool it. Here's why it happens and what actually helps.
 - [WindowServer using high CPU on Mac: what it means and what helps](https://trybondi.app/blog/windowserver-high-cpu.md): WindowServer draws everything on your Mac's screens. Here's why it gets busy, what normal looks like, and the settings that actually calm it down.
+
+## Guides: Mac tools and shortcuts
+- [Task manager for Mac: how to open it, and the shortcut](https://trybondi.app/blog/task-manager-for-mac.md): The Mac's task manager is Activity Monitor. Here's how to open it on a MacBook or any Mac, the shortcut that works like Ctrl-Alt-Delete, and how to end a stuck process.
+- [How to force quit on a Mac, even when it's frozen](https://trybondi.app/blog/force-quit-mac.md): How to force quit an app on a MacBook or any Mac: the keyboard shortcut, three other ways, and what to do when the whole screen is frozen.
+- [How to check uptime on a Mac](https://trybondi.app/blog/check-mac-uptime.md): Three ways to see how long your Mac or MacBook has been running since its last restart, what the uptime command's numbers mean, and whether a long uptime matters.
 
 ## Guides: Bondi and other tools
 - [Bondi vs Activity Monitor: what each one is for](https://trybondi.app/blog/bondi-vs-activity-monitor.md): Looking for an Activity Monitor alternative for Mac? Activity Monitor shows every process; Bondi tells you what they mean. When to use which.

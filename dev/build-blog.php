@@ -125,8 +125,9 @@ function markdown_copy(array $post): string
 {
     $md = preg_replace('~\]\(/~', '](' . SITE . '/', $post['markdown']);
     $dates = 'Published ' . nice_date($post['date']) . ($post['updated'] !== $post['date'] ? ', updated ' . nice_date($post['updated']) : '');
-    return "# {$post['title']}\n\n> {$post['description']}\n\nBy " . AUTHOR . ", maker of Bondi. $dates.\nWeb page: " . SITE . "/blog/{$post['slug']}/\n\n"
-         . trim($md) . "\n\n---\nBondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: " . SITE . "/\n";
+    $answer = ($post['answer'] ?? '') !== '' ? "**Quick answer:** {$post['answer']}\n\n" : '';
+    return "# {$post['title']}\n\n> {$post['description']}\n\n{$answer}By " . AUTHOR . ", maker of Bondi. $dates.\nWeb page: " . SITE . "/blog/{$post['slug']}/\n\n"
+         . trim($md) . "\n\n---\nBondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: " . SITE . "/\n";
 }
 
 function nice_date(string $ymd): string
@@ -198,6 +199,7 @@ foreach ($shown as $slug => $post) {
         '@context' => 'https://schema.org',
         '@graph' => [
             ['@type' => 'BlogPosting', 'headline' => $post['title'], 'description' => $post['description'],
+             'abstract' => ($post['answer'] ?? '') !== '' ? plain($post['answer']) : null,
              'datePublished' => $post['date'], 'dateModified' => $post['updated'], 'mainEntityOfPage' => $url,
              'image' => SITE . ($image ?: '/assets/og-image.jpg'),
              'author' => ['@type' => 'Person', 'name' => AUTHOR, 'url' => AUTHOR_URL, 'jobTitle' => 'Maker of Bondi'],
@@ -209,6 +211,7 @@ foreach ($shown as $slug => $post) {
                 ['@type' => 'ListItem', 'position' => 3, 'name' => $post['title'], 'item' => $url]]],
         ],
     ];
+    $ld['@graph'][0] = array_filter($ld['@graph'][0], fn($value) => $value !== null); // no "abstract" without an answer
     $qa = questions($post['markdown']);
     if ($qa) {
         $ld['@graph'][] = ['@type' => 'FAQPage', 'mainEntity' => array_map(fn($q) => ['@type' => 'Question', 'name' => $q[0],
@@ -222,6 +225,9 @@ foreach ($shown as $slug => $post) {
           . ($post['status'] !== 'published' ? '<meta name="robots" content="noindex">' : '')
           . "\n<script type=\"application/ld+json\">\n" . json_encode($ld, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . "\n</script>";
     $updated = $post['updated'] !== $post['date'] ? ' · Updated ' . $h(nice_date($post['updated'])) : '';
+    // The quick answer: the article's point in a sentence or two, set apart at the top (header "answer:")
+    $answerBox = ($post['answer'] ?? '') !== ''
+        ? '<aside class="quick-answer" aria-label="Quick answer"><p class="qa-label">Quick answer</p><p>' . $parsedown->line($post['answer']) . '</p></aside>' : '';
     $draft = $post['status'] !== 'published' ? '<p class="draft-flag">Draft, for review: not on trybondi.app yet.</p>' : '';
     $body = <<<HTML
 <article class="post">
@@ -229,6 +235,7 @@ foreach ($shown as $slug => $post) {
   $draft
   <h1>{$h($post['title'])}</h1>
   <p class="byline">By <a href="{$h(AUTHOR_URL)}" target="_blank" rel="me noopener">Noaman Khalil</a>, maker of Bondi · <time datetime="{$h($post['date'])}">{$h(nice_date($post['date']))}</time>$updated · {$post['minutes']} min read</p>
+  $answerBox
   <div class="prose">
 $html
   </div>

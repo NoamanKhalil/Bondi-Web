@@ -703,7 +703,9 @@ The full text of each article, by Noaman Khalil, maker of Bondi.
 
 > Mac running slow? It usually comes down to one of a handful of causes. Here's how to tell which one it is, with real readings from a real MacBook Pro.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 4, 2026.
+**Quick answer:** A slow Mac almost always has one cause: memory running short, one app working hard, macOS doing background work, or the Mac slowing itself down because it's hot. Activity Monitor's Memory and CPU tabs show which one.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 10, 2026.
 Web page: https://trybondi.app/blog/why-is-my-mac-slow/
 
 A slow Mac, whether it's a MacBook Air, a MacBook Pro or an iMac, almost always has one specific cause: memory running short, one app working hard, macOS doing background work, or the Mac protecting itself from heat. The trick is finding which one, because the fix for each is different.
@@ -786,13 +788,15 @@ No. macOS fills spare memory with cached files and gives it back when apps need 
 macOS rebuilds the Spotlight index, re-analyzes photos and syncs iCloud in the background. It settles on its own, usually within hours.
 
 ---
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
 
 ### Why is my Mac slow after a macOS update?
 
 > Mac slow after a macOS Sequoia or Tahoe update? It's re-indexing Spotlight, re-scanning photos and syncing iCloud. Here's what's running and how long it lasts.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+**Quick answer:** After a macOS update, your Mac re-indexes Spotlight, re-analyzes photos and syncs iCloud in the background. It settles on its own, usually within hours, and faster if you leave it plugged in and awake.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 10, 2026.
 Web page: https://trybondi.app/blog/mac-slow-after-update/
 
 A Mac is often slow for a day or so after a macOS update (to macOS Sequoia, Tahoe or any other version) because macOS is catching up in the background: rebuilding the Spotlight search index, re-analyzing your photos, re-checking apps and syncing with iCloud. It settles on its own, usually within hours, and faster if you leave the Mac plugged in and awake.
@@ -853,13 +857,15 @@ Spotlight's indexer, rebuilding the index of your files. Leave it running: it fi
 No. macOS starts them again and the work starts over.
 
 ---
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
 
 ### Is Spotlight indexing slowing down your Mac?
 
 > When mds_stores and mdworker are busy, Spotlight is rebuilding its index. Here's how to tell, how long it lasts, and how to keep folders out of it.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+**Quick answer:** If mds_stores, mds or mdworker are busy, Spotlight is indexing your files. It's normal after an update, after adding many files or when you connect a new disk, and it settles on its own, usually within a few hours.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 10, 2026.
 Web page: https://trybondi.app/blog/spotlight-indexing-slow-mac/
 
 If **mds_stores**, **mds** or **mdworker** are near the top of Activity Monitor, Spotlight is indexing: reading your files so searches can be instant. It's busiest after a macOS update, after adding lots of files, or when you connect a new disk, and it settles on its own, usually within a few hours.
@@ -917,13 +923,15 @@ From minutes to a few hours. A first index of a large external drive can take lo
 Add it to Spotlight's privacy list in System Settings → Spotlight.
 
 ---
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
 
 ### What is using memory on my Mac?
 
 > Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here's how to see which app is really using your Mac's memory.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 4, 2026.
+**Quick answer:** Add up all of an app's processes, not the biggest row: browsers and code editors split into dozens of helpers. In Activity Monitor, choose View → All Processes, Hierarchically, or use a monitor that groups them for you.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 10, 2026.
 Web page: https://trybondi.app/blog/which-app-is-using-my-mac-memory/
 
 To see which app is really using your Mac's memory, you need to add up all of its processes, not look at the biggest row. Browsers and code editors split themselves into dozens of helper processes, so the real total is usually hidden.
@@ -993,13 +1001,15 @@ In Activity Monitor's Memory tab, choose View → All Processes, Hierarchically,
 Only if memory pressure is yellow or red. With green pressure, the app is using memory macOS has spare.
 
 ---
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
 
 ### Memory pressure on Mac: what yellow and red mean
 
 > "Memory Used" being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here's how to read them.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 4, 2026.
+**Quick answer:** Memory pressure shows how hard macOS is working to fit everything into memory: green is fine, yellow means heavy compression, and red means it's swapping to disk, which is when a Mac slows down. A high Memory Used figure on its own is normal.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 10, 2026.
 Web page: https://trybondi.app/blog/memory-pressure-explained/
 
 Memory pressure tells you how hard macOS is working to fit everything you're running into your Mac's memory. Green means it's comfortable, yellow means it's compressing and juggling, and red means it's out of room and leaning on the disk. It's a far better guide than "Memory Used", which is high on almost every Mac, and that's fine.
@@ -1068,13 +1078,84 @@ Memory macOS has moved to the startup disk because RAM ran short. A little is no
 If memory pressure is red every day with the apps you normally use, your work needs more memory than this Mac has.
 
 ---
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+
+### What is unified memory on a Mac? Unified memory vs RAM
+
+> Unified memory is the RAM in Apple silicon Macs, shared by the processor, graphics and Neural Engine. What it means, how it differs from RAM and storage, and how much you need.
+
+**Quick answer:** Unified memory is the RAM in Apple silicon Macs, shared by the processor, graphics and Neural Engine. It isn't storage, and it can't be upgraded later. Memory pressure in Activity Monitor tells you whether you have enough.
+
+By Noaman Khalil, maker of Bondi. Published October 10, 2026.
+Web page: https://trybondi.app/blog/unified-memory-mac/
+
+Unified memory is the RAM in a Mac with Apple silicon (M1, M2, M3, M4 and later). It's called unified because the processor, the graphics and the Neural Engine all share one pool of it, instead of the graphics having separate memory of its own. When a MacBook says **16 GB unified memory**, that's its RAM: 16 GB, shared by everything on the chip.
+
+#### Key points
+
+- Unified memory is RAM, shared by the CPU, GPU and Neural Engine on Apple silicon.
+- It isn't storage: the SSD holds your files, memory holds what's running right now.
+- It can't be upgraded later, so the amount you buy is the amount you keep. Memory pressure tells you if it's enough.
+
+#### Unified memory vs RAM
+
+It is RAM. What's different is the arrangement:
+
+- **Shared:** on most PCs, graphics cards have their own memory, and data is copied between it and the main RAM. On Apple silicon, the graphics read the same memory as the processor, so nothing is copied and the graphics can use a large share of it.
+- **Built into the chip's package:** it sits right next to the processor, which makes it fast, but it can't be swapped or added to after you buy the Mac.
+
+So the graphics can use a lot of it. On the Mac I measure on, LM Studio held **23.97 GB** of memory with a local AI model loaded, in the same 64 GB the apps were using.
+
+#### Unified memory vs SSD storage
+
+Two different things that are easy to mix up:
+
+- **Memory (unified memory):** the workspace for what's open right now. It's emptied when the Mac restarts.
+- **Storage (the SSD):** where your files and apps live, kept when the Mac is off.
+
+A MacBook with "16 GB unified memory, 512 GB SSD storage" has 16 GB of RAM and 512 GB of space for files. When memory runs out, macOS moves some of it to the SSD (called swap), which works but is much slower.
+
+#### Is 16 GB of unified memory enough?
+
+For browsing, email, documents and photos, usually yes. For heavy video editing, large music projects, many browser tabs alongside development tools, or local AI models, more helps. Since late 2024, Apple's Macs start at 16 GB.
+
+The numbers that tell you if *your* Mac has enough aren't the GB used. macOS fills spare memory on purpose, so "used" is high on almost every Mac. Look at **memory pressure** instead: in Activity Monitor's **Memory** tab, a green graph means enough; yellow or red most days means your work needs more. More in [Memory pressure on Mac: what yellow and red mean](https://trybondi.app/blog/memory-pressure-explained/).
+
+#### How to see how much your Mac has
+
+Apple menu (the Apple logo, top left) → **About This Mac**: the **Memory** line shows it, for example **64 GB**. In Activity Monitor's Memory tab, **Physical Memory** at the bottom shows the same.
+
+#### How Bondi shows it
+
+Bondi leads with pressure, not GB used: on the Mac I measure on, **45.1 GB of 64 GB** was in use, and pressure was **Normal**, with only 0.5 GB of swap.
+
+![Unified memory on a MacBook Pro in Bondi: 45.1 GB of 64 GB used, memory pressure Normal, 0.5 GB swap.](https://trybondi.app/assets/features/popover-top.png)
+*Bondi on a MacBook Pro with 64 GB of unified memory: plenty used, no problem.*
+
+#### Questions
+
+##### What does unified memory mean on a MacBook?
+
+It's the MacBook's RAM. On Apple silicon, the processor, graphics and Neural Engine share it, which is why Apple calls it unified.
+
+##### Is unified memory the same as RAM?
+
+Yes. It's RAM that the processor and graphics share, built into the chip's package. It can't be upgraded after purchase.
+
+##### Is unified memory the same as storage?
+
+No. Unified memory holds what's running now and is emptied at restart; storage (the SSD) keeps your files.
+
+---
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
 
 ### Why is my Mac so hot and loud?
 
 > Loud fans on a MacBook or any Mac mean the chip is working hard or running hot. Here's how to find what's heating it, and what to do if they won't settle.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 4, 2026.
+**Quick answer:** Loud fans mean the chip is making more heat than the Mac can lose quietly. Find the busy app in Activity Monitor's CPU tab, put the Mac on a hard, flat surface, and the fans settle within minutes.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 10, 2026.
 Web page: https://trybondi.app/blog/mac-fans-loud/
 
 On a MacBook Pro or a desktop Mac, the fans get loud for one reason: the chip is producing more heat than the Mac can lose quietly. Find what's making it work hard, give it some air, and the fans settle within minutes.
@@ -1135,13 +1216,15 @@ No. The fans are protecting the chip. If they stay loud for no clear reason, fin
 macOS doesn't offer fan control. Bondi's Fan boost can raise it, never slower than your fans already were, and returns to automatic control when you quit Bondi.
 
 ---
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
 
 ### kernel_task high CPU on Mac? Your Mac is cooling itself down
 
 > kernel_task at high CPU usually means your Mac is hot, and macOS is slowing apps on purpose to cool it. Here's why it happens and what actually helps.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 4, 2026.
+**Quick answer:** High kernel_task CPU means your Mac is hot: macOS takes CPU time on purpose so apps slow down and the heat drops. It's a safety feature, not malware. Find the app heating the Mac and give it air, and it settles.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 10, 2026.
 Web page: https://trybondi.app/blog/kernel-task-high-cpu/
 
 When kernel_task shows a high CPU figure, your Mac is almost always running hot, or close to overheating. macOS is taking CPU time on purpose so that apps slow down and the heat drops. It's a safety feature, not a bug or malware.
@@ -1205,13 +1288,15 @@ No, it can't be quit. Let the Mac cool down or close the apps that heat it.
 Its large memory figure is normal: it's the core of macOS, managing memory and hardware for everything else.
 
 ---
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
 
 ### WindowServer using high CPU on Mac: what it means and what helps
 
 > WindowServer draws everything on your Mac's screens. Here's why it gets busy, what normal looks like, and the settings that actually calm it down.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+**Quick answer:** WindowServer draws everything on your screens. Many open windows, several or very high-resolution displays, screen recording and video keep it busy; closing windows and turning on Reduce transparency and Reduce motion lighten it.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 10, 2026.
 Web page: https://trybondi.app/blog/windowserver-high-cpu/
 
 WindowServer is the part of macOS that draws everything you see: windows, the Dock, the menu bar and every animation. When it's busy, it's because your screens are asking a lot of it, usually from many open windows, several or very high-resolution displays, screen recording or video.
@@ -1270,13 +1355,220 @@ It holds what's on every screen, so more and larger displays and more open windo
 No. Quitting it logs you out and closes every app.
 
 ---
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+
+### Task manager for Mac: how to open it, and the shortcut
+
+> The Mac's task manager is Activity Monitor. Here's how to open it on a MacBook or any Mac, the shortcut that works like Ctrl-Alt-Delete, and how to end a stuck process.
+
+**Quick answer:** The Mac's task manager is **Activity Monitor**: press Command-Space, type Activity Monitor and press Return. To close a frozen app, the way Ctrl-Alt-Delete does on Windows, press **Option-Command-Esc**.
+
+By Noaman Khalil, maker of Bondi. Published October 10, 2026.
+Web page: https://trybondi.app/blog/task-manager-for-mac/
+
+The task manager on a Mac is called **Activity Monitor**, and it's built into every MacBook, iMac and Mac mini. The quickest way to open it: press **Command-Space**, type **Activity Monitor** and press **Return**. If you only want to close a stuck app, **Option-Command-Esc** is the Mac's answer to Ctrl-Alt-Delete.
+
+#### Key points
+
+- The Mac's task manager is Activity Monitor, in Applications → Utilities.
+- Open it with Command-Space, then type "Activity Monitor". Option-Command-Esc opens Force Quit, the Ctrl-Alt-Delete equivalent.
+- To end a process, select it and click the Stop button (the ⓧ at the top), then Quit or Force Quit.
+
+#### How to open Task Manager on a Mac
+
+Any of these works on a MacBook Air, a MacBook Pro or a desktop Mac:
+
+1. **Spotlight:** press **Command-Space**, type **Activity Monitor**, press **Return**.
+2. **Finder:** open **Applications → Utilities → Activity Monitor**.
+3. **Keep it in the Dock:** once it's open, Control-click its Dock icon and choose **Options → Keep in Dock**. Next time it's one click.
+
+There's no built-in shortcut that opens Activity Monitor itself. If you want one, the **Shortcuts** app can make it: a shortcut that opens Activity Monitor, with a keyboard shortcut added in its details.
+
+#### The Ctrl-Alt-Delete of the Mac
+
+On Windows, Ctrl-Alt-Delete is how people deal with a frozen app. On a Mac, press **Option-Command-Esc**. It opens the Force Quit window: pick the app that isn't responding and click **Force Quit**. More in [How to force quit on a Mac](https://trybondi.app/blog/force-quit-mac/).
+
+#### What Activity Monitor shows
+
+Activity Monitor has five tabs along the top: **CPU**, **Memory**, **Energy**, **Disk** and **Network**. Click a column, such as **% CPU** or **Memory**, to sort by it and see what's busiest.
+
+One thing it doesn't do: add apps up. On the Mac I measure on, it listed **966 processes**. Browsers and code editors split into dozens of helper processes, so Google Chrome alone was 80 rows, none of them big on its own. [What is using memory on my Mac?](https://trybondi.app/blog/which-app-is-using-my-mac-memory/) shows how to add them up.
+
+#### How to end a process (kill a process)
+
+1. In Activity Monitor, select the process or app.
+2. Click the **Stop** button (ⓧ) in the toolbar.
+3. Choose **Quit** first. It lets the app save and close properly. Use **Force Quit** only if it doesn't respond.
+
+From Terminal, `killall "App Name"` does the same by name. Leave processes you don't recognise alone until you know what they are: many belong to macOS, and quitting them can log you out or bring them straight back.
+
+#### A task manager that explains
+
+Bondi is a task manager for Mac that groups every helper process into the app that started it, so Chrome is one row instead of 80. It tells you in one sentence what's slowing your Mac down. When you quit an app from Bondi, it asks first; if the app hasn't closed after 5 seconds, it offers Force Quit.
+
+![Task manager for Mac: Bondi's busiest apps, each a single row with all its helper processes.](https://trybondi.app/assets/features/busiest.png)
+*Bondi's busiest apps on a MacBook Pro, by memory: Chrome, macOS and Visual Studio Code, each one row.*
+
+#### Questions
+
+##### What is the task manager called on a Mac?
+
+Activity Monitor. It's in Applications → Utilities on every Mac, and Spotlight finds it if you type its name.
+
+##### What is the Mac shortcut for Task Manager?
+
+There's no shortcut that opens Activity Monitor itself, but Option-Command-Esc opens Force Quit, which does what Ctrl-Alt-Delete does on Windows for a frozen app.
+
+##### How do I see what's running on my Mac?
+
+Open Activity Monitor and look at the CPU or Memory tab, sorted by the busiest. Helper processes appear separately, so add up the rows that share an app's name, or use a monitor that groups them.
+
+---
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+
+### How to force quit on a Mac, even when it's frozen
+
+> How to force quit an app on a MacBook or any Mac: the keyboard shortcut, three other ways, and what to do when the whole screen is frozen.
+
+**Quick answer:** Press **Option-Command-Esc**, select the app that isn't responding and click **Force Quit**. If the whole Mac is frozen, hold the power button for about 10 seconds until it turns off, then start it again.
+
+By Noaman Khalil, maker of Bondi. Published October 10, 2026.
+Web page: https://trybondi.app/blog/force-quit-mac/
+
+To force quit on a Mac, press **Option-Command-Esc**, pick the app that isn't responding, and click **Force Quit**. It works the same on a MacBook Air, a MacBook Pro or a desktop Mac. If the whole screen is frozen and that window won't open, hold the power button until the Mac turns off, then start it again.
+
+#### Key points
+
+- Option-Command-Esc opens the Force Quit window: select the app, click Force Quit.
+- You can also use the Apple menu, the app's Dock icon with Option held, or Activity Monitor.
+- Force Quit closes an app without saving. Try a normal Quit first, and wait a few seconds if you see the spinning wheel.
+
+#### Four ways to force quit an app
+
+1. **Keyboard:** press **Option-Command-Esc**, select the app, click **Force Quit**.
+2. **Apple menu:** click the Apple logo in the top-left corner, choose **Force Quit**, then the app.
+3. **Dock:** hold **Option** and Control-click (or right-click) the app's icon. **Quit** turns into **Force Quit**.
+4. **Activity Monitor:** select the app, click the **Stop** button (ⓧ) and choose **Force Quit**. This is the way to stop a process that isn't a normal app. See [Task manager for Mac](https://trybondi.app/blog/task-manager-for-mac/).
+
+Finder can't be force quit, only relaunched: select it in the Force Quit window and the button says **Relaunch**.
+
+#### How to force quit on a Mac when the screen is frozen
+
+If the pointer moves, the Mac usually isn't frozen: one app is. Press **Option-Command-Esc** and give the window a few seconds to appear.
+
+If nothing responds at all:
+
+1. **Wait a minute.** A Mac that's very short on memory or very hot can stall and then recover.
+2. **Hold the power button** (the Touch ID button on a MacBook) for about 10 seconds, until the screen goes dark.
+3. **Press it again** to start up. Apps that save automatically reopen with your work; anything unsaved since their last save is lost.
+
+If it keeps happening, something is wearing the Mac down. [Why is my Mac so slow?](https://trybondi.app/blog/why-is-my-mac-slow/) walks through the usual causes.
+
+#### Quit or Force Quit?
+
+**Quit** asks the app to close: it saves what it can, tidies up and stops its helper processes. **Force Quit** stops it immediately, so anything unsaved is gone. Use it only when Quit does nothing.
+
+The spinning wheel often clears by itself, so give an app a few seconds first. A force quit doesn't fix the reason it stalled, either: if the same app freezes again, it's usually short of memory or stuck on one task.
+
+#### How Bondi does it
+
+Bondi always asks first. Quit Google Chrome from Bondi and it says how many processes will close (on the Mac I measure on, 82), quits them together, and only if Chrome hasn't closed after 5 seconds asks: *"Google Chrome isn't responding. Force Quit? Unsaved work will be lost."*
+
+![Force quit on a Mac with Bondi: Memory pressure is Elevated, Google Chrome is using 13.09 GB, with a Quit Google Chrome button.](https://trybondi.app/assets/features/warning.png)
+*Bondi's warning on a MacBook Pro: one cause, one fix, and nothing quits until you click.*
+
+#### Questions
+
+##### What is the shortcut to force quit on a Mac?
+
+Option-Command-Esc. It opens the Force Quit window, where you select the app and click Force Quit.
+
+##### How do I force quit on a MacBook when the screen is frozen?
+
+If Option-Command-Esc doesn't open the Force Quit window, hold the power button (the Touch ID button) for about 10 seconds until the Mac turns off, then press it again to start up.
+
+##### Does force quitting lose my work?
+
+Anything unsaved since the app's last save can be lost. Many Mac apps save automatically and reopen where you left off, but try a normal Quit first.
+
+---
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+
+### How to check uptime on a Mac
+
+> Three ways to see how long your Mac or MacBook has been running since its last restart, what the uptime command's numbers mean, and whether a long uptime matters.
+
+**Quick answer:** Open Terminal and type `uptime`. Or hold Option, choose System Information from the Apple menu, and click Software to see Time since boot. A long uptime isn't a problem by itself.
+
+By Noaman Khalil, maker of Bondi. Published October 10, 2026.
+Web page: https://trybondi.app/blog/check-mac-uptime/
+
+Your Mac's uptime is how long it has been running since it last started up. The quickest way to check it on a Mac or MacBook: open **Terminal** and type `uptime`. Or, without Terminal, hold **Option**, open the Apple menu, choose **System Information**, and click **Software**: it shows **Time since boot**.
+
+#### Key points
+
+- Terminal: type `uptime` and press Return.
+- No Terminal: Apple menu (with Option held) → System Information → Software → Time since boot.
+- A long uptime isn't a problem by itself. Restart when updates ask for it, or when the Mac slows down and memory stays tight.
+
+#### 1. The uptime command in Terminal
+
+Open **Terminal** (Command-Space, type "Terminal"), type `uptime` and press **Return**. On the Mac I measure on, it said:
+
+```
+11:30  up 4 days, 21:06, 1 user, load averages: 4.07 14.72 15.89
+```
+
+- **11:30** is the time now.
+- **up 4 days, 21:06** is the uptime: 4 days, 21 hours and 6 minutes.
+- **1 user** counts sign-in sessions, not people. Each open Terminal window can add one, which is why it often says **2 users** when you're the only person on the Mac.
+- **load averages** are how busy the processor was over the last 1, 5 and 15 minutes.
+
+For the exact moment it started, type `sysctl -n kern.boottime`. Mine said **Mon Oct 5 14:25:08 2026**. `last reboot` lists earlier restarts too.
+
+#### 2. System Information, no Terminal needed
+
+1. Hold **Option** and click the Apple menu (the Apple logo in the top-left corner).
+2. Choose **System Information**.
+3. Click **Software** in the sidebar. **Time since boot** is near the bottom: mine said **4 days, 21 hours, 6 minutes**, the same as `uptime`.
+
+#### 3. A system monitor
+
+Most system monitors show uptime next to the processor's figures. In Bondi, it's in the CPU details, under the load average.
+
+![Mac uptime in Bondi: CPU details with load average and an uptime of 34d 16h, on a MacBook Pro with an M1 Max.](https://trybondi.app/assets/features/cpu.png)
+*Bondi's CPU details on the same MacBook Pro, on another day: up 34 days and 16 hours.*
+
+#### Does a long uptime slow a Mac down?
+
+Not by itself. Macs sleep and wake for weeks without trouble. What can build up over days is **swap**: memory moved to the disk when apps need more than the Mac has. If **Memory Pressure** in Activity Monitor stays yellow or red even after you've closed apps, a restart clears it. See [Memory pressure on Mac: what yellow and red mean](https://trybondi.app/blog/memory-pressure-explained/).
+
+Restart when a macOS update asks you to, after installing software that asks for it, or when things are slow for no visible reason. [Why is my Mac so slow?](https://trybondi.app/blog/why-is-my-mac-slow/) helps find the reason.
+
+#### Questions
+
+##### How do I check how long my Mac has been on?
+
+Open Terminal and type uptime. Or hold Option, choose System Information from the Apple menu, click Software and read Time since boot.
+
+##### Why does Mac uptime say 2 users?
+
+The number counts sign-in sessions, not people. Being signed in at the screen is one; an open Terminal window usually adds another.
+
+##### Should I restart my Mac every day?
+
+No. There's no need to restart on a schedule. Restart for updates, or when memory pressure stays high or the Mac is slow and closing apps doesn't help.
+
+---
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
 
 ### Bondi vs Activity Monitor: what each one is for
 
 > Looking for an Activity Monitor alternative for Mac? Activity Monitor shows every process; Bondi tells you what they mean. When to use which.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+**Quick answer:** Activity Monitor, built into every Mac, lists every process and every figure. Bondi groups those processes into the apps you know, keeps 30 days of history, and says in one sentence what's slowing your Mac down. Most people use both.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 10, 2026.
 Web page: https://trybondi.app/blog/bondi-vs-activity-monitor/
 
 Activity Monitor is the task manager built into every Mac, a detailed instrument panel: it lists every process and every figure. Bondi is the interpreter: it groups those processes into the apps you know, keeps 30 days of history, and tells you in one sentence what's slowing your Mac down. Most people will use both.
@@ -1349,13 +1641,15 @@ At launch: a 7-day free trial, then a one-time purchase, $6.99 for the first 250
 No. History and the AI stay on the Mac. Bondi only contacts its server to check the trial or license and to look for updates.
 
 ---
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
 
 ### How Bondi's AI explains your Mac without making up a number
 
 > How Bondi's on-device AI, with Apple Intelligence where available, explains your Mac in one sentence while every figure stays measured and checked.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+**Quick answer:** Bondi measures every number itself, picks what matters, and lets an on-device AI write only the words around those facts. Then it checks the sentence: if a number or the tone is wrong, Bondi uses its own sentence instead. Nothing leaves your Mac.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 10, 2026.
 Web page: https://trybondi.app/blog/ai-that-never-makes-up-a-number/
 
 Bondi uses an on-device AI model, private to your Mac, to write one plain sentence about it, but the AI never decides a single number. Bondi measures everything itself, decides what matters, lets the model write the words around those facts, and then checks the sentence before you see it.
@@ -1416,5 +1710,5 @@ Apple's on-device foundation model on Macs with Apple Intelligence (macOS 26, Ap
 The AI never decides a number. Bondi measures every figure and rejects any sentence whose numbers don't match.
 
 ---
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
 <!-- /blog -->

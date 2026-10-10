@@ -2,7 +2,9 @@
 
 > "Memory Used" being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here's how to read them.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 4, 2026.
+**Quick answer:** Memory pressure shows how hard macOS is working to fit everything into memory: green is fine, yellow means heavy compression, and red means it's swapping to disk, which is when a Mac slows down. A high Memory Used figure on its own is normal.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 10, 2026.
 Web page: https://trybondi.app/blog/memory-pressure-explained/
 
 Memory pressure tells you how hard macOS is working to fit everything you're running into your Mac's memory. Green means it's comfortable, yellow means it's compressing and juggling, and red means it's out of room and leaning on the disk. It's a far better guide than "Memory Used", which is high on almost every Mac, and that's fine.
@@ -71,4 +73,4 @@ Memory macOS has moved to the startup disk because RAM ran short. A little is no
 If memory pressure is red every day with the apps you normally use, your work needs more memory than this Mac has.
 
 ---
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/

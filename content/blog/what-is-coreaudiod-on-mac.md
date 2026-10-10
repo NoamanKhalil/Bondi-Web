@@ -1,6 +1,7 @@
 ---
 title: What is coreaudiod on Mac?
 description: coreaudiod handles all sound on your Mac: playback, recording and audio devices. Here's why it uses CPU and what happens if you quit it.
+answer: coreaudiod handles all sound on your Mac: playback, recording and audio devices. It's part of macOS and safe; when it's busy, many apps are playing or recording, or an audio plug-in or device is working hard.
 date: 2026-10-04
 topic: processes
 status: draft

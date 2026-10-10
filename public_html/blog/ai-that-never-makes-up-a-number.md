@@ -2,7 +2,9 @@
 
 > How Bondi's on-device AI, with Apple Intelligence where available, explains your Mac in one sentence while every figure stays measured and checked.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+**Quick answer:** Bondi measures every number itself, picks what matters, and lets an on-device AI write only the words around those facts. Then it checks the sentence: if a number or the tone is wrong, Bondi uses its own sentence instead. Nothing leaves your Mac.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 10, 2026.
 Web page: https://trybondi.app/blog/ai-that-never-makes-up-a-number/
 
 Bondi uses an on-device AI model, private to your Mac, to write one plain sentence about it, but the AI never decides a single number. Bondi measures everything itself, decides what matters, lets the model write the words around those facts, and then checks the sentence before you see it.
@@ -63,4 +65,4 @@ Apple's on-device foundation model on Macs with Apple Intelligence (macOS 26, Ap
 The AI never decides a number. Bondi measures every figure and rejects any sentence whose numbers don't match.
 
 ---
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/

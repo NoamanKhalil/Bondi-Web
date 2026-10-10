@@ -1,8 +1,9 @@
 ---
 title: What is using memory on my Mac?
 description: Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here's how to see which app is really using your Mac's memory.
+answer: Add up all of an app's processes, not the biggest row: browsers and code editors split into dozens of helpers. In Activity Monitor, choose View → All Processes, Hierarchically, or use a monitor that groups them for you.
 date: 2026-10-03
-updated: 2026-10-04
+updated: 2026-10-10
 topic: memory
 status: published
 order: 2

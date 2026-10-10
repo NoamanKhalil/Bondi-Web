@@ -1,6 +1,7 @@
 ---
 title: What is mds_stores on Mac?
 description: mds_stores is Spotlight's indexer on your Mac. Here's what it does, why it uses CPU after updates or new files, and why you should let it finish.
+answer: mds_stores is Spotlight's indexer. It's part of macOS and safe; when it's busy, it's building or rebuilding the search index, which settles on its own.
 date: 2026-10-04
 topic: processes
 status: draft

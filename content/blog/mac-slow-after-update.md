@@ -1,8 +1,9 @@
 ---
 title: Why is my Mac slow after a macOS update?
 description: Mac slow after a macOS Sequoia or Tahoe update? It's re-indexing Spotlight, re-scanning photos and syncing iCloud. Here's what's running and how long it lasts.
+answer: After a macOS update, your Mac re-indexes Spotlight, re-analyzes photos and syncs iCloud in the background. It settles on its own, usually within hours, and faster if you leave it plugged in and awake.
 date: 2026-10-03
-updated: 2026-10-03
+updated: 2026-10-10
 topic: slow
 status: published
 order: 7

@@ -2,7 +2,9 @@
 
 > Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here's how to see which app is really using your Mac's memory.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 4, 2026.
+**Quick answer:** Add up all of an app's processes, not the biggest row: browsers and code editors split into dozens of helpers. In Activity Monitor, choose View → All Processes, Hierarchically, or use a monitor that groups them for you.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 10, 2026.
 Web page: https://trybondi.app/blog/which-app-is-using-my-mac-memory/
 
 To see which app is really using your Mac's memory, you need to add up all of its processes, not look at the biggest row. Browsers and code editors split themselves into dozens of helper processes, so the real total is usually hidden.
@@ -72,4 +74,4 @@ In Activity Monitor's Memory tab, choose View → All Processes, Hierarchically,
 Only if memory pressure is yellow or red. With green pressure, the app is using memory macOS has spare.
 
 ---
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
