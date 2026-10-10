@@ -77,4 +77,4 @@ At launch: a 7-day free trial, then a one-time purchase, $6.99 for the first 250
 No. History and the AI stay on the Mac. Bondi only contacts its server to check the trial or license and to look for updates.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/

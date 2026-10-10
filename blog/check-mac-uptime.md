@@ -64,4 +64,4 @@ The number counts sign-in sessions, not people. Being signed in at the screen is
 No. There's no need to restart on a schedule. Restart for updates, or when memory pressure stays high or the Mac is slow and closing apps doesn't help.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/

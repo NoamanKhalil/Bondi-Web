@@ -65,4 +65,4 @@ No. The fans are protecting the chip. If they stay loud for no clear reason, fin
 macOS doesn't offer fan control. Bondi's Fan boost can raise it, never slower than your fans already were, and returns to automatic control when you quit Bondi.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/

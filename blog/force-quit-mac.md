@@ -64,4 +64,4 @@ If Option-Command-Esc doesn't open the Force Quit window, hold the power button 
 Anything unsaved since the app's last save can be lost. Many Mac apps save automatically and reopen where you left off, but try a normal Quit first.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/

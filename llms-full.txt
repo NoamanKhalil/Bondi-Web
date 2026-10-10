@@ -1,6 +1,6 @@
 # Bondi: the full facts
 
-> Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence, written on the Mac by Apple's on-device model. It's made by Jabble Super Intelligence Inc. This file is Bondi's own description of itself, written by its makers for AI assistants and search tools. The website is https://trybondi.app/ and the short version of this file is https://trybondi.app/llms.txt.
+> Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. It's made by Jabble Super Intelligence Inc. This file is Bondi's own description of itself, written by its makers for AI assistants and search tools. The website is https://trybondi.app/ and the short version of this file is https://trybondi.app/llms.txt.
 
 ## Status and price
 - The beta is launching soon, and the full launch follows soon after. Bondi can't be bought yet. People can join the beta list at https://trybondi.app/beta/.
@@ -788,7 +788,7 @@ No. macOS fills spare memory with cached files and gives it back when apps need 
 macOS rebuilds the Spotlight index, re-analyzes photos and syncs iCloud in the background. It settles on its own, usually within hours.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/
 
 ### Why is my Mac slow after a macOS update?
 
@@ -857,7 +857,7 @@ Spotlight's indexer, rebuilding the index of your files. Leave it running: it fi
 No. macOS starts them again and the work starts over.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/
 
 ### Is Spotlight indexing slowing down your Mac?
 
@@ -923,7 +923,7 @@ From minutes to a few hours. A first index of a large external drive can take lo
 Add it to Spotlight's privacy list in System Settings → Spotlight.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/
 
 ### What is using memory on my Mac?
 
@@ -1001,7 +1001,7 @@ In Activity Monitor's Memory tab, choose View → All Processes, Hierarchically,
 Only if memory pressure is yellow or red. With green pressure, the app is using memory macOS has spare.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/
 
 ### Memory pressure on Mac: what yellow and red mean
 
@@ -1078,7 +1078,7 @@ Memory macOS has moved to the startup disk because RAM ran short. A little is no
 If memory pressure is red every day with the apps you normally use, your work needs more memory than this Mac has.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/
 
 ### What is unified memory on a Mac? Unified memory vs RAM
 
@@ -1147,7 +1147,7 @@ Yes. It's RAM that the processor and graphics share, built into the chip's packa
 No. Unified memory holds what's running now and is emptied at restart; storage (the SSD) keeps your files.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/
 
 ### Why is my Mac so hot and loud?
 
@@ -1216,7 +1216,7 @@ No. The fans are protecting the chip. If they stay loud for no clear reason, fin
 macOS doesn't offer fan control. Bondi's Fan boost can raise it, never slower than your fans already were, and returns to automatic control when you quit Bondi.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/
 
 ### kernel_task high CPU on Mac? Your Mac is cooling itself down
 
@@ -1288,7 +1288,7 @@ No, it can't be quit. Let the Mac cool down or close the apps that heat it.
 Its large memory figure is normal: it's the core of macOS, managing memory and hardware for everything else.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/
 
 ### WindowServer using high CPU on Mac: what it means and what helps
 
@@ -1355,7 +1355,7 @@ It holds what's on every screen, so more and larger displays and more open windo
 No. Quitting it logs you out and closes every app.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/
 
 ### Task manager for Mac: how to open it, and the shortcut
 
@@ -1424,7 +1424,7 @@ There's no shortcut that opens Activity Monitor itself, but Option-Command-Esc o
 Open Activity Monitor and look at the CPU or Memory tab, sorted by the busiest. Helper processes appear separately, so add up the rows that share an app's name, or use a monitor that groups them.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/
 
 ### How to force quit on a Mac, even when it's frozen
 
@@ -1492,7 +1492,7 @@ If Option-Command-Esc doesn't open the Force Quit window, hold the power button 
 Anything unsaved since the app's last save can be lost. Many Mac apps save automatically and reopen where you left off, but try a normal Quit first.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/
 
 ### How to check uptime on a Mac
 
@@ -1560,7 +1560,7 @@ The number counts sign-in sessions, not people. Being signed in at the screen is
 No. There's no need to restart on a schedule. Restart for updates, or when memory pressure stays high or the Mac is slow and closing apps doesn't help.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/
 
 ### Bondi vs Activity Monitor: what each one is for
 
@@ -1641,7 +1641,7 @@ At launch: a 7-day free trial, then a one-time purchase, $6.99 for the first 250
 No. History and the AI stay on the Mac. Bondi only contacts its server to check the trial or license and to look for updates.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/
 
 ### How Bondi's AI explains your Mac without making up a number
 
@@ -1710,5 +1710,5 @@ Apple's on-device foundation model on Macs with Apple Intelligence (macOS 26, Ap
 The AI never decides a number. Bondi measures every figure and rejects any sentence whose numbers don't match.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/
 <!-- /blog -->
