@@ -3,6 +3,7 @@ title: Bondi vs Activity Monitor, iStat Menus, Stats and Vitals
 description: How Bondi, a native macOS system monitor with on-device AI, compares with Activity Monitor, iStat Menus, Stats and Vitals: what each does, what each costs, and which to choose.
 answer: Bondi is a native macOS system monitor with on-device AI. Going by each app's own website, it's the only one of the five that tells you in a plain sentence why your Mac is slow. Activity Monitor and Stats are free, iStat Menus is $11.99, Vitals is $29, and Bondi is $29.99 ($6.99 for the first 250 at launch).
 checked: 2026-10-04
+crumb: Compare
 updated: 2026-10-10
 ---
 Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. Here is how it compares with the four tools people most often use instead, checked against each app's own website.

@@ -47,6 +47,20 @@ const TOPICS = [
     'bondi' => ['Bondi and other tools', 'How Bondi compares with Activity Monitor, and how its on-device AI works.'],
     'more' => ['More', ''],
 ];
+/** A visible breadcrumb trail: [[name, href], …]; the last one is the current section. */
+function crumbs(array $trail): string
+{
+    $h = fn(string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+    return '<nav class="crumbs" aria-label="Breadcrumb"><ol>' . implode('', array_map(fn($c) => '<li><a href="' . $h($c[1]) . '">' . $h($c[0]) . '</a></li>', $trail)) . '</ol></nav>';
+}
+
+/** The same trail for search engines (schema.org BreadcrumbList), ending with the page itself. */
+function breadcrumb_ld(array $trail): array
+{
+    return ['@type' => 'BreadcrumbList', 'itemListElement' => array_map(fn($i, $c) => ['@type' => 'ListItem', 'position' => $i + 1, 'name' => $c[0],
+        'item' => str_starts_with($c[1], 'http') ? $c[1] : SITE . $c[1]], array_keys($trail), $trail)];
+}
+
 /** Articles grouped by topic, in TOPICS order, each group in its "order:" order. */
 function by_topic(array $posts): array
 {
@@ -230,10 +244,12 @@ foreach ($shown as $slug => $post) {
     // The quick answer: the article's point in a sentence or two, set apart at the top (header "answer:")
     $answerBox = ($post['answer'] ?? '') !== ''
         ? '<aside class="quick-answer" aria-label="Quick answer"><p class="qa-label">Quick answer</p><p>' . $parsedown->line($post['answer']) . '</p></aside>' : '';
+    $topic = isset(TOPICS[$post['topic'] ?? '']) && ($post['topic'] ?? '') !== 'more' ? $post['topic'] : null;
+    $trail = crumbs(array_merge([['Bondi', '/'], ['Blog', '/blog/']], $topic ? [[TOPICS[$topic][0], '/blog/#' . $topic]] : []));
     $draft = $post['status'] !== 'published' ? '<p class="draft-flag">Draft, for review: not on trybondi.app yet.</p>' : '';
     $body = <<<HTML
 <article class="post">
-  <nav class="crumbs" aria-label="Breadcrumb"><a href="/blog/">Blog</a></nav>
+  $trail
   $draft
   <h1>{$h($post['title'])}</h1>
   <p class="byline">By <a href="{$h(AUTHOR_URL)}" target="_blank" rel="me noopener">Noaman Khalil</a>, maker of Bondi · <time datetime="{$h($post['date'])}">{$h(nice_date($post['date']))}</time>$updated · {$post['minutes']} min read</p>
@@ -273,11 +289,12 @@ if ($shown) {
         $groups .= '<section class="topic" id="' . $h($key) . '" aria-labelledby="topic-' . $h($key) . '"><h2 id="topic-' . $h($key) . '">' . $h($name) . '</h2>'
                  . ($intro !== '' ? '<p class="topic-intro">' . $h($intro) . '</p>' : '') . '<ul class="cards">' . $cards . '</ul></section>';
     }
-    $ld = ['@context' => 'https://schema.org', '@type' => 'Blog', 'name' => 'Bondi blog', 'url' => SITE . '/blog/',
-           'publisher' => ['@type' => 'Organization', 'name' => 'Jabble Super Intelligence Inc.']];
+    $ld = ['@context' => 'https://schema.org', '@graph' => [
+        ['@type' => 'Blog', 'name' => 'Bondi blog', 'url' => SITE . '/blog/', 'publisher' => ['@type' => 'Organization', 'name' => 'Jabble Super Intelligence Inc.']],
+        breadcrumb_ld([['Bondi', '/'], ['Blog', '/blog/']])]];
     $head = '<meta property="og:type" content="website"><meta property="og:title" content="Bondi blog"><meta property="og:image" content="' . SITE . '/assets/og-image.jpg">'
           . "\n<script type=\"application/ld+json\">" . json_encode($ld, JSON_UNESCAPED_SLASHES) . '</script>';
-    $body = '<section class="blog-head"><p class="eyebrow">Bondi blog</p><h1>Why your Mac does what it does.</h1>'
+    $body = '<section class="blog-head">' . crumbs([['Bondi', '/'], ['Blog', '/blog/']]) . '<p class="eyebrow">Bondi blog</p><h1>Why your Mac does what it does.</h1>'
           . '<p class="lede">Plain answers about Mac performance, from real readings of a real Mac, by the maker of Bondi.</p></section>'
           . $groups;
     file_put_contents("$out/blog/index.html", page('Bondi blog: why your Mac is slow, and what to do about it',
@@ -308,6 +325,7 @@ foreach (glob("$root/content/pages/*.md") ?: [] as $file) {
             'abstract' => $answer !== '' ? plain($answer) : null, 'dateModified' => $meta['updated'] ?? null, 'about' => ['@id' => SITE . '/#app']]),
         ['@type' => 'SoftwareApplication', '@id' => SITE . '/#app', 'name' => 'Bondi', 'url' => SITE . '/', 'description' => PITCH,
             'applicationCategory' => 'UtilitiesApplication', 'applicationSubCategory' => 'System monitor', 'operatingSystem' => 'macOS 15 or later'],
+        breadcrumb_ld([['Bondi', '/'], [$meta['title'], "/$slug/"]]),
     ]];
     if ($qa = questions($m[2])) {
         $ld['@graph'][] = ['@type' => 'FAQPage', 'mainEntity' => array_map(fn($q) => ['@type' => 'Question', 'name' => $q[0],
@@ -320,7 +338,7 @@ foreach (glob("$root/content/pages/*.md") ?: [] as $file) {
     $checked = isset($meta['checked']) ? 'Checked against each app\'s own website on ' . $h(nice_date($meta['checked'])) : '';
     $updated = isset($meta['updated']) ? ($checked !== '' ? ' · ' : '') . 'Updated ' . $h(nice_date($meta['updated'])) : '';
     $answerBox = $answer !== '' ? '<aside class="quick-answer" aria-label="Quick answer"><p class="qa-label">Quick answer</p><p>' . $parsedown->line($answer) . '</p></aside>' : '';
-    $body = '<article class="post"><nav class="crumbs" aria-label="Breadcrumb"><a href="/">Bondi</a></nav><h1>' . $h($meta['title']) . '</h1>'
+    $body = '<article class="post">' . crumbs([['Bondi', '/'], [$meta['crumb'] ?? $meta['title'], "/$slug/"]]) . '<h1>' . $h($meta['title']) . '</h1>'
           . '<p class="byline">' . $checked . $updated . '</p>' . $answerBox . '<div class="prose">' . $html . '</div>'
           . '<p class="plain-copy">Also as <a href="/' . $h($slug) . '/' . $h($slug) . '.md">plain text</a>, for AI assistants and readers.</p>'
           . '<aside class="cta"><img src="/assets/icon-blue.png" alt="" width="56" height="56"><div><p class="cta-title">' . $h(PITCH) . '</p>'
