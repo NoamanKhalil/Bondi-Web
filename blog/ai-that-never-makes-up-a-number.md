@@ -65,4 +65,4 @@ Apple's on-device foundation model on Macs with Apple Intelligence (macOS 26, Ap
 The AI never decides a number. Bondi measures every figure and rejects any sentence whose numbers don't match.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/

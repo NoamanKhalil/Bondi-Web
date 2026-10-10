@@ -65,4 +65,4 @@ Spotlight's indexer, rebuilding the index of your files. Leave it running: it fi
 No. macOS starts them again and the work starts over.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/

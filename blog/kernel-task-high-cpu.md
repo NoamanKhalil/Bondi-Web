@@ -68,4 +68,4 @@ No, it can't be quit. Let the Mac cool down or close the apps that heat it.
 Its large memory figure is normal: it's the core of macOS, managing memory and hardware for everything else.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/

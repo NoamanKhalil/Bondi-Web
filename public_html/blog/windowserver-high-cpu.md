@@ -63,4 +63,4 @@ It holds what's on every screen, so more and larger displays and more open windo
 No. Quitting it logs you out and closes every app.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/

@@ -32,6 +32,8 @@ if (($argv[1] ?? '') === '--preview' && $preview === '') {
 const SITE = 'https://trybondi.app';
 const AUTHOR = 'Noaman Khalil';
 const AUTHOR_URL = 'https://x.com/khalilnoaman';
+// How Bondi is described everywhere, word for word (CLAUDE.md: keep every page, listing and file in step)
+const PITCH = "Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence.";
 $h = fn(string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 
 // Topics: the blog index and llms.txt group articles under these, in this order. An article's "topic:" header names
@@ -127,7 +129,7 @@ function markdown_copy(array $post): string
     $dates = 'Published ' . nice_date($post['date']) . ($post['updated'] !== $post['date'] ? ', updated ' . nice_date($post['updated']) : '');
     $answer = ($post['answer'] ?? '') !== '' ? "**Quick answer:** {$post['answer']}\n\n" : '';
     return "# {$post['title']}\n\n> {$post['description']}\n\n{$answer}By " . AUTHOR . ", maker of Bondi. $dates.\nWeb page: " . SITE . "/blog/{$post['slug']}/\n\n"
-         . trim($md) . "\n\n---\nBondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: " . SITE . "/\n";
+         . trim($md) . "\n\n---\n" . PITCH . ' ' . SITE . "/\n";
 }
 
 function nice_date(string $ymd): string
@@ -242,7 +244,7 @@ $html
   <p class="plain-copy">Also as <a href="/blog/{$h($slug)}.md">plain text</a>, for AI assistants and readers.</p>
   <aside class="cta">
     <img src="/assets/icon-blue.png" alt="" width="56" height="56">
-    <div><p class="cta-title">Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence.</p>
+    <div><p class="cta-title">{$h(PITCH)}</p>
     <p>It runs on your Mac, groups every process into the apps you know, and keeps 30 days of history. Nothing leaves your Mac.</p>
     <p><a class="pillbtn primary" href="/beta/">Join the beta</a> <a class="pillbtn secondary" href="/">See how it works</a></p></div>
   </aside>
@@ -282,6 +284,56 @@ if ($shown) {
         'Plain answers about Mac performance: slowdowns, memory pressure, loud fans, kernel_task, WindowServer and Spotlight, from real readings of a real Mac.',
         SITE . '/blog/', $body, $head, $askRow));
     $written[] = "$out/blog/index.html";
+}
+
+// MARK: Pages: content/pages/<slug>.md (the comparison page) at /<slug>/, with the blog's look but no byline
+
+foreach (glob("$root/content/pages/*.md") ?: [] as $file) {
+    if (!preg_match('/\A---\n(.*?)\n---\n(.*)\z/s', (string)file_get_contents($file), $m)) {
+        fwrite(STDERR, "No header block in $file\n");
+        exit(1);
+    }
+    $meta = [];
+    foreach (explode("\n", $m[1]) as $line) {
+        if (preg_match('/^([a-z]+):\s*(.*)$/', $line, $kv)) {
+            $meta[$kv[1]] = preg_replace('/^"(.*)"$/', '$1', trim($kv[2]));
+        }
+    }
+    $slug = basename($file, '.md');
+    $url = SITE . "/$slug/";
+    $html = preg_replace('~<a href="(https?://(?!trybondi\.app)[^"]+)"~', '<a href="$1" target="_blank" rel="noopener"', $parsedown->text($m[2]));
+    $answer = $meta['answer'] ?? '';
+    $ld = ['@context' => 'https://schema.org', '@graph' => [
+        array_filter(['@type' => 'WebPage', 'name' => $meta['title'], 'description' => $meta['description'], 'url' => $url,
+            'abstract' => $answer !== '' ? plain($answer) : null, 'dateModified' => $meta['updated'] ?? null, 'about' => ['@id' => SITE . '/#app']]),
+        ['@type' => 'SoftwareApplication', '@id' => SITE . '/#app', 'name' => 'Bondi', 'url' => SITE . '/', 'description' => PITCH,
+            'applicationCategory' => 'UtilitiesApplication', 'applicationSubCategory' => 'System monitor', 'operatingSystem' => 'macOS 15 or later'],
+    ]];
+    if ($qa = questions($m[2])) {
+        $ld['@graph'][] = ['@type' => 'FAQPage', 'mainEntity' => array_map(fn($q) => ['@type' => 'Question', 'name' => $q[0],
+            'acceptedAnswer' => ['@type' => 'Answer', 'text' => $q[1]]], $qa)];
+    }
+    $head = '<meta property="og:type" content="website"><meta property="og:title" content="' . $h($meta['title']) . '">'
+          . '<meta property="og:description" content="' . $h($meta['description']) . '"><meta property="og:image" content="' . SITE . '/assets/og-image.jpg">'
+          . '<link rel="alternate" type="text/markdown" title="Plain text, for AI assistants" href="/' . $h($slug) . '/' . $h($slug) . '.md">'
+          . "\n<script type=\"application/ld+json\">\n" . json_encode($ld, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . "\n</script>";
+    $checked = isset($meta['checked']) ? 'Checked against each app\'s own website on ' . $h(nice_date($meta['checked'])) : '';
+    $updated = isset($meta['updated']) ? ($checked !== '' ? ' · ' : '') . 'Updated ' . $h(nice_date($meta['updated'])) : '';
+    $answerBox = $answer !== '' ? '<aside class="quick-answer" aria-label="Quick answer"><p class="qa-label">Quick answer</p><p>' . $parsedown->line($answer) . '</p></aside>' : '';
+    $body = '<article class="post"><nav class="crumbs" aria-label="Breadcrumb"><a href="/">Bondi</a></nav><h1>' . $h($meta['title']) . '</h1>'
+          . '<p class="byline">' . $checked . $updated . '</p>' . $answerBox . '<div class="prose">' . $html . '</div>'
+          . '<p class="plain-copy">Also as <a href="/' . $h($slug) . '/' . $h($slug) . '.md">plain text</a>, for AI assistants and readers.</p>'
+          . '<aside class="cta"><img src="/assets/icon-blue.png" alt="" width="56" height="56"><div><p class="cta-title">' . $h(PITCH) . '</p>'
+          . '<p>It runs on your Mac, groups every process into the apps you know, and keeps 30 days of history. Nothing leaves your Mac.</p>'
+          . '<p><a class="pillbtn primary" href="/beta/">Join the beta</a> <a class="pillbtn secondary" href="/">See how it works</a></p></div></aside></article>';
+    @mkdir("$out/$slug", 0755, true);
+    file_put_contents("$out/$slug/index.html", page($meta['title'] . ' · Bondi', $meta['description'], $url, $body, $head, $askRow));
+    $md = preg_replace('~\]\(/~', '](' . SITE . '/', $m[2]);
+    file_put_contents("$out/$slug/$slug.md", "# {$meta['title']}\n\n> {$meta['description']}\n\n" . ($answer !== '' ? "**Quick answer:** $answer\n\n" : '')
+        . "Web page: $url\n\n" . trim($md) . "\n\n---\n" . PITCH . ' ' . SITE . "/\n");
+    file_put_contents("$out/$slug/.htaccess", "# This page's plain-text copy (/$slug/$slug.md) is public, unlike .md files elsewhere on the site.\n"
+        . "<FilesMatch \"\\.md$\">\n  Require all granted\n</FilesMatch>\nAddType \"text/markdown; charset=utf-8\" .md\n");
+    $written[] = "$out/$slug/index.html";
 }
 
 if ($preview !== null) {

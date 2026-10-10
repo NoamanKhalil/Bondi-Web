@@ -1,6 +1,6 @@
 # Bondi
 
-> Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence, written on the Mac by Apple's on-device model. It's made by Jabble Super Intelligence Inc.
+> Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. It's made by Jabble Super Intelligence Inc.
 
 - Status: the beta is launching soon, and the full launch follows it. Bondi can't be bought yet.
 - What it does: groups every running process under the app that started it, finds what's holding memory, warns about one cause at a time and asks before it quits or stops anything, and keeps 30 days of history on the Mac.
@@ -26,6 +26,7 @@ Checked against each app's own website (apple.com, bjango.com, github.com/exelba
 ## Product
 - [Bondi for Mac](https://trybondi.app/): features, on-device AI, launch plans, pricing and FAQ
 - [Join the beta](https://trybondi.app/beta/): the beta sign-up list
+- [Bondi vs Activity Monitor, iStat Menus, Stats and Vitals](https://trybondi.app/compare/compare.md): what each does, what each costs, and which to choose
 - [The full facts](https://trybondi.app/llms-full.txt): everything above in detail, with Bondi's notes on 125 macOS processes
 
 ## Policies

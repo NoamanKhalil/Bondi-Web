@@ -65,4 +65,4 @@ Yes. It's RAM that the processor and graphics share, built into the chip's packa
 No. Unified memory holds what's running now and is emptied at restart; storage (the SSD) keeps your files.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/

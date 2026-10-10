@@ -65,4 +65,4 @@ There's no shortcut that opens Activity Monitor itself, but Option-Command-Esc o
 Open Activity Monitor and look at the CPU or Memory tab, sorted by the busiest. Helper processes appear separately, so add up the rows that share an app's name, or use a monitor that groups them.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/

@@ -62,4 +62,4 @@ From minutes to a few hours. A first index of a large external drive can take lo
 Add it to Spotlight's privacy list in System Settings → Spotlight.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/

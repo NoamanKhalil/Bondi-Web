@@ -73,4 +73,4 @@ Memory macOS has moved to the startup disk because RAM ran short. A little is no
 If memory pressure is red every day with the apps you normally use, your work needs more memory than this Mac has.
 
 ---
-Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/
+Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence. https://trybondi.app/
