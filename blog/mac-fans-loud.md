@@ -2,7 +2,9 @@
 
 > Loud fans on a MacBook or any Mac mean the chip is working hard or running hot. Here's how to find what's heating it, and what to do if they won't settle.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 4, 2026.
+**Quick answer:** Loud fans mean the chip is making more heat than the Mac can lose quietly. Find the busy app in Activity Monitor's CPU tab, put the Mac on a hard, flat surface, and the fans settle within minutes.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 10, 2026.
 Web page: https://trybondi.app/blog/mac-fans-loud/
 
 On a MacBook Pro or a desktop Mac, the fans get loud for one reason: the chip is producing more heat than the Mac can lose quietly. Find what's making it work hard, give it some air, and the fans settle within minutes.
@@ -63,4 +65,4 @@ No. The fans are protecting the chip. If they stay loud for no clear reason, fin
 macOS doesn't offer fan control. Bondi's Fan boost can raise it, never slower than your fans already were, and returns to automatic control when you quit Bondi.
 
 ---
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/

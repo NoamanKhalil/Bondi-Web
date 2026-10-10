@@ -2,7 +2,9 @@
 
 > WindowServer draws everything on your Mac's screens. Here's why it gets busy, what normal looks like, and the settings that actually calm it down.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+**Quick answer:** WindowServer draws everything on your screens. Many open windows, several or very high-resolution displays, screen recording and video keep it busy; closing windows and turning on Reduce transparency and Reduce motion lighten it.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 10, 2026.
 Web page: https://trybondi.app/blog/windowserver-high-cpu/
 
 WindowServer is the part of macOS that draws everything you see: windows, the Dock, the menu bar and every animation. When it's busy, it's because your screens are asking a lot of it, usually from many open windows, several or very high-resolution displays, screen recording or video.
@@ -61,4 +63,4 @@ It holds what's on every screen, so more and larger displays and more open windo
 No. Quitting it logs you out and closes every app.
 
 ---
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/

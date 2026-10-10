@@ -3,30 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>What is using memory on my Mac? · Bondi blog</title>
-<meta name="description" content="Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here&#039;s how to see which app is really using your Mac&#039;s memory.">
-<link rel="canonical" href="https://trybondi.app/blog/which-app-is-using-my-mac-memory/">
+<title>What is unified memory on a Mac? Unified memory vs RAM · Bondi blog</title>
+<meta name="description" content="Unified memory is the RAM in Apple silicon Macs, shared by the processor, graphics and Neural Engine. What it means, how it differs from RAM and storage, and how much you need.">
+<link rel="canonical" href="https://trybondi.app/blog/unified-memory-mac/">
 <link rel="icon" type="image/png" href="/assets/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="alternate" type="application/rss+xml" title="Bondi blog" href="/blog/rss.xml">
 <meta property="og:site_name" content="Bondi">
-<meta property="og:url" content="https://trybondi.app/blog/which-app-is-using-my-mac-memory/">
+<meta property="og:url" content="https://trybondi.app/blog/unified-memory-mac/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@khalilnoaman">
-<meta property="og:type" content="article"><meta property="og:title" content="What is using memory on my Mac?"><meta property="og:description" content="Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here&#039;s how to see which app is really using your Mac&#039;s memory."><meta property="og:image" content="https://trybondi.app/assets/features/busiest.png"><meta property="article:published_time" content="2026-10-03"><meta property="article:author" content="https://x.com/khalilnoaman"><link rel="alternate" type="text/markdown" title="Plain text, for AI assistants" href="/blog/which-app-is-using-my-mac-memory.md">
+<meta property="og:type" content="article"><meta property="og:title" content="What is unified memory on a Mac? Unified memory vs RAM"><meta property="og:description" content="Unified memory is the RAM in Apple silicon Macs, shared by the processor, graphics and Neural Engine. What it means, how it differs from RAM and storage, and how much you need."><meta property="og:image" content="https://trybondi.app/assets/features/popover-top.png"><meta property="article:published_time" content="2026-10-10"><meta property="article:author" content="https://x.com/khalilnoaman"><link rel="alternate" type="text/markdown" title="Plain text, for AI assistants" href="/blog/unified-memory-mac.md">
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
     "@graph": [
         {
             "@type": "BlogPosting",
-            "headline": "What is using memory on my Mac?",
-            "description": "Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here's how to see which app is really using your Mac's memory.",
-            "abstract": "Add up all of an app's processes, not the biggest row: browsers and code editors split into dozens of helpers. In Activity Monitor, choose View → All Processes, Hierarchically, or use a monitor that groups them for you.",
-            "datePublished": "2026-10-03",
+            "headline": "What is unified memory on a Mac? Unified memory vs RAM",
+            "description": "Unified memory is the RAM in Apple silicon Macs, shared by the processor, graphics and Neural Engine. What it means, how it differs from RAM and storage, and how much you need.",
+            "abstract": "Unified memory is the RAM in Apple silicon Macs, shared by the processor, graphics and Neural Engine. It isn't storage, and it can't be upgraded later. Memory pressure in Activity Monitor tells you whether you have enough.",
+            "datePublished": "2026-10-10",
             "dateModified": "2026-10-10",
-            "mainEntityOfPage": "https://trybondi.app/blog/which-app-is-using-my-mac-memory/",
-            "image": "https://trybondi.app/assets/features/busiest.png",
+            "mainEntityOfPage": "https://trybondi.app/blog/unified-memory-mac/",
+            "image": "https://trybondi.app/assets/features/popover-top.png",
             "author": {
                 "@type": "Person",
                 "name": "Noaman Khalil",
@@ -60,8 +60,8 @@
                 {
                     "@type": "ListItem",
                     "position": 3,
-                    "name": "What is using memory on my Mac?",
-                    "item": "https://trybondi.app/blog/which-app-is-using-my-mac-memory/"
+                    "name": "What is unified memory on a Mac? Unified memory vs RAM",
+                    "item": "https://trybondi.app/blog/unified-memory-mac/"
                 }
             ]
         },
@@ -70,26 +70,26 @@
             "mainEntity": [
                 {
                     "@type": "Question",
-                    "name": "Why does Google Chrome have so many processes on my Mac?",
+                    "name": "What does unified memory mean on a MacBook?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Chrome runs each tab, extension and site in its own process so one bad page can't crash the rest. Each shows as a separate Google Chrome Helper row in Activity Monitor."
+                        "text": "It's the MacBook's RAM. On Apple silicon, the processor, graphics and Neural Engine share it, which is why Apple calls it unified."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "How do I see the total memory an app uses on a Mac?",
+                    "name": "Is unified memory the same as RAM?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "In Activity Monitor's Memory tab, choose View → All Processes, Hierarchically, expand the app and add up its rows. Bondi does this for you and shows each app as one row."
+                        "text": "Yes. It's RAM that the processor and graphics share, built into the chip's package. It can't be upgraded after purchase."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "Should I worry if one app uses a lot of memory?",
+                    "name": "Is unified memory the same as storage?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Only if memory pressure is yellow or red. With green pressure, the app is using memory macOS has spare."
+                        "text": "No. Unified memory holds what's running now and is emptied at restart; storage (the SSD) keeps your files."
                     }
                 }
             ]
@@ -110,95 +110,56 @@
 <article class="post">
   <nav class="crumbs" aria-label="Breadcrumb"><a href="/blog/">Blog</a></nav>
   
-  <h1>What is using memory on my Mac?</h1>
-  <p class="byline">By <a href="https://x.com/khalilnoaman" target="_blank" rel="me noopener">Noaman Khalil</a>, maker of Bondi · <time datetime="2026-10-03">October 3, 2026</time> · Updated October 10, 2026 · 3 min read</p>
-  <aside class="quick-answer" aria-label="Quick answer"><p class="qa-label">Quick answer</p><p>Add up all of an app's processes, not the biggest row: browsers and code editors split into dozens of helpers. In Activity Monitor, choose View → All Processes, Hierarchically, or use a monitor that groups them for you.</p></aside>
+  <h1>What is unified memory on a Mac? Unified memory vs RAM</h1>
+  <p class="byline">By <a href="https://x.com/khalilnoaman" target="_blank" rel="me noopener">Noaman Khalil</a>, maker of Bondi · <time datetime="2026-10-10">October 10, 2026</time> · 3 min read</p>
+  <aside class="quick-answer" aria-label="Quick answer"><p class="qa-label">Quick answer</p><p>Unified memory is the RAM in Apple silicon Macs, shared by the processor, graphics and Neural Engine. It isn't storage, and it can't be upgraded later. Memory pressure in Activity Monitor tells you whether you have enough.</p></aside>
   <div class="prose">
-<p>To see which app is really using your Mac's memory, you need to add up all of its processes, not look at the biggest row. Browsers and code editors split themselves into dozens of helper processes, so the real total is usually hidden.</p>
+<p>Unified memory is the RAM in a Mac with Apple silicon (M1, M2, M3, M4 and later). It's called unified because the processor, the graphics and the Neural Engine all share one pool of it, instead of the graphics having separate memory of its own. When a MacBook says <strong>16 GB unified memory</strong>, that's its RAM: 16 GB, shared by everything on the chip.</p>
 <h2>Key points</h2>
 <ul>
-<li>Add up all of an app's processes: browsers and code editors split into dozens of helpers.</li>
-<li>In one real reading, Chrome was 80 processes using 12.23 GB, more than all of macOS (8.85 GB).</li>
-<li>In Activity Monitor, View → All Processes, Hierarchically groups helpers under their app.</li>
+<li>Unified memory is RAM, shared by the CPU, GPU and Neural Engine on Apple silicon.</li>
+<li>It isn't storage: the SSD holds your files, memory holds what's running right now.</li>
+<li>It can't be upgraded later, so the amount you buy is the amount you keep. Memory pressure tells you if it's enough.</li>
 </ul>
-<h2>Why the biggest row isn't the answer</h2>
-<p>On the Mac I measure on, Activity Monitor's Memory tab listed <strong>966 processes</strong>. The top rows looked like this: a handful of &quot;Google Chrome Helper (Renderer)&quot; processes at around 370 to 640 MB each, Finder at 495 MB, Notes at 436 MB, and some &quot;Code Helper&quot; processes.</p>
-<p>Nothing over a gigabyte. Nothing alarming.</p>
-<p>Added up by app, the picture was completely different:</p>
-<table>
-<thead>
-<tr>
-<th>App</th>
-<th>Processes</th>
-<th>Memory</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Google Chrome</td>
-<td>80</td>
-<td>12.23 GB</td>
-</tr>
-<tr>
-<td>macOS</td>
-<td>745</td>
-<td>8.85 GB</td>
-</tr>
-<tr>
-<td>Visual Studio Code</td>
-<td>44</td>
-<td>4.24 GB</td>
-</tr>
-<tr>
-<td>Safari</td>
-<td>16</td>
-<td>1.42 GB</td>
-</tr>
-<tr>
-<td>Notes</td>
-<td>9</td>
-<td>526.7 MB</td>
-</tr>
-<tr>
-<td>Finder</td>
-<td>3</td>
-<td>499.9 MB</td>
-</tr>
-</tbody>
-</table>
-<p><em>One real reading of a MacBook Pro (M1 Max, 64 GB), grouped by Bondi.</em></p>
-<p>Chrome was using more memory than all of macOS, spread across 80 processes so no single row stood out.</p>
-<h2>Why Chrome and other apps split into helper processes</h2>
-<p>Browsers run each tab, extension and site in its own process, so one misbehaving page can't crash the rest. Code editors do the same for extensions and language tools. It's good for stability, and bad for anyone trying to read Activity Monitor.</p>
-<h2>How to add it up in Activity Monitor</h2>
-<ol>
-<li>Open Activity Monitor and choose the <strong>Memory</strong> tab.</li>
-<li>Choose <strong>View → All Processes, Hierarchically</strong>. Helper processes now sit under the app that started them.</li>
-<li>Expand the app and add up its rows. There's no total, so it's a little arithmetic.</li>
-</ol>
-<p>Typing an app's name in the search field also filters to its processes, which helps for browsers whose helpers share its name.</p>
-<h2>Does it matter?</h2>
-<p>Only if memory pressure is high. If the <strong>Memory Pressure</strong> graph is green, a big app is fine. It's using memory macOS has spare. If it's yellow or red, the app at the top of the grouped list is your best lever: close tabs, quit it, or restart it. More in <a href="/blog/memory-pressure-explained/">Memory pressure on Mac: what yellow and red mean</a>.</p>
+<h2>Unified memory vs RAM</h2>
+<p>It is RAM. What's different is the arrangement:</p>
+<ul>
+<li><strong>Shared:</strong> on most PCs, graphics cards have their own memory, and data is copied between it and the main RAM. On Apple silicon, the graphics read the same memory as the processor, so nothing is copied and the graphics can use a large share of it.</li>
+<li><strong>Built into the chip's package:</strong> it sits right next to the processor, which makes it fast, but it can't be swapped or added to after you buy the Mac.</li>
+</ul>
+<p>So the graphics can use a lot of it. On the Mac I measure on, LM Studio held <strong>23.97 GB</strong> of memory with a local AI model loaded, in the same 64 GB the apps were using.</p>
+<h2>Unified memory vs SSD storage</h2>
+<p>Two different things that are easy to mix up:</p>
+<ul>
+<li><strong>Memory (unified memory):</strong> the workspace for what's open right now. It's emptied when the Mac restarts.</li>
+<li><strong>Storage (the SSD):</strong> where your files and apps live, kept when the Mac is off.</li>
+</ul>
+<p>A MacBook with &quot;16 GB unified memory, 512 GB SSD storage&quot; has 16 GB of RAM and 512 GB of space for files. When memory runs out, macOS moves some of it to the SSD (called swap), which works but is much slower.</p>
+<h2>Is 16 GB of unified memory enough?</h2>
+<p>For browsing, email, documents and photos, usually yes. For heavy video editing, large music projects, many browser tabs alongside development tools, or local AI models, more helps. Since late 2024, Apple's Macs start at 16 GB.</p>
+<p>The numbers that tell you if <em>your</em> Mac has enough aren't the GB used. macOS fills spare memory on purpose, so &quot;used&quot; is high on almost every Mac. Look at <strong>memory pressure</strong> instead: in Activity Monitor's <strong>Memory</strong> tab, a green graph means enough; yellow or red most days means your work needs more. More in <a href="/blog/memory-pressure-explained/">Memory pressure on Mac: what yellow and red mean</a>.</p>
+<h2>How to see how much your Mac has</h2>
+<p>Apple menu (the Apple logo, top left) → <strong>About This Mac</strong>: the <strong>Memory</strong> line shows it, for example <strong>64 GB</strong>. In Activity Monitor's Memory tab, <strong>Physical Memory</strong> at the bottom shows the same.</p>
 <h2>How Bondi shows it</h2>
-<p>Bondi does the grouping for you: every helper counts toward the app that started it, so Chrome is one row. Switch between CPU, memory and energy to see who's busiest by each.</p>
-<p><img loading="lazy" src="/assets/features/busiest.png" alt="Which app is using the most memory on a MacBook Pro: Bondi&#039;s Busiest Right Now list." />
-<em>Bondi's busiest apps, each a single row with all its helpers included.</em></p>
+<p>Bondi leads with pressure, not GB used: on the Mac I measure on, <strong>45.1 GB of 64 GB</strong> was in use, and pressure was <strong>Normal</strong>, with only 0.5 GB of swap.</p>
+<p><img loading="lazy" src="/assets/features/popover-top.png" alt="Unified memory on a MacBook Pro in Bondi: 45.1 GB of 64 GB used, memory pressure Normal, 0.5 GB swap." />
+<em>Bondi on a MacBook Pro with 64 GB of unified memory: plenty used, no problem.</em></p>
 <h2>Questions</h2>
-<h3>Why does Google Chrome have so many processes on my Mac?</h3>
-<p>Chrome runs each tab, extension and site in its own process so one bad page can't crash the rest. Each shows as a separate Google Chrome Helper row in Activity Monitor.</p>
-<h3>How do I see the total memory an app uses on a Mac?</h3>
-<p>In Activity Monitor's Memory tab, choose View → All Processes, Hierarchically, expand the app and add up its rows. Bondi does this for you and shows each app as one row.</p>
-<h3>Should I worry if one app uses a lot of memory?</h3>
-<p>Only if memory pressure is yellow or red. With green pressure, the app is using memory macOS has spare.</p>
+<h3>What does unified memory mean on a MacBook?</h3>
+<p>It's the MacBook's RAM. On Apple silicon, the processor, graphics and Neural Engine share it, which is why Apple calls it unified.</p>
+<h3>Is unified memory the same as RAM?</h3>
+<p>Yes. It's RAM that the processor and graphics share, built into the chip's package. It can't be upgraded after purchase.</p>
+<h3>Is unified memory the same as storage?</h3>
+<p>No. Unified memory holds what's running now and is emptied at restart; storage (the SSD) keeps your files.</p>
   </div>
-  <p class="plain-copy">Also as <a href="/blog/which-app-is-using-my-mac-memory.md">plain text</a>, for AI assistants and readers.</p>
+  <p class="plain-copy">Also as <a href="/blog/unified-memory-mac.md">plain text</a>, for AI assistants and readers.</p>
   <aside class="cta">
     <img src="/assets/icon-blue.png" alt="" width="56" height="56">
     <div><p class="cta-title">Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence.</p>
     <p>It runs on your Mac, groups every process into the apps you know, and keeps 30 days of history. Nothing leaves your Mac.</p>
     <p><a class="pillbtn primary" href="/beta/">Join the beta</a> <a class="pillbtn secondary" href="/">See how it works</a></p></div>
   </aside>
-  <section class="related" aria-labelledby="related-title"><h2 id="related-title">Keep reading</h2><ul><li><a href="/blog/memory-pressure-explained/">Memory pressure on Mac: what yellow and red mean</a><span>&quot;Memory Used&quot; being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here&#039;s how to read them.</span></li><li><a href="/blog/bondi-vs-activity-monitor/">Bondi vs Activity Monitor: what each one is for</a><span>Looking for an Activity Monitor alternative for Mac? Activity Monitor shows every process; Bondi tells you what they mean. When to use which.</span></li><li><a href="/blog/why-is-my-mac-slow/">Why is my Mac so slow? How to find the real cause</a><span>Mac running slow? It usually comes down to one of a handful of causes. Here&#039;s how to tell which one it is, with real readings from a real MacBook Pro.</span></li></ul></section>
+  <section class="related" aria-labelledby="related-title"><h2 id="related-title">Keep reading</h2><ul><li><a href="/blog/memory-pressure-explained/">Memory pressure on Mac: what yellow and red mean</a><span>&quot;Memory Used&quot; being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here&#039;s how to read them.</span></li><li><a href="/blog/which-app-is-using-my-mac-memory/">What is using memory on my Mac?</a><span>Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here&#039;s how to see which app is really using your Mac&#039;s memory.</span></li><li><a href="/blog/why-is-my-mac-slow/">Why is my Mac so slow? How to find the real cause</a><span>Mac running slow? It usually comes down to one of a handful of causes. Here&#039;s how to tell which one it is, with real readings from a real MacBook Pro.</span></li></ul></section>
 </article>
 </main>
 <footer>

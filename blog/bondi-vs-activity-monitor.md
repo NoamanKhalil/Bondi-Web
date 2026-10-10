@@ -2,7 +2,9 @@
 
 > Looking for an Activity Monitor alternative for Mac? Activity Monitor shows every process; Bondi tells you what they mean. When to use which.
 
-By Noaman Khalil, maker of Bondi. Published October 3, 2026.
+**Quick answer:** Activity Monitor, built into every Mac, lists every process and every figure. Bondi groups those processes into the apps you know, keeps 30 days of history, and says in one sentence what's slowing your Mac down. Most people use both.
+
+By Noaman Khalil, maker of Bondi. Published October 3, 2026, updated October 10, 2026.
 Web page: https://trybondi.app/blog/bondi-vs-activity-monitor/
 
 Activity Monitor is the task manager built into every Mac, a detailed instrument panel: it lists every process and every figure. Bondi is the interpreter: it groups those processes into the apps you know, keeps 30 days of history, and tells you in one sentence what's slowing your Mac down. Most people will use both.
@@ -75,4 +77,4 @@ At launch: a 7-day free trial, then a one-time purchase, $6.99 for the first 250
 No. History and the AI stay on the Mac. Bondi only contacts its server to check the trial or license and to look for updates.
 
 ---
-Bondi is a Mac app that tells you why your Mac is slow in one plain sentence, written on the Mac by an on-device AI: https://trybondi.app/
+Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence: https://trybondi.app/

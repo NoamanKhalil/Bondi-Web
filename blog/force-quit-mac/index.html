@@ -3,30 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>What is using memory on my Mac? · Bondi blog</title>
-<meta name="description" content="Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here&#039;s how to see which app is really using your Mac&#039;s memory.">
-<link rel="canonical" href="https://trybondi.app/blog/which-app-is-using-my-mac-memory/">
+<title>How to force quit on a Mac, even when it&#039;s frozen · Bondi blog</title>
+<meta name="description" content="How to force quit an app on a MacBook or any Mac: the keyboard shortcut, three other ways, and what to do when the whole screen is frozen.">
+<link rel="canonical" href="https://trybondi.app/blog/force-quit-mac/">
 <link rel="icon" type="image/png" href="/assets/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="alternate" type="application/rss+xml" title="Bondi blog" href="/blog/rss.xml">
 <meta property="og:site_name" content="Bondi">
-<meta property="og:url" content="https://trybondi.app/blog/which-app-is-using-my-mac-memory/">
+<meta property="og:url" content="https://trybondi.app/blog/force-quit-mac/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@khalilnoaman">
-<meta property="og:type" content="article"><meta property="og:title" content="What is using memory on my Mac?"><meta property="og:description" content="Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here&#039;s how to see which app is really using your Mac&#039;s memory."><meta property="og:image" content="https://trybondi.app/assets/features/busiest.png"><meta property="article:published_time" content="2026-10-03"><meta property="article:author" content="https://x.com/khalilnoaman"><link rel="alternate" type="text/markdown" title="Plain text, for AI assistants" href="/blog/which-app-is-using-my-mac-memory.md">
+<meta property="og:type" content="article"><meta property="og:title" content="How to force quit on a Mac, even when it&#039;s frozen"><meta property="og:description" content="How to force quit an app on a MacBook or any Mac: the keyboard shortcut, three other ways, and what to do when the whole screen is frozen."><meta property="og:image" content="https://trybondi.app/assets/features/warning.png"><meta property="article:published_time" content="2026-10-10"><meta property="article:author" content="https://x.com/khalilnoaman"><link rel="alternate" type="text/markdown" title="Plain text, for AI assistants" href="/blog/force-quit-mac.md">
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
     "@graph": [
         {
             "@type": "BlogPosting",
-            "headline": "What is using memory on my Mac?",
-            "description": "Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here's how to see which app is really using your Mac's memory.",
-            "abstract": "Add up all of an app's processes, not the biggest row: browsers and code editors split into dozens of helpers. In Activity Monitor, choose View → All Processes, Hierarchically, or use a monitor that groups them for you.",
-            "datePublished": "2026-10-03",
+            "headline": "How to force quit on a Mac, even when it's frozen",
+            "description": "How to force quit an app on a MacBook or any Mac: the keyboard shortcut, three other ways, and what to do when the whole screen is frozen.",
+            "abstract": "Press Option-Command-Esc, select the app that isn't responding and click Force Quit. If the whole Mac is frozen, hold the power button for about 10 seconds until it turns off, then start it again.",
+            "datePublished": "2026-10-10",
             "dateModified": "2026-10-10",
-            "mainEntityOfPage": "https://trybondi.app/blog/which-app-is-using-my-mac-memory/",
-            "image": "https://trybondi.app/assets/features/busiest.png",
+            "mainEntityOfPage": "https://trybondi.app/blog/force-quit-mac/",
+            "image": "https://trybondi.app/assets/features/warning.png",
             "author": {
                 "@type": "Person",
                 "name": "Noaman Khalil",
@@ -60,8 +60,8 @@
                 {
                     "@type": "ListItem",
                     "position": 3,
-                    "name": "What is using memory on my Mac?",
-                    "item": "https://trybondi.app/blog/which-app-is-using-my-mac-memory/"
+                    "name": "How to force quit on a Mac, even when it's frozen",
+                    "item": "https://trybondi.app/blog/force-quit-mac/"
                 }
             ]
         },
@@ -70,26 +70,26 @@
             "mainEntity": [
                 {
                     "@type": "Question",
-                    "name": "Why does Google Chrome have so many processes on my Mac?",
+                    "name": "What is the shortcut to force quit on a Mac?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Chrome runs each tab, extension and site in its own process so one bad page can't crash the rest. Each shows as a separate Google Chrome Helper row in Activity Monitor."
+                        "text": "Option-Command-Esc. It opens the Force Quit window, where you select the app and click Force Quit."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "How do I see the total memory an app uses on a Mac?",
+                    "name": "How do I force quit on a MacBook when the screen is frozen?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "In Activity Monitor's Memory tab, choose View → All Processes, Hierarchically, expand the app and add up its rows. Bondi does this for you and shows each app as one row."
+                        "text": "If Option-Command-Esc doesn't open the Force Quit window, hold the power button (the Touch ID button) for about 10 seconds until the Mac turns off, then press it again to start up."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "Should I worry if one app uses a lot of memory?",
+                    "name": "Does force quitting lose my work?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Only if memory pressure is yellow or red. With green pressure, the app is using memory macOS has spare."
+                        "text": "Anything unsaved since the app's last save can be lost. Many Mac apps save automatically and reopen where you left off, but try a normal Quit first."
                     }
                 }
             ]
@@ -110,95 +110,57 @@
 <article class="post">
   <nav class="crumbs" aria-label="Breadcrumb"><a href="/blog/">Blog</a></nav>
   
-  <h1>What is using memory on my Mac?</h1>
-  <p class="byline">By <a href="https://x.com/khalilnoaman" target="_blank" rel="me noopener">Noaman Khalil</a>, maker of Bondi · <time datetime="2026-10-03">October 3, 2026</time> · Updated October 10, 2026 · 3 min read</p>
-  <aside class="quick-answer" aria-label="Quick answer"><p class="qa-label">Quick answer</p><p>Add up all of an app's processes, not the biggest row: browsers and code editors split into dozens of helpers. In Activity Monitor, choose View → All Processes, Hierarchically, or use a monitor that groups them for you.</p></aside>
+  <h1>How to force quit on a Mac, even when it&#039;s frozen</h1>
+  <p class="byline">By <a href="https://x.com/khalilnoaman" target="_blank" rel="me noopener">Noaman Khalil</a>, maker of Bondi · <time datetime="2026-10-10">October 10, 2026</time> · 3 min read</p>
+  <aside class="quick-answer" aria-label="Quick answer"><p class="qa-label">Quick answer</p><p>Press <strong>Option-Command-Esc</strong>, select the app that isn't responding and click <strong>Force Quit</strong>. If the whole Mac is frozen, hold the power button for about 10 seconds until it turns off, then start it again.</p></aside>
   <div class="prose">
-<p>To see which app is really using your Mac's memory, you need to add up all of its processes, not look at the biggest row. Browsers and code editors split themselves into dozens of helper processes, so the real total is usually hidden.</p>
+<p>To force quit on a Mac, press <strong>Option-Command-Esc</strong>, pick the app that isn't responding, and click <strong>Force Quit</strong>. It works the same on a MacBook Air, a MacBook Pro or a desktop Mac. If the whole screen is frozen and that window won't open, hold the power button until the Mac turns off, then start it again.</p>
 <h2>Key points</h2>
 <ul>
-<li>Add up all of an app's processes: browsers and code editors split into dozens of helpers.</li>
-<li>In one real reading, Chrome was 80 processes using 12.23 GB, more than all of macOS (8.85 GB).</li>
-<li>In Activity Monitor, View → All Processes, Hierarchically groups helpers under their app.</li>
+<li>Option-Command-Esc opens the Force Quit window: select the app, click Force Quit.</li>
+<li>You can also use the Apple menu, the app's Dock icon with Option held, or Activity Monitor.</li>
+<li>Force Quit closes an app without saving. Try a normal Quit first, and wait a few seconds if you see the spinning wheel.</li>
 </ul>
-<h2>Why the biggest row isn't the answer</h2>
-<p>On the Mac I measure on, Activity Monitor's Memory tab listed <strong>966 processes</strong>. The top rows looked like this: a handful of &quot;Google Chrome Helper (Renderer)&quot; processes at around 370 to 640 MB each, Finder at 495 MB, Notes at 436 MB, and some &quot;Code Helper&quot; processes.</p>
-<p>Nothing over a gigabyte. Nothing alarming.</p>
-<p>Added up by app, the picture was completely different:</p>
-<table>
-<thead>
-<tr>
-<th>App</th>
-<th>Processes</th>
-<th>Memory</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Google Chrome</td>
-<td>80</td>
-<td>12.23 GB</td>
-</tr>
-<tr>
-<td>macOS</td>
-<td>745</td>
-<td>8.85 GB</td>
-</tr>
-<tr>
-<td>Visual Studio Code</td>
-<td>44</td>
-<td>4.24 GB</td>
-</tr>
-<tr>
-<td>Safari</td>
-<td>16</td>
-<td>1.42 GB</td>
-</tr>
-<tr>
-<td>Notes</td>
-<td>9</td>
-<td>526.7 MB</td>
-</tr>
-<tr>
-<td>Finder</td>
-<td>3</td>
-<td>499.9 MB</td>
-</tr>
-</tbody>
-</table>
-<p><em>One real reading of a MacBook Pro (M1 Max, 64 GB), grouped by Bondi.</em></p>
-<p>Chrome was using more memory than all of macOS, spread across 80 processes so no single row stood out.</p>
-<h2>Why Chrome and other apps split into helper processes</h2>
-<p>Browsers run each tab, extension and site in its own process, so one misbehaving page can't crash the rest. Code editors do the same for extensions and language tools. It's good for stability, and bad for anyone trying to read Activity Monitor.</p>
-<h2>How to add it up in Activity Monitor</h2>
+<h2>Four ways to force quit an app</h2>
 <ol>
-<li>Open Activity Monitor and choose the <strong>Memory</strong> tab.</li>
-<li>Choose <strong>View → All Processes, Hierarchically</strong>. Helper processes now sit under the app that started them.</li>
-<li>Expand the app and add up its rows. There's no total, so it's a little arithmetic.</li>
+<li><strong>Keyboard:</strong> press <strong>Option-Command-Esc</strong>, select the app, click <strong>Force Quit</strong>.</li>
+<li><strong>Apple menu:</strong> click the Apple logo in the top-left corner, choose <strong>Force Quit</strong>, then the app.</li>
+<li><strong>Dock:</strong> hold <strong>Option</strong> and Control-click (or right-click) the app's icon. <strong>Quit</strong> turns into <strong>Force Quit</strong>.</li>
+<li><strong>Activity Monitor:</strong> select the app, click the <strong>Stop</strong> button (ⓧ) and choose <strong>Force Quit</strong>. This is the way to stop a process that isn't a normal app. See <a href="/blog/task-manager-for-mac/">Task manager for Mac</a>.</li>
 </ol>
-<p>Typing an app's name in the search field also filters to its processes, which helps for browsers whose helpers share its name.</p>
-<h2>Does it matter?</h2>
-<p>Only if memory pressure is high. If the <strong>Memory Pressure</strong> graph is green, a big app is fine. It's using memory macOS has spare. If it's yellow or red, the app at the top of the grouped list is your best lever: close tabs, quit it, or restart it. More in <a href="/blog/memory-pressure-explained/">Memory pressure on Mac: what yellow and red mean</a>.</p>
-<h2>How Bondi shows it</h2>
-<p>Bondi does the grouping for you: every helper counts toward the app that started it, so Chrome is one row. Switch between CPU, memory and energy to see who's busiest by each.</p>
-<p><img loading="lazy" src="/assets/features/busiest.png" alt="Which app is using the most memory on a MacBook Pro: Bondi&#039;s Busiest Right Now list." />
-<em>Bondi's busiest apps, each a single row with all its helpers included.</em></p>
+<p>Finder can't be force quit, only relaunched: select it in the Force Quit window and the button says <strong>Relaunch</strong>.</p>
+<h2>How to force quit on a Mac when the screen is frozen</h2>
+<p>If the pointer moves, the Mac usually isn't frozen: one app is. Press <strong>Option-Command-Esc</strong> and give the window a few seconds to appear.</p>
+<p>If nothing responds at all:</p>
+<ol>
+<li><strong>Wait a minute.</strong> A Mac that's very short on memory or very hot can stall and then recover.</li>
+<li><strong>Hold the power button</strong> (the Touch ID button on a MacBook) for about 10 seconds, until the screen goes dark.</li>
+<li><strong>Press it again</strong> to start up. Apps that save automatically reopen with your work; anything unsaved since their last save is lost.</li>
+</ol>
+<p>If it keeps happening, something is wearing the Mac down. <a href="/blog/why-is-my-mac-slow/">Why is my Mac so slow?</a> walks through the usual causes.</p>
+<h2>Quit or Force Quit?</h2>
+<p><strong>Quit</strong> asks the app to close: it saves what it can, tidies up and stops its helper processes. <strong>Force Quit</strong> stops it immediately, so anything unsaved is gone. Use it only when Quit does nothing.</p>
+<p>The spinning wheel often clears by itself, so give an app a few seconds first. A force quit doesn't fix the reason it stalled, either: if the same app freezes again, it's usually short of memory or stuck on one task.</p>
+<h2>How Bondi does it</h2>
+<p>Bondi always asks first. Quit Google Chrome from Bondi and it says how many processes will close (on the Mac I measure on, 82), quits them together, and only if Chrome hasn't closed after 5 seconds asks: <em>&quot;Google Chrome isn't responding. Force Quit? Unsaved work will be lost.&quot;</em></p>
+<p><img loading="lazy" src="/assets/features/warning.png" alt="Force quit on a Mac with Bondi: Memory pressure is Elevated, Google Chrome is using 13.09 GB, with a Quit Google Chrome button." />
+<em>Bondi's warning on a MacBook Pro: one cause, one fix, and nothing quits until you click.</em></p>
 <h2>Questions</h2>
-<h3>Why does Google Chrome have so many processes on my Mac?</h3>
-<p>Chrome runs each tab, extension and site in its own process so one bad page can't crash the rest. Each shows as a separate Google Chrome Helper row in Activity Monitor.</p>
-<h3>How do I see the total memory an app uses on a Mac?</h3>
-<p>In Activity Monitor's Memory tab, choose View → All Processes, Hierarchically, expand the app and add up its rows. Bondi does this for you and shows each app as one row.</p>
-<h3>Should I worry if one app uses a lot of memory?</h3>
-<p>Only if memory pressure is yellow or red. With green pressure, the app is using memory macOS has spare.</p>
+<h3>What is the shortcut to force quit on a Mac?</h3>
+<p>Option-Command-Esc. It opens the Force Quit window, where you select the app and click Force Quit.</p>
+<h3>How do I force quit on a MacBook when the screen is frozen?</h3>
+<p>If Option-Command-Esc doesn't open the Force Quit window, hold the power button (the Touch ID button) for about 10 seconds until the Mac turns off, then press it again to start up.</p>
+<h3>Does force quitting lose my work?</h3>
+<p>Anything unsaved since the app's last save can be lost. Many Mac apps save automatically and reopen where you left off, but try a normal Quit first.</p>
   </div>
-  <p class="plain-copy">Also as <a href="/blog/which-app-is-using-my-mac-memory.md">plain text</a>, for AI assistants and readers.</p>
+  <p class="plain-copy">Also as <a href="/blog/force-quit-mac.md">plain text</a>, for AI assistants and readers.</p>
   <aside class="cta">
     <img src="/assets/icon-blue.png" alt="" width="56" height="56">
     <div><p class="cta-title">Bondi is a system monitor for Mac that tells you why it's slow, in one plain sentence.</p>
     <p>It runs on your Mac, groups every process into the apps you know, and keeps 30 days of history. Nothing leaves your Mac.</p>
     <p><a class="pillbtn primary" href="/beta/">Join the beta</a> <a class="pillbtn secondary" href="/">See how it works</a></p></div>
   </aside>
-  <section class="related" aria-labelledby="related-title"><h2 id="related-title">Keep reading</h2><ul><li><a href="/blog/memory-pressure-explained/">Memory pressure on Mac: what yellow and red mean</a><span>&quot;Memory Used&quot; being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here&#039;s how to read them.</span></li><li><a href="/blog/bondi-vs-activity-monitor/">Bondi vs Activity Monitor: what each one is for</a><span>Looking for an Activity Monitor alternative for Mac? Activity Monitor shows every process; Bondi tells you what they mean. When to use which.</span></li><li><a href="/blog/why-is-my-mac-slow/">Why is my Mac so slow? How to find the real cause</a><span>Mac running slow? It usually comes down to one of a handful of causes. Here&#039;s how to tell which one it is, with real readings from a real MacBook Pro.</span></li></ul></section>
+  <section class="related" aria-labelledby="related-title"><h2 id="related-title">Keep reading</h2><ul><li><a href="/blog/task-manager-for-mac/">Task manager for Mac: how to open it, and the shortcut</a><span>The Mac&#039;s task manager is Activity Monitor. Here&#039;s how to open it on a MacBook or any Mac, the shortcut that works like Ctrl-Alt-Delete, and how to end a stuck process.</span></li><li><a href="/blog/why-is-my-mac-slow/">Why is my Mac so slow? How to find the real cause</a><span>Mac running slow? It usually comes down to one of a handful of causes. Here&#039;s how to tell which one it is, with real readings from a real MacBook Pro.</span></li><li><a href="/blog/check-mac-uptime/">How to check uptime on a Mac</a><span>Three ways to see how long your Mac or MacBook has been running since its last restart, what the uptime command&#039;s numbers mean, and whether a long uptime matters.</span></li></ul></section>
 </article>
 </main>
 <footer>
