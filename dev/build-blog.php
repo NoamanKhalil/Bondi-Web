@@ -41,6 +41,7 @@ const TOPICS = [
     'memory' => ['Memory', "What's using your Mac's memory, and when it matters."],
     'heat' => ['Heat, fans and busy processes', 'Why the fans spin up, and what macOS is doing when your Mac gets hot.'],
     'processes' => ['What is this process?', 'The macOS processes people ask about most, in plain words.'],
+    'tools' => ['Mac tools and shortcuts', 'The tools already on your Mac: the task manager, Force Quit, uptime and more.'],
     'bondi' => ['Bondi and other tools', 'How Bondi compares with Activity Monitor, and how its on-device AI works.'],
     'more' => ['More', ''],
 ];
