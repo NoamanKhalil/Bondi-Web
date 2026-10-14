@@ -59,6 +59,8 @@ expect "checkout gives a claim" "$CHECKOUT" '"url":".*/buy/?claim='
 CLAIM=$(echo "$CHECKOUT" | sed 's/.*"claim":"\([a-f0-9]*\)".*/\1/')
 CLAIM_HASH=$(printf '%s' "$CLAIM" | shasum -a 256 | cut -c1-64)
 expect "buy page shows the price" "$(curl -s "$BASE/buy/?claim=$CLAIM")" "$CLAIM_HASH"
+expect "buy page shows the price after the launch" "$(curl -s "$BASE/buy/")" '\$29.99 after the launch offer'
+expect "thank-you page opens Bondi" "$(curl -s "$BASE/buy/done.php?from=app")" 'bondi://open'
 expect "claim waits for payment" "$(post claim "{\"claim\":\"$CLAIM\"}")" '"status":"pending"'
 
 expect "unsigned notification refused" "$(curl -s -X POST $BASE/api/paddle -d '{}')" '"error":"signature"'
@@ -247,6 +249,10 @@ expect "sign-ups still work before sql/005" "$(post signup '{"name":"Old DB","em
 expect "counts without sql/005" "$(curl -s $BASE/api/interest)" '"beta":null'
 
 if [ -n "${SNAP:-}" ]; then
+  curl -s "$BASE/buy/" > "$SNAP/buy.html"
+  curl -s "$BASE/buy/?claim=$CLAIM" > "$SNAP/buy-from-app.html"
+  curl -s "$BASE/buy/done.php" > "$SNAP/buy-done.html"
+  curl -s "$BASE/buy/done.php?from=app" > "$SNAP/buy-done-from-app.html"
   curl -s -c $J -b $J $BASE/admin/ > "$SNAP/admin-licenses.html"
   curl -s -c $J -b $J "$BASE/admin/?signups" > "$SNAP/admin-signups.html"
   post signup '{"name":"Sam Snap","email":"snap@example.com"}' >/dev/null
