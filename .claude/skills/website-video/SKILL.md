@@ -60,8 +60,15 @@ The window intro and the star film are the same scene (`src/Constellation.tsx`):
 - Commit on `main` in Bondi-Web with a plain message; push. `video/out` and `node_modules` are gitignored.
 - Tell the owner which files to upload to Hostinger (`public_html/index.html` and the changed `assets/*`) and which to delete.
 
+## The shortcuts film (Hyperframes, not Remotion)
+
+- `video/shortcuts/index.html`: one Hyperframes composition (HTML + a paused GSAP timeline on `window.__timelines.shortcuts`), 10 s at 1920 × 1080, looping seamlessly. Owner's choice of tool, 2026-10-15.
+- Its pictures are Bondi's real window (`video/shortcuts/assets/window-{overview,cpu,memory}.png`), drawn by the app's Debug build: `Bondi --render-screenshots DIR` (opens the window for about 40 s; no screen recording). Stack isn't used: it lists the owner's private project names.
+- The keys shown must match the app (`TabShortcuts` in `../TryBondi/Bondi/UI/Window/MainWindowView.swift`): ⌘1–⌘8 by tab position, ⌘9 Sound, ⌘0 Stack, ⌘+/⌘− step and wrap, ⌘Q quits from the menu bar. The homepage's `#shortcuts` list says the same.
+- `npm run render:shortcuts` in `video/` (Hyperframes pinned at 0.8.162; telemetry turned off with `npx hyperframes telemetry disable`), then `npm run assets`, or encode just this film with the `web` lines in `scripts/publish-assets.sh` so the other films' files stay byte-identical. Check stills first: `npx hyperframes snapshot --at 1.3,3.75,6.15,9.95 .` in `video/shortcuts`. Use `immediateRender: false` on any `fromTo` that a later beat repeats, or its start state shows early.
+
 ## Files
 
 - `video/src/Constellation.tsx` scene; `src/constellation-data.ts` reads `src/reading.json`; `src/Root.tsx` compositions; `src/Film.tsx` + `src/data.ts` the 24-second film.
 - `video/scripts/refresh-reading.sh` / `.swift` the reading; `scripts/publish-assets.sh` copies renders to the site.
-- `public_html/index.html`: `.win-intro` CSS and the "Intro film over the app window" script; `#stars` section; `#film` section.
+- `public_html/index.html`: `.win-intro` CSS and the "Intro film over the app window" script; `#stars` section; `#film` section; `#shortcuts` section (`.keys-grid`, `.keylist`).

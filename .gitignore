@@ -10,3 +10,6 @@ video/out/
 
 # Local test pages
 public_html/_*.html
+
+# Hyperframes (video/shortcuts): its own scratch folder
+video/shortcuts/.hyperframes/

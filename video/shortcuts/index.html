@@ -1,0 +1,72 @@
+<!doctype html>
+<!--
+  The homepage's shortcuts film (Hyperframes): Bondi's real window, drawn by the app itself with live readings
+  (the Debug build's --render-screenshots, October 15, 2026), changing tab as each shortcut is pressed.
+  Overview, then ⌘2 CPU, ⌘3 Memory, ⌘− back to CPU, ⌘1 Overview: ten seconds that loop seamlessly.
+  Render: npm run render in this folder (see package.json), then npm run assets.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920, height=1080">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+  body { margin: 0; background: #131315; }
+  #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: radial-gradient(1200px 700px at 38% 45%, rgba(44, 192, 222, 0.10), transparent 70%), #131315;
+          font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif; color: #f5f5f7; }
+  /* The window: 2200 × 1440 renders at 0.625, so 1375 × 900. The rings sit on its tab buttons (at 704, 780 and 856 in the render) */
+  #win { position: absolute; left: 80px; top: 90px; width: 1375px; height: 900px; border-radius: 22px; overflow: hidden;
+         box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.10), 0 40px 90px -20px rgba(0, 0, 0, 0.85); background: #1e1e1e; }
+  #win img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  /* A ring that pulses on the tab a shortcut picks */
+  .ring { position: absolute; top: 32.5px; width: 64px; height: 50px; margin: -25px 0 0 -32px; border-radius: 14px; border: 3px solid #2cc0de; opacity: 0; }
+  /* The keys being pressed, in the column beside the window */
+  #keys { position: absolute; left: 1455px; right: 0; top: 0; bottom: 0; display: grid; place-items: center; }
+  .press { position: absolute; display: grid; justify-items: center; gap: 28px; opacity: 0; }
+  .caps { display: flex; gap: 18px; }
+  .cap { width: 150px; height: 150px; border-radius: 30px; display: grid; place-items: center; font-size: 76px; font-weight: 500; color: #f5f5f7;
+         background: linear-gradient(180deg, #3a3a3e, #2a2a2d); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 10px 0 #18181a, 0 16px 30px rgba(0, 0, 0, 0.6); }
+  .label { font-size: 40px; font-weight: 600; letter-spacing: -0.02em; color: #5fd4ea; }
+  .label small { display: block; text-align: center; font-size: 26px; font-weight: 500; color: #b4b4b9; letter-spacing: -0.01em; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="shortcuts" data-start="0" data-duration="10" data-width="1920" data-height="1080">
+  <div id="win" class="clip" data-start="0" data-duration="10" data-track-index="0">
+    <img id="shot-overview" src="assets/window-overview.png" alt="">
+    <img id="shot-cpu" src="assets/window-cpu.png" alt="" style="opacity:0">
+    <img id="shot-memory" src="assets/window-memory.png" alt="" style="opacity:0">
+    <div class="ring" id="ring-overview" style="left:440px"></div>
+    <div class="ring" id="ring-cpu" style="left:487.5px"></div>
+    <div class="ring" id="ring-memory" style="left:535px"></div>
+  </div>
+  <div id="keys" class="clip" data-start="0" data-duration="10" data-track-index="1">
+    <div class="press" id="p1"><div class="caps"><div class="cap">⌘</div><div class="cap">2</div></div><div class="label">CPU</div></div>
+    <div class="press" id="p2"><div class="caps"><div class="cap">⌘</div><div class="cap">3</div></div><div class="label">Memory</div></div>
+    <div class="press" id="p3"><div class="caps"><div class="cap">⌘</div><div class="cap">−</div></div><div class="label">CPU<small>previous tab</small></div></div>
+    <div class="press" id="p4"><div class="caps"><div class="cap">⌘</div><div class="cap">1</div></div><div class="label">Overview</div></div>
+  </div>
+</div>
+<script>
+  const tl = gsap.timeline({ paused: true });
+  // [press id, time the keys go down, screen it opens, screen it leaves]
+  const beats = [['p1', 1.0, 'cpu', 'overview'], ['p2', 3.4, 'memory', 'cpu'], ['p3', 5.8, 'cpu', 'memory'], ['p4', 8.2, 'overview', 'cpu']];
+  for (const [id, t, to, from] of beats) {
+    const caps = `#${id} .cap`;
+    tl.fromTo(`#${id}`, { opacity: 0, y: 24, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'power3.out' }, t - 0.3);
+    // The key goes down, then comes back up
+    tl.fromTo(caps, { y: 0, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), 0 10px 0 #18181a, 0 16px 30px rgba(0,0,0,0.6)' },
+      { y: 8, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 2px 0 #18181a, 0 6px 12px rgba(0,0,0,0.6)', duration: 0.08, ease: 'power1.in' }, t);
+    tl.to(caps, { y: 0, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), 0 10px 0 #18181a, 0 16px 30px rgba(0,0,0,0.6)', duration: 0.16, ease: 'power2.out' }, t + 0.18);
+    // The window answers: the new tab fades in over the old one, and its tab button pulses
+    tl.fromTo(`#shot-${to}`, { opacity: 0 }, { opacity: 1, duration: 0.14, ease: 'none', immediateRender: false }, t + 0.1);
+    tl.set(`#shot-${from}`, { opacity: 0 }, t + 0.24);
+    tl.fromTo(`#ring-${to}`, { opacity: 1, scale: 0.9 }, { opacity: 0, scale: 1.5, duration: 0.7, ease: 'power2.out', immediateRender: false }, t + 0.1);
+    tl.to(`#${id}`, { opacity: 0, y: -16, duration: 0.3, ease: 'power2.in' }, t + 1.4); // gone by 9.9 s on the last beat
+  }
+  tl.set({}, {}, 10); // the full ten seconds, ending where it began
+  window.__timelines = window.__timelines || {};
+  window.__timelines.shortcuts = tl;
+</script>
+</body>
+</html>
