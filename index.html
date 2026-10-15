@@ -274,6 +274,17 @@
   /* Film, compare, pricing, FAQ */
   .film video { width: 100%; aspect-ratio: 16 / 9; border-radius: 28px; background: #06161b; box-shadow: var(--shadow); }
   .split { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 56px; align-items: center; }
+  /* Keyboard shortcuts: the film beside the list of keys */
+  .keys-grid { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 28px; align-items: center; margin-top: 36px; }
+  .keylist { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 18px; }
+  .keylist div { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .keylist .wide { grid-column: 1 / -1; }
+  .keylist dt { display: flex; gap: 4px; flex: none; }
+  .keylist dd { margin: 0; color: var(--soft); font-size: 0.95rem; }
+  kbd { display: inline-grid; place-items: center; min-width: 30px; height: 30px; padding: 0 7px; border-radius: 8px; font: 500 0.95rem/1 var(--sans, -apple-system, sans-serif);
+         color: var(--ink); background: var(--tile); border: 1px solid var(--line); box-shadow: 0 2px 0 var(--line); }
+  .keys-note { margin: 18px 0 0; text-align: center; color: var(--faint); font-size: 0.9rem; }
+  @media (max-width: 860px) { .keys-grid { grid-template-columns: minmax(0, 1fr); } .keylist { max-width: 460px; width: 100%; margin: 0 auto; } }
   .stars { padding-bottom: 0; } .stars-note { margin: 14px 0 0; text-align: center; color: var(--faint); font-size: 0.9rem; }
   .compare { background: var(--tile); border-radius: 28px; padding: 16px; display: grid; gap: 12px; }
   .compare-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
@@ -885,6 +896,22 @@
         </article>
 
       </div>
+    </section>
+
+    <section class="sec keys" id="shortcuts" aria-labelledby="keys-title">
+      <div class="sec-head center">
+        <p class="eyebrow">Keyboard shortcuts</p>
+        <h2 id="keys-title">Every tab, one keystroke.</h2>
+        <p class="sub">Press ⌘ and a number to jump straight to a tab, or ⌘+ and ⌘− to step through them. They work in Bondi's window and in the menu bar.</p>
+      </div>
+      <div class="keys-grid">
+        <div class="film">
+          <video src="assets/bondi-shortcuts.mp4" data-small="assets/bondi-shortcuts-small.mp4" poster="assets/bondi-shortcuts-poster.jpg" muted loop playsinline preload="none" data-lazy width="1920" height="1080"
+                 aria-label="Bondi's window on a real Mac, changing tab as shortcuts are pressed: Command 2 opens CPU, Command 3 opens Memory, Command minus goes back to CPU, and Command 1 returns to Overview."></video>
+        </div>
+        <dl class="keylist" aria-label="Bondi's keyboard shortcuts"><div><dt><kbd aria-label="Command">⌘</kbd><kbd>1</kbd></dt><dd>Overview</dd></div><div><dt><kbd aria-label="Command">⌘</kbd><kbd>2</kbd></dt><dd>CPU</dd></div><div><dt><kbd aria-label="Command">⌘</kbd><kbd>3</kbd></dt><dd>Memory</dd></div><div><dt><kbd aria-label="Command">⌘</kbd><kbd>4</kbd></dt><dd>Disk</dd></div><div><dt><kbd aria-label="Command">⌘</kbd><kbd>5</kbd></dt><dd>Network</dd></div><div><dt><kbd aria-label="Command">⌘</kbd><kbd>6</kbd></dt><dd>GPU</dd></div><div><dt><kbd aria-label="Command">⌘</kbd><kbd>7</kbd></dt><dd>Neural Engine</dd></div><div><dt><kbd aria-label="Command">⌘</kbd><kbd>8</kbd></dt><dd>Battery</dd></div><div><dt><kbd aria-label="Command">⌘</kbd><kbd>9</kbd></dt><dd>Sound</dd></div><div><dt><kbd aria-label="Command">⌘</kbd><kbd>0</kbd></dt><dd>Stack</dd></div><div class="wide"><dt><kbd aria-label="Command">⌘</kbd><kbd aria-label="plus">+</kbd> <kbd aria-label="Command">⌘</kbd><kbd aria-label="minus">−</kbd></dt><dd>Next or previous tab</dd></div><div class="wide"><dt><kbd aria-label="Command">⌘</kbd><kbd>Q</kbd></dt><dd>Quit Bondi, from the menu bar</dd></div></dl>
+      </div>
+      <p class="keys-note">⌘8 opens Battery on Macs that have one. Bluetooth has no number: step to it with ⌘+ or ⌘−.</p>
     </section>
   </div>
 
