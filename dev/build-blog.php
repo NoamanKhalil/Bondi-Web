@@ -189,7 +189,7 @@ $extraHead
 $body
 </main>
 <footer>
-  <div class="foot-line"><span>© 2026 Jabble Super Intelligence Inc.</span>$made<a href="/blog/">Blog</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/your-data/">Your data</a><a href="mailto:support@trybondi.app">support@trybondi.app</a></div>
+  <div class="foot-line"><span>© 2026 Jabble Super Intelligence Inc.</span>$made<a href="/blog/">Blog</a><a href="/can-my-mac-run-it/">Can my Mac run it?</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/your-data/">Your data</a><a href="mailto:support@trybondi.app">support@trybondi.app</a></div>
   <div class="foot-line">$askRow</div>
 </footer>
 </body>
@@ -338,8 +338,8 @@ foreach (glob("$root/content/pages/*.md") ?: [] as $file) {
           . '<meta property="og:description" content="' . $h($meta['description']) . '"><meta property="og:image" content="' . SITE . '/assets/og-image.jpg">'
           . '<link rel="alternate" type="text/markdown" title="Plain text, for AI assistants" href="/' . $h($slug) . '/' . $h($slug) . '.md">'
           . "\n<script type=\"application/ld+json\">\n" . json_encode($ld, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . "\n</script>";
-    $checked = isset($meta['checked']) ? 'Checked against each app\'s own website on ' . $h(nice_date($meta['checked'])) : '';
-    $updated = isset($meta['updated']) ? ($checked !== '' ? ' · ' : '') . 'Updated ' . $h(nice_date($meta['updated'])) : '';
+    $checked = isset($meta['checked']) ? $h($meta['checkednote'] ?? 'Checked against each app\'s own website') . ' on ' . $h(nice_date($meta['checked'])) : '';
+    $updated = isset($meta['updated']) && $meta['updated'] !== ($meta['checked'] ?? '') ? ($checked !== '' ? ' · ' : '') . 'Updated ' . $h(nice_date($meta['updated'])) : '';
     $answerBox = $answer !== '' ? '<aside class="quick-answer" aria-label="Quick answer"><p class="qa-label">Quick answer</p><p>' . $parsedown->line($answer) . '</p></aside>' : '';
     $body = '<article class="post">' . crumbs([['Bondi', '/'], [$meta['crumb'] ?? $meta['title'], "/$slug/"]]) . '<h1>' . $h($meta['title']) . '</h1>'
           . '<p class="byline">' . $checked . $updated . '</p>' . $answerBox . '<div class="prose">' . $html . '</div>'
@@ -349,7 +349,8 @@ foreach (glob("$root/content/pages/*.md") ?: [] as $file) {
           . '<p><a class="pillbtn primary" href="/beta/">Join the beta</a> <a class="pillbtn secondary" href="/">See how it works</a></p></div></aside></article>';
     @mkdir("$out/$slug", 0755, true);
     file_put_contents("$out/$slug/index.html", page($meta['title'] . ' · Bondi', $meta['description'], $url, $body, $head, $askRow));
-    $md = preg_replace('~\]\(/~', '](' . SITE . '/', $m[2]);
+    // The plain-text copy leaves out what only works on the web page (the calculator's controls and script)
+    $md = preg_replace('~\]\(/~', '](' . SITE . '/', preg_replace('~<!-- web -->.*?<!-- /web -->\s*~s', '', $m[2]));
     file_put_contents("$out/$slug/$slug.md", "# {$meta['title']}\n\n> {$meta['description']}\n\n" . ($answer !== '' ? "**Quick answer:** $answer\n\n" : '')
         . "Web page: $url\n\n" . trim($md) . "\n\n---\n" . PITCH . ' ' . SITE . "/\n");
     file_put_contents("$out/$slug/.htaccess", "# This page's plain-text copy (/$slug/$slug.md) is public, unlike .md files elsewhere on the site.\n"

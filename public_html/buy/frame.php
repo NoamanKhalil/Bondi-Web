@@ -17,7 +17,7 @@ function buy_page_start(string $title): void
 
 function buy_page_end(): void
 {
-    echo '</main><footer><div class="foot-line"><span>© 2026 Jabble Super Intelligence Inc.</span><a href="/">trybondi.app</a>'
+    echo '</main><footer><div class="foot-line"><span>© 2026 Jabble Super Intelligence Inc.</span><a href="/">trybondi.app</a><a href="/can-my-mac-run-it/">Can my Mac run it?</a>'
        . '<a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/eula/">License agreement</a><a href="/refunds/">Refunds</a>'
        . '<a href="mailto:support@trybondi.app">support@trybondi.app</a></div></footer></body></html>';
 }

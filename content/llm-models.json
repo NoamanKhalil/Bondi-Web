@@ -1,0 +1,390 @@
+{
+    "checked": "2026-10-15",
+    "source": "Ollama library (registry.ollama.ai), default download of each tag",
+    "models": [
+        {
+            "tag": "gemma4:e2b",
+            "name": "Gemma 4 E2B",
+            "bytes": 4587144832,
+            "params": "4.6B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "gemma4:e4b",
+            "name": "Gemma 4 E4B",
+            "bytes": 6583644832,
+            "params": "7.5B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "gemma4:12b",
+            "name": "Gemma 4 12B",
+            "bytes": 8021608448,
+            "params": "11.9B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "gemma4:26b",
+            "name": "Gemma 4 26B A4B",
+            "bytes": 18731013952,
+            "params": "25.2B",
+            "quant": "Q4_K_M",
+            "active": 4
+        },
+        {
+            "tag": "gemma4:31b",
+            "name": "Gemma 4 31B",
+            "bytes": 20385446560,
+            "params": "30.7B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "qwen3.8:27b",
+            "name": "Qwen 3.8 27B",
+            "bytes": 17741860480,
+            "params": "27.3B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "qwen3.6:27b",
+            "name": "Qwen 3.6 27B",
+            "bytes": 17769065248,
+            "params": "27.3B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "qwen3.6:35b-a3b",
+            "name": "Qwen 3.6 35B A3B",
+            "bytes": 22621302688,
+            "params": "35.5B",
+            "quant": "Q4_K_M",
+            "active": 3
+        },
+        {
+            "tag": "qwen3.5:0.8b",
+            "name": "Qwen 3.5 0.8B",
+            "bytes": 1322057600,
+            "params": "752.39M",
+            "quant": "Q8_0",
+            "active": null
+        },
+        {
+            "tag": "qwen3.5:2b",
+            "name": "Qwen 3.5 2B",
+            "bytes": 2683385216,
+            "params": "1.9B",
+            "quant": "Q8_0",
+            "active": null
+        },
+        {
+            "tag": "qwen3.5:4b",
+            "name": "Qwen 3.5 4B",
+            "bytes": 3324162336,
+            "params": "4.2B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "qwen3.5:9b",
+            "name": "Qwen 3.5 9B",
+            "bytes": 6550813952,
+            "params": "9.0B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "qwen3.5:27b",
+            "name": "Qwen 3.5 27B",
+            "bytes": 17478544992,
+            "params": "26.9B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "qwen3.5:35b-a3b",
+            "name": "Qwen 3.5 35B A3B",
+            "bytes": 22069580576,
+            "params": "34.7B",
+            "quant": "Q4_K_M",
+            "active": 3
+        },
+        {
+            "tag": "qwen3.5:122b-a10b",
+            "name": "Qwen 3.5 122B A10B",
+            "bytes": 81370024480,
+            "params": "125.1B",
+            "quant": "Q4_K_M",
+            "active": 10
+        },
+        {
+            "tag": "gpt-oss:20b",
+            "name": "gpt-oss 20B",
+            "bytes": 13793422816,
+            "params": "20.9B",
+            "quant": "MXFP4",
+            "active": 3.6
+        },
+        {
+            "tag": "gpt-oss:120b",
+            "name": "gpt-oss 120B",
+            "bytes": 65369800832,
+            "params": "116.8B",
+            "quant": "MXFP4",
+            "active": 5.1
+        },
+        {
+            "tag": "deepseek-r1:1.5b",
+            "name": "DeepSeek-R1 1.5B",
+            "bytes": 1117320512,
+            "params": "1.8B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "deepseek-r1:7b",
+            "name": "DeepSeek-R1 7B",
+            "bytes": 4683073184,
+            "params": "7.6B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "deepseek-r1:8b",
+            "name": "DeepSeek-R1 8B",
+            "bytes": 5225373760,
+            "params": "8.2B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "deepseek-r1:14b",
+            "name": "DeepSeek-R1 14B",
+            "bytes": 8988109952,
+            "params": "14.8B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "deepseek-r1:32b",
+            "name": "DeepSeek-R1 32B",
+            "bytes": 19851335552,
+            "params": "32.8B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "deepseek-r1:70b",
+            "name": "DeepSeek-R1 70B",
+            "bytes": 42520395616,
+            "params": "70.6B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "deepseek-r1:671b",
+            "name": "DeepSeek-R1 671B",
+            "bytes": 404430186848,
+            "params": "671.0B",
+            "quant": "Q4_K_M",
+            "active": 37
+        },
+        {
+            "tag": "deepseek-v3:671b",
+            "name": "DeepSeek-V3 671B",
+            "bytes": 404430186016,
+            "params": "671.0B",
+            "quant": "Q4_K_M",
+            "active": 37
+        },
+        {
+            "tag": "llama3.2:1b",
+            "name": "Llama 3.2 1B",
+            "bytes": 1321082688,
+            "params": "1.2B",
+            "quant": "Q8_0",
+            "active": null
+        },
+        {
+            "tag": "llama3.2:3b",
+            "name": "Llama 3.2 3B",
+            "bytes": 2019377376,
+            "params": "3.2B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "llama3.1:8b",
+            "name": "Llama 3.1 8B",
+            "bytes": 4920738944,
+            "params": "8.0B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "llama3.3:70b",
+            "name": "Llama 3.3 70B",
+            "bytes": 42520398528,
+            "params": "70.6B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "llama3.1:405b",
+            "name": "Llama 3.1 405B",
+            "bytes": 243069610720,
+            "params": "405.9B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "llama4:latest",
+            "name": "Llama 4 Scout",
+            "bytes": 67436800960,
+            "params": "108.6B",
+            "quant": "Q4_K_M",
+            "active": 17
+        },
+        {
+            "tag": "mistral:7b",
+            "name": "Mistral 7B",
+            "bytes": 4372811712,
+            "params": "7.2B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "mistral-small3.2:24b",
+            "name": "Mistral Small 3.2 24B",
+            "bytes": 15177369888,
+            "params": "24.0B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "devstral:24b",
+            "name": "Devstral 24B",
+            "bytes": 14333909728,
+            "params": "23.6B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "phi4-mini:3.8b",
+            "name": "Phi-4 mini 3.8B",
+            "bytes": 2491874624,
+            "params": "3.8B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "phi4:14b",
+            "name": "Phi-4 14B",
+            "bytes": 9053114464,
+            "params": "14.7B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "qwen3-coder:30b",
+            "name": "Qwen3-Coder 30B A3B",
+            "bytes": 18556688736,
+            "params": "30.5B",
+            "quant": "Q4_K_M",
+            "active": 3.3
+        },
+        {
+            "tag": "qwen3-coder:480b",
+            "name": "Qwen3-Coder 480B A35B",
+            "bytes": 290058824416,
+            "params": "480.2B",
+            "quant": "Q4_K_M",
+            "active": 35
+        },
+        {
+            "tag": "gemma3:1b",
+            "name": "Gemma 3 1B",
+            "bytes": 806058400,
+            "params": "999.89M",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "gemma3:4b",
+            "name": "Gemma 3 4B",
+            "bytes": 3350263392,
+            "params": "3.9B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "gemma3:12b",
+            "name": "Gemma 3 12B",
+            "bytes": 8164030720,
+            "params": "11.8B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "gemma3:27b",
+            "name": "Gemma 3 27B",
+            "bytes": 17413400640,
+            "params": "27.0B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "qwen3:4b",
+            "name": "Qwen3 4B",
+            "bytes": 2497280480,
+            "params": "4.0B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "qwen3:8b",
+            "name": "Qwen3 8B",
+            "bytes": 5225374496,
+            "params": "8.2B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "qwen3:14b",
+            "name": "Qwen3 14B",
+            "bytes": 9276184896,
+            "params": "14.8B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "qwen3:30b-a3b",
+            "name": "Qwen3 30B A3B",
+            "bytes": 18556685856,
+            "params": "30.5B",
+            "quant": "Q4_K_M",
+            "active": 3
+        },
+        {
+            "tag": "qwen3:32b",
+            "name": "Qwen3 32B",
+            "bytes": 20201240160,
+            "params": "32.8B",
+            "quant": "Q4_K_M",
+            "active": null
+        },
+        {
+            "tag": "qwen3:235b-a22b",
+            "name": "Qwen3 235B A22B",
+            "bytes": 142154073664,
+            "params": "235.1B",
+            "quant": "Q4_K_M",
+            "active": 22
+        }
+    ]
+}

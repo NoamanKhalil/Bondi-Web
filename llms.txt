@@ -28,6 +28,7 @@ Checked against each app's own website (apple.com, bjango.com, github.com/exelba
 - [Join the beta](https://trybondi.app/beta/): the beta sign-up list
 - [Bondi's Mac guide](https://trybondi.app/guide/): what the processes in Activity Monitor are, why they get busy, and whether you can quit them
 - [Bondi vs Activity Monitor, iStat Menus, Stats and Vitals](https://trybondi.app/compare/compare.md): what each does, what each costs, and which to choose
+- [Can my Mac run it? LLM RAM calculator for Mac](https://trybondi.app/can-my-mac-run-it/can-my-mac-run-it.md): which local AI models (Llama, Qwen, Gemma, DeepSeek, gpt-oss) a Mac can run, how much memory each needs and how fast it writes, from real sizes and readings
 - [The full facts](https://trybondi.app/llms-full.txt): everything above in detail, with Bondi's notes on 125 macOS processes
 
 ## Policies
@@ -35,6 +36,10 @@ Checked against each app's own website (apple.com, bjango.com, github.com/exelba
 - [Terms of service](https://trybondi.app/terms/): buying Bondi, the free trial and acceptable use
 - [License agreement](https://trybondi.app/eula/): one Mac at a time, activation checks and AI features
 - [Refund policy](https://trybondi.app/refunds/): a full refund within 14 days of buying
+
+
+
+
 
 <!-- blog -->
 ## Guides: Why is my Mac slow?

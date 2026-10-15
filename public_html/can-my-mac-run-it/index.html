@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Can my Mac run it? LLM RAM calculator for Mac · Bondi</title>
+<meta name="description" content="Pick your Mac&#039;s memory and chip to see which local AI models it can run, how much RAM each LLM needs, and how fast: Llama, Qwen, Gemma, DeepSeek and gpt-oss.">
+<link rel="canonical" href="https://trybondi.app/can-my-mac-run-it/">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="alternate" type="application/rss+xml" title="Bondi blog" href="/blog/rss.xml">
+<meta property="og:site_name" content="Bondi">
+<meta property="og:url" content="https://trybondi.app/can-my-mac-run-it/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@khalilnoaman">
+<meta property="og:type" content="website"><meta property="og:title" content="Can my Mac run it? LLM RAM calculator for Mac"><meta property="og:description" content="Pick your Mac&#039;s memory and chip to see which local AI models it can run, how much RAM each LLM needs, and how fast: Llama, Qwen, Gemma, DeepSeek and gpt-oss."><meta property="og:image" content="https://trybondi.app/assets/og-image.jpg"><link rel="alternate" type="text/markdown" title="Plain text, for AI assistants" href="/can-my-mac-run-it/can-my-mac-run-it.md">
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "WebPage",
+            "name": "Can my Mac run it? LLM RAM calculator for Mac",
+            "description": "Pick your Mac's memory and chip to see which local AI models it can run, how much RAM each LLM needs, and how fast: Llama, Qwen, Gemma, DeepSeek and gpt-oss.",
+            "url": "https://trybondi.app/can-my-mac-run-it/",
+            "abstract": "A local AI model needs about its download size in memory, plus up to 20% for the conversation. An 8 GB Mac runs models up to about 7B parameters, 16 GB up to 14B, 32 GB up to about 30B, and 64 GB runs 70B models, tightly. How fast it writes depends on the chip's memory bandwidth.",
+            "dateModified": "2026-10-15",
+            "about": {
+                "@id": "https://trybondi.app/#app"
+            }
+        },
+        {
+            "@type": "SoftwareApplication",
+            "@id": "https://trybondi.app/#app",
+            "name": "Bondi",
+            "url": "https://trybondi.app/",
+            "description": "Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence.",
+            "applicationCategory": "UtilitiesApplication",
+            "applicationSubCategory": "System monitor",
+            "operatingSystem": "macOS 15 or later"
+        },
+        {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Bondi",
+                    "item": "https://trybondi.app/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Can my Mac run it? LLM RAM calculator for Mac",
+                    "item": "https://trybondi.app/can-my-mac-run-it/"
+                }
+            ]
+        },
+        {
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "How much RAM do I need to run a local LLM?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "About the model's download size, plus up to 20% for the conversation. As a rule of thumb, an 8 GB Mac runs models up to about 7B parameters, 16 GB up to 14B, 32 GB up to about 30B, and 64 GB runs 70B models, tightly. The calculator above checks 48 popular models against your Mac's memory."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What LLM can I run on my Mac?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "It depends on your Mac's memory. With 8 GB: Llama 3.2 3B, Gemma 3 4B, Qwen 3.5 4B or Mistral 7B. With 16 GB: Qwen 3.5 9B, Gemma 4 12B, Phi-4 14B or DeepSeek-R1 14B. With 32 GB: gpt-oss 20B, Gemma 3 27B, Qwen 3.6 27B or Qwen3 30B A3B. With 64 GB: Llama 3.3 70B or DeepSeek-R1 70B, tightly. With 128 GB: gpt-oss 120B or Qwen 3.5 122B A10B."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Can a Mac mini run LLMs?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. A Mac mini uses the same unified memory as every Apple silicon Mac, so what it can run depends only on its memory and chip: with 16 GB, models up to about 14B parameters; with 64 GB, 70B models fit, tightly. Pick its memory and chip in the calculator above."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How much RAM do I need for Llama 3.3 70B?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Llama 3.3 70B is a 42.5 GB download in Ollama and needs about 45.8 GB of memory. It fits, tightly, on a 64 GB Mac and runs well on 96 GB or more. On an M1 Max it would write about 4 tokens a second, by our estimate."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Is 8 GB of RAM enough to run an LLM?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "For small models, yes. An 8 GB Mac runs models such as Llama 3.2 3B, Gemma 3 4B and Mistral 7B well, and fits most other 7B and 8B models, such as Llama 3.1 8B, tightly: close other apps first."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Why does my Mac get slow when a model is loaded?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A loaded model holds its memory even when you're not using it. If it takes most of your Mac's memory, macOS starts compressing memory and swapping to disk, and every app slows down. Quit or unload the model when you're done. Bondi shows each loaded model in Ollama or LM Studio with the memory it holds, and can unload it."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Does this page check my Mac?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "No. Websites can't see how much memory a Mac has, so you choose it. Everything is worked out in your browser, and nothing is sent anywhere."
+                    }
+                }
+            ]
+        }
+    ]
+}
+</script>
+<script src="/assets/theme.js"></script>
+<link rel="stylesheet" href="/assets/blog.css">
+</head>
+<body>
+<header class="nav"><div class="nav-inner">
+  <a class="brand" href="/"><img src="/assets/icon-blue.png" alt="" width="26" height="26">Bondi</a>
+  <nav class="links" aria-label="Site"><a href="/blog/">Blog</a><a href="/guide/">Guide</a><a href="/">What's Bondi?</a></nav>
+  <div class="nav-right"><button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button><a class="pillbtn primary small" href="/beta/">Join the beta</a></div>
+</div></header>
+<main>
+<article class="post"><nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Bondi</a></li><li><a href="/can-my-mac-run-it/">Can my Mac run it?</a></li></ol></nav><h1>Can my Mac run it? LLM RAM calculator for Mac</h1><p class="byline">Model sizes checked against Ollama&#039;s library on October 15, 2026</p><aside class="quick-answer" aria-label="Quick answer"><p class="qa-label">Quick answer</p><p>A local AI model needs about its download size in memory, plus up to 20% for the conversation. An 8 GB Mac runs models up to about 7B parameters, 16 GB up to 14B, 32 GB up to about 30B, and 64 GB runs 70B models, tightly. How fast it writes depends on the chip's memory bandwidth.</p></aside><div class="prose"><!-- web -->
+<style>
+.calc { --good: #248a3d; --warn: #c76e00; --bad: #d70015; margin: 30px 0 34px; padding: 26px 24px 22px; border-radius: 22px; background: var(--tile); box-shadow: var(--shadow); display: grid; gap: 16px; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .calc { --good: #30d158; --warn: #ff9f0a; --bad: #ff453a; } }
+:root[data-theme="dark"] .calc { --good: #30d158; --warn: #ff9f0a; --bad: #ff453a; }
+.calc-pick { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 12px; }
+.calc label { display: grid; gap: 6px; font-size: .85rem; font-weight: 600; color: var(--soft); }
+.calc select, .calc input { font: 500 1rem/1.3 var(--sans); color: var(--ink); background: var(--tile-2); border: 1px solid var(--line); border-radius: 12px; padding: 11px 12px; width: 100%; min-width: 0; }
+.calc select:focus-visible, .calc input:focus-visible { outline: 2px solid var(--bondi); outline-offset: 1px; }
+.calc-how { margin: -6px 0 0; font-size: .82rem; color: var(--faint); }
+.calc-sum { margin: 0; font: 600 1.15rem/1.4 var(--display); letter-spacing: -0.015em; }
+.calc-group h3 { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; font-size: .9rem; color: var(--soft); }
+.calc-group h3::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--dot); }
+.calc-group[data-v="well"] { --dot: var(--good); } .calc-group[data-v="tight"] { --dot: var(--warn); } .calc-group[data-v="no"] { --dot: var(--bad); }
+#calc-groups { display: grid; gap: 18px; }
+.calc-group ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.calc-group li { margin: 0; display: inline-flex; gap: 6px; align-items: baseline; padding: 5px 11px; border-radius: 980px; background: var(--tile-2); border: 1px solid var(--line); font-size: .82rem; line-height: 1.3; }
+.calc-group li b { font-weight: 600; color: var(--ink); } .calc-group li span { color: var(--faint); font-variant-numeric: tabular-nums; }
+.calc-group[data-v="no"] li { opacity: .75; }
+.calc-group summary { cursor: pointer; list-style: none; } .calc-group summary::-webkit-details-marker { display: none; }
+.calc-group summary h3 { display: inline-flex; margin: 0; } .calc-group summary .more { margin-left: 8px; font-size: .85rem; color: var(--bondi-ink); font-weight: 600; }
+.calc-group details[open] .more { display: none; } .calc-group details ul { margin-top: 8px; }
+.calc-custom { border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 10px; }
+.calc-custom .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 12px; }
+.calc-custom p { margin: 0; font-size: .95rem; color: var(--soft); }
+.calc-custom p b { color: var(--ink); }
+.calc-note { margin: 0; font-size: .82rem; color: var(--faint); }
+.calc-bondi { margin: 0; padding: 12px 16px; border-radius: 14px; background: var(--bondi-soft); font-size: .92rem; }
+.calc-bondi a { color: var(--bondi-ink); font-weight: 600; }
+@media (max-width: 640px) { .calc { padding: 20px 16px 18px; } }
+</style>
+<section class="calc" aria-label="LLM RAM calculator">
+<div class="calc-pick">
+<label for="calc-ram">Your Mac's memory
+<select id="calc-ram"><option>8</option><option selected>16</option><option>18</option><option>24</option><option>32</option><option>36</option><option>48</option><option>64</option><option>96</option><option>128</option><option>192</option><option>256</option><option>512</option></select></label>
+<label for="calc-chip">Its chip (for speed)
+<select id="calc-chip"><option value="">Not sure</option><option value="68">M1</option><option value="200">M1 Pro</option><option value="400">M1 Max</option><option value="800">M1 Ultra</option><option value="100">M2</option><option value="200">M2 Pro</option><option value="400">M2 Max</option><option value="800">M2 Ultra</option><option value="100">M3</option><option value="150">M3 Pro</option><option value="300">M3 Max (30-core GPU)</option><option value="400">M3 Max (40-core GPU)</option><option value="819">M3 Ultra</option><option value="120">M4</option><option value="273">M4 Pro</option><option value="410">M4 Max (32-core GPU)</option><option value="546">M4 Max (40-core GPU)</option><option value="153">M5</option><option value="307">M5 Pro</option><option value="460">M5 Max (32-core GPU)</option><option value="614">M5 Max (40-core GPU)</option><option value="1200">M5 Ultra</option></select></label>
+</div>
+<p class="calc-how">Not sure? Open the Apple menu and choose About This Mac: it shows the chip and the memory.</p>
+<p class="calc-sum" id="calc-sum" aria-live="polite">Pick your Mac's memory to see which models it can run.</p>
+<div id="calc-groups"></div>
+<div class="calc-custom">
+<div class="row">
+<label for="calc-params">Another model? Its size, in billions of parameters
+<input id="calc-params" type="number" inputmode="decimal" min="0.1" max="2000" step="any" placeholder="For example 70"></label>
+<label for="calc-quant">Quality
+<select id="calc-quant"><option value="q4">4-bit (Q4, the usual download)</option><option value="q8">8-bit (Q8)</option><option value="f16">16-bit (full size)</option></select></label>
+</div>
+<p id="calc-custom-out" aria-live="polite">The size is in the model's name: the 70B in "Llama 3.3 70B" means 70 billion.</p>
+</div>
+<p class="calc-note" id="calc-note"></p>
+<p class="calc-bondi">Running one? <a href="/beta/">Bondi</a> shows each loaded model in Ollama or LM Studio with the memory it really holds, and unloads it when you're done.</p>
+</section>
+<!-- models:data --><script type="application/json" id="llm-data">{"checked":"2026-10-15","rules":{"reading":"a 14-inch MacBook Pro (2021) with M1 Max and 64 GB, on macOS 27.0.1 and Ollama 0.35.1, on October 15, 2026","gpuShare":0.81,"well":0.65,"contextShare":0.2,"contextMax":3000000000,"working":250000000,"efficiency":0.46,"bytesPerParam":{"q4":0.61,"q8":1.1,"f16":2},"sizes":[8,16,18,24,32,36,48,64,96,128,192,256,512]},"models":[["Gemma 3 1B",806058400,1,"gemma3:1b"],["DeepSeek-R1 1.5B",1117320512,1,"deepseek-r1:1.5b"],["Llama 3.2 1B",1321082688,1,"llama3.2:1b"],["Qwen 3.5 0.8B",1322057600,1,"qwen3.5:0.8b"],["Llama 3.2 3B",2019377376,1,"llama3.2:3b"],["Phi-4 mini 3.8B",2491874624,1,"phi4-mini:3.8b"],["Qwen3 4B",2497280480,1,"qwen3:4b"],["Qwen 3.5 2B",2683385216,1,"qwen3.5:2b"],["Qwen 3.5 4B",3324162336,1,"qwen3.5:4b"],["Gemma 3 4B",3350263392,1,"gemma3:4b"],["Mistral 7B",4372811712,1,"mistral:7b"],["Gemma 4 E2B",4587144832,1,"gemma4:e2b"],["DeepSeek-R1 7B",4683073184,1,"deepseek-r1:7b"],["Llama 3.1 8B",4920738944,1,"llama3.1:8b"],["DeepSeek-R1 8B",5225373760,1,"deepseek-r1:8b"],["Qwen3 8B",5225374496,1,"qwen3:8b"],["Qwen 3.5 9B",6550813952,1,"qwen3.5:9b"],["Gemma 4 E4B",6583644832,1,"gemma4:e4b"],["Gemma 4 12B",8021608448,1,"gemma4:12b"],["Gemma 3 12B",8164030720,1,"gemma3:12b"],["DeepSeek-R1 14B",8988109952,1,"deepseek-r1:14b"],["Phi-4 14B",9053114464,1,"phi4:14b"],["Qwen3 14B",9276184896,1,"qwen3:14b"],["gpt-oss 20B",13793422816,0.1722488038277512,"gpt-oss:20b"],["Devstral 24B",14333909728,1,"devstral:24b"],["Mistral Small 3.2 24B",15177369888,1,"mistral-small3.2:24b"],["Gemma 3 27B",17413400640,1,"gemma3:27b"],["Qwen 3.5 27B",17478544992,1,"qwen3.5:27b"],["Qwen 3.8 27B",17741860480,1,"qwen3.8:27b"],["Qwen 3.6 27B",17769065248,1,"qwen3.6:27b"],["Qwen3 30B A3B",18556685856,0.09836065573770492,"qwen3:30b-a3b"],["Qwen3-Coder 30B A3B",18556688736,0.10819672131147541,"qwen3-coder:30b"],["Gemma 4 26B A4B",18731013952,0.15873015873015872,"gemma4:26b"],["DeepSeek-R1 32B",19851335552,1,"deepseek-r1:32b"],["Qwen3 32B",20201240160,1,"qwen3:32b"],["Gemma 4 31B",20385446560,1,"gemma4:31b"],["Qwen 3.5 35B A3B",22069580576,0.08645533141210374,"qwen3.5:35b-a3b"],["Qwen 3.6 35B A3B",22621302688,0.08450704225352113,"qwen3.6:35b-a3b"],["DeepSeek-R1 70B",42520395616,1,"deepseek-r1:70b"],["Llama 3.3 70B",42520398528,1,"llama3.3:70b"],["gpt-oss 120B",65369800832,0.04366438356164384,"gpt-oss:120b"],["Llama 4 Scout",67436800960,0.1565377532228361,"llama4:latest"],["Qwen 3.5 122B A10B",81370024480,0.07993605115907275,"qwen3.5:122b-a10b"],["Qwen3 235B A22B",142154073664,0.09357720119098256,"qwen3:235b-a22b"],["Llama 3.1 405B",243069610720,1,"llama3.1:405b"],["Qwen3-Coder 480B A35B",290058824416,0.0728862973760933,"qwen3-coder:480b"],["DeepSeek-V3 671B",404430186016,0.05514157973174367,"deepseek-v3:671b"],["DeepSeek-R1 671B",404430186848,0.05514157973174367,"deepseek-r1:671b"]]}</script><!-- /models:data -->
+<script>
+(() => {
+  const data = JSON.parse(document.getElementById('llm-data').textContent);
+  const R = data.rules, GiB = 1073741824;
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const need = b => b + Math.min(R.contextShare * b, R.contextMax) + R.working;
+  const gb = b => (b / 1e9).toFixed(1) + ' GB';
+  const verdict = (n, ram) => n <= R.well * ram ? 'well' : n <= R.gpuShare * ram ? 'tight' : 'no';
+  const smallest = (n, share) => { const s = R.sizes.find(g => n <= share * g * GiB); return s ? s + ' GB' : 'more than 512 GB'; };
+  // Writing speed: each new word reads the working part of the model from memory once
+  const speed = (b, active, bw) => { const s = R.efficiency * bw * 1e9 / (b * active); return s >= 100 ? '100+ tokens/s' : '~' + (s >= 20 ? Math.round(s / 5) * 5 : Math.max(1, Math.round(s))) + ' tokens/s'; };
+  const titles = { well: 'Runs well', tight: 'Fits, tightly: close other apps first', no: "Won't fit in memory" };
+  const render = () => {
+    const ramGb = +$('calc-ram').value, ram = ramGb * GiB, bw = +$('calc-chip').value;
+    const groups = { well: [], tight: [], no: [] };
+    for (const [name, bytes, active] of data.models) groups[verdict(need(bytes), ram)].push([name, bytes, active]);
+    groups.well.reverse(); // biggest first: the best a Mac can do is the interesting part
+    $('calc-sum').textContent = `With ${ramGb} GB, ${groups.well.length} of these ${data.models.length} popular models run well`
+      + (groups.tight.length ? ` and ${groups.tight.length} more fit, tightly.` : '.');
+    // The models that won't fit stay folded away, so the ones that do stay in view
+    const open = !!document.querySelector('.calc-group details[open]');
+    $('calc-groups').innerHTML = Object.entries(groups).filter(([, list]) => list.length).map(([v, list]) => {
+      const chips = '<ul>' + list.map(([name, bytes, active]) =>
+        `<li><b>${esc(name)}</b><span>${gb(bytes)}${bw && v !== 'no' ? ' · ' + speed(bytes, active, bw) : ''}</span></li>`).join('') + '</ul>';
+      const head = `<h3>${titles[v]} (${list.length})</h3>`;
+      return `<div class="calc-group" data-v="${v}">` + (v === 'no'
+        ? `<details${open ? ' open' : ''}><summary>${head}<span class="more">Show</span></summary>${chips}</details>` : head + chips) + '</div>';
+    }).join('');
+    $('calc-note').textContent = (bw ? 'Speeds are estimates from the chip\'s memory bandwidth (Apple\'s figure), checked against a real reading. ' : 'Pick the chip to see how fast each model writes. ')
+      + 'Sizes are Ollama\'s default downloads, checked ' + new Date(data.checked + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) + '.';
+    const p = parseFloat($('calc-params').value);
+    if (p > 0) {
+      const bytes = p * 1e9 * R.bytesPerParam[$('calc-quant').value], n = need(bytes), v = verdict(n, ram);
+      const said = { well: `runs well on your ${ramGb} GB Mac`, tight: `fits on your ${ramGb} GB Mac, tightly`, no: `won't fit in your ${ramGb} GB Mac` }[v];
+      $('calc-custom-out').innerHTML = `About <b>${gb(bytes)}</b> to download and <b>${gb(n)}</b> of memory: it <b>${said}</b>`
+        + (bw && v !== 'no' ? `, at ${speed(bytes, 1, bw)} if all of it works on each word` : '')
+        + `. It runs well on ${smallest(n, R.well)} and fits, tightly, on ${smallest(n, R.gpuShare)}.`;
+    }
+  };
+  ['calc-ram', 'calc-chip', 'calc-quant'].forEach(id => $(id).addEventListener('change', render));
+  $('calc-params').addEventListener('input', render);
+  render();
+})();
+</script>
+<!-- /web -->
+<p>Pick your Mac's memory, and its chip if you know it. The calculator sorts 48 popular local AI models into three groups: the ones that run well, the ones that fit if you close other apps, and the ones that won't fit. Every size is the real download from Ollama's library, and the rules come from real readings on a Mac, described below.</p>
+<h2>How much RAM do you need to run a local LLM?</h2>
+<p>A local AI model (an LLM, or large language model) has to sit in your Mac's memory while it works. So the first number to know is its download size: Llama 3.1 8B is 4.9 GB in Ollama, Llama 3.3 70B is 42.5 GB.</p>
+<p>On top of that, it needs room for the conversation (the context) and a little working space. In our reading, Dolphin Llama 3 8B (a 4.66 GB download) took <strong>5.66 GB</strong> of memory with an 8,192-token conversation. The calculator allows 20% of the model, up to 3 GB, plus 0.25 GB, which comes to 5.84 GB for that model. Longer conversations need more.</p>
+<p>Then there's how much of the memory the model can use. Macs share one pool of memory between the processor and the graphics chip, which is why they're good at this. But macOS keeps part of it back: on our 64 GB M1 Max, it let the graphics chip use <strong>51.8 GB (81%)</strong> by default. Macs with less memory may get a smaller share.</p>
+<p>So the calculator says:</p>
+<ul>
+<li><strong>Runs well:</strong> the model needs no more than 65% of your memory, leaving the rest for macOS and your apps.</li>
+<li><strong>Fits, tightly:</strong> it needs up to 81%. It loads, but close other apps first, or your Mac will start to swap and everything slows down.</li>
+<li><strong>Won't fit:</strong> more than that. Ollama can still run part of it on the processor instead, but it's many times slower.</li>
+</ul>
+<h2>How fast will it run?</h2>
+<p>Every new word (a token, about three-quarters of a word) means reading the working part of the model from memory once. So speed depends on the chip's <strong>memory bandwidth</strong>, which Apple publishes for each chip: 120 GB/s for M4, 273 GB/s for M4 Pro, up to 546 GB/s for M4 Max, and 1.2 TB/s for M5 Ultra.</p>
+<p>In our readings, on an M1 Max (400 GB/s):</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Download</th>
+<th>In memory</th>
+<th>Writing speed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dolphin Llama 3 8B (Q4_0)</td>
+<td>4.66 GB</td>
+<td>5.66 GB, with an 8,192-token conversation</td>
+<td>39.5 tokens/s</td>
+</tr>
+<tr>
+<td>Qwen2.5 0.5B (Q8_0)</td>
+<td>0.40 GB</td>
+<td>0.93 GB, with a 32,768-token conversation</td>
+<td>218 tokens/s</td>
+</tr>
+</tbody>
+</table>
+<p>The 8B model reached 46% of the theoretical limit (400 GB/s ÷ 4.66 GB), so the calculator's speeds are 46% of each chip's limit. Treat them as estimates: very small models are held back by other work, and long conversations slow every model down. Reading speed is about 5 tokens a second, so anything above 20 feels quick.</p>
+<p>Mixture-of-experts models, such as gpt-oss and Qwen3 30B A3B, are a special case. All of the model has to fit in memory, but only a small part of it works on each word, so they write much faster than their size suggests.</p>
+<h2>Every model, and the Mac it needs</h2>
+<p>Sizes are Ollama's default download of each model (usually 4-bit, Q4_K_M), checked on October 15, 2026. LM Studio's versions of the same models can be a little bigger or smaller.</p>
+<!-- models:table -->
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Download</th>
+<th>Memory it needs</th>
+<th>Runs well on</th>
+<th>Fits, tightly, on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gemma 3 1B</td>
+<td>0.8 GB</td>
+<td>1.2 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>DeepSeek-R1 1.5B</td>
+<td>1.1 GB</td>
+<td>1.6 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>Llama 3.2 1B</td>
+<td>1.3 GB</td>
+<td>1.8 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.5 0.8B</td>
+<td>1.3 GB</td>
+<td>1.8 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>Llama 3.2 3B</td>
+<td>2.0 GB</td>
+<td>2.7 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>Phi-4 mini 3.8B</td>
+<td>2.5 GB</td>
+<td>3.2 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>Qwen3 4B</td>
+<td>2.5 GB</td>
+<td>3.2 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.5 2B</td>
+<td>2.7 GB</td>
+<td>3.5 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.5 4B</td>
+<td>3.3 GB</td>
+<td>4.2 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>Gemma 3 4B</td>
+<td>3.4 GB</td>
+<td>4.3 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>Mistral 7B</td>
+<td>4.4 GB</td>
+<td>5.5 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>Gemma 4 E2B</td>
+<td>4.6 GB</td>
+<td>5.8 GB</td>
+<td>16 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>DeepSeek-R1 7B</td>
+<td>4.7 GB</td>
+<td>5.9 GB</td>
+<td>16 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>Llama 3.1 8B</td>
+<td>4.9 GB</td>
+<td>6.2 GB</td>
+<td>16 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>DeepSeek-R1 8B</td>
+<td>5.2 GB</td>
+<td>6.5 GB</td>
+<td>16 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>Qwen3 8B</td>
+<td>5.2 GB</td>
+<td>6.5 GB</td>
+<td>16 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.5 9B</td>
+<td>6.6 GB</td>
+<td>8.1 GB</td>
+<td>16 GB</td>
+<td>16 GB</td>
+</tr>
+<tr>
+<td>Gemma 4 E4B</td>
+<td>6.6 GB</td>
+<td>8.2 GB</td>
+<td>16 GB</td>
+<td>16 GB</td>
+</tr>
+<tr>
+<td>Gemma 4 12B</td>
+<td>8.0 GB</td>
+<td>9.9 GB</td>
+<td>16 GB</td>
+<td>16 GB</td>
+</tr>
+<tr>
+<td>Gemma 3 12B</td>
+<td>8.2 GB</td>
+<td>10.0 GB</td>
+<td>16 GB</td>
+<td>16 GB</td>
+</tr>
+<tr>
+<td>DeepSeek-R1 14B</td>
+<td>9.0 GB</td>
+<td>11.0 GB</td>
+<td>16 GB</td>
+<td>16 GB</td>
+</tr>
+<tr>
+<td>Phi-4 14B</td>
+<td>9.1 GB</td>
+<td>11.1 GB</td>
+<td>16 GB</td>
+<td>16 GB</td>
+</tr>
+<tr>
+<td>Qwen3 14B</td>
+<td>9.3 GB</td>
+<td>11.4 GB</td>
+<td>18 GB</td>
+<td>16 GB</td>
+</tr>
+<tr>
+<td>gpt-oss 20B (mixture of experts, 3.6B active)</td>
+<td>13.8 GB</td>
+<td>16.8 GB</td>
+<td>32 GB</td>
+<td>24 GB</td>
+</tr>
+<tr>
+<td>Devstral 24B</td>
+<td>14.3 GB</td>
+<td>17.5 GB</td>
+<td>32 GB</td>
+<td>24 GB</td>
+</tr>
+<tr>
+<td>Mistral Small 3.2 24B</td>
+<td>15.2 GB</td>
+<td>18.4 GB</td>
+<td>32 GB</td>
+<td>24 GB</td>
+</tr>
+<tr>
+<td>Gemma 3 27B</td>
+<td>17.4 GB</td>
+<td>20.7 GB</td>
+<td>32 GB</td>
+<td>24 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.5 27B</td>
+<td>17.5 GB</td>
+<td>20.7 GB</td>
+<td>32 GB</td>
+<td>24 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.8 27B</td>
+<td>17.7 GB</td>
+<td>21.0 GB</td>
+<td>32 GB</td>
+<td>32 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.6 27B</td>
+<td>17.8 GB</td>
+<td>21.0 GB</td>
+<td>32 GB</td>
+<td>32 GB</td>
+</tr>
+<tr>
+<td>Qwen3 30B A3B (mixture of experts, 3B active)</td>
+<td>18.6 GB</td>
+<td>21.8 GB</td>
+<td>32 GB</td>
+<td>32 GB</td>
+</tr>
+<tr>
+<td>Qwen3-Coder 30B A3B (mixture of experts, 3.3B active)</td>
+<td>18.6 GB</td>
+<td>21.8 GB</td>
+<td>32 GB</td>
+<td>32 GB</td>
+</tr>
+<tr>
+<td>Gemma 4 26B A4B (mixture of experts, 4B active)</td>
+<td>18.7 GB</td>
+<td>22.0 GB</td>
+<td>32 GB</td>
+<td>32 GB</td>
+</tr>
+<tr>
+<td>DeepSeek-R1 32B</td>
+<td>19.9 GB</td>
+<td>23.1 GB</td>
+<td>36 GB</td>
+<td>32 GB</td>
+</tr>
+<tr>
+<td>Qwen3 32B</td>
+<td>20.2 GB</td>
+<td>23.5 GB</td>
+<td>36 GB</td>
+<td>32 GB</td>
+</tr>
+<tr>
+<td>Gemma 4 31B</td>
+<td>20.4 GB</td>
+<td>23.6 GB</td>
+<td>36 GB</td>
+<td>32 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.5 35B A3B (mixture of experts, 3B active)</td>
+<td>22.1 GB</td>
+<td>25.3 GB</td>
+<td>48 GB</td>
+<td>32 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.6 35B A3B (mixture of experts, 3B active)</td>
+<td>22.6 GB</td>
+<td>25.9 GB</td>
+<td>48 GB</td>
+<td>32 GB</td>
+</tr>
+<tr>
+<td>DeepSeek-R1 70B</td>
+<td>42.5 GB</td>
+<td>45.8 GB</td>
+<td>96 GB</td>
+<td>64 GB</td>
+</tr>
+<tr>
+<td>Llama 3.3 70B</td>
+<td>42.5 GB</td>
+<td>45.8 GB</td>
+<td>96 GB</td>
+<td>64 GB</td>
+</tr>
+<tr>
+<td>gpt-oss 120B (mixture of experts, 5.1B active)</td>
+<td>65.4 GB</td>
+<td>68.6 GB</td>
+<td>128 GB</td>
+<td>96 GB</td>
+</tr>
+<tr>
+<td>Llama 4 Scout (mixture of experts, 17B active)</td>
+<td>67.4 GB</td>
+<td>70.7 GB</td>
+<td>128 GB</td>
+<td>96 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.5 122B A10B (mixture of experts, 10B active)</td>
+<td>81.4 GB</td>
+<td>84.6 GB</td>
+<td>128 GB</td>
+<td>128 GB</td>
+</tr>
+<tr>
+<td>Qwen3 235B A22B (mixture of experts, 22B active)</td>
+<td>142.2 GB</td>
+<td>145.4 GB</td>
+<td>256 GB</td>
+<td>192 GB</td>
+</tr>
+<tr>
+<td>Llama 3.1 405B</td>
+<td>243.1 GB</td>
+<td>246.3 GB</td>
+<td>512 GB</td>
+<td>512 GB</td>
+</tr>
+<tr>
+<td>Qwen3-Coder 480B A35B (mixture of experts, 35B active)</td>
+<td>290.1 GB</td>
+<td>293.3 GB</td>
+<td>512 GB</td>
+<td>512 GB</td>
+</tr>
+<tr>
+<td>DeepSeek-V3 671B (mixture of experts, 37B active)</td>
+<td>404.4 GB</td>
+<td>407.7 GB</td>
+<td>more than 512 GB</td>
+<td>512 GB</td>
+</tr>
+<tr>
+<td>DeepSeek-R1 671B (mixture of experts, 37B active)</td>
+<td>404.4 GB</td>
+<td>407.7 GB</td>
+<td>more than 512 GB</td>
+<td>512 GB</td>
+</tr>
+</tbody>
+</table>
+<!-- /models:table -->
+<h2>Questions</h2>
+<h3>How much RAM do I need to run a local LLM?</h3>
+<p>About the model's download size, plus up to 20% for the conversation. As a rule of thumb, an 8 GB Mac runs models up to about 7B parameters, 16 GB up to 14B, 32 GB up to about 30B, and 64 GB runs 70B models, tightly. The calculator above checks 48 popular models against your Mac's memory.</p>
+<h3>What LLM can I run on my Mac?</h3>
+<p>It depends on your Mac's memory. With 8 GB: Llama 3.2 3B, Gemma 3 4B, Qwen 3.5 4B or Mistral 7B. With 16 GB: Qwen 3.5 9B, Gemma 4 12B, Phi-4 14B or DeepSeek-R1 14B. With 32 GB: gpt-oss 20B, Gemma 3 27B, Qwen 3.6 27B or Qwen3 30B A3B. With 64 GB: Llama 3.3 70B or DeepSeek-R1 70B, tightly. With 128 GB: gpt-oss 120B or Qwen 3.5 122B A10B.</p>
+<h3>Can a Mac mini run LLMs?</h3>
+<p>Yes. A Mac mini uses the same unified memory as every Apple silicon Mac, so what it can run depends only on its memory and chip: with 16 GB, models up to about 14B parameters; with 64 GB, 70B models fit, tightly. Pick its memory and chip in the calculator above.</p>
+<h3>How much RAM do I need for Llama 3.3 70B?</h3>
+<p>Llama 3.3 70B is a 42.5 GB download in Ollama and needs about 45.8 GB of memory. It fits, tightly, on a 64 GB Mac and runs well on 96 GB or more. On an M1 Max it would write about 4 tokens a second, by our estimate.</p>
+<h3>Is 8 GB of RAM enough to run an LLM?</h3>
+<p>For small models, yes. An 8 GB Mac runs models such as Llama 3.2 3B, Gemma 3 4B and Mistral 7B well, and fits most other 7B and 8B models, such as Llama 3.1 8B, tightly: close other apps first.</p>
+<h3>Why does my Mac get slow when a model is loaded?</h3>
+<p>A loaded model holds its memory even when you're not using it. If it takes most of your Mac's memory, macOS starts compressing memory and swapping to disk, and every app slows down. Quit or unload the model when you're done. <a href="https://trybondi.app/">Bondi</a> shows each loaded model in Ollama or LM Studio with the memory it holds, and can unload it.</p>
+<h3>Does this page check my Mac?</h3>
+<p>No. Websites can't see how much memory a Mac has, so you choose it. Everything is worked out in your browser, and nothing is sent anywhere.</p></div><p class="plain-copy">Also as <a href="/can-my-mac-run-it/can-my-mac-run-it.md">plain text</a>, for AI assistants and readers.</p><aside class="cta"><img src="/assets/icon-blue.png" alt="" width="56" height="56"><div><p class="cta-title">Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence.</p><p>It runs on your Mac, groups every process into the apps you know, and keeps 30 days of history. Nothing leaves your Mac.</p><p><a class="pillbtn primary" href="/beta/">Join the beta</a> <a class="pillbtn secondary" href="/">See how it works</a></p></div></aside></article>
+</main>
+<footer>
+  <div class="foot-line"><span>© 2026 Jabble Super Intelligence Inc.</span><span class="made"><span>Made with <span class="heart" role="img" aria-label="love">♥</span> by <a href="https://x.com/khalilnoaman" target="_blank" rel="me noopener">Noaman Khalil</a></span></span><a href="/blog/">Blog</a><a href="/can-my-mac-run-it/">Can my Mac run it?</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/your-data/">Your data</a><a href="mailto:support@trybondi.app">support@trybondi.app</a></div>
+  <div class="foot-line"><!-- ask-ai:row --><div class="askai-row" role="group" aria-label="Ask AI about Bondi"><span class="askai-label" title="Asks: What is Bondi for Mac (trybondi.app), and how does it compare with Activity Monitor, iStat Menus, Stats and Vitals for finding out why a Mac is slow? Bondi&#039;s website has a summary for AI assistants at https://trybondi.app/llms.txt, and a full version at https://trybondi.app/llms-full.txt.">Ask AI about Bondi</span><a href="https://chatgpt.com/?q=What%20is%20Bondi%20for%20Mac%20%28trybondi.app%29%2C%20and%20how%20does%20it%20compare%20with%20Activity%20Monitor%2C%20iStat%20Menus%2C%20Stats%20and%20Vitals%20for%20finding%20out%20why%20a%20Mac%20is%20slow%3F%20Bondi%27s%20website%20has%20a%20summary%20for%20AI%20assistants%20at%20https%3A%2F%2Ftrybondi.app%2Fllms.txt%2C%20and%20a%20full%20version%20at%20https%3A%2F%2Ftrybondi.app%2Fllms-full.txt." target="_blank" rel="noopener noreferrer" title="ChatGPT" aria-label="Ask ChatGPT about Bondi (opens in a new tab)"><svg class="ai-logo" aria-hidden="true" focusable="false" fill="currentColor" fill-rule="evenodd" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.205 8.658v-2.26c0-.19.072-.333.238-.428l4.543-2.616c.619-.357 1.356-.523 2.117-.523 2.854 0 4.662 2.212 4.662 4.566 0 .167 0 .357-.024.547l-4.71-2.759a.797.797 0 00-.856 0l-5.97 3.473zm10.609 8.8V12.06c0-.333-.143-.57-.429-.737l-5.97-3.473 1.95-1.118a.433.433 0 01.476 0l4.543 2.617c1.309.76 2.189 2.378 2.189 3.948 0 1.808-1.07 3.473-2.76 4.163zM7.802 12.703l-1.95-1.142c-.167-.095-.239-.238-.239-.428V5.899c0-2.545 1.95-4.472 4.591-4.472 1 0 1.927.333 2.712.928L8.23 5.067c-.285.166-.428.404-.428.737v6.898zM12 15.128l-2.795-1.57v-3.33L12 8.658l2.795 1.57v3.33L12 15.128zm1.796 7.23c-1 0-1.927-.332-2.712-.927l4.686-2.712c.285-.166.428-.404.428-.737v-6.898l1.974 1.142c.167.095.238.238.238.428v5.233c0 2.545-1.974 4.472-4.614 4.472zm-5.637-5.303l-4.544-2.617c-1.308-.761-2.188-2.378-2.188-3.948A4.482 4.482 0 014.21 6.327v5.423c0 .333.143.571.428.738l5.947 3.449-1.95 1.118a.432.432 0 01-.476 0zm-.262 3.9c-2.688 0-4.662-2.021-4.662-4.519 0-.19.024-.38.047-.57l4.686 2.71c.286.167.571.167.856 0l5.97-3.448v2.26c0 .19-.07.333-.237.428l-4.543 2.616c-.619.357-1.356.523-2.117.523zm5.899 2.83a5.947 5.947 0 005.827-4.756C22.287 18.339 24 15.84 24 13.296c0-1.665-.713-3.282-1.998-4.448.119-.5.19-.999.19-1.498 0-3.401-2.759-5.947-5.946-5.947-.642 0-1.26.095-1.88.31A5.962 5.962 0 0010.205 0a5.947 5.947 0 00-5.827 4.757C1.713 5.447 0 7.945 0 10.49c0 1.666.713 3.283 1.998 4.448-.119.5-.19 1-.19 1.499 0 3.401 2.759 5.946 5.946 5.946.642 0 1.26-.095 1.88-.309a5.96 5.96 0 004.162 1.713z"></path></svg></a><a href="https://claude.ai/new?q=What%20is%20Bondi%20for%20Mac%20%28trybondi.app%29%2C%20and%20how%20does%20it%20compare%20with%20Activity%20Monitor%2C%20iStat%20Menus%2C%20Stats%20and%20Vitals%20for%20finding%20out%20why%20a%20Mac%20is%20slow%3F%20Bondi%27s%20website%20has%20a%20summary%20for%20AI%20assistants%20at%20https%3A%2F%2Ftrybondi.app%2Fllms.txt%2C%20and%20a%20full%20version%20at%20https%3A%2F%2Ftrybondi.app%2Fllms-full.txt." target="_blank" rel="noopener noreferrer" title="Claude" aria-label="Ask Claude about Bondi (opens in a new tab)"><svg class="ai-logo" aria-hidden="true" focusable="false" fill="currentColor" fill-rule="evenodd" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4.709 15.955l4.72-2.647.08-.23-.08-.128H9.2l-.79-.048-2.698-.073-2.339-.097-2.266-.122-.571-.121L0 11.784l.055-.352.48-.321.686.06 1.52.103 2.278.158 1.652.097 2.449.255h.389l.055-.157-.134-.098-.103-.097-2.358-1.596-2.552-1.688-1.336-.972-.724-.491-.364-.462-.158-1.008.656-.722.881.06.225.061.893.686 1.908 1.476 2.491 1.833.365.304.145-.103.019-.073-.164-.274-1.355-2.446-1.446-2.49-.644-1.032-.17-.619a2.97 2.97 0 01-.104-.729L6.283.134 6.696 0l.996.134.42.364.62 1.414 1.002 2.229 1.555 3.03.456.898.243.832.091.255h.158V9.01l.128-1.706.237-2.095.23-2.695.08-.76.376-.91.747-.492.584.28.48.685-.067.444-.286 1.851-.559 2.903-.364 1.942h.212l.243-.242.985-1.306 1.652-2.064.73-.82.85-.904.547-.431h1.033l.76 1.129-.34 1.166-1.064 1.347-.881 1.142-1.264 1.7-.79 1.36.073.11.188-.02 2.856-.606 1.543-.28 1.841-.315.833.388.091.395-.328.807-1.969.486-2.309.462-3.439.813-.042.03.049.061 1.549.146.662.036h1.622l3.02.225.79.522.474.638-.079.485-1.215.62-1.64-.389-3.829-.91-1.312-.329h-.182v.11l1.093 1.068 2.006 1.81 2.509 2.33.127.578-.322.455-.34-.049-2.205-1.657-.851-.747-1.926-1.62h-.128v.17l.444.649 2.345 3.521.122 1.08-.17.353-.608.213-.668-.122-1.374-1.925-1.415-2.167-1.143-1.943-.14.08-.674 7.254-.316.37-.729.28-.607-.461-.322-.747.322-1.476.389-1.924.315-1.53.286-1.9.17-.632-.012-.042-.14.018-1.434 1.967-2.18 2.945-1.726 1.845-.414.164-.717-.37.067-.662.401-.589 2.388-3.036 1.44-1.882.93-1.086-.006-.158h-.055L4.132 18.56l-1.13.146-.487-.456.061-.746.231-.243 1.908-1.312-.006.006z"></path></svg></a><a href="https://www.perplexity.ai/search?q=What%20is%20Bondi%20for%20Mac%20%28trybondi.app%29%2C%20and%20how%20does%20it%20compare%20with%20Activity%20Monitor%2C%20iStat%20Menus%2C%20Stats%20and%20Vitals%20for%20finding%20out%20why%20a%20Mac%20is%20slow%3F%20Bondi%27s%20website%20has%20a%20summary%20for%20AI%20assistants%20at%20https%3A%2F%2Ftrybondi.app%2Fllms.txt%2C%20and%20a%20full%20version%20at%20https%3A%2F%2Ftrybondi.app%2Fllms-full.txt." target="_blank" rel="noopener noreferrer" title="Perplexity" aria-label="Ask Perplexity about Bondi (opens in a new tab)"><svg class="ai-logo" aria-hidden="true" focusable="false" fill="currentColor" fill-rule="evenodd" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.785 0v7.272H22.5V17.62h-2.935V24l-7.037-6.194v6.145h-1.091v-6.152L4.392 24v-6.465H1.5V7.188h2.884V0l7.053 6.494V.19h1.09v6.49L19.786 0zm-7.257 9.044v7.319l5.946 5.234V14.44l-5.946-5.397zm-1.099-.08l-5.946 5.398v7.235l5.946-5.234V8.965zm8.136 7.58h1.844V8.349H13.46l6.105 5.54v2.655zm-8.982-8.28H2.59v8.195h1.8v-2.576l6.192-5.62zM5.475 2.476v4.71h5.115l-5.115-4.71zm13.219 0l-5.115 4.71h5.115v-4.71z"></path></svg></a><a href="https://www.google.com/search?udm=50&amp;q=What%20is%20Bondi%20for%20Mac%20%28trybondi.app%29%2C%20and%20how%20does%20it%20compare%20with%20Activity%20Monitor%2C%20iStat%20Menus%2C%20Stats%20and%20Vitals%20for%20finding%20out%20why%20a%20Mac%20is%20slow%3F%20Bondi%27s%20website%20has%20a%20summary%20for%20AI%20assistants%20at%20https%3A%2F%2Ftrybondi.app%2Fllms.txt%2C%20and%20a%20full%20version%20at%20https%3A%2F%2Ftrybondi.app%2Fllms-full.txt." target="_blank" rel="noopener noreferrer" title="Google AI Mode" aria-label="Ask Google AI Mode about Bondi (opens in a new tab)"><svg class="ai-logo" aria-hidden="true" focusable="false" fill="currentColor" fill-rule="evenodd" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23 12.245c0-.905-.075-1.565-.236-2.25h-10.54v4.083h6.186c-.124 1.014-.797 2.542-2.294 3.569l-.021.136 3.332 2.53.23.022C21.779 18.417 23 15.593 23 12.245z"></path><path d="M12.225 23c3.03 0 5.574-.978 7.433-2.665l-3.542-2.688c-.948.648-2.22 1.1-3.891 1.1a6.745 6.745 0 01-6.386-4.572l-.132.011-3.465 2.628-.045.124C4.043 20.531 7.835 23 12.225 23z"></path><path d="M5.84 14.175A6.65 6.65 0 015.463 12c0-.758.138-1.491.361-2.175l-.006-.147-3.508-2.67-.115.054A10.831 10.831 0 001 12c0 1.772.436 3.447 1.197 4.938l3.642-2.763z"></path><path d="M12.225 5.253c2.108 0 3.529.892 4.34 1.638l3.167-3.031C17.787 2.088 15.255 1 12.225 1 7.834 1 4.043 3.469 2.197 7.062l3.63 2.763a6.77 6.77 0 016.398-4.572z"></path></svg></a><a href="https://grok.com/?q=What%20is%20Bondi%20for%20Mac%20%28trybondi.app%29%2C%20and%20how%20does%20it%20compare%20with%20Activity%20Monitor%2C%20iStat%20Menus%2C%20Stats%20and%20Vitals%20for%20finding%20out%20why%20a%20Mac%20is%20slow%3F%20Bondi%27s%20website%20has%20a%20summary%20for%20AI%20assistants%20at%20https%3A%2F%2Ftrybondi.app%2Fllms.txt%2C%20and%20a%20full%20version%20at%20https%3A%2F%2Ftrybondi.app%2Fllms-full.txt." target="_blank" rel="noopener noreferrer" title="Grok" aria-label="Ask Grok about Bondi (opens in a new tab)"><svg class="ai-logo" aria-hidden="true" focusable="false" fill="currentColor" fill-rule="evenodd" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.27 15.29l7.978-5.897c.391-.29.95-.177 1.137.272.98 2.369.542 5.215-1.41 7.169-1.951 1.954-4.667 2.382-7.149 1.406l-2.711 1.257c3.889 2.661 8.611 2.003 11.562-.953 2.341-2.344 3.066-5.539 2.388-8.42l.006.007c-.983-4.232.242-5.924 2.75-9.383.06-.082.12-.164.179-.248l-3.301 3.305v-.01L9.267 15.292M7.623 16.723c-2.792-2.67-2.31-6.801.071-9.184 1.761-1.763 4.647-2.483 7.166-1.425l2.705-1.25a7.808 7.808 0 00-1.829-1A8.975 8.975 0 005.984 5.83c-2.533 2.536-3.33 6.436-1.962 9.764 1.022 2.487-.653 4.246-2.34 6.022-.599.63-1.199 1.259-1.682 1.925l7.62-6.815"></path></svg></a></div><!-- /ask-ai:row --></div>
+</footer>
+</body>
+</html>
