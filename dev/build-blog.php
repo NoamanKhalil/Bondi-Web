@@ -121,7 +121,7 @@ function preferred_source(): string
 }
 
 /** The article's sections: ids on its ## headings, the contents list, and a short Bondi box before the third section. */
-function sections(string $html): array
+function sections(string $html, bool $withBox = true): array
 {
     $toc = []; $n = 0;
     $html = preg_replace_callback('~<h2>(.*?)</h2>~s', function ($m) use (&$toc, &$n) {
@@ -131,7 +131,9 @@ function sections(string $html): array
     }, $html);
     $box = '<aside class="mid-cta"><img src="/assets/icon-blue.png" alt="" width="40" height="40"><p><b>Don\'t want to check all this by hand?</b> Bondi keeps an eye on your Mac and tells you what\'s slowing it down, in one plain sentence.</p><a class="pillbtn primary small" href="/beta/">Join the beta</a></aside>';
     $count = 0;
-    $html = preg_replace_callback('~<h2 id=~', function ($m) use (&$count, $box) { return ++$count === 3 ? $box . $m[0] : $m[0]; }, $html);
+    if ($withBox) {
+        $html = preg_replace_callback('~<h2 id=~', function ($m) use (&$count, $box) { return ++$count === 3 ? $box . $m[0] : $m[0]; }, $html);
+    }
     $list = '';
     foreach ($toc as [$id, $text]) { $list .= '<li><a href="#' . $id . '">' . htmlspecialchars(html_entity_decode($text), ENT_QUOTES, 'UTF-8') . '</a></li>'; }
     $side = $toc ? '<nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ol>' . $list . '</ol></nav>' : '';
@@ -477,9 +479,18 @@ foreach (glob("$root/content/pages/*.md") ?: [] as $file) {
         return "\n\nWEBPART" . (count($webParts) - 1) . "\n\n";
     }, $m[2]);
     $html = preg_replace('~<a href="(https?://(?!trybondi\.app)[^"]+)"~', '<a href="$1" target="_blank" rel="noopener"', $parsedown->text($source));
+    $wide = ($meta['layout'] ?? '') === 'wide';
+    if ($wide && $webParts) { // split after the last web part: it spans the page; the text below gets a contents list beside it
+        $cut = strpos($html, "<p>WEBPART" . (count($webParts) - 1) . "</p>") + strlen("<p>WEBPART" . (count($webParts) - 1) . "</p>");
+        [$rest, $tocSide] = sections(substr($html, $cut), false);
+        $html = substr($html, 0, $cut);
+    }
     foreach ($webParts as $i => $part) {
         $html = str_replace("<p>WEBPART$i</p>", $part, $html);
     }
+    $pageBody = $wide && $webParts
+        ? '<div class="prose">' . $html . '</div><div class="wide-body"><div class="prose">' . $rest . '</div><aside class="wide-side">' . $tocSide . '</aside></div>'
+        : '<div class="prose">' . $html . '</div>';
     $answer = $meta['answer'] ?? '';
     $ld = ['@context' => 'https://schema.org', '@graph' => [
         array_filter(['@type' => 'WebPage', 'name' => $meta['title'], 'description' => $meta['description'], 'url' => $url,
@@ -500,7 +511,7 @@ foreach (glob("$root/content/pages/*.md") ?: [] as $file) {
     $updated = isset($meta['updated']) && $meta['updated'] !== ($meta['checked'] ?? '') ? ($checked !== '' ? ' · ' : '') . 'Updated ' . $h(nice_date($meta['updated'])) : '';
     $answerBox = $answer !== '' ? '<aside class="quick-answer" aria-label="Quick answer"><p class="qa-label">Quick answer</p><p>' . $parsedown->line($answer) . '</p></aside>' : '';
     $body = '<article class="post' . (($meta['layout'] ?? '') === 'wide' ? ' post-wide' : '') . '">' . crumbs([['Bondi', '/'], [$meta['crumb'] ?? $meta['title'], "/$slug/"]]) . '<h1>' . $h($meta['title']) . '</h1>'
-          . '<p class="byline">' . $checked . $updated . '</p>' . $answerBox . '<div class="prose">' . $html . '</div>'
+          . '<p class="byline">' . $checked . $updated . '</p>' . $answerBox . $pageBody
           . '<p class="plain-copy">Also as <a href="/' . $h($slug) . '/' . $h($slug) . '.md">plain text</a>, for AI assistants and readers.</p>'
           . '<aside class="cta"><img src="/assets/icon-blue.png" alt="" width="56" height="56"><div><p class="cta-title">' . $h(PITCH) . '</p>'
           . '<p>It runs on your Mac, groups every process into the apps you know, and keeps 30 days of history. Nothing leaves your Mac.</p>'

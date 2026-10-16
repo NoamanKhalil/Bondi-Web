@@ -357,9 +357,9 @@
   render();
 })();
 </script>
-
+</div><div class="wide-body"><div class="prose">
 <p>Set your Mac's memory, its chip, a model and a quality, and the calculator shows how much memory the model needs and how fast it would write on your Mac. It also sorts 48 popular local AI models into three groups: the ones that run well, the ones that fit if you close other apps, and the ones that won't fit. Every size is the real download from Ollama's library, and the rules come from real readings on a Mac, described below.</p>
-<h2>How much RAM do you need to run a local LLM?</h2>
+<h2 id="how-much-ram-do-you-need-to-run-a-local-llm">How much RAM do you need to run a local LLM?</h2>
 <p>A local AI model (an LLM, or large language model) has to sit in your Mac's memory while it works. So the first number to know is its download size: Llama 3.1 8B is 4.9 GB in Ollama, Llama 3.3 70B is 42.5 GB.</p>
 <p>On top of that, it needs room for the conversation (the context) and a little working space. In our reading, Dolphin Llama 3 8B (a 4.66 GB download) took <strong>5.66 GB</strong> of memory with an 8,192-token conversation. The calculator allows 20% of the model, up to 3 GB, plus 0.25 GB, which comes to 5.84 GB for that model. Longer conversations need more.</p>
 <p>Then there's how much of the memory the model can use. Macs share one pool of memory between the processor and the graphics chip, which is why they're good at this. But macOS keeps part of it back: on our 64 GB M1 Max, it let the graphics chip use <strong>51.8 GB (81%)</strong> by default. Macs with less memory may get a smaller share.</p>
@@ -369,7 +369,7 @@
 <li><strong>Fits, tightly:</strong> it needs up to 81%. It loads, but close other apps first, or your Mac will start to swap and everything slows down.</li>
 <li><strong>Won't fit:</strong> more than that. Ollama can still run part of it on the processor instead, but it's many times slower.</li>
 </ul>
-<h2>How fast will it run?</h2>
+<h2 id="how-fast-will-it-run">How fast will it run?</h2>
 <p>Every new word (a token, about three-quarters of a word) means reading the working part of the model from memory once. So speed depends on the chip's <strong>memory bandwidth</strong>, which Apple publishes for each chip: 120 GB/s for M4, 273 GB/s for M4 Pro, up to 546 GB/s for M4 Max, and 1.2 TB/s for M5 Ultra.</p>
 <p>In our readings, on an M1 Max (400 GB/s):</p>
 <table>
@@ -398,7 +398,7 @@
 </table>
 <p>The 8B model reached 46% of the theoretical limit (400 GB/s ÷ 4.66 GB), so the calculator's speeds are 46% of each chip's limit. Treat them as estimates: very small models are held back by other work, and long conversations slow every model down. Reading speed is about 5 tokens a second, so anything above 20 feels quick.</p>
 <p>Mixture-of-experts models, such as gpt-oss and Qwen3 30B A3B, are a special case. All of the model has to fit in memory, but only a small part of it works on each word, so they write much faster than their size suggests.</p>
-<h2>Every model, and the Mac it needs</h2>
+<h2 id="every-model-and-the-mac-it-needs">Every model, and the Mac it needs</h2>
 <p>Sizes are Ollama's default download of each model (usually 4-bit, Q4_K_M), checked on October 15, 2026. LM Studio's versions of the same models can be a little bigger or smaller.</p>
 <!-- models:table -->
 <table>
@@ -849,7 +849,7 @@
 </tbody>
 </table>
 <!-- /models:table -->
-<h2>Questions</h2>
+<h2 id="questions">Questions</h2>
 <h3>How much RAM do I need to run a local LLM?</h3>
 <p>About the model's download size, plus up to 20% for the conversation. As a rule of thumb, an 8 GB Mac runs models up to about 7B parameters, 16 GB up to 14B, 32 GB up to about 30B, and 64 GB runs 70B models, tightly. The calculator above checks 48 popular models against your Mac's memory.</p>
 <h3>What LLM can I run on my Mac?</h3>
@@ -865,7 +865,7 @@
 <h3>Why does my Mac get slow when a model is loaded?</h3>
 <p>A loaded model holds its memory even when you're not using it. If it takes most of your Mac's memory, macOS starts compressing memory and swapping to disk, and every app slows down. Quit or unload the model when you're done. <a href="https://trybondi.app/">Bondi</a> shows each loaded model in Ollama or LM Studio with the memory it holds, and can unload it.</p>
 <h3>Does this page check my Mac?</h3>
-<p>No. Websites can't see how much memory a Mac has, so you choose it. Everything is worked out in your browser, and nothing is sent anywhere.</p></div><p class="plain-copy">Also as <a href="/can-my-mac-run-it/can-my-mac-run-it.md">plain text</a>, for AI assistants and readers.</p><aside class="cta"><img src="/assets/icon-blue.png" alt="" width="56" height="56"><div><p class="cta-title">Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence.</p><p>It runs on your Mac, groups every process into the apps you know, and keeps 30 days of history. Nothing leaves your Mac.</p><p><a class="pillbtn primary" href="/beta/">Join the beta</a> <a class="pillbtn secondary" href="/">See how it works</a></p></div></aside></article>
+<p>No. Websites can't see how much memory a Mac has, so you choose it. Everything is worked out in your browser, and nothing is sent anywhere.</p></div><aside class="wide-side"><nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ol><li><a href="#how-much-ram-do-you-need-to-run-a-local-llm">How much RAM do you need to run a local LLM?</a></li><li><a href="#how-fast-will-it-run">How fast will it run?</a></li><li><a href="#every-model-and-the-mac-it-needs">Every model, and the Mac it needs</a></li><li><a href="#questions">Questions</a></li></ol></nav></aside></div><p class="plain-copy">Also as <a href="/can-my-mac-run-it/can-my-mac-run-it.md">plain text</a>, for AI assistants and readers.</p><aside class="cta"><img src="/assets/icon-blue.png" alt="" width="56" height="56"><div><p class="cta-title">Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence.</p><p>It runs on your Mac, groups every process into the apps you know, and keeps 30 days of history. Nothing leaves your Mac.</p><p><a class="pillbtn primary" href="/beta/">Join the beta</a> <a class="pillbtn secondary" href="/">See how it works</a></p></div></aside></article>
 </main>
 <footer>
   <div class="foot-line"><span>© 2026 Jabble Super Intelligence Inc.</span><span class="made"><span>Made with <span class="heart" role="img" aria-label="love">♥</span> by <a href="https://x.com/khalilnoaman" target="_blank" rel="me noopener">Noaman Khalil</a></span></span><a href="/blog/">Blog</a><a href="/can-my-mac-run-it/">Can my Mac run it?</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/your-data/">Your data</a><a href="mailto:support@trybondi.app">support@trybondi.app</a></div>

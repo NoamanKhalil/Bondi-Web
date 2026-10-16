@@ -206,3 +206,8 @@ button.pillbtn.primary { background: var(--bondi); } button.pillbtn.secondary:ho
 /* A wide page (header "layout: wide", the calculator): one left edge for the title, the tool and the text; reading text keeps its width */
 .post-wide { max-width: 1040px; }
 .post-wide > h1, .post-wide .byline, .post-wide .quick-answer, .post-wide .prose > :not(table):not(.calc-wrap), .post-wide .plain-copy, .post-wide .cta { max-width: 720px; }
+/* A wide page's reading text, with its contents list in the space beside it */
+.wide-body { display: grid; grid-template-columns: minmax(0, 720px) minmax(0, 240px); gap: 64px; align-items: start; }
+.wide-side { position: sticky; top: 84px; padding-top: 34px; }
+.post-wide .wide-body .prose > * { max-width: none; }
+@media (max-width: 1000px) { .wide-body { grid-template-columns: minmax(0, 1fr); } .wide-side { display: none; } }
