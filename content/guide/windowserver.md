@@ -4,7 +4,7 @@ name: WindowServer
 group: processes
 description: WindowServer is the part of macOS that draws everything on your screens. What it does, why it uses CPU and memory, why it can crash or keep your Mac awake, and whether you can quit it.
 answer: WindowServer is the part of macOS that draws everything you see: windows, the Dock, the menu bar and every animation, on every display. It's essential: quitting it logs you out. Some CPU and several hundred MB of memory are normal; many windows, external displays and screen recording make it work harder.
-status: draft
+status: published
 reviewed: 2026-10-16
 related: loginwindow, systemuiserver, launchd
 article: windowserver-high-cpu

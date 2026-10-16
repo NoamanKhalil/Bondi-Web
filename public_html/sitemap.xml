@@ -9,7 +9,7 @@
   <url><loc>https://trybondi.app/eula/</loc><lastmod>2026-10-04</lastmod></url>
   <url><loc>https://trybondi.app/refunds/</loc><lastmod>2026-09-29</lastmod></url>
   <!-- guide -->
-  <url><loc>https://trybondi.app/guide/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/</loc><lastmod>2026-10-16</lastmod></url>
   <url><loc>https://trybondi.app/guide/apsd/</loc><lastmod>2026-10-10</lastmod></url>
   <url><loc>https://trybondi.app/guide/backupd/</loc><lastmod>2026-10-10</lastmod></url>
   <url><loc>https://trybondi.app/guide/cloudd/</loc><lastmod>2026-10-10</lastmod></url>
@@ -29,6 +29,7 @@
   <url><loc>https://trybondi.app/guide/syspolicyd/</loc><lastmod>2026-10-10</lastmod></url>
   <url><loc>https://trybondi.app/guide/systemuiserver/</loc><lastmod>2026-10-10</lastmod></url>
   <url><loc>https://trybondi.app/guide/trustd/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/guide/windowserver/</loc><lastmod>2026-10-16</lastmod></url>
   <url><loc>https://trybondi.app/guide/xprotectservice/</loc><lastmod>2026-10-10</lastmod></url>
   <!-- /guide -->
   <!-- blog -->
@@ -47,10 +48,10 @@
   <url><loc>https://trybondi.app/blog/what-is-mlx-on-mac/</loc><lastmod>2026-10-16</lastmod></url>
   <url><loc>https://trybondi.app/blog/which-app-is-using-my-mac-memory/</loc><lastmod>2026-10-10</lastmod></url>
   <url><loc>https://trybondi.app/blog/why-is-my-mac-slow/</loc><lastmod>2026-10-10</lastmod></url>
-  <url><loc>https://trybondi.app/blog/windowserver-high-cpu/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/blog/windowserver-high-cpu/</loc><lastmod>2026-10-16</lastmod></url>
   <url><loc>https://trybondi.app/blog/topic/slow/</loc><lastmod>2026-10-10</lastmod></url>
   <url><loc>https://trybondi.app/blog/topic/memory/</loc><lastmod>2026-10-16</lastmod></url>
-  <url><loc>https://trybondi.app/blog/topic/heat/</loc><lastmod>2026-10-10</lastmod></url>
+  <url><loc>https://trybondi.app/blog/topic/heat/</loc><lastmod>2026-10-16</lastmod></url>
   <url><loc>https://trybondi.app/blog/topic/tools/</loc><lastmod>2026-10-10</lastmod></url>
   <url><loc>https://trybondi.app/blog/topic/bondi/</loc><lastmod>2026-10-10</lastmod></url>
   <!-- /blog -->

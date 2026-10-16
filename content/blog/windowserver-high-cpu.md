@@ -3,7 +3,7 @@ title: WindowServer using high CPU on Mac: what it means and what helps
 description: WindowServer draws everything on your Mac's screens. Here's why it gets busy, what normal looks like, and the settings that actually calm it down.
 answer: WindowServer draws everything on your screens. Many open windows, several or very high-resolution displays, screen recording and video keep it busy; closing windows and turning on Reduce transparency and Reduce motion lighten it.
 date: 2026-10-03
-updated: 2026-10-10
+updated: 2026-10-16
 topic: heat
 status: published
 order: 6
@@ -11,6 +11,8 @@ image: /assets/features/guide.png
 related: kernel-task-high-cpu, why-is-my-mac-slow, mac-fans-loud
 ---
 WindowServer is the part of macOS that draws everything you see: windows, the Dock, the menu bar and every animation. When it's busy, it's because your screens are asking a lot of it, usually from many open windows, several or very high-resolution displays, screen recording or video.
+
+New to WindowServer? [What is WindowServer on Mac?](/guide/windowserver/) explains what it is, from Bondi's Mac guide.
 
 ## Key points
 
