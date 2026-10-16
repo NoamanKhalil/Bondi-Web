@@ -226,3 +226,10 @@ button.pillbtn.primary { background: var(--bondi); } button.pillbtn.secondary:ho
 /* A faint outline so each card's edge shows in dark mode too; it takes a touch of Bondi Blue under the pointer */
 .grid-card, .feature-card { box-shadow: 0 0 0 1px color-mix(in srgb, var(--line) 75%, transparent), 0 10px 30px -18px rgba(0, 0, 0, 0.35); }
 .feature-card:hover, .grid-card:hover, .feature-card:focus-visible, .grid-card:focus-visible { box-shadow: 0 0 0 1px color-mix(in srgb, var(--bondi) 45%, var(--line)), 0 22px 44px -20px rgba(0, 0, 0, 0.45); }
+/* Card hover: as it is in light mode; in dark mode a softer outline, a near-white title and a smaller lift, so it doesn't glow */
+:root { --card-lift: -4px; --card-ring: color-mix(in srgb, var(--bondi) 45%, var(--line)); --card-title-hover: var(--bondi-ink); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --card-lift: -2px; --card-ring: color-mix(in srgb, var(--bondi) 16%, var(--line)); --card-title-hover: color-mix(in srgb, var(--bondi-ink) 30%, var(--ink)); } }
+:root[data-theme="dark"] { --card-lift: -2px; --card-ring: color-mix(in srgb, var(--bondi) 16%, var(--line)); --card-title-hover: color-mix(in srgb, var(--bondi-ink) 30%, var(--ink)); }
+.feature-card:hover, .grid-card:hover, .feature-card:focus-visible, .grid-card:focus-visible { transform: translateY(var(--card-lift)); box-shadow: 0 0 0 1px var(--card-ring), 0 22px 44px -20px rgba(0, 0, 0, 0.45); }
+.feature-card:hover .feature-title, .grid-card:hover .grid-title, .feature-card:focus-visible .feature-title, .grid-card:focus-visible .grid-title { color: var(--card-title-hover); }
+@media (prefers-reduced-motion: reduce) { .feature-card:hover, .grid-card:hover, .feature-card:focus-visible, .grid-card:focus-visible { transform: none; } }
