@@ -8,7 +8,7 @@ The Mac app lives in its own repo next to this one: **`../TryBondi`** (readable 
 
 | Folder | What it is | On Hostinger |
 | --- | --- | --- |
-| `public_html/` | The website's readable source (`index.html`), the license API (`api/`), the admin page (`admin/`), the buy page (`buy/`, not linked until launch), legal pages, `assets/` | Hostinger's Git deploy serves this repository's top level: `php dev/build-site.php` copies `public_html` there with CSS minified and the films' addresses version-stamped. `/public_html/…` redirects to the real pages |
+| `public_html/` | The website's readable source (`index.html`), the license API (`api/`), the admin page (`admin/`), the buy page (`buy/`, not linked until launch), legal pages, `assets/` | Hostinger's Git deploy serves this repository's top level: `php dev/build-site.php` copies `public_html` there with CSS minified and version stamps (`?v=<hash>`) on the films, stylesheets, scripts and blog thumbnails, so a page never meets a stale cached copy. Refer to them in HTML attributes (`href`, `src`), never build their URLs in scripts. `/public_html/…` redirects to the real pages |
 | `bondi/` | Private PHP: settings (`config.php`, never committed), database, Paddle, email, licenses, sign-ups | Live at `public_html/bondi/` (the owner's host wants everything in `public_html`); its `.htaccess` blocks web access. Beside `public_html` also works. After an upload, check `https://trybondi.app/bondi/config.php` answers 403 |
 | `sql/` | Database setup, imported in phpMyAdmin in order (001, 003, 004, 005, 006, 007; 002 only for old installs) | — |
 | `dev/` | Local tests: `dev/test.sh` (a throwaway MySQL and PHP server, 129 checks) | Not uploaded |
