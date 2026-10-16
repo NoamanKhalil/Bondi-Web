@@ -6,7 +6,7 @@
 
 Web page: https://trybondi.app/can-my-mac-run-it/
 
-Slide to your Mac's memory, pick its chip and a model, and the calculator shows how fast that model would write on your Mac. It also sorts 48 popular local AI models into three groups: the ones that run well, the ones that fit if you close other apps, and the ones that won't fit. Every size is the real download from Ollama's library, and the rules come from real readings on a Mac, described below.
+Set your Mac's memory, its chip, a model and a quality, and the calculator shows how much memory the model needs and how fast it would write on your Mac. It also sorts 48 popular local AI models into three groups: the ones that run well, the ones that fit if you close other apps, and the ones that won't fit. Every size is the real download from Ollama's library, and the rules come from real readings on a Mac, described below.
 
 ## How much RAM do you need to run a local LLM?
 
@@ -42,56 +42,56 @@ Mixture-of-experts models, such as gpt-oss and Qwen3 30B A3B, are a special case
 Sizes are Ollama's default download of each model (usually 4-bit, Q4_K_M), checked on October 15, 2026. LM Studio's versions of the same models can be a little bigger or smaller.
 
 <!-- models:table -->
-| Model | Download | Memory it needs | Runs well on | Fits, tightly, on |
-| --- | --- | --- | --- | --- |
-| Gemma 3 1B | 0.8 GB | 1.2 GB | 8 GB | 8 GB |
-| DeepSeek-R1 1.5B | 1.1 GB | 1.6 GB | 8 GB | 8 GB |
-| Llama 3.2 1B | 1.3 GB | 1.8 GB | 8 GB | 8 GB |
-| Qwen 3.5 0.8B | 1.3 GB | 1.8 GB | 8 GB | 8 GB |
-| Llama 3.2 3B | 2.0 GB | 2.7 GB | 8 GB | 8 GB |
-| Phi-4 mini 3.8B | 2.5 GB | 3.2 GB | 8 GB | 8 GB |
-| Qwen3 4B | 2.5 GB | 3.2 GB | 8 GB | 8 GB |
-| Qwen 3.5 2B | 2.7 GB | 3.5 GB | 8 GB | 8 GB |
-| Qwen 3.5 4B | 3.3 GB | 4.2 GB | 8 GB | 8 GB |
-| Gemma 3 4B | 3.4 GB | 4.3 GB | 8 GB | 8 GB |
-| Mistral 7B | 4.4 GB | 5.5 GB | 8 GB | 8 GB |
-| Gemma 4 E2B | 4.6 GB | 5.8 GB | 16 GB | 8 GB |
-| DeepSeek-R1 7B | 4.7 GB | 5.9 GB | 16 GB | 8 GB |
-| Llama 3.1 8B | 4.9 GB | 6.2 GB | 16 GB | 8 GB |
-| DeepSeek-R1 8B | 5.2 GB | 6.5 GB | 16 GB | 8 GB |
-| Qwen3 8B | 5.2 GB | 6.5 GB | 16 GB | 8 GB |
-| Qwen 3.5 9B | 6.6 GB | 8.1 GB | 16 GB | 16 GB |
-| Gemma 4 E4B | 6.6 GB | 8.2 GB | 16 GB | 16 GB |
-| Gemma 4 12B | 8.0 GB | 9.9 GB | 16 GB | 16 GB |
-| Gemma 3 12B | 8.2 GB | 10.0 GB | 16 GB | 16 GB |
-| DeepSeek-R1 14B | 9.0 GB | 11.0 GB | 16 GB | 16 GB |
-| Phi-4 14B | 9.1 GB | 11.1 GB | 16 GB | 16 GB |
-| Qwen3 14B | 9.3 GB | 11.4 GB | 18 GB | 16 GB |
-| gpt-oss 20B (mixture of experts, 3.6B active) | 13.8 GB | 16.8 GB | 32 GB | 24 GB |
-| Devstral 24B | 14.3 GB | 17.5 GB | 32 GB | 24 GB |
-| Mistral Small 3.2 24B | 15.2 GB | 18.4 GB | 32 GB | 24 GB |
-| Gemma 3 27B | 17.4 GB | 20.7 GB | 32 GB | 24 GB |
-| Qwen 3.5 27B | 17.5 GB | 20.7 GB | 32 GB | 24 GB |
-| Qwen 3.8 27B | 17.7 GB | 21.0 GB | 32 GB | 32 GB |
-| Qwen 3.6 27B | 17.8 GB | 21.0 GB | 32 GB | 32 GB |
-| Qwen3 30B A3B (mixture of experts, 3B active) | 18.6 GB | 21.8 GB | 32 GB | 32 GB |
-| Qwen3-Coder 30B A3B (mixture of experts, 3.3B active) | 18.6 GB | 21.8 GB | 32 GB | 32 GB |
-| Gemma 4 26B A4B (mixture of experts, 4B active) | 18.7 GB | 22.0 GB | 32 GB | 32 GB |
-| DeepSeek-R1 32B | 19.9 GB | 23.1 GB | 36 GB | 32 GB |
-| Qwen3 32B | 20.2 GB | 23.5 GB | 36 GB | 32 GB |
-| Gemma 4 31B | 20.4 GB | 23.6 GB | 36 GB | 32 GB |
-| Qwen 3.5 35B A3B (mixture of experts, 3B active) | 22.1 GB | 25.3 GB | 48 GB | 32 GB |
-| Qwen 3.6 35B A3B (mixture of experts, 3B active) | 22.6 GB | 25.9 GB | 48 GB | 32 GB |
-| DeepSeek-R1 70B | 42.5 GB | 45.8 GB | 96 GB | 64 GB |
-| Llama 3.3 70B | 42.5 GB | 45.8 GB | 96 GB | 64 GB |
-| gpt-oss 120B (mixture of experts, 5.1B active) | 65.4 GB | 68.6 GB | 128 GB | 96 GB |
-| Llama 4 Scout (mixture of experts, 17B active) | 67.4 GB | 70.7 GB | 128 GB | 96 GB |
-| Qwen 3.5 122B A10B (mixture of experts, 10B active) | 81.4 GB | 84.6 GB | 128 GB | 128 GB |
-| Qwen3 235B A22B (mixture of experts, 22B active) | 142.2 GB | 145.4 GB | 256 GB | 192 GB |
-| Llama 3.1 405B | 243.1 GB | 246.3 GB | 512 GB | 512 GB |
-| Qwen3-Coder 480B A35B (mixture of experts, 35B active) | 290.1 GB | 293.3 GB | 512 GB | 512 GB |
-| DeepSeek-V3 671B (mixture of experts, 37B active) | 404.4 GB | 407.7 GB | more than 512 GB | 512 GB |
-| DeepSeek-R1 671B (mixture of experts, 37B active) | 404.4 GB | 407.7 GB | more than 512 GB | 512 GB |
+| Model | Download | Memory it needs | Runs well on | Fits, tightly, on | At 8-bit, runs well on | At 16-bit, runs well on |
+| --- | --- | --- | --- | --- | --- | --- |
+| Gemma 3 1B | 0.8 GB, 4-bit | 1.2 GB | 8 GB | 8 GB | 8 GB | 8 GB |
+| DeepSeek-R1 1.5B | 1.1 GB, 4-bit | 1.6 GB | 8 GB | 8 GB | 8 GB | 8 GB |
+| Llama 3.2 1B | 1.3 GB, 8-bit | 1.8 GB | 8 GB | 8 GB | 8 GB | 8 GB |
+| Qwen 3.5 0.8B | 1.3 GB, 8-bit | 1.8 GB | 8 GB | 8 GB | 8 GB | 8 GB |
+| Llama 3.2 3B | 2.0 GB, 4-bit | 2.7 GB | 8 GB | 8 GB | 8 GB | 16 GB |
+| Phi-4 mini 3.8B | 2.5 GB, 4-bit | 3.2 GB | 8 GB | 8 GB | 8 GB | 16 GB |
+| Qwen3 4B | 2.5 GB, 4-bit | 3.2 GB | 8 GB | 8 GB | 8 GB | 16 GB |
+| Qwen 3.5 2B | 2.7 GB, 8-bit | 3.5 GB | 8 GB | 8 GB | 8 GB | 8 GB |
+| Qwen 3.5 4B | 3.3 GB, 4-bit | 4.2 GB | 8 GB | 8 GB | 16 GB | 16 GB |
+| Gemma 3 4B | 3.4 GB, 4-bit | 4.3 GB | 8 GB | 8 GB | 8 GB | 16 GB |
+| Mistral 7B | 4.4 GB, 4-bit | 5.5 GB | 8 GB | 8 GB | 16 GB | 32 GB |
+| Gemma 4 E2B | 4.6 GB, 4-bit | 5.8 GB | 16 GB | 8 GB | 16 GB | 18 GB |
+| DeepSeek-R1 7B | 4.7 GB, 4-bit | 5.9 GB | 16 GB | 8 GB | 16 GB | 32 GB |
+| Llama 3.1 8B | 4.9 GB, 4-bit | 6.2 GB | 16 GB | 8 GB | 16 GB | 32 GB |
+| DeepSeek-R1 8B | 5.2 GB, 4-bit | 6.5 GB | 16 GB | 8 GB | 16 GB | 32 GB |
+| Qwen3 8B | 5.2 GB, 4-bit | 6.5 GB | 16 GB | 8 GB | 16 GB | 32 GB |
+| Qwen 3.5 9B | 6.6 GB, 4-bit | 8.1 GB | 16 GB | 16 GB | 18 GB | 32 GB |
+| Gemma 4 E4B | 6.6 GB, 4-bit | 8.2 GB | 16 GB | 16 GB | 16 GB | 32 GB |
+| Gemma 4 12B | 8.0 GB, 4-bit | 9.9 GB | 16 GB | 16 GB | 24 GB | 48 GB |
+| Gemma 3 12B | 8.2 GB, 4-bit | 10.0 GB | 16 GB | 16 GB | 24 GB | 48 GB |
+| DeepSeek-R1 14B | 9.0 GB, 4-bit | 11.0 GB | 16 GB | 16 GB | 32 GB | 48 GB |
+| Phi-4 14B | 9.1 GB, 4-bit | 11.1 GB | 16 GB | 16 GB | 32 GB | 48 GB |
+| Qwen3 14B | 9.3 GB, 4-bit | 11.4 GB | 18 GB | 16 GB | 32 GB | 48 GB |
+| gpt-oss 20B (mixture of experts, 3.6B active) | 13.8 GB, 4-bit | 16.8 GB | 32 GB | 24 GB | 48 GB | 96 GB |
+| Devstral 24B | 14.3 GB, 4-bit | 17.5 GB | 32 GB | 24 GB | 48 GB | 96 GB |
+| Mistral Small 3.2 24B | 15.2 GB, 4-bit | 18.4 GB | 32 GB | 24 GB | 48 GB | 96 GB |
+| Gemma 3 27B | 17.4 GB, 4-bit | 20.7 GB | 32 GB | 24 GB | 48 GB | 96 GB |
+| Qwen 3.5 27B | 17.5 GB, 4-bit | 20.7 GB | 32 GB | 24 GB | 48 GB | 96 GB |
+| Qwen 3.8 27B | 17.7 GB, 4-bit | 21.0 GB | 32 GB | 32 GB | 48 GB | 96 GB |
+| Qwen 3.6 27B | 17.8 GB, 4-bit | 21.0 GB | 32 GB | 32 GB | 48 GB | 96 GB |
+| Qwen3 30B A3B (mixture of experts, 3B active) | 18.6 GB, 4-bit | 21.8 GB | 32 GB | 32 GB | 64 GB | 96 GB |
+| Qwen3-Coder 30B A3B (mixture of experts, 3.3B active) | 18.6 GB, 4-bit | 21.8 GB | 32 GB | 32 GB | 64 GB | 96 GB |
+| Gemma 4 26B A4B (mixture of experts, 4B active) | 18.7 GB, 4-bit | 22.0 GB | 32 GB | 32 GB | 48 GB | 96 GB |
+| DeepSeek-R1 32B | 19.9 GB, 4-bit | 23.1 GB | 36 GB | 32 GB | 64 GB | 128 GB |
+| Qwen3 32B | 20.2 GB, 4-bit | 23.5 GB | 36 GB | 32 GB | 64 GB | 128 GB |
+| Gemma 4 31B | 20.4 GB, 4-bit | 23.6 GB | 36 GB | 32 GB | 64 GB | 96 GB |
+| Qwen 3.5 35B A3B (mixture of experts, 3B active) | 22.1 GB, 4-bit | 25.3 GB | 48 GB | 32 GB | 64 GB | 128 GB |
+| Qwen 3.6 35B A3B (mixture of experts, 3B active) | 22.6 GB, 4-bit | 25.9 GB | 48 GB | 32 GB | 64 GB | 128 GB |
+| DeepSeek-R1 70B | 42.5 GB, 4-bit | 45.8 GB | 96 GB | 64 GB | 128 GB | 256 GB |
+| Llama 3.3 70B | 42.5 GB, 4-bit | 45.8 GB | 96 GB | 64 GB | 128 GB | 256 GB |
+| gpt-oss 120B (mixture of experts, 5.1B active) | 65.4 GB, 4-bit | 68.6 GB | 128 GB | 96 GB | 192 GB | 512 GB |
+| Llama 4 Scout (mixture of experts, 17B active) | 67.4 GB, 4-bit | 70.7 GB | 128 GB | 96 GB | 192 GB | 512 GB |
+| Qwen 3.5 122B A10B (mixture of experts, 10B active) | 81.4 GB, 4-bit | 84.6 GB | 128 GB | 128 GB | 256 GB | 512 GB |
+| Qwen3 235B A22B (mixture of experts, 22B active) | 142.2 GB, 4-bit | 145.4 GB | 256 GB | 192 GB | 512 GB | more than 512 GB |
+| Llama 3.1 405B | 243.1 GB, 4-bit | 246.3 GB | 512 GB | 512 GB | more than 512 GB | more than 512 GB |
+| Qwen3-Coder 480B A35B (mixture of experts, 35B active) | 290.1 GB, 4-bit | 293.3 GB | 512 GB | 512 GB | more than 512 GB | more than 512 GB |
+| DeepSeek-V3 671B (mixture of experts, 37B active) | 404.4 GB, 4-bit | 407.7 GB | more than 512 GB | 512 GB | more than 512 GB | more than 512 GB |
+| DeepSeek-R1 671B (mixture of experts, 37B active) | 404.4 GB, 4-bit | 407.7 GB | more than 512 GB | 512 GB | more than 512 GB | more than 512 GB |
 <!-- /models:table -->
 
 ## Questions
@@ -103,6 +103,10 @@ About the model's download size, plus up to 20% for the conversation. As a rule 
 ### What LLM can I run on my Mac?
 
 It depends on your Mac's memory. With 8 GB: Llama 3.2 3B, Gemma 3 4B, Qwen 3.5 4B or Mistral 7B. With 16 GB: Qwen 3.5 9B, Gemma 4 12B, Phi-4 14B or DeepSeek-R1 14B. With 32 GB: gpt-oss 20B, Gemma 3 27B, Qwen 3.6 27B or Qwen3 30B A3B. With 64 GB: Llama 3.3 70B or DeepSeek-R1 70B, tightly. With 128 GB: gpt-oss 120B or Qwen 3.5 122B A10B.
+
+### 4-bit vs 8-bit vs 16-bit: which should I use?
+
+The number is how many bits each of the model's parameters is stored in. 16-bit is the full-size model: 2 bytes per parameter, so a 70B model needs about 140 GB. 8-bit is about half that and very close to full quality. 4-bit (Q4), the usual download in Ollama and LM Studio, is about a third of the full size, for a small loss in quality. Use the best one that runs well on your Mac: the list under the calculator shows it for each model.
 
 ### Can a Mac mini run LLMs?
 

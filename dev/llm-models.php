@@ -99,14 +99,21 @@ $smallest = function (float $need, float $share): string {
 $gb = fn(float $b) => number_format($b / 1e9, 1) . ' GB';
 $models = $data['models'];
 usort($models, fn($a, $b) => $a['bytes'] <=> $b['bytes']);
-$table = "| Model | Download | Memory it needs | Runs well on | Fits, tightly, on |\n| --- | --- | --- | --- | --- |\n";
+// Quality: Ollama's download is usually 4-bit (Q4_K_M, or MXFP4 for gpt-oss), some small models 8-bit (Q8_0). The other
+// qualities are worked out from the parameter count with RULES['bytesPerParam'].
+$billions = fn(string $p) => str_ends_with($p, 'M') ? (float)$p / 1000 : (float)$p;
+$bits = fn(string $q) => str_starts_with($q, 'Q8') ? 8 : (in_array($q, ['F16', 'BF16'], true) ? 16 : 4);
+$sizeAt = fn(array $m, int $b) => $bits($m['quant']) === $b ? (float)$m['bytes']
+    : $billions($m['params']) * 1e9 * RULES['bytesPerParam'][[4 => 'q4', 8 => 'q8', 16 => 'f16'][$b]];
+$table = "| Model | Download | Memory it needs | Runs well on | Fits, tightly, on | At 8-bit, runs well on | At 16-bit, runs well on |\n| --- | --- | --- | --- | --- | --- | --- |\n";
 foreach ($models as $m) {
     $n = $need($m['bytes']);
     $kind = $m['active'] ? " (mixture of experts, {$m['active']}B active)" : '';
-    $table .= "| {$m['name']}$kind | {$gb($m['bytes'])} | {$gb($n)} | {$smallest($n, RULES['well'])} | {$smallest($n, RULES['gpuShare'])} |\n";
+    $table .= "| {$m['name']}$kind | {$gb($m['bytes'])}, {$bits($m['quant'])}-bit | {$gb($n)} | {$smallest($n, RULES['well'])} | {$smallest($n, RULES['gpuShare'])}"
+        . " | {$smallest($need($sizeAt($m, 8)), RULES['well'])} | {$smallest($need($sizeAt($m, 16)), RULES['well'])} |\n";
 }
 $json = json_encode(['checked' => $data['checked'], 'rules' => RULES,
-    'models' => array_map(fn($m) => [$m['name'], $m['bytes'], $m['active'] ? $m['active'] / (float)$m['params'] : 1, $m['tag']], $models)],
+    'models' => array_map(fn($m) => [$m['name'], $m['bytes'], $m['active'] ? $m['active'] / $billions($m['params']) : 1, $m['tag'], round($billions($m['params']), 2), $bits($m['quant'])], $models)],
     JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 $page = "$root/content/pages/can-my-mac-run-it.md";
 $md = (string)file_get_contents($page);
