@@ -4,7 +4,7 @@ description: MLX is Apple's framework for running AI models on Apple silicon. Wh
 answer: MLX is Apple's open-source framework for running AI models on Apple silicon Macs, built around their unified memory. An MLX model is a model saved in MLX's format, usually 4-bit or 8-bit. GGUF is the other common format, from llama.cpp, and runs on any computer. In our test on an M1 Max, the same model wrote about 23% faster as MLX than as GGUF.
 date: 2026-10-16
 topic: memory
-status: draft
+status: published
 order: 30
 related: unified-memory-mac, which-app-is-using-my-mac-memory, memory-pressure-explained
 ---

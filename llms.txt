@@ -59,6 +59,8 @@ Checked against each app's own website (apple.com, bjango.com, github.com/exelba
 
 
 
+
+
 <!-- blog -->
 ## Guides: Why is my Mac slow?
 - [Why is my Mac so slow? How to find the real cause](https://trybondi.app/blog/why-is-my-mac-slow.md): Mac running slow? It usually comes down to one of a handful of causes. Here's how to tell which one it is, with real readings from a real MacBook Pro.
@@ -69,6 +71,7 @@ Checked against each app's own website (apple.com, bjango.com, github.com/exelba
 - [What is using memory on my Mac?](https://trybondi.app/blog/which-app-is-using-my-mac-memory.md): Apps like Chrome split into dozens of helper processes, so Activity Monitor hides the real total. Here's how to see which app is really using your Mac's memory.
 - [Memory pressure on Mac: what yellow and red mean](https://trybondi.app/blog/memory-pressure-explained.md): "Memory Used" being high is normal on a Mac. Memory pressure, swap and compressed memory tell you whether you actually need more. Here's how to read them.
 - [What is unified memory on a Mac? Unified memory vs RAM](https://trybondi.app/blog/unified-memory-mac.md): Unified memory is the RAM in Apple silicon Macs, shared by the processor, graphics and Neural Engine. What it means, how it differs from RAM and storage, and how much you need.
+- [What is MLX on Mac? MLX vs GGUF, and which is faster](https://trybondi.app/blog/what-is-mlx-on-mac.md): MLX is Apple's framework for running AI models on Apple silicon. What MLX models are, how MLX differs from GGUF, Ollama and llama.cpp, and which runs faster on a Mac.
 
 ## Guides: Heat, fans and busy processes
 - [Why is my Mac so hot and loud?](https://trybondi.app/blog/mac-fans-loud.md): Loud fans on a MacBook or any Mac mean the chip is working hard or running hot. Here's how to find what's heating it, and what to do if they won't settle.
