@@ -197,3 +197,6 @@ footer a { color: var(--soft); text-decoration: none; } footer a:hover { color: 
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .thumb-dark { display: block !important; } :root:not([data-theme="light"]) .thumb-light { display: none !important; } }
 :root[data-theme="dark"] .thumb-dark { display: block !important; } :root[data-theme="dark"] .thumb-light { display: none !important; }
 :root[data-theme="light"] .thumb-dark { display: none !important; } :root[data-theme="light"] .thumb-light { display: block !important; }
+/* Pill buttons that are real <button>s (Read more): no browser grey, the same colours as the link pills in light and dark */
+button.pillbtn { cursor: pointer; background: transparent; }
+button.pillbtn.primary { background: var(--bondi); } button.pillbtn.secondary:hover { background: var(--bondi-soft); }
