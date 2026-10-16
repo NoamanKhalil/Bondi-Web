@@ -203,3 +203,6 @@ button.pillbtn.primary { background: var(--bondi); } button.pillbtn.secondary:ho
 /* "Add Bondi as a preferred source on Google" */
 .pref-src { display: inline-flex; align-items: center; gap: 9px; margin: -12px 0 30px; padding: 8px 14px 8px 12px; border-radius: 980px; border: 1px solid var(--line); background: var(--tile); color: var(--ink); font-size: .88rem; font-weight: 500; text-decoration: none; }
 .pref-src:hover { border-color: var(--bondi); color: var(--ink); } .pref-src svg { width: 18px; height: 18px; flex: none; }
+/* A wide page (header "layout: wide", the calculator): one left edge for the title, the tool and the text; reading text keeps its width */
+.post-wide { max-width: 1040px; }
+.post-wide > h1, .post-wide .byline, .post-wide .quick-answer, .post-wide .prose > :not(table):not(.calc-wrap), .post-wide .plain-copy, .post-wide .cta { max-width: 720px; }
