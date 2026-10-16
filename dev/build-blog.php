@@ -89,7 +89,7 @@ function share_row(string $url, string $title, string $where): string
     $logo = function (string $name) use (&$logos): string {
         if (!isset($logos[$name])) {
             $svg = (string)file_get_contents(__DIR__ . "/share-logos/$name.svg");
-            $logos[$name] = preg_replace(['~<title>.*?</title>~', '~<svg[^>]*>~'], ['', '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor">'], $svg);
+            $logos[$name] = preg_replace(['~<title>.*?</title>~', '~<svg[^>]*>~'], ['', '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false" fill="currentColor">'], $svg);
         }
         return $logos[$name];
     };
@@ -102,12 +102,12 @@ function share_row(string $url, string $title, string $where): string
         ['WhatsApp', 'https://wa.me/?text=' . rawurlencode("$title $url"), $logo('whatsapp')],
     ];
     $out = '<div class="share share-' . $h($where) . '" data-share data-url="' . $h($url) . '" data-title="' . $h($title) . '"><span class="share-label">Share</span>'
-         . '<button type="button" class="share-native" data-share-native hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M6 11H5v10h14V11h-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Share</button>';
+         . '<button type="button" class="share-native" data-share-native hidden><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M6 11H5v10h14V11h-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Share</button>';
     foreach ($links as [$name, $href, $svg]) {
         $out .= '<a class="share-btn" href="' . $h($href) . '" target="_blank" rel="noopener noreferrer" aria-label="Share on ' . $name . ' (opens in a new tab)" title="' . $name . '">' . $svg . '</a>';
     }
-    $out .= '<a class="share-btn" href="mailto:?subject=' . $t . '&amp;body=' . $u . '" aria-label="Share by email" title="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a>'
-          . '<button type="button" class="share-btn" data-share-copy aria-label="Copy link" title="Copy link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>'
+    $out .= '<a class="share-btn" href="mailto:?subject=' . $t . '&amp;body=' . $u . '" aria-label="Share by email" title="Email"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a>'
+          . '<button type="button" class="share-btn" data-share-copy aria-label="Copy link" title="Copy link"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>'
           . '<span class="share-done" data-share-done role="status"></span></div>';
     return $out;
 }
@@ -117,7 +117,7 @@ function share_row(string $url, string $title, string $where): string
 function preferred_source(): string
 {
     return '<a class="pref-src" href="https://www.google.com/preferences/source?q=trybondi.app" target="_blank" rel="noopener noreferrer"'
-         . ' title="Opens Google: star Bondi to see more of its guides in Google\'s Top Stories"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#4285F4" d="M23 12.245c0-.905-.075-1.565-.236-2.25h-10.54v4.083h6.186c-.124 1.014-.797 2.542-2.294 3.569l-.021.136 3.332 2.53.23.022C21.779 18.417 23 15.593 23 12.245z"/><path fill="#34A853" d="M12.225 23c3.03 0 5.574-.978 7.433-2.665l-3.542-2.688c-.948.648-2.22 1.1-3.891 1.1a6.745 6.745 0 01-6.386-4.572l-.132.011-3.465 2.628-.045.124C4.043 20.531 7.835 23 12.225 23z"/><path fill="#FBBC05" d="M5.84 14.175A6.65 6.65 0 015.463 12c0-.758.138-1.491.361-2.175l-.006-.147-3.508-2.67-.115.054A10.831 10.831 0 001 12c0 1.772.436 3.447 1.197 4.938l3.642-2.763z"/><path fill="#EA4335" d="M12.225 5.253c2.108 0 3.529.892 4.34 1.638l3.167-3.031C17.787 2.088 15.255 1 12.225 1 7.834 1 4.043 3.469 2.197 7.062l3.63 2.763a6.77 6.77 0 016.398-4.572z"/></svg><span>Add Bondi as a preferred source on Google</span></a>';
+         . ' title="Opens Google: star Bondi to see more of its guides in Google\'s Top Stories"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path fill="#4285F4" d="M23 12.245c0-.905-.075-1.565-.236-2.25h-10.54v4.083h6.186c-.124 1.014-.797 2.542-2.294 3.569l-.021.136 3.332 2.53.23.022C21.779 18.417 23 15.593 23 12.245z"/><path fill="#34A853" d="M12.225 23c3.03 0 5.574-.978 7.433-2.665l-3.542-2.688c-.948.648-2.22 1.1-3.891 1.1a6.745 6.745 0 01-6.386-4.572l-.132.011-3.465 2.628-.045.124C4.043 20.531 7.835 23 12.225 23z"/><path fill="#FBBC05" d="M5.84 14.175A6.65 6.65 0 015.463 12c0-.758.138-1.491.361-2.175l-.006-.147-3.508-2.67-.115.054A10.831 10.831 0 001 12c0 1.772.436 3.447 1.197 4.938l3.642-2.763z"/><path fill="#EA4335" d="M12.225 5.253c2.108 0 3.529.892 4.34 1.638l3.167-3.031C17.787 2.088 15.255 1 12.225 1 7.834 1 4.043 3.469 2.197 7.062l3.63 2.763a6.77 6.77 0 016.398-4.572z"/></svg><span>Add Bondi as a preferred source on Google</span></a>';
 }
 
 /** The article's sections: ids on its ## headings, the contents list, and a short Bondi box before the third section. */
@@ -421,7 +421,7 @@ if ($shown) {
         breadcrumb_ld([['Bondi', '/'], ['Blog', '/blog/']])]];
     $head = '<meta property="og:type" content="website"><meta property="og:title" content="Bondi blog"><meta property="og:image" content="' . SITE . '/assets/og-image.jpg">'
           . "\n<script type=\"application/ld+json\">" . json_encode($ld, JSON_UNESCAPED_SLASHES) . '</script>';
-    $spark = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.1 6.2 6.4 2.3-6.4 2.3L12 19.5l-2.1-6.2L3.5 11l6.4-2.3z" fill="currentColor"/><path d="M19 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z" fill="currentColor"/></svg>';
+    $spark = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 2.5l2.1 6.2 6.4 2.3-6.4 2.3L12 19.5l-2.1-6.2L3.5 11l6.4-2.3z" fill="currentColor"/><path d="M19 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z" fill="currentColor"/></svg>';
     $body = subnav('blog', $topicKeys) . '<div class="blog-home"><h1 class="blog-h1">Bondi Blog: let\'s figure out what your Mac is up to</h1>'
           . '<div class="blog-top">' . $feature
           . ($picks !== '' ? '<section class="picks" aria-labelledby="picks-title"><h2 id="picks-title">' . $spark . 'Good places to start</h2><ul>' . $picks . '</ul></section>' : '') . '</div>'

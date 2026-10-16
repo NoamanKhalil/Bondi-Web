@@ -3,7 +3,9 @@
 // puts the repository's top level in the site's public_html). On the way:
 // - CSS is minified, in .css files and in the <style> blocks of .html pages; public_html keeps the readable source.
 // - Pages ask for the films, their phone and Retina copies and posters (assets/bondi-*.mp4, -small, -hd, -poster.jpg/png) with ?v=<content hash>, so
-//   browsers can keep them for a year (.htaccess) and a new render is still seen at once.
+//   browsers can keep them for a year (.htaccess) and a new render is still seen at once. Stylesheets, scripts and the blog's
+//   thumbnails (assets/*.css, assets/*.js, assets/blog/*.jpg) get the same stamp, so a page never meets yesterday's copy of
+//   its stylesheet, which browsers keep for a day.
 // Run it after changing anything in public_html, before committing: php dev/build-site.php
 // (dev/build-blog.php runs it too.)
 
@@ -74,6 +76,21 @@ function stamp_films(string $html, string $src): string
         }, $html);
 }
 
+/** The stylesheets', scripts' and blog thumbnails' addresses with the same kind of stamp. */
+function stamp_assets(string $html, string $src): string
+{
+    static $hashes = [];
+    return preg_replace_callback('~((?:src|href)=")(/?assets/((?:blog/)?[a-z0-9-]+\.(?:css|js|jpg)))"~',
+        function (array $m) use ($src, &$hashes): string {
+            $file = "$src/assets/{$m[3]}";
+            if (!is_file($file) || (!str_starts_with($m[3], 'blog/') && str_ends_with($m[3], '.jpg'))) {
+                return $m[0];
+            }
+            $hashes[$file] ??= substr(sha1_file($file), 0, 10);
+            return $m[1] . $m[2] . '?v=' . $hashes[$file] . '"';
+        }, $html);
+}
+
 $changed = [];
 $cssBefore = $cssAfter = 0;
 $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($src, FilesystemIterator::SKIP_DOTS));
@@ -95,7 +112,7 @@ foreach ($files as $file) {
             $cssAfter += strlen($min);
             return $m[1] . $min . $m[3];
         }, $data);
-        $data = stamp_films($data, $src);
+        $data = stamp_assets(stamp_films($data, $src), $src);
     }
     $target = "$root/$rel";
     if (is_file($target) && file_get_contents($target) === $data) {
