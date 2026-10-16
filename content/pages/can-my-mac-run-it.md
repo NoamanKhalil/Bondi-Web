@@ -6,12 +6,13 @@ answer: A local AI model needs about its download size in memory, plus up to 20%
 checked: 2026-10-15
 checkednote: Model sizes checked against Ollama's library
 updated: 2026-10-15
+layout: wide
 ---
 <!-- web -->
 <style>
 /* The calculator: settings on the left (a quality toggle, then a box and a slider per setting), the answer on the right */
 .calc-wrap { --good: #248a3d; --warn: #c76e00; --bad: #d70015; }
-.calc { position: relative; left: 50%; transform: translateX(-50%); width: min(1040px, calc(100vw - 44px)); margin: 34px 0 18px;
+.calc { margin: 34px 0 18px;
   display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); border: 1px solid var(--line); border-radius: 16px; background: var(--tile); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .calc-wrap { --good: #30d158; --warn: #ff9f0a; --bad: #ff453a; } }
 :root[data-theme="dark"] .calc-wrap { --good: #30d158; --warn: #ff9f0a; --bad: #ff453a; }
@@ -81,7 +82,7 @@ updated: 2026-10-15
 .calc-wrap .calc-list p.foot { margin: 14px 0 0; font-size: .8rem; color: var(--faint); }
 .calc-bondi { margin: 0 0 30px; padding: 12px 16px; border-radius: 14px; background: var(--bondi-soft); font-size: .92rem; }
 .calc-bondi a { color: var(--bondi-ink); font-weight: 600; }
-@media (max-width: 900px) { .calc { left: 0; transform: none; width: 100%; grid-template-columns: minmax(0, 1fr); } .calc-out { border-left: 0; border-top: 1px solid var(--line); } }
+@media (max-width: 900px) { .calc { grid-template-columns: minmax(0, 1fr); } .calc-out { border-left: 0; border-top: 1px solid var(--line); } }
 @media (max-width: 560px) { .calc-in { padding: 22px 18px 24px; gap: 22px; } .calc-pair { grid-template-columns: minmax(0, 1fr); gap: 10px; } .calc .seg { gap: 8px; } .calc-out { padding: 26px 18px; } .calc-list { padding: 18px 16px; } }
 </style>
 <div class="calc-wrap">

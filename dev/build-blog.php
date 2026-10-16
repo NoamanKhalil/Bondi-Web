@@ -470,7 +470,16 @@ foreach (glob("$root/content/pages/*.md") ?: [] as $file) {
     }
     $slug = basename($file, '.md');
     $url = SITE . "/$slug/";
-    $html = preg_replace('~<a href="(https?://(?!trybondi\.app)[^"]+)"~', '<a href="$1" target="_blank" rel="noopener"', $parsedown->text($m[2]));
+    // Parts only for the web page (the calculator) go in untouched: Markdown would misread their HTML and the text after it
+    $webParts = [];
+    $source = preg_replace_callback('~<!-- web -->(.*?)<!-- /web -->~s', function ($w) use (&$webParts) {
+        $webParts[] = $w[1];
+        return "\n\nWEBPART" . (count($webParts) - 1) . "\n\n";
+    }, $m[2]);
+    $html = preg_replace('~<a href="(https?://(?!trybondi\.app)[^"]+)"~', '<a href="$1" target="_blank" rel="noopener"', $parsedown->text($source));
+    foreach ($webParts as $i => $part) {
+        $html = str_replace("<p>WEBPART$i</p>", $part, $html);
+    }
     $answer = $meta['answer'] ?? '';
     $ld = ['@context' => 'https://schema.org', '@graph' => [
         array_filter(['@type' => 'WebPage', 'name' => $meta['title'], 'description' => $meta['description'], 'url' => $url,
@@ -490,7 +499,7 @@ foreach (glob("$root/content/pages/*.md") ?: [] as $file) {
     $checked = isset($meta['checked']) ? $h($meta['checkednote'] ?? 'Checked against each app\'s own website') . ' on ' . $h(nice_date($meta['checked'])) : '';
     $updated = isset($meta['updated']) && $meta['updated'] !== ($meta['checked'] ?? '') ? ($checked !== '' ? ' · ' : '') . 'Updated ' . $h(nice_date($meta['updated'])) : '';
     $answerBox = $answer !== '' ? '<aside class="quick-answer" aria-label="Quick answer"><p class="qa-label">Quick answer</p><p>' . $parsedown->line($answer) . '</p></aside>' : '';
-    $body = '<article class="post">' . crumbs([['Bondi', '/'], [$meta['crumb'] ?? $meta['title'], "/$slug/"]]) . '<h1>' . $h($meta['title']) . '</h1>'
+    $body = '<article class="post' . (($meta['layout'] ?? '') === 'wide' ? ' post-wide' : '') . '">' . crumbs([['Bondi', '/'], [$meta['crumb'] ?? $meta['title'], "/$slug/"]]) . '<h1>' . $h($meta['title']) . '</h1>'
           . '<p class="byline">' . $checked . $updated . '</p>' . $answerBox . '<div class="prose">' . $html . '</div>'
           . '<p class="plain-copy">Also as <a href="/' . $h($slug) . '/' . $h($slug) . '.md">plain text</a>, for AI assistants and readers.</p>'
           . '<aside class="cta"><img src="/assets/icon-blue.png" alt="" width="56" height="56"><div><p class="cta-title">' . $h(PITCH) . '</p>'

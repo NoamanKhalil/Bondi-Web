@@ -139,8 +139,8 @@
   <div class="nav-right"><button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button><a class="pillbtn primary small" href="/beta/">Join the beta</a></div>
 </div></header>
 <main>
-<article class="post"><nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Bondi</a></li><li><a href="/can-my-mac-run-it/">Can my Mac run it?</a></li></ol></nav><h1>Can my Mac run it? LLM RAM calculator for Mac</h1><p class="byline">Model sizes checked against Ollama&#039;s library on October 15, 2026</p><aside class="quick-answer" aria-label="Quick answer"><p class="qa-label">Quick answer</p><p>A local AI model needs about its download size in memory, plus up to 20% for the conversation. An 8 GB Mac runs models up to about 7B parameters, 16 GB up to 14B, 32 GB up to about 30B, and 64 GB runs 70B models, tightly. How fast it writes depends on the chip's memory bandwidth.</p></aside><div class="prose"><!-- web -->
-<style>.calc-wrap{--good:#248a3d;--warn:#c76e00;--bad:#d70015}.calc{position:relative;left:50%;transform:translateX(-50%);width:min(1040px,calc(100vw - 44px));margin:34px 0 18px;display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);border:1px solid var(--line);border-radius:16px;background:var(--tile)}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .calc-wrap{--good:#30d158;--warn:#ff9f0a;--bad:#ff453a}}:root[data-theme="dark"] .calc-wrap{--good:#30d158;--warn:#ff9f0a;--bad:#ff453a}.calc-in{display:grid;gap:26px;padding:30px 32px 32px;min-width:0}.calc-row{display:grid;gap:10px;min-width:0;margin:0;padding:0;border:0}.calc-row>label,.calc-row>legend{padding:0;font:600 1.05rem/1.3 var(--sans);letter-spacing:-0.01em;color:var(--ink)}.calc-row>legend{margin-bottom:10px}.calc-pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:center}.calc .seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.calc .seg button{height:48px;border-radius:10px;border:1px solid var(--line);background:var(--tile);color:var(--ink);font:500 1rem/1 var(--sans);cursor:pointer}.calc .seg button[aria-pressed="true"]{border-color:var(--bondi);background:var(--bondi-soft);color:var(--bondi-ink);font-weight:600}.calc .seg button:focus-visible{outline:2px solid var(--bondi);outline-offset:2px}.calc-box{display:flex;align-items:center;height:52px;border:1px solid var(--line);border-radius:10px;background:var(--tile);min-width:0;overflow:hidden}.calc-box:focus-within{border-color:var(--bondi);box-shadow:0 0 0 3px var(--bondi-soft)}.calc-box input,.calc-box select{flex:1;min-width:0;height:100%;border:0;background:transparent;padding:0 14px 0 16px;font:500 1.08rem/1 var(--sans);color:var(--ink);font-variant-numeric:tabular-nums;outline:none;appearance:none;-webkit-appearance:none;-moz-appearance:textfield}.calc-box input::-webkit-outer-spin-button,.calc-box input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}.calc-box select{cursor:pointer;padding-right:40px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%2386868b' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}.calc-box select option,.calc-box select optgroup{background:var(--tile);color:var(--ink)}.calc-box .unit{flex:none;padding:0 16px;color:var(--faint);font-size:1rem}.calc .hint{margin:0;font-size:.85rem;line-height:1.4;color:var(--faint)}.calc input[type="range"]{width:100%;height:30px;margin:0;background:transparent;appearance:none;-webkit-appearance:none;cursor:pointer}.calc input[type="range"]::-webkit-slider-runnable-track{height:7px;border-radius:4px;background:linear-gradient(90deg,var(--bondi) var(--fill,10%),var(--line) var(--fill,10%))}.calc input[type="range"]::-moz-range-track{height:7px;border-radius:4px;background:var(--line)}.calc input[type="range"]::-moz-range-progress{height:7px;border-radius:4px;background:var(--bondi)}.calc input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-11.5px;border-radius:50%;background:var(--tile);border:2.5px solid var(--ink)}.calc input[type="range"]::-moz-range-thumb{width:25px;height:25px;border-radius:50%;background:var(--tile);border:2.5px solid var(--ink)}.calc input[type="range"]:focus-visible{outline:2px solid var(--bondi);outline-offset:4px;border-radius:8px}.calc-out{display:grid;align-content:center;justify-items:center;gap:6px;padding:32px 28px;border-left:1px solid var(--line);text-align:center;min-width:0}.calc-out .big{margin:0;font:700 clamp(3rem,6vw,4rem)/1 var(--display);letter-spacing:-0.04em;color:var(--ink);font-variant-numeric:tabular-nums}.calc-out .big small{font-size:.3em;font-weight:600;letter-spacing:-0.01em;margin-left:6px}.calc-out .big .approx{font-size:.55em;font-weight:600;margin-right:4px;color:var(--soft)}.calc-out .cap{margin:2px 0 0;font-weight:600;color:var(--ink)}.calc-out .pill{margin:10px 0 18px;display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:980px;font-size:.85rem;font-weight:600;background:var(--tile-2);color:var(--ink)}.calc-out .pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--dot,var(--line))}.calc-out .pill[data-v="well"]{--dot:var(--good)}.calc-out .pill[data-v="tight"]{--dot:var(--warn)}.calc-out .pill[data-v="no"]{--dot:var(--bad)}.calc-out .lab{margin:14px 0 2px;font-size:.74rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--soft)}.calc-out .mid{margin:0;font:700 2rem/1.1 var(--display);letter-spacing:-0.03em;color:var(--ink);font-variant-numeric:tabular-nums}.calc-out .mid small{font-size:.5em;font-weight:600;color:var(--soft);letter-spacing:-0.01em}.calc-bar{position:relative;display:flex;width:100%;height:34px;margin-top:6px;border-radius:4px;overflow:hidden;background:var(--line)}.calc-bar i{display:block;height:100%;flex:none}.calc-bar .m{background:var(--bondi)}.calc-bar .c{background:color-mix(in srgb,var(--bondi) 55%,#fff)}.calc-bar .w{background:color-mix(in srgb,var(--bondi) 25%,#fff)}.calc-bar .limit{position:absolute;top:0;bottom:0;width:2px;background:var(--bad)}.calc-legend{width:100%;display:grid;grid-template-columns:minmax(0,1fr);gap:6px;margin-top:8px;font-size:.82rem;text-align:left;color:var(--soft);font-variant-numeric:tabular-nums}.calc-legend span{display:flex;align-items:center;gap:6px;min-width:0}.calc-legend span::before{content:"";flex:none;width:10px;height:10px;border-radius:2px;background:var(--sw)}.calc-legend b{color:var(--ink);font-weight:600;margin-left:auto}.calc-out .after{margin:12px 0 0;font-size:.88rem;color:var(--soft)}.calc-vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.calc-list{margin:0 0 18px;padding:22px 24px;border:1px solid var(--line);border-radius:16px;background:var(--tile);font-size:.92rem}.calc-list .head{margin:0;display:flex;justify-content:space-between;gap:10px;font-weight:600;color:var(--ink)}.calc-list .head span + span{font-weight:500;color:var(--faint);font-size:.85rem}.calc-list h3{margin:16px 0 6px;font:600 .95rem/1.3 var(--sans);color:var(--ink);display:flex;align-items:center;gap:8px}.calc-list h3::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--dot)}.calc-list [data-v="well"]{--dot:var(--good)}.calc-list [data-v="tight"]{--dot:var(--warn)}.calc-list [data-v="no"]{--dot:var(--bad)}.calc-list ul{list-style:none;margin:0;padding:0}.calc-wrap .calc-list li{margin:0;padding:4px 0;display:flex;align-items:baseline;gap:8px;color:var(--ink);font-variant-numeric:tabular-nums}.calc-list li .n{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.calc-list li .dots{flex:1 1 12px;min-width:12px;border-bottom:1px dotted var(--line);transform:translateY(-4px)}.calc-list li .v{flex:none;white-space:nowrap;color:var(--soft)}.calc-list li .q{flex:none;padding:1px 7px;border-radius:6px;font-size:.78rem;font-weight:600;background:var(--bondi-soft);color:var(--bondi-ink)}.calc-wrap .calc-list [data-v="no"] li{color:var(--soft)}.calc-list summary{cursor:pointer;list-style:none}.calc-list summary::-webkit-details-marker{display:none}.calc-list summary h3{display:inline-flex}.calc-list summary .more{margin-left:8px;font-size:.85rem;font-weight:600;color:var(--bondi-ink)}.calc-list details[open] .more{display:none}.calc-wrap .calc-list p.foot{margin:14px 0 0;font-size:.8rem;color:var(--faint)}.calc-bondi{margin:0 0 30px;padding:12px 16px;border-radius:14px;background:var(--bondi-soft);font-size:.92rem}.calc-bondi a{color:var(--bondi-ink);font-weight:600}@media (max-width:900px){.calc{left:0;transform:none;width:100%;grid-template-columns:minmax(0,1fr)}.calc-out{border-left:0;border-top:1px solid var(--line)}}@media (max-width:560px){.calc-in{padding:22px 18px 24px;gap:22px}.calc-pair{grid-template-columns:minmax(0,1fr);gap:10px}.calc .seg{gap:8px}.calc-out{padding:26px 18px}.calc-list{padding:18px 16px}}</style>
+<article class="post post-wide"><nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Bondi</a></li><li><a href="/can-my-mac-run-it/">Can my Mac run it?</a></li></ol></nav><h1>Can my Mac run it? LLM RAM calculator for Mac</h1><p class="byline">Model sizes checked against Ollama&#039;s library on October 15, 2026</p><aside class="quick-answer" aria-label="Quick answer"><p class="qa-label">Quick answer</p><p>A local AI model needs about its download size in memory, plus up to 20% for the conversation. An 8 GB Mac runs models up to about 7B parameters, 16 GB up to 14B, 32 GB up to about 30B, and 64 GB runs 70B models, tightly. How fast it writes depends on the chip's memory bandwidth.</p></aside><div class="prose">
+<style>.calc-wrap{--good:#248a3d;--warn:#c76e00;--bad:#d70015}.calc{margin:34px 0 18px;display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);border:1px solid var(--line);border-radius:16px;background:var(--tile)}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .calc-wrap{--good:#30d158;--warn:#ff9f0a;--bad:#ff453a}}:root[data-theme="dark"] .calc-wrap{--good:#30d158;--warn:#ff9f0a;--bad:#ff453a}.calc-in{display:grid;gap:26px;padding:30px 32px 32px;min-width:0}.calc-row{display:grid;gap:10px;min-width:0;margin:0;padding:0;border:0}.calc-row>label,.calc-row>legend{padding:0;font:600 1.05rem/1.3 var(--sans);letter-spacing:-0.01em;color:var(--ink)}.calc-row>legend{margin-bottom:10px}.calc-pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:center}.calc .seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.calc .seg button{height:48px;border-radius:10px;border:1px solid var(--line);background:var(--tile);color:var(--ink);font:500 1rem/1 var(--sans);cursor:pointer}.calc .seg button[aria-pressed="true"]{border-color:var(--bondi);background:var(--bondi-soft);color:var(--bondi-ink);font-weight:600}.calc .seg button:focus-visible{outline:2px solid var(--bondi);outline-offset:2px}.calc-box{display:flex;align-items:center;height:52px;border:1px solid var(--line);border-radius:10px;background:var(--tile);min-width:0;overflow:hidden}.calc-box:focus-within{border-color:var(--bondi);box-shadow:0 0 0 3px var(--bondi-soft)}.calc-box input,.calc-box select{flex:1;min-width:0;height:100%;border:0;background:transparent;padding:0 14px 0 16px;font:500 1.08rem/1 var(--sans);color:var(--ink);font-variant-numeric:tabular-nums;outline:none;appearance:none;-webkit-appearance:none;-moz-appearance:textfield}.calc-box input::-webkit-outer-spin-button,.calc-box input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}.calc-box select{cursor:pointer;padding-right:40px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%2386868b' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}.calc-box select option,.calc-box select optgroup{background:var(--tile);color:var(--ink)}.calc-box .unit{flex:none;padding:0 16px;color:var(--faint);font-size:1rem}.calc .hint{margin:0;font-size:.85rem;line-height:1.4;color:var(--faint)}.calc input[type="range"]{width:100%;height:30px;margin:0;background:transparent;appearance:none;-webkit-appearance:none;cursor:pointer}.calc input[type="range"]::-webkit-slider-runnable-track{height:7px;border-radius:4px;background:linear-gradient(90deg,var(--bondi) var(--fill,10%),var(--line) var(--fill,10%))}.calc input[type="range"]::-moz-range-track{height:7px;border-radius:4px;background:var(--line)}.calc input[type="range"]::-moz-range-progress{height:7px;border-radius:4px;background:var(--bondi)}.calc input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-11.5px;border-radius:50%;background:var(--tile);border:2.5px solid var(--ink)}.calc input[type="range"]::-moz-range-thumb{width:25px;height:25px;border-radius:50%;background:var(--tile);border:2.5px solid var(--ink)}.calc input[type="range"]:focus-visible{outline:2px solid var(--bondi);outline-offset:4px;border-radius:8px}.calc-out{display:grid;align-content:center;justify-items:center;gap:6px;padding:32px 28px;border-left:1px solid var(--line);text-align:center;min-width:0}.calc-out .big{margin:0;font:700 clamp(3rem,6vw,4rem)/1 var(--display);letter-spacing:-0.04em;color:var(--ink);font-variant-numeric:tabular-nums}.calc-out .big small{font-size:.3em;font-weight:600;letter-spacing:-0.01em;margin-left:6px}.calc-out .big .approx{font-size:.55em;font-weight:600;margin-right:4px;color:var(--soft)}.calc-out .cap{margin:2px 0 0;font-weight:600;color:var(--ink)}.calc-out .pill{margin:10px 0 18px;display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:980px;font-size:.85rem;font-weight:600;background:var(--tile-2);color:var(--ink)}.calc-out .pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--dot,var(--line))}.calc-out .pill[data-v="well"]{--dot:var(--good)}.calc-out .pill[data-v="tight"]{--dot:var(--warn)}.calc-out .pill[data-v="no"]{--dot:var(--bad)}.calc-out .lab{margin:14px 0 2px;font-size:.74rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--soft)}.calc-out .mid{margin:0;font:700 2rem/1.1 var(--display);letter-spacing:-0.03em;color:var(--ink);font-variant-numeric:tabular-nums}.calc-out .mid small{font-size:.5em;font-weight:600;color:var(--soft);letter-spacing:-0.01em}.calc-bar{position:relative;display:flex;width:100%;height:34px;margin-top:6px;border-radius:4px;overflow:hidden;background:var(--line)}.calc-bar i{display:block;height:100%;flex:none}.calc-bar .m{background:var(--bondi)}.calc-bar .c{background:color-mix(in srgb,var(--bondi) 55%,#fff)}.calc-bar .w{background:color-mix(in srgb,var(--bondi) 25%,#fff)}.calc-bar .limit{position:absolute;top:0;bottom:0;width:2px;background:var(--bad)}.calc-legend{width:100%;display:grid;grid-template-columns:minmax(0,1fr);gap:6px;margin-top:8px;font-size:.82rem;text-align:left;color:var(--soft);font-variant-numeric:tabular-nums}.calc-legend span{display:flex;align-items:center;gap:6px;min-width:0}.calc-legend span::before{content:"";flex:none;width:10px;height:10px;border-radius:2px;background:var(--sw)}.calc-legend b{color:var(--ink);font-weight:600;margin-left:auto}.calc-out .after{margin:12px 0 0;font-size:.88rem;color:var(--soft)}.calc-vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.calc-list{margin:0 0 18px;padding:22px 24px;border:1px solid var(--line);border-radius:16px;background:var(--tile);font-size:.92rem}.calc-list .head{margin:0;display:flex;justify-content:space-between;gap:10px;font-weight:600;color:var(--ink)}.calc-list .head span + span{font-weight:500;color:var(--faint);font-size:.85rem}.calc-list h3{margin:16px 0 6px;font:600 .95rem/1.3 var(--sans);color:var(--ink);display:flex;align-items:center;gap:8px}.calc-list h3::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--dot)}.calc-list [data-v="well"]{--dot:var(--good)}.calc-list [data-v="tight"]{--dot:var(--warn)}.calc-list [data-v="no"]{--dot:var(--bad)}.calc-list ul{list-style:none;margin:0;padding:0}.calc-wrap .calc-list li{margin:0;padding:4px 0;display:flex;align-items:baseline;gap:8px;color:var(--ink);font-variant-numeric:tabular-nums}.calc-list li .n{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.calc-list li .dots{flex:1 1 12px;min-width:12px;border-bottom:1px dotted var(--line);transform:translateY(-4px)}.calc-list li .v{flex:none;white-space:nowrap;color:var(--soft)}.calc-list li .q{flex:none;padding:1px 7px;border-radius:6px;font-size:.78rem;font-weight:600;background:var(--bondi-soft);color:var(--bondi-ink)}.calc-wrap .calc-list [data-v="no"] li{color:var(--soft)}.calc-list summary{cursor:pointer;list-style:none}.calc-list summary::-webkit-details-marker{display:none}.calc-list summary h3{display:inline-flex}.calc-list summary .more{margin-left:8px;font-size:.85rem;font-weight:600;color:var(--bondi-ink)}.calc-list details[open] .more{display:none}.calc-wrap .calc-list p.foot{margin:14px 0 0;font-size:.8rem;color:var(--faint)}.calc-bondi{margin:0 0 30px;padding:12px 16px;border-radius:14px;background:var(--bondi-soft);font-size:.92rem}.calc-bondi a{color:var(--bondi-ink);font-weight:600}@media (max-width:900px){.calc{grid-template-columns:minmax(0,1fr)}.calc-out{border-left:0;border-top:1px solid var(--line)}}@media (max-width:560px){.calc-in{padding:22px 18px 24px;gap:22px}.calc-pair{grid-template-columns:minmax(0,1fr);gap:10px}.calc .seg{gap:8px}.calc-out{padding:26px 18px}.calc-list{padding:18px 16px}}</style>
 <div class="calc-wrap">
 <section class="calc" id="calc" aria-label="LLM RAM calculator">
 <div class="calc-in">
@@ -273,128 +273,515 @@
   render();
 })();
 </script>
-<!-- /web -->
-Set your Mac's memory, its chip, a model and a quality, and the calculator shows how much memory the model needs and how fast it would write on your Mac. It also sorts 48 popular local AI models into three groups: the ones that run well, the ones that fit if you close other apps, and the ones that won't fit. Every size is the real download from Ollama's library, and the rules come from real readings on a Mac, described below.
 
-## How much RAM do you need to run a local LLM?
-
-A local AI model (an LLM, or large language model) has to sit in your Mac's memory while it works. So the first number to know is its download size: Llama 3.1 8B is 4.9 GB in Ollama, Llama 3.3 70B is 42.5 GB.
-
-On top of that, it needs room for the conversation (the context) and a little working space. In our reading, Dolphin Llama 3 8B (a 4.66 GB download) took **5.66 GB** of memory with an 8,192-token conversation. The calculator allows 20% of the model, up to 3 GB, plus 0.25 GB, which comes to 5.84 GB for that model. Longer conversations need more.
-
-Then there's how much of the memory the model can use. Macs share one pool of memory between the processor and the graphics chip, which is why they're good at this. But macOS keeps part of it back: on our 64 GB M1 Max, it let the graphics chip use **51.8 GB (81%)** by default. Macs with less memory may get a smaller share.
-
-So the calculator says:
-
-- **Runs well:** the model needs no more than 65% of your memory, leaving the rest for macOS and your apps.
-- **Fits, tightly:** it needs up to 81%. It loads, but close other apps first, or your Mac will start to swap and everything slows down.
-- **Won't fit:** more than that. Ollama can still run part of it on the processor instead, but it's many times slower.
-
-## How fast will it run?
-
-Every new word (a token, about three-quarters of a word) means reading the working part of the model from memory once. So speed depends on the chip's **memory bandwidth**, which Apple publishes for each chip: 120 GB/s for M4, 273 GB/s for M4 Pro, up to 546 GB/s for M4 Max, and 1.2 TB/s for M5 Ultra.
-
-In our readings, on an M1 Max (400 GB/s):
-
-| Model | Download | In memory | Writing speed |
-| --- | --- | --- | --- |
-| Dolphin Llama 3 8B (Q4_0) | 4.66 GB | 5.66 GB, with an 8,192-token conversation | 39.5 tokens/s |
-| Qwen2.5 0.5B (Q8_0) | 0.40 GB | 0.93 GB, with a 32,768-token conversation | 218 tokens/s |
-
-The 8B model reached 46% of the theoretical limit (400 GB/s ÷ 4.66 GB), so the calculator's speeds are 46% of each chip's limit. Treat them as estimates: very small models are held back by other work, and long conversations slow every model down. Reading speed is about 5 tokens a second, so anything above 20 feels quick.
-
-Mixture-of-experts models, such as gpt-oss and Qwen3 30B A3B, are a special case. All of the model has to fit in memory, but only a small part of it works on each word, so they write much faster than their size suggests.
-
-## Every model, and the Mac it needs
-
-Sizes are Ollama's default download of each model (usually 4-bit, Q4_K_M), checked on October 15, 2026. LM Studio's versions of the same models can be a little bigger or smaller.
-
+<p>Set your Mac's memory, its chip, a model and a quality, and the calculator shows how much memory the model needs and how fast it would write on your Mac. It also sorts 48 popular local AI models into three groups: the ones that run well, the ones that fit if you close other apps, and the ones that won't fit. Every size is the real download from Ollama's library, and the rules come from real readings on a Mac, described below.</p>
+<h2>How much RAM do you need to run a local LLM?</h2>
+<p>A local AI model (an LLM, or large language model) has to sit in your Mac's memory while it works. So the first number to know is its download size: Llama 3.1 8B is 4.9 GB in Ollama, Llama 3.3 70B is 42.5 GB.</p>
+<p>On top of that, it needs room for the conversation (the context) and a little working space. In our reading, Dolphin Llama 3 8B (a 4.66 GB download) took <strong>5.66 GB</strong> of memory with an 8,192-token conversation. The calculator allows 20% of the model, up to 3 GB, plus 0.25 GB, which comes to 5.84 GB for that model. Longer conversations need more.</p>
+<p>Then there's how much of the memory the model can use. Macs share one pool of memory between the processor and the graphics chip, which is why they're good at this. But macOS keeps part of it back: on our 64 GB M1 Max, it let the graphics chip use <strong>51.8 GB (81%)</strong> by default. Macs with less memory may get a smaller share.</p>
+<p>So the calculator says:</p>
+<ul>
+<li><strong>Runs well:</strong> the model needs no more than 65% of your memory, leaving the rest for macOS and your apps.</li>
+<li><strong>Fits, tightly:</strong> it needs up to 81%. It loads, but close other apps first, or your Mac will start to swap and everything slows down.</li>
+<li><strong>Won't fit:</strong> more than that. Ollama can still run part of it on the processor instead, but it's many times slower.</li>
+</ul>
+<h2>How fast will it run?</h2>
+<p>Every new word (a token, about three-quarters of a word) means reading the working part of the model from memory once. So speed depends on the chip's <strong>memory bandwidth</strong>, which Apple publishes for each chip: 120 GB/s for M4, 273 GB/s for M4 Pro, up to 546 GB/s for M4 Max, and 1.2 TB/s for M5 Ultra.</p>
+<p>In our readings, on an M1 Max (400 GB/s):</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Download</th>
+<th>In memory</th>
+<th>Writing speed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dolphin Llama 3 8B (Q4_0)</td>
+<td>4.66 GB</td>
+<td>5.66 GB, with an 8,192-token conversation</td>
+<td>39.5 tokens/s</td>
+</tr>
+<tr>
+<td>Qwen2.5 0.5B (Q8_0)</td>
+<td>0.40 GB</td>
+<td>0.93 GB, with a 32,768-token conversation</td>
+<td>218 tokens/s</td>
+</tr>
+</tbody>
+</table>
+<p>The 8B model reached 46% of the theoretical limit (400 GB/s ÷ 4.66 GB), so the calculator's speeds are 46% of each chip's limit. Treat them as estimates: very small models are held back by other work, and long conversations slow every model down. Reading speed is about 5 tokens a second, so anything above 20 feels quick.</p>
+<p>Mixture-of-experts models, such as gpt-oss and Qwen3 30B A3B, are a special case. All of the model has to fit in memory, but only a small part of it works on each word, so they write much faster than their size suggests.</p>
+<h2>Every model, and the Mac it needs</h2>
+<p>Sizes are Ollama's default download of each model (usually 4-bit, Q4_K_M), checked on October 15, 2026. LM Studio's versions of the same models can be a little bigger or smaller.</p>
 <!-- models:table -->
-| Model | Download | Memory it needs | Runs well on | Fits, tightly, on | At 8-bit, runs well on | At 16-bit, runs well on |
-| --- | --- | --- | --- | --- | --- | --- |
-| Gemma 3 1B | 0.8 GB, 4-bit | 1.2 GB | 8 GB | 8 GB | 8 GB | 8 GB |
-| DeepSeek-R1 1.5B | 1.1 GB, 4-bit | 1.6 GB | 8 GB | 8 GB | 8 GB | 8 GB |
-| Llama 3.2 1B | 1.3 GB, 8-bit | 1.8 GB | 8 GB | 8 GB | 8 GB | 8 GB |
-| Qwen 3.5 0.8B | 1.3 GB, 8-bit | 1.8 GB | 8 GB | 8 GB | 8 GB | 8 GB |
-| Llama 3.2 3B | 2.0 GB, 4-bit | 2.7 GB | 8 GB | 8 GB | 8 GB | 16 GB |
-| Phi-4 mini 3.8B | 2.5 GB, 4-bit | 3.2 GB | 8 GB | 8 GB | 8 GB | 16 GB |
-| Qwen3 4B | 2.5 GB, 4-bit | 3.2 GB | 8 GB | 8 GB | 8 GB | 16 GB |
-| Qwen 3.5 2B | 2.7 GB, 8-bit | 3.5 GB | 8 GB | 8 GB | 8 GB | 8 GB |
-| Qwen 3.5 4B | 3.3 GB, 4-bit | 4.2 GB | 8 GB | 8 GB | 16 GB | 16 GB |
-| Gemma 3 4B | 3.4 GB, 4-bit | 4.3 GB | 8 GB | 8 GB | 8 GB | 16 GB |
-| Mistral 7B | 4.4 GB, 4-bit | 5.5 GB | 8 GB | 8 GB | 16 GB | 32 GB |
-| Gemma 4 E2B | 4.6 GB, 4-bit | 5.8 GB | 16 GB | 8 GB | 16 GB | 18 GB |
-| DeepSeek-R1 7B | 4.7 GB, 4-bit | 5.9 GB | 16 GB | 8 GB | 16 GB | 32 GB |
-| Llama 3.1 8B | 4.9 GB, 4-bit | 6.2 GB | 16 GB | 8 GB | 16 GB | 32 GB |
-| DeepSeek-R1 8B | 5.2 GB, 4-bit | 6.5 GB | 16 GB | 8 GB | 16 GB | 32 GB |
-| Qwen3 8B | 5.2 GB, 4-bit | 6.5 GB | 16 GB | 8 GB | 16 GB | 32 GB |
-| Qwen 3.5 9B | 6.6 GB, 4-bit | 8.1 GB | 16 GB | 16 GB | 18 GB | 32 GB |
-| Gemma 4 E4B | 6.6 GB, 4-bit | 8.2 GB | 16 GB | 16 GB | 16 GB | 32 GB |
-| Gemma 4 12B | 8.0 GB, 4-bit | 9.9 GB | 16 GB | 16 GB | 24 GB | 48 GB |
-| Gemma 3 12B | 8.2 GB, 4-bit | 10.0 GB | 16 GB | 16 GB | 24 GB | 48 GB |
-| DeepSeek-R1 14B | 9.0 GB, 4-bit | 11.0 GB | 16 GB | 16 GB | 32 GB | 48 GB |
-| Phi-4 14B | 9.1 GB, 4-bit | 11.1 GB | 16 GB | 16 GB | 32 GB | 48 GB |
-| Qwen3 14B | 9.3 GB, 4-bit | 11.4 GB | 18 GB | 16 GB | 32 GB | 48 GB |
-| gpt-oss 20B (mixture of experts, 3.6B active) | 13.8 GB, 4-bit | 16.8 GB | 32 GB | 24 GB | 48 GB | 96 GB |
-| Devstral 24B | 14.3 GB, 4-bit | 17.5 GB | 32 GB | 24 GB | 48 GB | 96 GB |
-| Mistral Small 3.2 24B | 15.2 GB, 4-bit | 18.4 GB | 32 GB | 24 GB | 48 GB | 96 GB |
-| Gemma 3 27B | 17.4 GB, 4-bit | 20.7 GB | 32 GB | 24 GB | 48 GB | 96 GB |
-| Qwen 3.5 27B | 17.5 GB, 4-bit | 20.7 GB | 32 GB | 24 GB | 48 GB | 96 GB |
-| Qwen 3.8 27B | 17.7 GB, 4-bit | 21.0 GB | 32 GB | 32 GB | 48 GB | 96 GB |
-| Qwen 3.6 27B | 17.8 GB, 4-bit | 21.0 GB | 32 GB | 32 GB | 48 GB | 96 GB |
-| Qwen3 30B A3B (mixture of experts, 3B active) | 18.6 GB, 4-bit | 21.8 GB | 32 GB | 32 GB | 64 GB | 96 GB |
-| Qwen3-Coder 30B A3B (mixture of experts, 3.3B active) | 18.6 GB, 4-bit | 21.8 GB | 32 GB | 32 GB | 64 GB | 96 GB |
-| Gemma 4 26B A4B (mixture of experts, 4B active) | 18.7 GB, 4-bit | 22.0 GB | 32 GB | 32 GB | 48 GB | 96 GB |
-| DeepSeek-R1 32B | 19.9 GB, 4-bit | 23.1 GB | 36 GB | 32 GB | 64 GB | 128 GB |
-| Qwen3 32B | 20.2 GB, 4-bit | 23.5 GB | 36 GB | 32 GB | 64 GB | 128 GB |
-| Gemma 4 31B | 20.4 GB, 4-bit | 23.6 GB | 36 GB | 32 GB | 64 GB | 96 GB |
-| Qwen 3.5 35B A3B (mixture of experts, 3B active) | 22.1 GB, 4-bit | 25.3 GB | 48 GB | 32 GB | 64 GB | 128 GB |
-| Qwen 3.6 35B A3B (mixture of experts, 3B active) | 22.6 GB, 4-bit | 25.9 GB | 48 GB | 32 GB | 64 GB | 128 GB |
-| DeepSeek-R1 70B | 42.5 GB, 4-bit | 45.8 GB | 96 GB | 64 GB | 128 GB | 256 GB |
-| Llama 3.3 70B | 42.5 GB, 4-bit | 45.8 GB | 96 GB | 64 GB | 128 GB | 256 GB |
-| gpt-oss 120B (mixture of experts, 5.1B active) | 65.4 GB, 4-bit | 68.6 GB | 128 GB | 96 GB | 192 GB | 512 GB |
-| Llama 4 Scout (mixture of experts, 17B active) | 67.4 GB, 4-bit | 70.7 GB | 128 GB | 96 GB | 192 GB | 512 GB |
-| Qwen 3.5 122B A10B (mixture of experts, 10B active) | 81.4 GB, 4-bit | 84.6 GB | 128 GB | 128 GB | 256 GB | 512 GB |
-| Qwen3 235B A22B (mixture of experts, 22B active) | 142.2 GB, 4-bit | 145.4 GB | 256 GB | 192 GB | 512 GB | more than 512 GB |
-| Llama 3.1 405B | 243.1 GB, 4-bit | 246.3 GB | 512 GB | 512 GB | more than 512 GB | more than 512 GB |
-| Qwen3-Coder 480B A35B (mixture of experts, 35B active) | 290.1 GB, 4-bit | 293.3 GB | 512 GB | 512 GB | more than 512 GB | more than 512 GB |
-| DeepSeek-V3 671B (mixture of experts, 37B active) | 404.4 GB, 4-bit | 407.7 GB | more than 512 GB | 512 GB | more than 512 GB | more than 512 GB |
-| DeepSeek-R1 671B (mixture of experts, 37B active) | 404.4 GB, 4-bit | 407.7 GB | more than 512 GB | 512 GB | more than 512 GB | more than 512 GB |
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Download</th>
+<th>Memory it needs</th>
+<th>Runs well on</th>
+<th>Fits, tightly, on</th>
+<th>At 8-bit, runs well on</th>
+<th>At 16-bit, runs well on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gemma 3 1B</td>
+<td>0.8 GB, 4-bit</td>
+<td>1.2 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>DeepSeek-R1 1.5B</td>
+<td>1.1 GB, 4-bit</td>
+<td>1.6 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>Llama 3.2 1B</td>
+<td>1.3 GB, 8-bit</td>
+<td>1.8 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.5 0.8B</td>
+<td>1.3 GB, 8-bit</td>
+<td>1.8 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>Llama 3.2 3B</td>
+<td>2.0 GB, 4-bit</td>
+<td>2.7 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>16 GB</td>
+</tr>
+<tr>
+<td>Phi-4 mini 3.8B</td>
+<td>2.5 GB, 4-bit</td>
+<td>3.2 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>16 GB</td>
+</tr>
+<tr>
+<td>Qwen3 4B</td>
+<td>2.5 GB, 4-bit</td>
+<td>3.2 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>16 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.5 2B</td>
+<td>2.7 GB, 8-bit</td>
+<td>3.5 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.5 4B</td>
+<td>3.3 GB, 4-bit</td>
+<td>4.2 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>16 GB</td>
+<td>16 GB</td>
+</tr>
+<tr>
+<td>Gemma 3 4B</td>
+<td>3.4 GB, 4-bit</td>
+<td>4.3 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>16 GB</td>
+</tr>
+<tr>
+<td>Mistral 7B</td>
+<td>4.4 GB, 4-bit</td>
+<td>5.5 GB</td>
+<td>8 GB</td>
+<td>8 GB</td>
+<td>16 GB</td>
+<td>32 GB</td>
+</tr>
+<tr>
+<td>Gemma 4 E2B</td>
+<td>4.6 GB, 4-bit</td>
+<td>5.8 GB</td>
+<td>16 GB</td>
+<td>8 GB</td>
+<td>16 GB</td>
+<td>18 GB</td>
+</tr>
+<tr>
+<td>DeepSeek-R1 7B</td>
+<td>4.7 GB, 4-bit</td>
+<td>5.9 GB</td>
+<td>16 GB</td>
+<td>8 GB</td>
+<td>16 GB</td>
+<td>32 GB</td>
+</tr>
+<tr>
+<td>Llama 3.1 8B</td>
+<td>4.9 GB, 4-bit</td>
+<td>6.2 GB</td>
+<td>16 GB</td>
+<td>8 GB</td>
+<td>16 GB</td>
+<td>32 GB</td>
+</tr>
+<tr>
+<td>DeepSeek-R1 8B</td>
+<td>5.2 GB, 4-bit</td>
+<td>6.5 GB</td>
+<td>16 GB</td>
+<td>8 GB</td>
+<td>16 GB</td>
+<td>32 GB</td>
+</tr>
+<tr>
+<td>Qwen3 8B</td>
+<td>5.2 GB, 4-bit</td>
+<td>6.5 GB</td>
+<td>16 GB</td>
+<td>8 GB</td>
+<td>16 GB</td>
+<td>32 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.5 9B</td>
+<td>6.6 GB, 4-bit</td>
+<td>8.1 GB</td>
+<td>16 GB</td>
+<td>16 GB</td>
+<td>18 GB</td>
+<td>32 GB</td>
+</tr>
+<tr>
+<td>Gemma 4 E4B</td>
+<td>6.6 GB, 4-bit</td>
+<td>8.2 GB</td>
+<td>16 GB</td>
+<td>16 GB</td>
+<td>16 GB</td>
+<td>32 GB</td>
+</tr>
+<tr>
+<td>Gemma 4 12B</td>
+<td>8.0 GB, 4-bit</td>
+<td>9.9 GB</td>
+<td>16 GB</td>
+<td>16 GB</td>
+<td>24 GB</td>
+<td>48 GB</td>
+</tr>
+<tr>
+<td>Gemma 3 12B</td>
+<td>8.2 GB, 4-bit</td>
+<td>10.0 GB</td>
+<td>16 GB</td>
+<td>16 GB</td>
+<td>24 GB</td>
+<td>48 GB</td>
+</tr>
+<tr>
+<td>DeepSeek-R1 14B</td>
+<td>9.0 GB, 4-bit</td>
+<td>11.0 GB</td>
+<td>16 GB</td>
+<td>16 GB</td>
+<td>32 GB</td>
+<td>48 GB</td>
+</tr>
+<tr>
+<td>Phi-4 14B</td>
+<td>9.1 GB, 4-bit</td>
+<td>11.1 GB</td>
+<td>16 GB</td>
+<td>16 GB</td>
+<td>32 GB</td>
+<td>48 GB</td>
+</tr>
+<tr>
+<td>Qwen3 14B</td>
+<td>9.3 GB, 4-bit</td>
+<td>11.4 GB</td>
+<td>18 GB</td>
+<td>16 GB</td>
+<td>32 GB</td>
+<td>48 GB</td>
+</tr>
+<tr>
+<td>gpt-oss 20B (mixture of experts, 3.6B active)</td>
+<td>13.8 GB, 4-bit</td>
+<td>16.8 GB</td>
+<td>32 GB</td>
+<td>24 GB</td>
+<td>48 GB</td>
+<td>96 GB</td>
+</tr>
+<tr>
+<td>Devstral 24B</td>
+<td>14.3 GB, 4-bit</td>
+<td>17.5 GB</td>
+<td>32 GB</td>
+<td>24 GB</td>
+<td>48 GB</td>
+<td>96 GB</td>
+</tr>
+<tr>
+<td>Mistral Small 3.2 24B</td>
+<td>15.2 GB, 4-bit</td>
+<td>18.4 GB</td>
+<td>32 GB</td>
+<td>24 GB</td>
+<td>48 GB</td>
+<td>96 GB</td>
+</tr>
+<tr>
+<td>Gemma 3 27B</td>
+<td>17.4 GB, 4-bit</td>
+<td>20.7 GB</td>
+<td>32 GB</td>
+<td>24 GB</td>
+<td>48 GB</td>
+<td>96 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.5 27B</td>
+<td>17.5 GB, 4-bit</td>
+<td>20.7 GB</td>
+<td>32 GB</td>
+<td>24 GB</td>
+<td>48 GB</td>
+<td>96 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.8 27B</td>
+<td>17.7 GB, 4-bit</td>
+<td>21.0 GB</td>
+<td>32 GB</td>
+<td>32 GB</td>
+<td>48 GB</td>
+<td>96 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.6 27B</td>
+<td>17.8 GB, 4-bit</td>
+<td>21.0 GB</td>
+<td>32 GB</td>
+<td>32 GB</td>
+<td>48 GB</td>
+<td>96 GB</td>
+</tr>
+<tr>
+<td>Qwen3 30B A3B (mixture of experts, 3B active)</td>
+<td>18.6 GB, 4-bit</td>
+<td>21.8 GB</td>
+<td>32 GB</td>
+<td>32 GB</td>
+<td>64 GB</td>
+<td>96 GB</td>
+</tr>
+<tr>
+<td>Qwen3-Coder 30B A3B (mixture of experts, 3.3B active)</td>
+<td>18.6 GB, 4-bit</td>
+<td>21.8 GB</td>
+<td>32 GB</td>
+<td>32 GB</td>
+<td>64 GB</td>
+<td>96 GB</td>
+</tr>
+<tr>
+<td>Gemma 4 26B A4B (mixture of experts, 4B active)</td>
+<td>18.7 GB, 4-bit</td>
+<td>22.0 GB</td>
+<td>32 GB</td>
+<td>32 GB</td>
+<td>48 GB</td>
+<td>96 GB</td>
+</tr>
+<tr>
+<td>DeepSeek-R1 32B</td>
+<td>19.9 GB, 4-bit</td>
+<td>23.1 GB</td>
+<td>36 GB</td>
+<td>32 GB</td>
+<td>64 GB</td>
+<td>128 GB</td>
+</tr>
+<tr>
+<td>Qwen3 32B</td>
+<td>20.2 GB, 4-bit</td>
+<td>23.5 GB</td>
+<td>36 GB</td>
+<td>32 GB</td>
+<td>64 GB</td>
+<td>128 GB</td>
+</tr>
+<tr>
+<td>Gemma 4 31B</td>
+<td>20.4 GB, 4-bit</td>
+<td>23.6 GB</td>
+<td>36 GB</td>
+<td>32 GB</td>
+<td>64 GB</td>
+<td>96 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.5 35B A3B (mixture of experts, 3B active)</td>
+<td>22.1 GB, 4-bit</td>
+<td>25.3 GB</td>
+<td>48 GB</td>
+<td>32 GB</td>
+<td>64 GB</td>
+<td>128 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.6 35B A3B (mixture of experts, 3B active)</td>
+<td>22.6 GB, 4-bit</td>
+<td>25.9 GB</td>
+<td>48 GB</td>
+<td>32 GB</td>
+<td>64 GB</td>
+<td>128 GB</td>
+</tr>
+<tr>
+<td>DeepSeek-R1 70B</td>
+<td>42.5 GB, 4-bit</td>
+<td>45.8 GB</td>
+<td>96 GB</td>
+<td>64 GB</td>
+<td>128 GB</td>
+<td>256 GB</td>
+</tr>
+<tr>
+<td>Llama 3.3 70B</td>
+<td>42.5 GB, 4-bit</td>
+<td>45.8 GB</td>
+<td>96 GB</td>
+<td>64 GB</td>
+<td>128 GB</td>
+<td>256 GB</td>
+</tr>
+<tr>
+<td>gpt-oss 120B (mixture of experts, 5.1B active)</td>
+<td>65.4 GB, 4-bit</td>
+<td>68.6 GB</td>
+<td>128 GB</td>
+<td>96 GB</td>
+<td>192 GB</td>
+<td>512 GB</td>
+</tr>
+<tr>
+<td>Llama 4 Scout (mixture of experts, 17B active)</td>
+<td>67.4 GB, 4-bit</td>
+<td>70.7 GB</td>
+<td>128 GB</td>
+<td>96 GB</td>
+<td>192 GB</td>
+<td>512 GB</td>
+</tr>
+<tr>
+<td>Qwen 3.5 122B A10B (mixture of experts, 10B active)</td>
+<td>81.4 GB, 4-bit</td>
+<td>84.6 GB</td>
+<td>128 GB</td>
+<td>128 GB</td>
+<td>256 GB</td>
+<td>512 GB</td>
+</tr>
+<tr>
+<td>Qwen3 235B A22B (mixture of experts, 22B active)</td>
+<td>142.2 GB, 4-bit</td>
+<td>145.4 GB</td>
+<td>256 GB</td>
+<td>192 GB</td>
+<td>512 GB</td>
+<td>more than 512 GB</td>
+</tr>
+<tr>
+<td>Llama 3.1 405B</td>
+<td>243.1 GB, 4-bit</td>
+<td>246.3 GB</td>
+<td>512 GB</td>
+<td>512 GB</td>
+<td>more than 512 GB</td>
+<td>more than 512 GB</td>
+</tr>
+<tr>
+<td>Qwen3-Coder 480B A35B (mixture of experts, 35B active)</td>
+<td>290.1 GB, 4-bit</td>
+<td>293.3 GB</td>
+<td>512 GB</td>
+<td>512 GB</td>
+<td>more than 512 GB</td>
+<td>more than 512 GB</td>
+</tr>
+<tr>
+<td>DeepSeek-V3 671B (mixture of experts, 37B active)</td>
+<td>404.4 GB, 4-bit</td>
+<td>407.7 GB</td>
+<td>more than 512 GB</td>
+<td>512 GB</td>
+<td>more than 512 GB</td>
+<td>more than 512 GB</td>
+</tr>
+<tr>
+<td>DeepSeek-R1 671B (mixture of experts, 37B active)</td>
+<td>404.4 GB, 4-bit</td>
+<td>407.7 GB</td>
+<td>more than 512 GB</td>
+<td>512 GB</td>
+<td>more than 512 GB</td>
+<td>more than 512 GB</td>
+</tr>
+</tbody>
+</table>
 <!-- /models:table -->
-
-## Questions
-
-### How much RAM do I need to run a local LLM?
-
-About the model's download size, plus up to 20% for the conversation. As a rule of thumb, an 8 GB Mac runs models up to about 7B parameters, 16 GB up to 14B, 32 GB up to about 30B, and 64 GB runs 70B models, tightly. The calculator above checks 48 popular models against your Mac's memory.
-
-### What LLM can I run on my Mac?
-
-It depends on your Mac's memory. With 8 GB: Llama 3.2 3B, Gemma 3 4B, Qwen 3.5 4B or Mistral 7B. With 16 GB: Qwen 3.5 9B, Gemma 4 12B, Phi-4 14B or DeepSeek-R1 14B. With 32 GB: gpt-oss 20B, Gemma 3 27B, Qwen 3.6 27B or Qwen3 30B A3B. With 64 GB: Llama 3.3 70B or DeepSeek-R1 70B, tightly. With 128 GB: gpt-oss 120B or Qwen 3.5 122B A10B.
-
-### 4-bit vs 8-bit vs 16-bit: which should I use?
-
-The number is how many bits each of the model's parameters is stored in. 16-bit is the full-size model: 2 bytes per parameter, so a 70B model needs about 140 GB. 8-bit is about half that and very close to full quality. 4-bit (Q4), the usual download in Ollama and LM Studio, is about a third of the full size, for a small loss in quality. Use the best one that runs well on your Mac: the list under the calculator shows it for each model.
-
-### Can a Mac mini run LLMs?
-
-Yes. A Mac mini uses the same unified memory as every Apple silicon Mac, so what it can run depends only on its memory and chip: with 16 GB, models up to about 14B parameters; with 64 GB, 70B models fit, tightly. Pick its memory and chip in the calculator above.
-
-### How much RAM do I need for Llama 3.3 70B?
-
-Llama 3.3 70B is a 42.5 GB download in Ollama and needs about 45.8 GB of memory. It fits, tightly, on a 64 GB Mac and runs well on 96 GB or more. On an M1 Max it would write about 4 tokens a second, by our estimate.
-
-### Is 8 GB of RAM enough to run an LLM?
-
-For small models, yes. An 8 GB Mac runs models such as Llama 3.2 3B, Gemma 3 4B and Mistral 7B well, and fits most other 7B and 8B models, such as Llama 3.1 8B, tightly: close other apps first.
-
-### Why does my Mac get slow when a model is loaded?
-
-A loaded model holds its memory even when you're not using it. If it takes most of your Mac's memory, macOS starts compressing memory and swapping to disk, and every app slows down. Quit or unload the model when you're done. [Bondi](https://trybondi.app/) shows each loaded model in Ollama or LM Studio with the memory it holds, and can unload it.
-
-### Does this page check my Mac?
-
-No. Websites can't see how much memory a Mac has, so you choose it. Everything is worked out in your browser, and nothing is sent anywhere.</div><p class="plain-copy">Also as <a href="/can-my-mac-run-it/can-my-mac-run-it.md">plain text</a>, for AI assistants and readers.</p><aside class="cta"><img src="/assets/icon-blue.png" alt="" width="56" height="56"><div><p class="cta-title">Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence.</p><p>It runs on your Mac, groups every process into the apps you know, and keeps 30 days of history. Nothing leaves your Mac.</p><p><a class="pillbtn primary" href="/beta/">Join the beta</a> <a class="pillbtn secondary" href="/">See how it works</a></p></div></aside></article>
+<h2>Questions</h2>
+<h3>How much RAM do I need to run a local LLM?</h3>
+<p>About the model's download size, plus up to 20% for the conversation. As a rule of thumb, an 8 GB Mac runs models up to about 7B parameters, 16 GB up to 14B, 32 GB up to about 30B, and 64 GB runs 70B models, tightly. The calculator above checks 48 popular models against your Mac's memory.</p>
+<h3>What LLM can I run on my Mac?</h3>
+<p>It depends on your Mac's memory. With 8 GB: Llama 3.2 3B, Gemma 3 4B, Qwen 3.5 4B or Mistral 7B. With 16 GB: Qwen 3.5 9B, Gemma 4 12B, Phi-4 14B or DeepSeek-R1 14B. With 32 GB: gpt-oss 20B, Gemma 3 27B, Qwen 3.6 27B or Qwen3 30B A3B. With 64 GB: Llama 3.3 70B or DeepSeek-R1 70B, tightly. With 128 GB: gpt-oss 120B or Qwen 3.5 122B A10B.</p>
+<h3>4-bit vs 8-bit vs 16-bit: which should I use?</h3>
+<p>The number is how many bits each of the model's parameters is stored in. 16-bit is the full-size model: 2 bytes per parameter, so a 70B model needs about 140 GB. 8-bit is about half that and very close to full quality. 4-bit (Q4), the usual download in Ollama and LM Studio, is about a third of the full size, for a small loss in quality. Use the best one that runs well on your Mac: the list under the calculator shows it for each model.</p>
+<h3>Can a Mac mini run LLMs?</h3>
+<p>Yes. A Mac mini uses the same unified memory as every Apple silicon Mac, so what it can run depends only on its memory and chip: with 16 GB, models up to about 14B parameters; with 64 GB, 70B models fit, tightly. Pick its memory and chip in the calculator above.</p>
+<h3>How much RAM do I need for Llama 3.3 70B?</h3>
+<p>Llama 3.3 70B is a 42.5 GB download in Ollama and needs about 45.8 GB of memory. It fits, tightly, on a 64 GB Mac and runs well on 96 GB or more. On an M1 Max it would write about 4 tokens a second, by our estimate.</p>
+<h3>Is 8 GB of RAM enough to run an LLM?</h3>
+<p>For small models, yes. An 8 GB Mac runs models such as Llama 3.2 3B, Gemma 3 4B and Mistral 7B well, and fits most other 7B and 8B models, such as Llama 3.1 8B, tightly: close other apps first.</p>
+<h3>Why does my Mac get slow when a model is loaded?</h3>
+<p>A loaded model holds its memory even when you're not using it. If it takes most of your Mac's memory, macOS starts compressing memory and swapping to disk, and every app slows down. Quit or unload the model when you're done. <a href="https://trybondi.app/">Bondi</a> shows each loaded model in Ollama or LM Studio with the memory it holds, and can unload it.</p>
+<h3>Does this page check my Mac?</h3>
+<p>No. Websites can't see how much memory a Mac has, so you choose it. Everything is worked out in your browser, and nothing is sent anywhere.</p></div><p class="plain-copy">Also as <a href="/can-my-mac-run-it/can-my-mac-run-it.md">plain text</a>, for AI assistants and readers.</p><aside class="cta"><img src="/assets/icon-blue.png" alt="" width="56" height="56"><div><p class="cta-title">Bondi is a native macOS system monitor with on-device AI. It tells you why your Mac is slow, in one plain sentence.</p><p>It runs on your Mac, groups every process into the apps you know, and keeps 30 days of history. Nothing leaves your Mac.</p><p><a class="pillbtn primary" href="/beta/">Join the beta</a> <a class="pillbtn secondary" href="/">See how it works</a></p></div></aside></article>
 </main>
 <footer>
   <div class="foot-line"><span>© 2026 Jabble Super Intelligence Inc.</span><span class="made"><span>Made with <span class="heart" role="img" aria-label="love">♥</span> by <a href="https://x.com/khalilnoaman" target="_blank" rel="me noopener">Noaman Khalil</a></span></span><a href="/blog/">Blog</a><a href="/can-my-mac-run-it/">Can my Mac run it?</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/your-data/">Your data</a><a href="mailto:support@trybondi.app">support@trybondi.app</a></div>
