@@ -211,3 +211,18 @@ button.pillbtn.primary { background: var(--bondi); } button.pillbtn.secondary:ho
 .wide-side { position: sticky; top: 84px; padding-top: 34px; }
 .post-wide .wide-body .prose > * { max-width: none; }
 @media (max-width: 1000px) { .wide-body { grid-template-columns: minmax(0, 1fr); } .wide-side { display: none; } }
+/* Blog cards: every article is one card (picture, topic and title together), and it lifts a little under the pointer */
+.blog-grid { gap: 28px; }
+.blog-grid li { display: flex; }
+.grid-card { flex: 1; display: flex; flex-direction: column; border-radius: 14px; overflow: hidden; background: var(--tile); box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.35); }
+.grid-img, .grid-img.is-thumb { border-radius: 0; border: 0; }
+.grid-card .card-label { margin: 16px 20px 6px; }
+.grid-title { margin: 0 20px 22px; }
+.feature-card, .grid-card { transition: transform .22s ease, box-shadow .22s ease; }
+.feature-card:hover, .grid-card:hover, .feature-card:focus-visible, .grid-card:focus-visible { transform: translateY(-4px); box-shadow: 0 22px 44px -20px rgba(0, 0, 0, 0.45); }
+.feature-card:focus-visible .feature-title, .grid-card:focus-visible .grid-title { color: var(--bondi-ink); }
+.feature-card:active, .grid-card:active { transform: translateY(-1px); }
+@media (prefers-reduced-motion: reduce) { .feature-card, .grid-card { transition: none; } .feature-card:hover, .grid-card:hover, .feature-card:focus-visible, .grid-card:focus-visible, .feature-card:active, .grid-card:active { transform: none; } }
+/* A faint outline so each card's edge shows in dark mode too; it takes a touch of Bondi Blue under the pointer */
+.grid-card, .feature-card { box-shadow: 0 0 0 1px color-mix(in srgb, var(--line) 75%, transparent), 0 10px 30px -18px rgba(0, 0, 0, 0.35); }
+.feature-card:hover, .grid-card:hover, .feature-card:focus-visible, .grid-card:focus-visible { box-shadow: 0 0 0 1px color-mix(in srgb, var(--bondi) 45%, var(--line)), 0 22px 44px -20px rgba(0, 0, 0, 0.45); }
