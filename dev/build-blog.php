@@ -61,6 +61,76 @@ function breadcrumb_ld(array $trail): array
         'item' => str_starts_with($c[1], 'http') ? $c[1] : SITE . $c[1]], array_keys($trail), $trail)];
 }
 
+
+// The blog home: one featured article and three picks to start with (owner's choice; change freely)
+const FEATURED = 'why-is-my-mac-slow';
+const START_HERE = ['windowserver-high-cpu', 'which-app-is-using-my-mac-memory', 'mac-fans-loud'];
+// Short names for the topic bar under the header (TOPICS keys), each opening /blog/topic/<key>/
+const TOPIC_SHORT = ['slow' => 'Slow Mac', 'memory' => 'Memory', 'heat' => 'Heat and fans', 'processes' => 'Processes', 'tools' => 'Mac tools', 'bondi' => 'Bondi'];
+
+/** The topic bar under the header, on the blog, its topics, its articles and the guide. $here: a TOPICS key, 'blog' or 'guide'. */
+function subnav(string $here, array $topicsWithPosts): string
+{
+    $h = fn(string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+    $link = fn(string $key, string $href, string $name) => '<a href="' . $h($href) . '"' . ($key === $here ? ' aria-current="page"' : '') . '>' . $h($name) . '</a>';
+    $out = $link('blog', '/blog/', 'Blog');
+    foreach (TOPIC_SHORT as $key => $name) {
+        if (in_array($key, $topicsWithPosts, true)) { $out .= $link($key, "/blog/topic/$key/", $name); }
+    }
+    if (HAS_GUIDE) { $out .= $link('guide', '/guide/', 'Mac guide'); }
+    return '<nav class="subnav" aria-label="Blog topics"><div class="subnav-inner">' . $out . '</div></nav>';
+}
+
+/** Share buttons: the phone's own share sheet where there is one, plus plain links to each network (nothing loads from them). */
+function share_row(string $url, string $title, string $where): string
+{
+    $h = fn(string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+    static $logos = [];
+    $logo = function (string $name) use (&$logos): string {
+        if (!isset($logos[$name])) {
+            $svg = (string)file_get_contents(__DIR__ . "/share-logos/$name.svg");
+            $logos[$name] = preg_replace(['~<title>.*?</title>~', '~<svg[^>]*>~'], ['', '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor">'], $svg);
+        }
+        return $logos[$name];
+    };
+    $u = rawurlencode($url); $t = rawurlencode($title);
+    $links = [
+        ['X', "https://x.com/intent/post?text=$t&url=$u", $logo('x')],
+        ['LinkedIn', "https://www.linkedin.com/sharing/share-offsite/?url=$u", $logo('linkedin')],
+        ['Reddit', "https://www.reddit.com/submit?url=$u&title=$t", $logo('reddit')],
+        ['Facebook', "https://www.facebook.com/sharer/sharer.php?u=$u", $logo('facebook')],
+        ['WhatsApp', 'https://wa.me/?text=' . rawurlencode("$title $url"), $logo('whatsapp')],
+    ];
+    $out = '<div class="share share-' . $h($where) . '" data-share data-url="' . $h($url) . '" data-title="' . $h($title) . '"><span class="share-label">Share</span>'
+         . '<button type="button" class="share-native" data-share-native hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M6 11H5v10h14V11h-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Share</button>';
+    foreach ($links as [$name, $href, $svg]) {
+        $out .= '<a class="share-btn" href="' . $h($href) . '" target="_blank" rel="noopener noreferrer" aria-label="Share on ' . $name . ' (opens in a new tab)" title="' . $name . '">' . $svg . '</a>';
+    }
+    $out .= '<a class="share-btn" href="mailto:?subject=' . $t . '&amp;body=' . $u . '" aria-label="Share by email" title="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a>'
+          . '<button type="button" class="share-btn" data-share-copy aria-label="Copy link" title="Copy link"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>'
+          . '<span class="share-done" data-share-done role="status"></span></div>';
+    return $out;
+}
+
+/** The article's sections: ids on its ## headings, the contents list, and a short Bondi box before the third section. */
+function sections(string $html): array
+{
+    $toc = []; $n = 0;
+    $html = preg_replace_callback('~<h2>(.*?)</h2>~s', function ($m) use (&$toc, &$n) {
+        $id = trim(preg_replace('~[^a-z0-9]+~', '-', strtolower(html_entity_decode(strip_tags($m[1])))), '-') ?: 'section-' . ($n + 1);
+        $toc[] = [$id, strip_tags($m[1])]; $n++;
+        return '<h2 id="' . $id . '">' . $m[1] . '</h2>';
+    }, $html);
+    $box = '<aside class="mid-cta"><img src="/assets/icon-blue.png" alt="" width="40" height="40"><p><b>Don\'t want to check all this by hand?</b> Bondi keeps an eye on your Mac and tells you what\'s slowing it down, in one plain sentence.</p><a class="pillbtn primary small" href="/beta/">Join the beta</a></aside>';
+    $count = 0;
+    $html = preg_replace_callback('~<h2 id=~', function ($m) use (&$count, $box) { return ++$count === 3 ? $box . $m[0] : $m[0]; }, $html);
+    $list = '';
+    foreach ($toc as [$id, $text]) { $list .= '<li><a href="#' . $id . '">' . htmlspecialchars(html_entity_decode($text), ENT_QUOTES, 'UTF-8') . '</a></li>'; }
+    $side = $toc ? '<nav class="toc" aria-label="On this page"><p class="toc-title">On this page</p><ol>' . $list . '</ol></nav>' : '';
+    $inline = $toc ? '<details class="toc-inline"><summary>On this page</summary><ol>' . $list . '</ol></details>' : '';
+    return [$html, $side, $inline];
+}
+
 /** Articles grouped by topic, in TOPICS order, each group in its "order:" order. */
 function by_topic(array $posts): array
 {
@@ -108,6 +178,10 @@ foreach (glob("$root/content/blog/*.md") as $file) {
         'updated' => $meta['updated'] ?? $meta['date'],
         'related' => array_values(array_filter(array_map('trim', explode(',', $meta['related'] ?? '')))),
     ]);
+}
+// Each article's thumbnail (dev/blog-thumbs.mjs), when it has one: on cards and as its link preview
+foreach ($posts as $slug => $post) {
+    $posts[$slug]['thumb'] = is_file("$root/public_html/assets/blog/$slug.jpg") ? "/assets/blog/$slug.jpg" : '';
 }
 $live = array_filter($posts, fn($p) => $p['status'] === 'published');
 define('HAS_GUIDE', $preview !== null || (bool)array_filter(glob("$root/content/guide/*.md") ?: [],
@@ -177,12 +251,13 @@ function page(string $title, string $description, string $canonical, string $bod
 <meta name="twitter:creator" content="@khalilnoaman">
 $extraHead
 <script src="/assets/theme.js"></script>
+<script src="/assets/share.js" defer></script>
 <link rel="stylesheet" href="/assets/blog.css">
 </head>
 <body>
 <header class="nav"><div class="nav-inner">
   <a class="brand" href="/"><img src="/assets/icon-blue.png" alt="" width="26" height="26">Bondi</a>
-  <nav class="links" aria-label="Site"><a href="/blog/">Blog</a>{$guideLink}<a href="/">What's Bondi?</a></nav>
+  <nav class="links" aria-label="Site"><a href="/blog/">Blog</a>{$guideLink}<a class="calc-link" href="/can-my-mac-run-it/">LLM calculator</a><a href="/">What's Bondi?</a></nav>
   <div class="nav-right">$toggle<a class="pillbtn primary small" href="/beta/">Join the beta</a></div>
 </div></header>
 <main>
@@ -201,17 +276,18 @@ HTML;
 $parsedown = new Parsedown();
 $written = [];
 $out = $preview ?? "$root/public_html";
+$topicKeys = array_keys(by_topic($shown));
 
 foreach ($shown as $slug => $post) {
     $url = SITE . "/blog/$slug/";
     $html = $parsedown->text($post['markdown']);
     $html = str_replace('<img ', '<img loading="lazy" ', $html);
     $html = preg_replace('~<a href="(https?://(?!trybondi\.app)[^"]+)"~', '<a href="$1" target="_blank" rel="noopener"', $html);
-    $image = $post['image'] ?? '';
+    $image = $post['thumb'] ?: ($post['image'] ?? '');
     $related = '';
     foreach ($post['related'] as $other) {
         if (isset($shown[$other])) {
-            $related .= '<li><a href="/blog/' . $h($other) . '/">' . $h($shown[$other]['title']) . '</a><span>' . $h($shown[$other]['description']) . '</span></li>';
+            $related .= '<li><a class="card" href="/blog/' . $h($other) . '/"><span class="card-date">' . $h(TOPICS[$shown[$other]['topic'] ?? 'more'][0] ?? '') . ' · ' . $shown[$other]['minutes'] . ' min read</span><span class="card-title">' . $h($shown[$other]['title']) . '</span><span class="card-desc">' . $h($shown[$other]['description']) . '</span></a></li>';
         }
     }
     $ld = [
@@ -248,30 +324,40 @@ foreach ($shown as $slug => $post) {
     $answerBox = ($post['answer'] ?? '') !== ''
         ? '<aside class="quick-answer" aria-label="Quick answer"><p class="qa-label">Quick answer</p><p>' . $parsedown->line($post['answer']) . '</p></aside>' : '';
     $topic = isset(TOPICS[$post['topic'] ?? '']) && ($post['topic'] ?? '') !== 'more' ? $post['topic'] : null;
-    $trail = crumbs(array_merge([['Bondi', '/'], ['Blog', '/blog/']], $topic ? [[TOPICS[$topic][0], '/blog/#' . $topic]] : []));
+    $trail = crumbs(array_merge([['Bondi', '/'], ['Blog', '/blog/']], $topic ? [[TOPICS[$topic][0], '/blog/topic/' . $topic . '/']] : []));
     $draft = $post['status'] !== 'published' ? '<p class="draft-flag">Draft, for review: not on trybondi.app yet.</p>' : '';
+    [$html, $tocSide, $tocInline] = sections($html);
+    $shareTop = share_row($url, $post['title'], 'top');
+    $shareEnd = share_row($url, $post['title'], 'end');
+    $subnav = subnav($topic ?? 'blog', $topicKeys);
     $body = <<<HTML
+$subnav
+<div class="post-grid">
+<aside class="toc-side">$tocSide</aside>
 <article class="post">
   $trail
   $draft
   <h1>{$h($post['title'])}</h1>
   <p class="byline">By <a href="{$h(AUTHOR_URL)}" target="_blank" rel="me noopener">Noaman Khalil</a>, maker of Bondi · <time datetime="{$h($post['date'])}">{$h(nice_date($post['date']))}</time>$updated · {$post['minutes']} min read</p>
+  $shareTop
   $answerBox
+  $tocInline
   <div class="prose">
 $html
   </div>
+  $shareEnd
   <p class="plain-copy">Also as <a href="/blog/{$h($slug)}.md">plain text</a>, for AI assistants and readers.</p>
   <aside class="cta">
     <img src="/assets/icon-blue.png" alt="" width="56" height="56">
     <div><p class="cta-title">{$h(PITCH)}</p>
-    <p>It runs on your Mac, groups every process into the apps you know, and keeps 30 days of history. Nothing leaves your Mac.</p>
+    <p>If you'd rather not dig through Activity Monitor every time something feels off, Bondi does the checking for you. It runs on your Mac, and nothing leaves it.</p>
     <p><a class="pillbtn primary" href="/beta/">Join the beta</a> <a class="pillbtn secondary" href="/">See how it works</a></p></div>
   </aside>
 HTML;
     if ($related !== '') {
-        $body .= "\n  <section class=\"related\" aria-labelledby=\"related-title\"><h2 id=\"related-title\">Keep reading</h2><ul>$related</ul></section>";
+        $body .= "\n  <section class=\"related\" aria-labelledby=\"related-title\"><h2 id=\"related-title\">Keep reading</h2><ul class=\"cards related-cards\">$related</ul></section>";
     }
-    $body .= "\n</article>";
+    $body .= "\n</article>\n</div>";
     $file = "$out/blog/$slug/index.html";
     @mkdir(dirname($file), 0755, true);
     file_put_contents($file, page($post['title'] . ' · Bondi blog', $post['description'], $url, $body, $head, $askRow));
@@ -279,31 +365,84 @@ HTML;
     $written[] = $file;
 }
 
-// The index of articles, grouped by topic
+// The blog home: the featured article, three to start with, and every article, newest first; then a page per topic
 if ($shown) {
-    $groups = '';
-    foreach (by_topic($shown) as $key => $group) {
-        $cards = '';
-        foreach ($group as $slug => $post) {
-            $cards .= '<li><a class="card" href="/blog/' . $h($slug) . '/"><span class="card-date">' . $h(nice_date($post['date'])) . ' · ' . $post['minutes'] . ' min read</span>'
-                    . '<span class="card-title">' . $h($post['title']) . '</span><span class="card-desc">' . $h($post['description']) . '</span></a></li>';
+    $topicOf = fn(array $post) => isset(TOPICS[$post['topic'] ?? '']) && ($post['topic'] ?? '') !== 'more' ? $post['topic'] : null;
+    $label = function (array $post) use ($h, $topicOf) {
+        $t = $topicOf($post);
+        return $t ? '<a class="topic-label" href="/blog/topic/' . $t . '/">' . $h(TOPIC_SHORT[$t] ?? TOPICS[$t][0]) . '</a>' : '';
+    };
+    // An article's picture for cards: its image on Bondi's dark ground, or the icon and topic when it has none
+    $thumb = function (array $post, string $class) use ($h, $topicOf) {
+        if ($post['thumb'] !== '') {
+            $dark = str_replace('.jpg', '-dark.jpg', $post['thumb']);
+            return '<span class="' . $class . ' is-thumb" aria-hidden="true"><img class="thumb-light" src="' . $h($post['thumb']) . '" alt="" loading="lazy" width="1200" height="630">'
+                 . '<img class="thumb-dark" src="' . $h($dark) . '" alt="" loading="lazy" width="1200" height="630"></span>';
         }
-        [$name, $intro] = TOPICS[$key];
-        $groups .= '<section class="topic" id="' . $h($key) . '" aria-labelledby="topic-' . $h($key) . '"><h2 id="topic-' . $h($key) . '">' . $h($name) . '</h2>'
-                 . ($intro !== '' ? '<p class="topic-intro">' . $h($intro) . '</p>' : '') . '<ul class="cards">' . $cards . '</ul></section>';
+        $img = $post['image'] ?? '';
+        $inner = $img !== '' ? '<img src="' . $h($img) . '" alt="" loading="lazy">'
+            : '<span class="thumb-none"><img src="/assets/icon-blue.png" alt="" width="44" height="44"><span>' . $h(TOPIC_SHORT[$topicOf($post) ?? ''] ?? 'Bondi blog') . '</span></span>';
+        return '<span class="' . $class . '" aria-hidden="true">' . $inner . '</span>';
+    };
+    $labelText = fn(array $post) => $h(TOPIC_SHORT[$topicOf($post) ?? ''] ?? 'Bondi');
+    $feature = '';
+    if (isset($shown[FEATURED])) {
+        $f = $shown[FEATURED];
+        $feature = '<a class="feature-card" href="/blog/' . FEATURED . '/">' . $thumb($f, 'feature-img') . '<span class="feature-text"><span class="card-label">' . $labelText($f) . '</span>'
+                 . '<span class="feature-title">' . $h($f['title']) . '</span></span></a>';
     }
+    $picks = '';
+    foreach (START_HERE as $slug) {
+        if (isset($shown[$slug])) {
+            $picks .= '<li><a href="/blog/' . $h($slug) . '/"><span class="pick-label">' . $labelText($shown[$slug]) . '</span><span class="pick-title">' . $h($shown[$slug]['title']) . '</span></a></li>';
+        }
+    }
+    $grid = ''; $n = 0;
+    foreach ($shown as $slug => $post) {
+        if ($slug === FEATURED) { continue; }
+        $grid .= '<li' . (++$n > 9 ? ' data-more' : '') . '><a class="grid-card" href="/blog/' . $h($slug) . '/">' . $thumb($post, 'grid-img') . '<span class="card-label">' . $labelText($post) . '</span>'
+               . '<span class="grid-title">' . $h($post['title']) . '</span></a></li>';
+    }
+    $more = $n > 9 ? '<p class="read-more"><button type="button" class="pillbtn secondary" id="blog-more">Read more</button></p>'
+          . '<script>(() => { const b = document.getElementById("blog-more"), rest = document.querySelectorAll(".blog-grid [data-more]");'
+          . ' rest.forEach(li => li.hidden = true); b.addEventListener("click", () => { rest.forEach(li => li.hidden = false); b.parentElement.remove(); }); })();</script>' : '';
     $ld = ['@context' => 'https://schema.org', '@graph' => [
         ['@type' => 'Blog', 'name' => 'Bondi blog', 'url' => SITE . '/blog/', 'publisher' => ['@type' => 'Organization', 'name' => 'Jabble Super Intelligence Inc.']],
         breadcrumb_ld([['Bondi', '/'], ['Blog', '/blog/']])]];
     $head = '<meta property="og:type" content="website"><meta property="og:title" content="Bondi blog"><meta property="og:image" content="' . SITE . '/assets/og-image.jpg">'
           . "\n<script type=\"application/ld+json\">" . json_encode($ld, JSON_UNESCAPED_SLASHES) . '</script>';
-    $body = '<section class="blog-head">' . crumbs([['Bondi', '/'], ['Blog', '/blog/']]) . '<p class="eyebrow">Bondi blog</p><h1>Why your Mac does what it does.</h1>'
-          . '<p class="lede">Plain answers about Mac performance, from real readings of a real Mac, by the maker of Bondi.</p></section>'
-          . $groups;
+    $spark = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.1 6.2 6.4 2.3-6.4 2.3L12 19.5l-2.1-6.2L3.5 11l6.4-2.3z" fill="currentColor"/><path d="M19 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z" fill="currentColor"/></svg>';
+    $body = subnav('blog', $topicKeys) . '<div class="blog-home"><h1 class="blog-h1">Bondi Blog: let\'s figure out what your Mac is up to</h1>'
+          . '<div class="blog-top">' . $feature
+          . ($picks !== '' ? '<section class="picks" aria-labelledby="picks-title"><h2 id="picks-title">' . $spark . 'Good places to start</h2><ul>' . $picks . '</ul></section>' : '') . '</div>'
+          . '<section aria-label="Every article"><ul class="blog-grid">' . $grid . '</ul>' . $more . '</section></div>';
     file_put_contents("$out/blog/index.html", page('Bondi blog: why your Mac is slow, and what to do about it',
         'Plain answers about Mac performance: slowdowns, memory pressure, loud fans, kernel_task, WindowServer and Spotlight, from real readings of a real Mac.',
         SITE . '/blog/', $body, $head, $askRow));
     $written[] = "$out/blog/index.html";
+
+    // A page per topic: /blog/topic/<key>/
+    foreach (by_topic($shown) as $key => $group) {
+        if ($key === 'more') { continue; }
+        [$name, $intro] = TOPICS[$key];
+        $cards = '';
+        foreach ($group as $slug => $post) {
+            $cards .= '<li><a class="card" href="/blog/' . $h($slug) . '/"><span class="card-date">' . $h(nice_date($post['updated'])) . ' · ' . $post['minutes'] . ' min read</span>'
+                    . '<span class="card-title">' . $h($post['title']) . '</span><span class="card-desc">' . $h($post['description']) . '</span></a></li>';
+        }
+        $turl = SITE . "/blog/topic/$key/";
+        $tld = ['@context' => 'https://schema.org', '@graph' => [
+            ['@type' => 'CollectionPage', 'name' => $name, 'description' => $intro, 'url' => $turl, 'isPartOf' => ['@type' => 'Blog', 'name' => 'Bondi blog', 'url' => SITE . '/blog/']],
+            breadcrumb_ld([['Bondi', '/'], ['Blog', '/blog/'], [$name, "/blog/topic/$key/"]])]];
+        $thead = '<meta property="og:type" content="website"><meta property="og:title" content="' . $h($name) . ' · Bondi blog"><meta property="og:image" content="' . SITE . '/assets/og-image.jpg">'
+               . "\n<script type=\"application/ld+json\">" . json_encode($tld, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>';
+        $tbody = subnav($key, $topicKeys) . '<section class="blog-head">' . crumbs([['Bondi', '/'], ['Blog', '/blog/'], [$name, "/blog/topic/$key/"]])
+               . '<p class="eyebrow">Bondi blog</p><h1>' . $h($name) . '</h1>' . ($intro !== '' ? '<p class="lede">' . $h($intro) . '</p>' : '') . '</section>'
+               . '<section class="topic"><ul class="cards">' . $cards . '</ul></section>';
+        @mkdir("$out/blog/topic/$key", 0755, true);
+        file_put_contents("$out/blog/topic/$key/index.html", page($name . ' · Bondi blog', $intro !== '' ? $intro : $name, $turl, $tbody, $thead, $askRow));
+        $written[] = "$out/blog/topic/$key/index.html";
+    }
 }
 
 // MARK: Pages: content/pages/<slug>.md (the comparison page) at /<slug>/, with the blog's look but no byline
@@ -400,11 +539,11 @@ foreach ($guideShown as $slug => $g) {
     $related = '';
     foreach ($g['related'] as $other) {
         if (isset($guideShown[$other])) {
-            $related .= '<li><a href="/guide/' . $h($other) . '/">' . $h($guideShown[$other]['name']) . '</a><span>' . $h($guideShown[$other]['description']) . '</span></li>';
+            $related .= '<li><a class="card" href="/guide/' . $h($other) . '/"><span class="card-date">Mac guide</span><span class="card-title">' . $h($guideShown[$other]['name']) . '</span><span class="card-desc">' . $h($guideShown[$other]['description']) . '</span></a></li>';
         }
     }
     if (($g['article'] ?? '') !== '' && isset($shown[$g['article']])) {
-        $related .= '<li><a href="/blog/' . $h($g['article']) . '/">' . $h($shown[$g['article']]['title']) . '</a><span>' . $h($shown[$g['article']]['description']) . '</span></li>';
+        $related .= '<li><a class="card" href="/blog/' . $h($g['article']) . '/"><span class="card-date">Blog · ' . $shown[$g['article']]['minutes'] . ' min read</span><span class="card-title">' . $h($shown[$g['article']]['title']) . '</span><span class="card-desc">' . $h($shown[$g['article']]['description']) . '</span></a></li>';
     }
     $ld = ['@context' => 'https://schema.org', '@graph' => [
         array_filter(['@type' => 'WebPage', 'name' => $g['title'], 'description' => $g['description'], 'url' => $url,
@@ -426,17 +565,19 @@ foreach ($guideShown as $slug => $g) {
           . "\n<script type=\"application/ld+json\">\n" . json_encode($ld, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . "\n</script>";
     $answerBox = $answer !== '' ? '<aside class="quick-answer" aria-label="Quick answer"><p class="qa-label">Quick answer</p><p>' . $parsedown->line($answer) . '</p></aside>' : '';
     $draft = $g['status'] !== 'published' ? '<p class="draft-flag">Draft, for review: not on trybondi.app yet.</p>' : '';
-    $body = '<article class="post">' . crumbs([['Bondi', '/'], ['Guide', '/guide/'], [$groupName, '/guide/#' . $g['group']]]) . $draft
+    [$html, $tocSide, $tocInline] = sections($html);
+    $body = subnav('guide', $topicKeys) . '<div class="post-grid"><aside class="toc-side">' . $tocSide . '</aside>'
+          . '<article class="post">' . crumbs([['Bondi', '/'], ['Guide', '/guide/'], [$groupName, '/guide/']]) . $draft
           . '<h1>' . $h($g['title']) . '</h1>'
           . '<p class="byline">Bondi\'s Mac guide · Reviewed by <a href="' . $h(AUTHOR_URL) . '" target="_blank" rel="me noopener">' . AUTHOR . '</a>'
           . ($reviewed ? ' · <time datetime="' . $h($reviewed) . '">' . $h(nice_date($reviewed)) . '</time>' : '') . '</p>'
-          . $answerBox . '<div class="prose">' . $html . '</div>'
+          . share_row($url, $g['title'], 'top') . $answerBox . $tocInline . '<div class="prose">' . $html . '</div>' . share_row($url, $g['title'], 'end')
           . '<p class="plain-copy">Also as <a href="/guide/' . $h($slug) . '.md">plain text</a>, for AI assistants and readers.</p>'
           . '<aside class="cta"><img src="/assets/icon-blue.png" alt="" width="56" height="56"><div><p class="cta-title">' . $h(PITCH) . '</p>'
-          . '<p>Its process guide explains 125 macOS processes like this one, with what each is using on your Mac right now.</p>'
+          . '<p>Bondi explains 125 macOS processes like this one, and shows what each is using on your Mac right now, so you don\'t have to look them up.</p>'
           . '<p><a class="pillbtn primary" href="/beta/">Join the beta</a> <a class="pillbtn secondary" href="/">See how it works</a></p></div></aside>'
-          . ($related !== '' ? '<section class="related" aria-labelledby="related-title"><h2 id="related-title">Related</h2><ul>' . $related . '</ul></section>' : '')
-          . '</article>';
+          . ($related !== '' ? '<section class="related" aria-labelledby="related-title"><h2 id="related-title">Related</h2><ul class="cards related-cards">' . $related . '</ul></section>' : '')
+          . '</article></div>';
     @mkdir("$out/guide/$slug", 0755, true);
     file_put_contents("$out/guide/$slug/index.html", page($g['title'] . ' · Bondi guide', $g['description'], $url, $body, $head, $askRow));
     $md = preg_replace('~\]\(/~', '](' . SITE . '/', $g['markdown']);
@@ -444,23 +585,24 @@ foreach ($guideShown as $slug => $g) {
         . "From Bondi's Mac guide, reviewed by " . AUTHOR . ($reviewed ? ' on ' . nice_date($reviewed) : '') . ". Web page: $url\n\n" . trim($md) . "\n\n---\n" . PITCH . ' ' . SITE . "/\n");
 }
 if ($guideShown) {
-    $sections = '';
-    foreach (GUIDE_GROUPS as $key => [$name, $intro]) {
-        $items = array_filter($guideShown, fn($g) => $g['group'] === $key);
-        if (!$items) { continue; }
-        $cards = '';
-        foreach ($items as $slug => $g) {
-            $cards .= '<li><a class="card" href="/guide/' . $h($slug) . '/"><span class="card-title">' . $h($g['name']) . '</span><span class="card-desc">' . $h($g['description']) . '</span></a></li>';
-        }
-        $sections .= '<section class="topic" id="' . $h($key) . '" aria-labelledby="topic-' . $h($key) . '"><h2 id="topic-' . $h($key) . '">' . $h($name) . '</h2><p class="topic-intro">' . $h($intro) . '</p><ul class="cards">' . $cards . '</ul></section>';
+    $items = '';
+    $sorted = $guideShown;
+    uasort($sorted, fn($x, $y) => strcasecmp(ltrim($x['name'], '_'), ltrim($y['name'], '_')));
+    foreach ($sorted as $slug => $g) {
+        $items .= '<li data-q="' . $h(strtolower($g['name'] . ' ' . $g['description'])) . '"><a href="/guide/' . $h($slug) . '/"><b>' . $h($g['name']) . '</b><span>' . $h($g['description']) . '</span></a></li>';
     }
+    $sections = '<section class="az" aria-label="Every process in the guide"><label class="az-search"><span class="vh">Find a process</span>'
+              . '<input type="search" id="guide-find" placeholder="Find a process, for example WindowServer" autocomplete="off" spellcheck="false"></label>'
+              . '<ul class="az-list" id="guide-list">' . $items . '</ul><p class="az-none" id="guide-none" hidden>No process by that name in the guide yet. Bondi itself explains 125.</p></section>'
+              . '<script>(() => { const f = document.getElementById("guide-find"), items = [...document.querySelectorAll("#guide-list li")], none = document.getElementById("guide-none");'
+              . ' f.addEventListener("input", () => { const q = f.value.trim().toLowerCase(); let n = 0; items.forEach(li => { const on = !q || li.dataset.q.includes(q); li.hidden = !on; n += on; }); none.hidden = n > 0; }); })();</script>';
     $ld = ['@context' => 'https://schema.org', '@graph' => [
         ['@type' => 'DefinedTermSet', 'name' => "Bondi's Mac guide", 'url' => SITE . '/guide/', 'hasDefinedTerm' => array_values(array_map(fn($g) => ['@type' => 'DefinedTerm', 'name' => $g['name'], 'url' => SITE . "/guide/{$g['slug']}/"], $guideShown))],
         breadcrumb_ld([['Bondi', '/'], ['Guide', '/guide/']])]];
     $head = '<meta property="og:type" content="website"><meta property="og:title" content="Bondi\'s Mac guide"><meta property="og:image" content="' . SITE . '/assets/og-image.jpg">'
           . "\n<script type=\"application/ld+json\">" . json_encode($ld, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>';
-    $body = '<section class="blog-head">' . crumbs([['Bondi', '/'], ['Guide', '/guide/']]) . '<p class="eyebrow">Bondi\'s Mac guide</p><h1>What is this process?</h1>'
-          . '<p class="lede">The processes you see in Activity Monitor, in plain words: what each one does, why it gets busy, and whether you can quit it. From the notes in Bondi\'s process guide, with real readings of a real Mac.</p></section>' . $sections;
+    $body = subnav('guide', $topicKeys) . '<section class="blog-head">' . crumbs([['Bondi', '/'], ['Guide', '/guide/']]) . '<p class="eyebrow">Bondi\'s Mac guide</p><h1>What is this process?</h1>'
+          . '<p class="lede">Spotted a name in Activity Monitor you don\'t recognise? Look it up here: what it does, why it gets busy, and whether you can quit it. Checked against real readings of a real Mac.</p></section>' . $sections;
     @mkdir("$out/guide", 0755, true);
     file_put_contents("$out/guide/index.html", page("Bondi's Mac guide: what is this process on my Mac?",
         'What the processes in Activity Monitor are, in plain words: what each does, why it gets busy, and whether you can quit it. With real readings of a real Mac.',
@@ -491,6 +633,11 @@ if ($live) {
 $sitemapEntries = $live ? '  <url><loc>' . SITE . '/blog/</loc><lastmod>' . max(array_column($live, 'updated')) . "</lastmod></url>\n" : '';
 foreach ($live as $slug => $post) {
     $sitemapEntries .= '  <url><loc>' . SITE . "/blog/$slug/</loc><lastmod>{$post['updated']}</lastmod></url>\n";
+}
+foreach (by_topic($live) as $key => $group) {
+    if ($key !== 'more') {
+        $sitemapEntries .= '  <url><loc>' . SITE . "/blog/topic/$key/</loc><lastmod>" . max(array_column($group, 'updated')) . "</lastmod></url>\n";
+    }
 }
 $guideEntries = $guideLive ? '  <url><loc>' . SITE . '/guide/</loc><lastmod>' . max(array_map(fn($g) => $g['reviewed'] ?? '2026-10-10', $guideLive)) . "</lastmod></url>\n" : '';
 foreach ($guideLive as $slug => $g) {
