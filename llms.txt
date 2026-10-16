@@ -63,6 +63,8 @@ Checked against each app's own website (apple.com, bjango.com, github.com/exelba
 
 
 
+
+
 <!-- blog -->
 ## Guides: Why is my Mac slow?
 - [Why is my Mac so slow? How to find the real cause](https://trybondi.app/blog/why-is-my-mac-slow.md): Mac running slow? It usually comes down to one of a handful of causes. Here's how to tell which one it is, with real readings from a real MacBook Pro.
@@ -111,5 +113,6 @@ Checked against each app's own website (apple.com, bjango.com, github.com/exelba
 - [What is syspolicyd on Mac?](https://trybondi.app/guide/syspolicyd.md): syspolicyd is Gatekeeper: it checks apps the first time you open them. Why syspolicyd uses CPU on your Mac, and why it's busy for developers.
 - [What is SystemUIServer on Mac?](https://trybondi.app/guide/systemuiserver.md): SystemUIServer runs some of the menu bar's icons on your Mac. Why it's rarely busy, and how to restart it when menu bar icons stop responding.
 - [What is trustd on Mac?](https://trybondi.app/guide/trustd.md): trustd checks the security certificates of the websites and servers your apps connect to. Why trustd uses CPU on a Mac, and why several copies are normal.
+- [What is WindowServer on Mac?](https://trybondi.app/guide/windowserver.md): WindowServer is the part of macOS that draws everything on your screens. What it does, why it uses CPU and memory, why it can crash or keep your Mac awake, and whether you can quit it.
 - [What is XProtect (XprotectService) on Mac?](https://trybondi.app/guide/xprotectservice.md): XProtect is Apple's built-in malware protection on every Mac. What XprotectService does, why it uses CPU, and why you should leave it running.
 <!-- /guide -->
