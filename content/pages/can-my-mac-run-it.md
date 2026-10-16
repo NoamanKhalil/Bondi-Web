@@ -9,208 +9,157 @@ updated: 2026-10-15
 ---
 <!-- web -->
 <style>
-/* A pocket calculator: the same graphite body and keys in light and dark, like a real object; the model list prints on a paper tape */
-.calc-wrap { margin: 30px 0 34px; display: grid; justify-items: center; }
-.calc { --good: #30d158; --warn: #ff9f0a; --bad: #ff453a; --glow: #5fd4ea; width: 100%; max-width: 720px; padding: 22px 22px 24px; border-radius: 34px; color: #f5f5f7;
-  background: linear-gradient(160deg, #3a3a3e 0%, #232326 55%, #1b1b1d 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.16), inset 0 -2px 0 rgba(0,0,0,.4), 0 2px 0 #0e0e0f, 0 30px 60px -24px rgba(0,0,0,.55);
-  display: grid; gap: 18px; position: relative; z-index: 1; font-family: var(--sans); }
-.calc-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 4px; }
-.calc .calc-brand { margin: 0; display: flex; align-items: center; gap: 8px; font: 700 .78rem/1 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: #a9a9ae; }
-.calc .calc-brand img { display: block; margin: 0; width: 20px; height: 20px; border-radius: 5px; box-shadow: none; }
-.calc .calc-brand span { color: #6f6f75; font-weight: 600; }
-.calc-solar { display: flex; gap: 2px; padding: 3px; border-radius: 6px; background: #121214; box-shadow: inset 0 1px 2px rgba(0,0,0,.8), 0 1px 0 rgba(255,255,255,.08); }
-.calc-solar i { width: 18px; height: 12px; border-radius: 2px; background: linear-gradient(180deg, #3b2f26, #241c16); }
-.calc-screen { position: relative; border-radius: 18px; padding: 16px 20px 16px 22px; min-height: 148px; background: radial-gradient(120% 140% at 70% 0%, #0f2a30 0%, #071114 60%); box-shadow: inset 0 2px 10px rgba(0,0,0,.9), 0 1px 0 rgba(255,255,255,.1); display: grid; align-content: space-between; gap: 6px; overflow: hidden; }
-.calc-screen .line { display: flex; justify-content: space-between; gap: 10px; font: 500 .82rem/1.2 var(--mono); letter-spacing: .04em; color: #7fb9c4; text-transform: uppercase; }
-.calc-screen .big { text-align: right; font: 300 clamp(2.6rem, 9vw, 3.6rem)/1 var(--display); letter-spacing: -0.02em; color: var(--glow); text-shadow: 0 0 18px rgba(95,212,234,.45); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.calc-screen .big small { font-size: .42em; font-weight: 500; letter-spacing: 0; margin-left: 8px; color: #9fd9e4; text-shadow: none; }
-.calc-screen .line.bottom { text-transform: none; letter-spacing: 0; font: 500 .9rem/1.35 var(--sans); color: #b9dfe6; justify-content: flex-end; text-align: right; }
-.calc-led { position: absolute; left: 12px; top: 50%; width: 6px; height: 46px; margin-top: -23px; border-radius: 3px; background: var(--led, #2a3a3e); box-shadow: 0 0 12px var(--led, transparent); }
-.calc-body { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 18px; }
-.calc-panel { display: grid; gap: 10px; align-content: start; }
-.calc-panel h3 { margin: 4px 2px 0; font: 700 .68rem/1 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: #8b8b91; }
-.calc-panel .hint { margin: -2px 2px 0; font-size: .74rem; line-height: 1.35; color: #77777d; }
-.keys { display: grid; gap: 8px; }
-.keys.mem { grid-template-columns: repeat(5, minmax(0, 1fr)); } .keys.gen { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-.keys.tier { grid-template-columns: repeat(4, minmax(0, 1fr)); } .keys.cores { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.keys.pad { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.keys[hidden] { display: none; }
-.key { min-width: 0; height: 46px; border: 0; border-radius: 12px; cursor: pointer; font: 600 1rem/1 var(--sans); color: #f5f5f7; letter-spacing: -0.01em;
-  background: linear-gradient(180deg, #4a4a4f, #36363a); box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 4px 0 #161618, 0 6px 10px rgba(0,0,0,.45); transition: transform .06s, box-shadow .06s, background .12s; -webkit-tap-highlight-color: transparent; }
-.key.num { font-size: 1.25rem; font-weight: 500; height: 54px; background: linear-gradient(180deg, #5a5a60, #444449); }
-.key.fn { font-size: .85rem; color: #d7d7dc; }
-.key.clear { color: #ff8a80; }
-.key.eq { grid-column: 1 / -1; height: 52px; font-size: 1.5rem; color: #031418; background: linear-gradient(180deg, #5fd4ea, #2cc0de); box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 4px 0 #157f95, 0 6px 12px rgba(0,0,0,.45); }
-.key[aria-pressed="true"] { color: #031418; background: linear-gradient(180deg, #8fe3f2, #5fd4ea); box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 2px 0 #157f95, 0 3px 6px rgba(0,0,0,.4); transform: translateY(2px); }
-.key:active, .key.is-down { transform: translateY(3px); box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 1px 0 #161618, 0 2px 4px rgba(0,0,0,.4); }
-.key:disabled { opacity: .35; cursor: default; }
-.key:focus-visible { outline: 2px solid #5fd4ea; outline-offset: 2px; }
+/* The calculator, in the site's own card style: memory slider, chip and model, and the estimated speed */
+.calc { --good: #248a3d; --warn: #c76e00; --bad: #d70015; margin: 30px 0 34px; padding: 26px 24px 22px; border-radius: 22px; background: var(--tile); box-shadow: var(--shadow); display: grid; gap: 20px; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .calc { --good: #30d158; --warn: #ff9f0a; --bad: #ff453a; } }
+:root[data-theme="dark"] .calc { --good: #30d158; --warn: #ff9f0a; --bad: #ff453a; }
+.calc-screen { display: grid; gap: 6px; padding: 18px 20px; border-radius: 16px; background: var(--tile-2); }
+.calc-screen .line { display: flex; justify-content: space-between; gap: 10px; font-size: .82rem; font-weight: 600; color: var(--soft); }
+.calc-screen .big { font: 700 clamp(2.4rem, 8vw, 3.4rem)/1.05 var(--display); letter-spacing: -0.035em; color: var(--bondi-ink); font-variant-numeric: tabular-nums; }
+.calc-screen .big small { font-size: .4em; font-weight: 600; letter-spacing: -0.01em; margin-left: 8px; color: var(--soft); }
+.calc-screen .line.bottom { display: flex; align-items: center; justify-content: flex-start; gap: 8px; font-weight: 500; font-size: .95rem; color: var(--ink); }
+.calc-led { flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--led, var(--line)); }
+.calc-controls { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px 18px; }
+.calc-field { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.calc-field.wide { grid-column: 1 / -1; }
+.calc-field > label { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: .85rem; font-weight: 600; color: var(--soft); }
+.calc-field > label b { font-size: 1rem; color: var(--bondi-ink); font-variant-numeric: tabular-nums; }
+.calc select, .calc input[type="number"] { width: 100%; min-width: 0; height: 46px; padding: 0 38px 0 12px; border-radius: 12px; border: 1px solid var(--line); font: 500 1rem/1 var(--sans); color: var(--ink); background-color: var(--tile-2); appearance: none; -webkit-appearance: none; }
+.calc select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%230095b6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+.calc input[type="number"] { padding-right: 12px; }
+.calc select:focus-visible, .calc input:focus-visible { outline: 2px solid var(--bondi); outline-offset: 1px; }
+.calc-range { padding-top: 4px; }
+.calc input[type="range"] { width: 100%; height: 28px; margin: 0; background: transparent; appearance: none; -webkit-appearance: none; cursor: pointer; }
+.calc input[type="range"]::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--bondi) var(--fill, 10%), var(--line) var(--fill, 10%)); }
+.calc input[type="range"]::-moz-range-track { height: 6px; border-radius: 3px; background: var(--line); }
+.calc input[type="range"]::-moz-range-progress { height: 6px; border-radius: 3px; background: var(--bondi); }
+.calc input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; margin-top: -9px; border-radius: 50%; background: #fff; border: 1px solid rgba(0,0,0,.08); box-shadow: 0 2px 6px rgba(0,0,0,.25); }
+.calc input[type="range"]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 1px solid rgba(0,0,0,.08); box-shadow: 0 2px 6px rgba(0,0,0,.25); }
+.calc input[type="range"]:focus-visible { outline: 2px solid var(--bondi); outline-offset: 4px; border-radius: 8px; }
+.calc-ticks { display: flex; justify-content: space-between; margin: 2px 12px 0; font-size: .72rem; color: var(--faint); font-variant-numeric: tabular-nums; }
+.calc-ticks span { width: 0; display: flex; justify-content: center; white-space: nowrap; }
+.calc-custom { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+.calc-custom[hidden] { display: none; }
+.calc .hint { margin: 0; font-size: .8rem; line-height: 1.4; color: var(--faint); }
 .calc-vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-/* The tape */
-.tape { --ink: #2a2a2c; --faint: #8b8a84; --good: #248a3d; --warn: #b06100; --bad: #c4001a; width: calc(100% - 80px); max-width: 600px; margin-top: -14px; padding: 30px 22px 22px; color: var(--ink); background: #fbfaf5;
-  font: 500 .82rem/1.55 var(--mono); box-shadow: 0 14px 30px -18px rgba(0,0,0,.45), 0 0 0 1px rgba(0,0,0,.05);
-  -webkit-mask: linear-gradient(#000, #000) top / 100% calc(100% - 10px) no-repeat, radial-gradient(circle 6px at 8px 100%, transparent 5.5px, #000 6px) bottom / 16px 10px repeat-x;
-  mask: linear-gradient(#000, #000) top / 100% calc(100% - 10px) no-repeat, radial-gradient(circle 6px at 8px 100%, transparent 5.5px, #000 6px) bottom / 16px 10px repeat-x; }
-.calc-wrap .tape p { margin: 0; color: var(--ink); }
-.calc-wrap .tape .head { display: flex; justify-content: space-between; gap: 10px; text-transform: uppercase; letter-spacing: .06em; font-size: .74rem; color: var(--faint); padding-bottom: 8px; border-bottom: 1px dashed #cfcdc4; margin-bottom: 10px; }
-.tape h3 { margin: 14px 0 4px; font: 700 .78rem/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
-.tape h3::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--dot); }
-.tape [data-v="well"] { --dot: var(--good); } .tape [data-v="tight"] { --dot: var(--warn); } .tape [data-v="no"] { --dot: var(--bad); }
-.tape ul { list-style: none; margin: 0; padding: 0; }
-.calc-wrap .tape li { margin: 0; color: var(--ink); display: flex; align-items: baseline; gap: 6px; font-variant-numeric: tabular-nums; }
-.tape li .n { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.tape li .dots { flex: 1 1 12px; border-bottom: 1px dotted #b9b7ae; transform: translateY(-4px); min-width: 12px; }
-.tape li .v { flex: none; white-space: nowrap; color: #55544f; }
-.calc-wrap .tape [data-v="no"] li { color: #77766f; }
-.tape summary { cursor: pointer; list-style: none; } .tape summary::-webkit-details-marker { display: none; }
-.tape summary h3 { display: inline-flex; } .tape summary .more { margin-left: 8px; font-size: .74rem; color: #00708a; text-decoration: underline; }
-.tape details[open] .more { display: none; }
-.calc-wrap .tape .foot { margin-top: 14px; padding-top: 8px; border-top: 1px dashed #cfcdc4; font-size: .72rem; line-height: 1.5; color: var(--faint); }
-.calc-bondi { margin: 22px 0 0; padding: 12px 16px; border-radius: 14px; background: var(--bondi-soft); font-size: .92rem; }
+/* Every model, sorted for this Mac */
+.calc-list { border-top: 1px solid var(--line); padding-top: 14px; font-size: .9rem; }
+.calc .calc-list p { margin: 0; color: var(--faint); font-size: .8rem; }
+.calc-list .head { display: flex; justify-content: space-between; gap: 10px; font-weight: 600; }
+.calc-list h3 { margin: 16px 0 6px; font: 600 .95rem/1.3 var(--sans); letter-spacing: -0.01em; color: var(--ink); display: flex; align-items: center; gap: 8px; }
+.calc-list h3::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--dot); }
+.calc-list [data-v="well"] { --dot: var(--good); } .calc-list [data-v="tight"] { --dot: var(--warn); } .calc-list [data-v="no"] { --dot: var(--bad); }
+.calc-list ul { list-style: none; margin: 0; padding: 0; }
+.calc .calc-list li { margin: 0; padding: 3px 0; display: flex; align-items: baseline; gap: 8px; color: var(--ink); font-variant-numeric: tabular-nums; }
+.calc-list li .n { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.calc-list li .dots { flex: 1 1 12px; min-width: 12px; border-bottom: 1px dotted var(--line); transform: translateY(-4px); }
+.calc-list li .v { flex: none; white-space: nowrap; color: var(--soft); }
+.calc .calc-list [data-v="no"] li { color: var(--soft); }
+.calc-list summary { cursor: pointer; list-style: none; } .calc-list summary::-webkit-details-marker { display: none; }
+.calc-list summary h3 { display: inline-flex; } .calc-list summary .more { margin-left: 8px; font-size: .85rem; font-weight: 600; color: var(--bondi-ink); }
+.calc-list details[open] .more { display: none; }
+.calc .calc-list .foot { margin-top: 14px; }
+.calc-bondi { margin: 0 0 30px; padding: 12px 16px; border-radius: 14px; background: var(--bondi-soft); font-size: .92rem; }
 .calc-bondi a { color: var(--bondi-ink); font-weight: 600; }
-@media (max-width: 640px) {
-  .calc { padding: 16px 14px 18px; border-radius: 28px; gap: 14px; } .calc-body { grid-template-columns: minmax(0, 1fr); }
-  .key { height: 44px; } .key.num { height: 50px; } .tape { width: calc(100% - 24px); padding: 26px 14px 20px; font-size: .76rem; }
-}
-@media (prefers-reduced-motion: reduce) { .key { transition: none; } }
+@media (max-width: 640px) { .calc { padding: 20px 16px 18px; } .calc-controls { grid-template-columns: minmax(0, 1fr); } .calc-ticks span:nth-child(even) { visibility: hidden; } }
 </style>
-<div class="calc-wrap">
 <section class="calc" id="calc" aria-label="LLM RAM calculator">
-<div class="calc-top"><p class="calc-brand"><img src="/assets/icon-blue.png" alt="" width="20" height="20">Bondi <span>LLM RAM calculator</span></p><div class="calc-solar" aria-hidden="true"><i></i><i></i><i></i><i></i></div></div>
-<div class="calc-screen" aria-hidden="true"><i class="calc-led" id="calc-led"></i><div class="line"><span id="calc-l1">16 GB</span><span id="calc-l1r">Q4</span></div><div class="big" id="calc-big">22<small>run well</small></div><div class="line bottom" id="calc-l3"></div></div>
+<div class="calc-screen" aria-hidden="true"><div class="line"><span>Estimated speed</span><span id="calc-l1">16 GB · M4</span></div><div class="big" id="calc-big">–</div><div class="line bottom"><i class="calc-led" id="calc-led"></i><span id="calc-l3"></span></div></div>
 <p class="calc-vh" id="calc-say" aria-live="polite"></p>
-<div class="calc-body">
-<div class="calc-panel">
-<h3 id="calc-mem-h">Your Mac's memory, in GB</h3>
-<div class="keys mem" role="group" aria-labelledby="calc-mem-h"><button type="button" class="key" data-k="ram:8" aria-pressed="false">8</button><button type="button" class="key" data-k="ram:16" aria-pressed="true">16</button><button type="button" class="key" data-k="ram:18" aria-pressed="false">18</button><button type="button" class="key" data-k="ram:24" aria-pressed="false">24</button><button type="button" class="key" data-k="ram:32" aria-pressed="false">32</button><button type="button" class="key" data-k="ram:36" aria-pressed="false">36</button><button type="button" class="key" data-k="ram:48" aria-pressed="false">48</button><button type="button" class="key" data-k="ram:64" aria-pressed="false">64</button><button type="button" class="key" data-k="ram:96" aria-pressed="false">96</button><button type="button" class="key" data-k="ram:128" aria-pressed="false">128</button><button type="button" class="key" data-k="ram:192" aria-pressed="false">192</button><button type="button" class="key" data-k="ram:256" aria-pressed="false">256</button><button type="button" class="key" data-k="ram:512" aria-pressed="false">512</button></div>
-<h3 id="calc-chip-h">Its chip, for speed</h3>
-<div class="keys gen" role="group" aria-labelledby="calc-chip-h"><button type="button" class="key" data-k="gen:M1" aria-pressed="false">M1</button><button type="button" class="key" data-k="gen:M2" aria-pressed="false">M2</button><button type="button" class="key" data-k="gen:M3" aria-pressed="false">M3</button><button type="button" class="key" data-k="gen:M4" aria-pressed="false">M4</button><button type="button" class="key" data-k="gen:M5" aria-pressed="false">M5</button></div>
-<div class="keys tier" role="group" aria-label="Chip kind"><button type="button" class="key" data-k="tier:base" aria-pressed="true" aria-label="Base chip">—</button><button type="button" class="key" data-k="tier:pro" aria-pressed="false">Pro</button><button type="button" class="key" data-k="tier:max" aria-pressed="false">Max</button><button type="button" class="key" data-k="tier:ultra" aria-pressed="false">Ultra</button></div>
-<div class="keys cores" id="calc-cores" role="group" aria-label="GPU cores" hidden><button type="button" class="key" data-k="cores:0" aria-pressed="true"></button><button type="button" class="key" data-k="cores:1" aria-pressed="false"></button></div>
-<p class="hint">Not sure? Open the Apple menu and choose About This Mac: it shows the chip and the memory.</p>
+<div class="calc-controls">
+<div class="calc-field wide"><label for="calc-ram">Your Mac's memory <b id="calc-ram-out">16 GB</b></label>
+<div class="calc-range"><input id="calc-ram" type="range" min="0" max="12" step="1" value="1" aria-valuetext="16 GB"><div class="calc-ticks" aria-hidden="true"><span>8</span><span>16</span><span>18</span><span>24</span><span>32</span><span>36</span><span>48</span><span>64</span><span>96</span><span>128</span><span>192</span><span>256</span><span>512</span></div></div></div>
+<div class="calc-field"><label for="calc-chip">Its chip</label><select id="calc-chip"><option value="">Not sure</option><optgroup label="M1"><option value="68">M1</option><option value="200">M1 Pro</option><option value="400">M1 Max</option><option value="800">M1 Ultra</option></optgroup><optgroup label="M2"><option value="100">M2</option><option value="200">M2 Pro</option><option value="400">M2 Max</option><option value="800">M2 Ultra</option></optgroup><optgroup label="M3"><option value="100">M3</option><option value="150">M3 Pro</option><option value="300">M3 Max, 30-core GPU</option><option value="400">M3 Max, 40-core GPU</option><option value="819">M3 Ultra</option></optgroup><optgroup label="M4"><option value="120" selected>M4</option><option value="273">M4 Pro</option><option value="410">M4 Max, 32-core GPU</option><option value="546">M4 Max, 40-core GPU</option></optgroup><optgroup label="M5"><option value="153">M5</option><option value="307">M5 Pro</option><option value="460">M5 Max, 32-core GPU</option><option value="614">M5 Max, 40-core GPU</option><option value="1200">M5 Ultra</option></optgroup></select>
+<p class="hint">Not sure? Apple menu, then About This Mac: it shows the chip and the memory.</p></div>
+<div class="calc-field"><label for="calc-model">Model</label><select id="calc-model"></select>
+<div class="calc-custom" id="calc-custom" hidden><input id="calc-params" type="number" inputmode="decimal" min="0.1" max="2000" step="any" value="70" aria-label="Model size, in billions of parameters"><select id="calc-quant" aria-label="Quality"><option value="q4">4-bit</option><option value="q8">8-bit</option><option value="f16">16-bit</option></select></div></div>
 </div>
-<div class="calc-panel">
-<h3 id="calc-pad-h">Any model: its size, in billions</h3>
-<div class="keys pad" role="group" aria-labelledby="calc-pad-h"><button type="button" class="key num" data-k="d:7">7</button><button type="button" class="key num" data-k="d:8">8</button><button type="button" class="key num" data-k="d:9">9</button><button type="button" class="key fn" data-k="quant:q4" aria-pressed="true" aria-label="4-bit quality">Q4</button><button type="button" class="key num" data-k="d:4">4</button><button type="button" class="key num" data-k="d:5">5</button><button type="button" class="key num" data-k="d:6">6</button><button type="button" class="key fn" data-k="quant:q8" aria-pressed="false" aria-label="8-bit quality">Q8</button><button type="button" class="key num" data-k="d:1">1</button><button type="button" class="key num" data-k="d:2">2</button><button type="button" class="key num" data-k="d:3">3</button><button type="button" class="key fn" data-k="quant:f16" aria-pressed="false" aria-label="16-bit, full size quality">16-bit</button><button type="button" class="key num" data-k="d:0">0</button><button type="button" class="key num" data-k="d:." aria-label="Decimal point">.</button><button type="button" class="key fn" data-k="back" aria-label="Delete last digit">⌫</button><button type="button" class="key clear" data-k="clear" aria-label="Clear">C</button><button type="button" class="key eq" data-k="eq" aria-label="Equals: check this model">=</button></div>
-<p class="hint">The 70B in "Llama 3.3 70B" means 70 billion. Your keyboard works too.</p>
-</div>
-</div>
+<div class="calc-list" id="calc-tape" aria-label="Every model, sorted for your Mac"></div>
 </section>
-<div class="tape" id="calc-tape" aria-label="Printout: the models, sorted for your Mac"></div>
-</div>
 <!-- models:data --><script type="application/json" id="llm-data">{"checked":"2026-10-15","rules":{"reading":"a 14-inch MacBook Pro (2021) with M1 Max and 64 GB, on macOS 27.0.1 and Ollama 0.35.1, on October 15, 2026","gpuShare":0.81,"well":0.65,"contextShare":0.2,"contextMax":3000000000,"working":250000000,"efficiency":0.46,"bytesPerParam":{"q4":0.61,"q8":1.1,"f16":2},"sizes":[8,16,18,24,32,36,48,64,96,128,192,256,512]},"models":[["Gemma 3 1B",806058400,1,"gemma3:1b"],["DeepSeek-R1 1.5B",1117320512,1,"deepseek-r1:1.5b"],["Llama 3.2 1B",1321082688,1,"llama3.2:1b"],["Qwen 3.5 0.8B",1322057600,1,"qwen3.5:0.8b"],["Llama 3.2 3B",2019377376,1,"llama3.2:3b"],["Phi-4 mini 3.8B",2491874624,1,"phi4-mini:3.8b"],["Qwen3 4B",2497280480,1,"qwen3:4b"],["Qwen 3.5 2B",2683385216,1,"qwen3.5:2b"],["Qwen 3.5 4B",3324162336,1,"qwen3.5:4b"],["Gemma 3 4B",3350263392,1,"gemma3:4b"],["Mistral 7B",4372811712,1,"mistral:7b"],["Gemma 4 E2B",4587144832,1,"gemma4:e2b"],["DeepSeek-R1 7B",4683073184,1,"deepseek-r1:7b"],["Llama 3.1 8B",4920738944,1,"llama3.1:8b"],["DeepSeek-R1 8B",5225373760,1,"deepseek-r1:8b"],["Qwen3 8B",5225374496,1,"qwen3:8b"],["Qwen 3.5 9B",6550813952,1,"qwen3.5:9b"],["Gemma 4 E4B",6583644832,1,"gemma4:e4b"],["Gemma 4 12B",8021608448,1,"gemma4:12b"],["Gemma 3 12B",8164030720,1,"gemma3:12b"],["DeepSeek-R1 14B",8988109952,1,"deepseek-r1:14b"],["Phi-4 14B",9053114464,1,"phi4:14b"],["Qwen3 14B",9276184896,1,"qwen3:14b"],["gpt-oss 20B",13793422816,0.1722488038277512,"gpt-oss:20b"],["Devstral 24B",14333909728,1,"devstral:24b"],["Mistral Small 3.2 24B",15177369888,1,"mistral-small3.2:24b"],["Gemma 3 27B",17413400640,1,"gemma3:27b"],["Qwen 3.5 27B",17478544992,1,"qwen3.5:27b"],["Qwen 3.8 27B",17741860480,1,"qwen3.8:27b"],["Qwen 3.6 27B",17769065248,1,"qwen3.6:27b"],["Qwen3 30B A3B",18556685856,0.09836065573770492,"qwen3:30b-a3b"],["Qwen3-Coder 30B A3B",18556688736,0.10819672131147541,"qwen3-coder:30b"],["Gemma 4 26B A4B",18731013952,0.15873015873015872,"gemma4:26b"],["DeepSeek-R1 32B",19851335552,1,"deepseek-r1:32b"],["Qwen3 32B",20201240160,1,"qwen3:32b"],["Gemma 4 31B",20385446560,1,"gemma4:31b"],["Qwen 3.5 35B A3B",22069580576,0.08645533141210374,"qwen3.5:35b-a3b"],["Qwen 3.6 35B A3B",22621302688,0.08450704225352113,"qwen3.6:35b-a3b"],["DeepSeek-R1 70B",42520395616,1,"deepseek-r1:70b"],["Llama 3.3 70B",42520398528,1,"llama3.3:70b"],["gpt-oss 120B",65369800832,0.04366438356164384,"gpt-oss:120b"],["Llama 4 Scout",67436800960,0.1565377532228361,"llama4:latest"],["Qwen 3.5 122B A10B",81370024480,0.07993605115907275,"qwen3.5:122b-a10b"],["Qwen3 235B A22B",142154073664,0.09357720119098256,"qwen3:235b-a22b"],["Llama 3.1 405B",243069610720,1,"llama3.1:405b"],["Qwen3-Coder 480B A35B",290058824416,0.0728862973760933,"qwen3-coder:480b"],["DeepSeek-V3 671B",404430186016,0.05514157973174367,"deepseek-v3:671b"],["DeepSeek-R1 671B",404430186848,0.05514157973174367,"deepseek-r1:671b"]]}</script><!-- /models:data -->
 <p class="calc-bondi">Running one? <a href="/beta/">Bondi</a> shows each loaded model in Ollama or LM Studio with the memory it really holds, and unloads it when you're done.</p>
 <script>
 (() => {
   const data = JSON.parse(document.getElementById('llm-data').textContent);
-  const R = data.rules, GiB = 1073741824;
+  const R = data.rules, GiB = 1073741824, SIZES = R.sizes;
   const $ = id => document.getElementById(id);
-  const calc = $('calc');
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const need = b => b + Math.min(R.contextShare * b, R.contextMax) + R.working;
   const gb = b => (b / 1e9).toFixed(1) + ' GB';
   const verdict = (n, ram) => n <= R.well * ram ? 'well' : n <= R.gpuShare * ram ? 'tight' : 'no';
-  const smallest = (n, share) => { const s = R.sizes.find(g => n <= share * g * GiB); return s ? s + ' GB' : 'more than 512 GB'; };
+  const smallest = (n, share) => { const s = SIZES.find(g => n <= share * g * GiB); return s ? s + ' GB' : 'more than 512 GB'; };
   // Writing speed: each new word reads the working part of the model from memory once
   const tps = (b, active, bw) => R.efficiency * bw * 1e9 / (b * active);
-  const speed = s => s >= 100 ? '100+ tokens/s' : '~' + (s >= 20 ? Math.round(s / 5) * 5 : Math.max(1, Math.round(s))) + ' tokens/s';
-  const short = s => s >= 100 ? '100+ t/s' : '~' + (s >= 20 ? Math.round(s / 5) * 5 : Math.max(1, Math.round(s))) + ' t/s';
-  // Apple's published memory bandwidth, GB/s; Max comes in two GPU sizes from M3 on
-  const CHIPS = { M1: { base: 68, pro: 200, max: [400], ultra: 800 }, M2: { base: 100, pro: 200, max: [400], ultra: 800 },
-    M3: { base: 100, pro: 150, max: [300, 400], ultra: 819, cores: [30, 40] }, M4: { base: 120, pro: 273, max: [410, 546], cores: [32, 40] },
-    M5: { base: 153, pro: 307, max: [460, 614], ultra: 1200, cores: [32, 40] } };
-  const QUANT = { q4: 'Q4', q8: 'Q8', f16: '16-bit' };
-  const st = { ram: 16, gen: null, tier: 'base', cores: 0, quant: 'q4', entry: '', shown: null };
-  const chip = () => st.gen ? CHIPS[st.gen] : null;
-  const bw = () => { const c = chip(); if (!c) return 0; const v = c[st.tier]; return Array.isArray(v) ? v[Math.min(st.cores, v.length - 1)] : v || 0; };
-  const chipName = () => { const c = chip(); if (!c) return ''; const t = { base: '', pro: ' Pro', max: ' Max', ultra: ' Ultra' }[st.tier];
-    return st.gen + t + (st.tier === 'max' && c.cores ? `, ${c.cores[st.cores]}-core GPU` : ''); };
+  const round = s => s >= 100 ? '100+' : String(s >= 20 ? Math.round(s / 5) * 5 : Math.max(1, Math.round(s)));
   const titles = { well: 'Runs well', tight: 'Fits, tightly: close other apps', no: "Won't fit" };
+  const said = { well: 'runs well', tight: 'fits, tightly', no: "won't fit" };
+  const QUANT = { q4: '4-bit', q8: '8-bit', f16: '16-bit' };
   const checked = new Date(data.checked + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  let picked = null; // the model someone chose; until then, the biggest one that runs well
 
   const render = () => {
-    const ram = st.ram * GiB, b = bw(), name = chipName();
-    // Keys
-    calc.querySelectorAll('[data-k]').forEach(k => {
-      const [kind, val] = k.dataset.k.split(':');
-      const on = { ram: +val === st.ram, gen: val === st.gen, tier: val === st.tier, cores: +val === st.cores, quant: val === st.quant }[kind];
-      if (on !== undefined) k.setAttribute('aria-pressed', String(on));
-    });
-    const c = chip();
-    calc.querySelector('[data-k="tier:ultra"]').disabled = !!c && !c.ultra;
-    $('calc-cores').hidden = !(c && c.cores && st.tier === 'max');
-    if (c && c.cores) c.cores.forEach((n, i) => { calc.querySelector(`[data-k="cores:${i}"]`).textContent = n + '-core GPU'; });
-    // Screen
+    const ramGb = SIZES[+$('calc-ram').value], ram = ramGb * GiB;
+    const sel = $('calc-chip'), bw = +sel.value, chipName = bw ? sel.options[sel.selectedIndex].text : '';
+    $('calc-ram-out').textContent = ramGb + ' GB';
+    $('calc-ram').setAttribute('aria-valuetext', ramGb + ' GB');
+    $('calc-ram').style.setProperty('--fill', (+$('calc-ram').value / (SIZES.length - 1) * 100) + '%');
     const groups = { well: [], tight: [], no: [] };
-    for (const [mName, bytes, active] of data.models) groups[verdict(need(bytes), ram)].push([mName, bytes, active]);
-    groups.well.reverse(); // biggest first: the best a Mac can do is the interesting part
-    $('calc-l1').textContent = `${st.ram} GB` + (name ? ` · ${name}` : ' · chip not set');
-    $('calc-l1r').textContent = st.entry || st.shown !== null ? QUANT[st.quant] : '';
-    let big, l3, led, say;
-    if (st.shown !== null) {
-      const bytes = st.shown * 1e9 * R.bytesPerParam[st.quant], n = need(bytes), v = verdict(n, ram);
-      const said = { well: `Runs well on ${st.ram} GB`, tight: `Fits on ${st.ram} GB, tightly`, no: `Won't fit in ${st.ram} GB` }[v];
-      big = `${(n / 1e9).toFixed(1)}<small>GB needed</small>`;
-      l3 = `${esc(said)}` + (b && v !== 'no' ? ` · ${speed(tps(bytes, 1, b))}` : '') + `<br>Runs well on ${smallest(n, R.well)} · fits on ${smallest(n, R.gpuShare)}`;
-      led = { well: 'var(--good)', tight: 'var(--warn)', no: 'var(--bad)' }[v];
-      say = `A ${st.shown} billion model at ${QUANT[st.quant]} is about ${gb(bytes)} to download and needs ${gb(n)} of memory. ${said}. It runs well on ${smallest(n, R.well)} and fits, tightly, on ${smallest(n, R.gpuShare)}.`;
-    } else if (st.entry) {
-      big = `${esc(st.entry)}<small>B</small>`; l3 = 'Press = to check this model'; led = '#2a3a3e'; say = '';
+    for (const m of data.models) groups[verdict(need(m[1]), ram)].push(m);
+    groups.well.reverse(); groups.tight.reverse(); // biggest first: the best a Mac can do is the interesting part
+    // The model list, grouped by what fits; keeps the choice when the memory changes
+    const auto = groups.well[0] || groups.tight[0] || groups.no[0];
+    const current = picked || auto[0];
+    $('calc-model').innerHTML = Object.entries(groups).filter(([, l]) => l.length).map(([v, l]) =>
+      `<optgroup label="${titles[v]} (${l.length})">` + l.map(m => `<option${m[0] === current ? ' selected' : ''}>${esc(m[0])}</option>`).join('') + '</optgroup>').join('')
+      + `<optgroup label="Another model"><option value="__custom"${current === '__custom' ? ' selected' : ''}>Another size…</option></optgroup>`;
+    $('calc-custom').hidden = current !== '__custom';
+    // The answer for the chosen model
+    let name, bytes, active;
+    if (current === '__custom') {
+      const p = parseFloat($('calc-params').value) || 0;
+      name = `A ${p}B model (${QUANT[$('calc-quant').value]})`; bytes = p * 1e9 * R.bytesPerParam[$('calc-quant').value]; active = 1;
+    } else [name, bytes, active] = data.models.find(m => m[0] === current);
+    const n = need(bytes), v = verdict(n, ram);
+    $('calc-l1').textContent = `${ramGb} GB · ${chipName || 'chip not set'}`;
+    let big, l3, say;
+    if (!bytes) { big = '–'; l3 = 'Type the model\'s size, in billions'; say = ''; }
+    else if (v === 'no') {
+      big = 'Won\'t fit';
+      l3 = `${esc(name)} needs ${gb(n)} · runs well on ${smallest(n, R.well)}`;
+      say = `${name} needs ${gb(n)} of memory, so it won't fit in ${ramGb} GB. It runs well on ${smallest(n, R.well)}.`;
+    } else if (!bw) {
+      big = '–<small>pick a chip</small>';
+      l3 = `${esc(name)} ${said[v]} · needs ${gb(n)} of ${ramGb} GB`;
+      say = `${name} ${said[v]} on ${ramGb} GB: it needs ${gb(n)}. Pick the chip to see how fast it writes.`;
     } else {
-      big = `${groups.well.length}<small>run well</small>`;
-      l3 = `${groups.tight.length} more fit, tightly · ${groups.no.length} won't fit`;
-      led = groups.well.length ? 'var(--good)' : 'var(--bad)';
-      say = `With ${st.ram} GB, ${groups.well.length} of ${data.models.length} popular models run well, ${groups.tight.length} more fit tightly, and ${groups.no.length} won't fit.`;
+      const s = tps(bytes, active, bw);
+      big = `~${round(s)}<small>tokens/s</small>`;
+      l3 = `${esc(name)} ${said[v]} · needs ${gb(n)} of ${ramGb} GB`;
+      say = `${name} ${said[v]} on ${ramGb} GB with ${chipName}, needing ${gb(n)}, and writes about ${round(s)} tokens a second, by our estimate.`;
     }
-    $('calc-big').innerHTML = big; $('calc-l3').innerHTML = l3; $('calc-led').style.setProperty('--led', led);
-    if (say !== undefined && say !== $('calc-say').textContent) $('calc-say').textContent = say;
-    // Tape
+    $('calc-big').innerHTML = big.replace(/^~/, '≈ ').replace('≈ 100+', '100+');
+    $('calc-l3').innerHTML = l3;
+    $('calc-led').style.setProperty('--led', !bytes ? '#2a3a3e' : { well: 'var(--good)', tight: 'var(--warn)', no: 'var(--bad)' }[v]);
+    if (say !== $('calc-say').textContent) $('calc-say').textContent = say;
+    // The tape: every model for this Mac
     const open = !!$('calc-tape').querySelector('details[open]');
-    $('calc-tape').innerHTML = `<p class="head"><span>${st.ram} GB${name ? ' · ' + esc(name) : ''}</span><span>Sizes ${checked}</span></p>`
-      + Object.entries(groups).filter(([, list]) => list.length).map(([v, list]) => {
-        const rows = '<ul>' + list.map(([mName, bytes, active]) => `<li><span class="n">${esc(mName)}</span><span class="dots"></span><span class="v">${gb(bytes)}`
-          + (b && v !== 'no' ? ' · ' + short(tps(bytes, active, b)) : '') + '</span></li>').join('') + '</ul>';
-        const head = `<h3>${titles[v]} (${list.length})</h3>`;
-        return `<div data-v="${v}">` + (v === 'no' ? `<details${open ? ' open' : ''}><summary>${head}<span class="more">Show</span></summary>${rows}</details>` : head + rows) + '</div>';
+    $('calc-tape').innerHTML = `<p class="head"><span>Every model, for this Mac</span><span>Sizes ${checked}</span></p>`
+      + Object.entries(groups).filter(([, l]) => l.length).map(([gv, l]) => {
+        const rows = '<ul>' + l.map(([mName, mBytes, mActive]) => `<li><span class="n">${esc(mName)}</span><span class="dots"></span><span class="v">${gb(mBytes)}`
+          + (bw && gv !== 'no' ? ' · ' + (round(tps(mBytes, mActive, bw)) === '100+' ? '100+' : '~' + round(tps(mBytes, mActive, bw))) + ' t/s' : '') + '</span></li>').join('') + '</ul>';
+        const head = `<h3>${titles[gv]} (${l.length})</h3>`;
+        return `<div data-v="${gv}">` + (gv === 'no' ? `<details${open ? ' open' : ''}><summary>${head}<span class="more">Show</span></summary>${rows}</details>` : head + rows) + '</div>';
       }).join('')
-      + `<p class="foot">${b ? 'Speeds (t/s, tokens a second) are estimates from the chip\'s memory bandwidth, checked against a real reading.' : 'Press a chip key to see how fast each model writes.'} Sizes are Ollama's default downloads.</p>`;
+      + `<p class="foot">${bw ? 'Speeds (t/s, tokens a second) are estimates from the chip\'s memory bandwidth, Apple\'s figure, checked against a real reading.' : 'Pick the chip to see how fast each model writes.'} Sizes are Ollama's default downloads.</p>`;
   };
-
-  const press = key => {
-    const [kind, val] = key.split(':');
-    if (kind === 'ram') st.ram = +val;
-    else if (kind === 'gen') { st.gen = st.gen === val ? null : val; if (st.gen && !CHIPS[st.gen][st.tier]) st.tier = 'base'; }
-    else if (kind === 'tier') st.tier = val;
-    else if (kind === 'cores') st.cores = +val;
-    else if (kind === 'quant') st.quant = val;
-    else if (kind === 'd') {
-      if (st.shown !== null) { st.shown = null; st.entry = ''; }
-      if (val === '.' && st.entry.includes('.')) return;
-      if (st.entry.replace('.', '').length >= 5) return;
-      st.entry = st.entry === '0' && val !== '.' ? val : (st.entry === '' && val === '.' ? '0.' : st.entry + val);
-    }
-    else if (kind === 'back') { if (st.shown !== null) st.shown = null; else st.entry = st.entry.slice(0, -1); }
-    else if (kind === 'clear') { st.entry = ''; st.shown = null; }
-    else if (kind === 'eq') { const v = parseFloat(st.entry); if (v > 0) { st.shown = v; st.entry = ''; } }
-    render();
-  };
-  calc.addEventListener('click', e => { const k = e.target.closest('[data-k]'); if (k && !k.disabled) press(k.dataset.k); });
-  // Typing works too, while the calculator has focus
-  calc.addEventListener('keydown', e => {
-    if (e.metaKey || e.ctrlKey || e.altKey) return;
-    const map = { Enter: 'eq', '=': 'eq', Backspace: 'back', Escape: 'clear', Delete: 'clear', c: 'clear', C: 'clear', '.': 'd:.', ',': 'd:.' };
-    const key = /^[0-9]$/.test(e.key) ? 'd:' + e.key : map[e.key];
-    if (!key || (e.key === 'Enter' && e.target.closest('button'))) return; // Enter on a key presses that key, as buttons do
-    e.preventDefault();
-    const btn = calc.querySelector(`[data-k="${key}"]`);
-    if (btn) { btn.classList.add('is-down'); setTimeout(() => btn.classList.remove('is-down'), 120); }
-    press(key);
-  });
+  $('calc-model').addEventListener('change', e => { picked = e.target.value === '__custom' ? '__custom' : e.target.value; render(); });
+  ['calc-ram', 'calc-params'].forEach(id => $(id).addEventListener('input', render));
+  ['calc-chip', 'calc-quant'].forEach(id => $(id).addEventListener('change', render));
   render();
 })();
 </script>
 <!-- /web -->
-Press your Mac's memory, and its chip if you know it. The calculator sorts 48 popular local AI models into three groups: the ones that run well, the ones that fit if you close other apps, and the ones that won't fit. Every size is the real download from Ollama's library, and the rules come from real readings on a Mac, described below.
+Slide to your Mac's memory, pick its chip and a model, and the calculator shows how fast that model would write on your Mac. It also sorts 48 popular local AI models into three groups: the ones that run well, the ones that fit if you close other apps, and the ones that won't fit. Every size is the real download from Ollama's library, and the rules come from real readings on a Mac, described below.
 
 ## How much RAM do you need to run a local LLM?
 
