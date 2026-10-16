@@ -1,7 +1,7 @@
 ---
 title: What is MLX on Mac? MLX vs GGUF, and which is faster
 description: MLX is Apple's framework for running AI models on Apple silicon. What MLX models are, how MLX differs from GGUF, Ollama and llama.cpp, and which runs faster on a Mac.
-answer: MLX is Apple's open-source framework for running AI models on Apple silicon Macs, built around their unified memory. An MLX model is a model saved in MLX's format, usually 4-bit or 8-bit. GGUF is the other common format, from llama.cpp, and runs on any computer. On a Mac, LM Studio runs both, and Ollama now lists MLX versions of some models.
+answer: MLX is Apple's open-source framework for running AI models on Apple silicon Macs, built around their unified memory. An MLX model is a model saved in MLX's format, usually 4-bit or 8-bit. GGUF is the other common format, from llama.cpp, and runs on any computer. In our test on an M1 Max, the same model wrote about 23% faster as MLX than as GGUF.
 date: 2026-10-16
 topic: memory
 status: draft
@@ -17,6 +17,7 @@ When people say "an MLX model", they mean a model saved in MLX's format, ready t
 - MLX is Apple's framework for running AI models on Apple silicon; an MLX model is one saved in its format.
 - GGUF is the other common format. It comes from llama.cpp and runs on Macs, Windows and Linux.
 - The same model takes about the same memory in either format, at the same quality (4-bit or 8-bit).
+- In our test on an M1 Max, the same model wrote about 23% faster as MLX than as GGUF.
 - LM Studio runs both formats on a Mac. Ollama's library now lists MLX versions of some models too.
 
 ## What is an MLX model?
@@ -48,11 +49,14 @@ The GGUF downloads are a little bigger here because they include extras, such as
 
 ## Is MLX faster than GGUF on a Mac?
 
-<!-- TO MEASURE before publishing: the same Qwen 3.8 27B model at 4-bit, as MLX and as GGUF, in LM Studio on the owner's M1 Max (64 GB): tokens a second for the same prompt, and memory in use. Needs LM Studio open. -->
+We ran the same model both ways on one Mac: a 14-inch MacBook Pro with M1 Max and 64 GB, in LM Studio 0.4.25, on October 16, 2026. The model was a community version of Qwen 3.8 27B at 4-bit, saved once as MLX and once as GGUF (Q4_K_M), loaded with the same 8,192-token context and asked the same question three times.
 
-**[Reading to come: the same model as MLX and as GGUF on an M1 Max, tokens a second for each.]**
+| | Writing speed, three runs | Average | Memory in use |
+| --- | --- | --- | --- |
+| MLX | 13.2, 12.2, 11.7 tokens/s | **12.4 tokens/s** | 14.1 GB |
+| GGUF (llama.cpp) | 10.1, 10.3, 10.0 tokens/s | **10.1 tokens/s** | 15.7 GB |
 
-MLX was made for Apple silicon first, so it can lean on what these chips do well. How much faster it is depends on the model and the app, so the honest answer comes from trying the same model both ways on your own Mac.
+On this Mac, the MLX version wrote **about 23% faster** and held a little less memory (as LM Studio reported it). That's one model on one Mac: the gap depends on the model, the chip and the app, so if speed matters, try the model you use both ways.
 
 ## MLX vs Ollama and LM Studio
 
@@ -75,6 +79,10 @@ Apple's open-source framework for running AI models on Apple silicon Macs. An ML
 ### What is the difference between MLX and GGUF?
 
 MLX is Apple's format and engine, made for Apple silicon Macs. GGUF is the format of llama.cpp and runs on any computer. At the same quality, a model takes about the same memory in either.
+
+### Is MLX faster than GGUF on a Mac?
+
+In our test on an M1 Max with 64 GB, the same 27B model at 4-bit wrote 12.4 tokens a second as MLX and 10.1 as GGUF: about 23% faster. The gap depends on the model, the chip and the app.
 
 ### Does Ollama support MLX?
 
