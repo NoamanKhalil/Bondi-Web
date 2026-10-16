@@ -200,3 +200,6 @@ footer a { color: var(--soft); text-decoration: none; } footer a:hover { color: 
 /* Pill buttons that are real <button>s (Read more): no browser grey, the same colours as the link pills in light and dark */
 button.pillbtn { cursor: pointer; background: transparent; }
 button.pillbtn.primary { background: var(--bondi); } button.pillbtn.secondary:hover { background: var(--bondi-soft); }
+/* "Add Bondi as a preferred source on Google" */
+.pref-src { display: inline-flex; align-items: center; gap: 9px; margin: -12px 0 30px; padding: 8px 14px 8px 12px; border-radius: 980px; border: 1px solid var(--line); background: var(--tile); color: var(--ink); font-size: .88rem; font-weight: 500; text-decoration: none; }
+.pref-src:hover { border-color: var(--bondi); color: var(--ink); } .pref-src svg { width: 18px; height: 18px; flex: none; }

@@ -112,6 +112,14 @@ function share_row(string $url, string $title, string $where): string
     return $out;
 }
 
+/** "Add Bondi as a preferred source on Google": a plain link to Google's source preferences (Google allows a custom button).
+ * Its official button script would load from news.google.com on every visit, which the site doesn't do. */
+function preferred_source(): string
+{
+    return '<a class="pref-src" href="https://www.google.com/preferences/source?q=trybondi.app" target="_blank" rel="noopener noreferrer"'
+         . ' title="Opens Google: star Bondi to see more of its guides in Google\'s Top Stories"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#4285F4" d="M23 12.245c0-.905-.075-1.565-.236-2.25h-10.54v4.083h6.186c-.124 1.014-.797 2.542-2.294 3.569l-.021.136 3.332 2.53.23.022C21.779 18.417 23 15.593 23 12.245z"/><path fill="#34A853" d="M12.225 23c3.03 0 5.574-.978 7.433-2.665l-3.542-2.688c-.948.648-2.22 1.1-3.891 1.1a6.745 6.745 0 01-6.386-4.572l-.132.011-3.465 2.628-.045.124C4.043 20.531 7.835 23 12.225 23z"/><path fill="#FBBC05" d="M5.84 14.175A6.65 6.65 0 015.463 12c0-.758.138-1.491.361-2.175l-.006-.147-3.508-2.67-.115.054A10.831 10.831 0 001 12c0 1.772.436 3.447 1.197 4.938l3.642-2.763z"/><path fill="#EA4335" d="M12.225 5.253c2.108 0 3.529.892 4.34 1.638l3.167-3.031C17.787 2.088 15.255 1 12.225 1 7.834 1 4.043 3.469 2.197 7.062l3.63 2.763a6.77 6.77 0 016.398-4.572z"/></svg><span>Add Bondi as a preferred source on Google</span></a>';
+}
+
 /** The article's sections: ids on its ## headings, the contents list, and a short Bondi box before the third section. */
 function sections(string $html): array
 {
@@ -328,6 +336,7 @@ foreach ($shown as $slug => $post) {
     $draft = $post['status'] !== 'published' ? '<p class="draft-flag">Draft, for review: not on trybondi.app yet.</p>' : '';
     [$html, $tocSide, $tocInline] = sections($html);
     $shareTop = share_row($url, $post['title'], 'top');
+    $prefSrc = preferred_source();
     $shareEnd = share_row($url, $post['title'], 'end');
     $subnav = subnav($topic ?? 'blog', $topicKeys);
     $body = <<<HTML
@@ -340,6 +349,7 @@ $subnav
   <h1>{$h($post['title'])}</h1>
   <p class="byline">By <a href="{$h(AUTHOR_URL)}" target="_blank" rel="me noopener">Noaman Khalil</a>, maker of Bondi · <time datetime="{$h($post['date'])}">{$h(nice_date($post['date']))}</time>$updated · {$post['minutes']} min read</p>
   $shareTop
+  {$prefSrc}
   $answerBox
   $tocInline
   <div class="prose">
@@ -571,7 +581,7 @@ foreach ($guideShown as $slug => $g) {
           . '<h1>' . $h($g['title']) . '</h1>'
           . '<p class="byline">Bondi\'s Mac guide · Reviewed by <a href="' . $h(AUTHOR_URL) . '" target="_blank" rel="me noopener">' . AUTHOR . '</a>'
           . ($reviewed ? ' · <time datetime="' . $h($reviewed) . '">' . $h(nice_date($reviewed)) . '</time>' : '') . '</p>'
-          . share_row($url, $g['title'], 'top') . $answerBox . $tocInline . '<div class="prose">' . $html . '</div>' . share_row($url, $g['title'], 'end')
+          . share_row($url, $g['title'], 'top') . preferred_source() . $answerBox . $tocInline . '<div class="prose">' . $html . '</div>' . share_row($url, $g['title'], 'end')
           . '<p class="plain-copy">Also as <a href="/guide/' . $h($slug) . '.md">plain text</a>, for AI assistants and readers.</p>'
           . '<aside class="cta"><img src="/assets/icon-blue.png" alt="" width="56" height="56"><div><p class="cta-title">' . $h(PITCH) . '</p>'
           . '<p>Bondi explains 125 macOS processes like this one, and shows what each is using on your Mac right now, so you don\'t have to look them up.</p>'
