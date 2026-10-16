@@ -105,3 +105,95 @@ footer a { color: var(--soft); text-decoration: none; } footer a:hover { color: 
 }
 @media (prefers-reduced-motion: reduce) { .card { transition: none; } }
 .plain-copy { margin: 30px 0 0; font-size: .85rem; color: var(--faint); }
+
+/* Topic bar under the header (blog, topics, articles, guide) */
+.subnav { border-bottom: 1px solid var(--line); margin: 0 -22px; }
+.subnav-inner { max-width: 1080px; margin: 0 auto; padding: 0 22px; display: flex; gap: 24px; overflow-x: auto; scrollbar-width: none; font-size: .9rem; }
+.subnav-inner::-webkit-scrollbar { display: none; }
+.subnav a { flex: none; padding: 12px 0 11px; color: var(--soft); text-decoration: none; font-weight: 500; border-bottom: 2px solid transparent; }
+.subnav a:hover { color: var(--ink); } .subnav a[aria-current="page"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--bondi); }
+
+/* An article with its contents beside it */
+.post-grid { max-width: 1040px; margin: 0 auto; display: grid; grid-template-columns: 200px minmax(0, 720px); gap: 56px; justify-content: center; }
+.toc-side { padding-top: 64px; } .toc { position: sticky; top: 84px; }
+.toc-title { margin: 0 0 10px; font-size: .74rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); }
+.toc ol, .toc-inline ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: .88rem; line-height: 1.35; }
+.toc a, .toc-inline a { color: var(--soft); text-decoration: none; } .toc a:hover, .toc-inline a:hover { color: var(--bondi-ink); }
+.toc ol { border-left: 1px solid var(--line); padding-left: 14px; }
+.toc-inline { display: none; margin: 0 0 30px; padding: 12px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--tile); }
+.toc-inline summary { cursor: pointer; font-weight: 600; font-size: .95rem; } .toc-inline ol { margin-top: 10px; }
+.prose h2[id] { scroll-margin-top: 80px; }
+@media (max-width: 1100px) { .post-grid { display: block; } .toc-side { display: none; } .toc-inline { display: block; } }
+
+/* Share buttons */
+.share { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 30px; }
+.share-end { margin: 36px 0 0; padding-top: 22px; border-top: 1px solid var(--line); }
+.share-label { margin-right: 4px; font-size: .85rem; font-weight: 600; color: var(--faint); }
+.share-btn { width: 36px; height: 36px; display: inline-grid; place-items: center; border-radius: 50%; border: 1px solid var(--line); background: var(--tile); color: var(--soft); cursor: pointer; padding: 0; }
+.share-btn:hover { color: var(--bondi-ink); border-color: var(--bondi); } .share-btn svg, .share-native svg { width: 16px; height: 16px; }
+.share-native { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: 980px; border: 0; background: var(--bondi); color: var(--on-bondi); font: 600 .9rem/1 var(--sans); cursor: pointer; }
+.share-native[hidden] { display: none; }
+.share-done { font-size: .85rem; color: var(--faint); }
+
+/* The short Bondi box halfway through an article */
+.mid-cta { display: flex; align-items: center; gap: 14px; margin: 36px 0; padding: 14px 18px; border-radius: 16px; background: var(--bondi-soft); }
+.prose .mid-cta p { margin: 0; color: var(--soft); font-size: .95rem; line-height: 1.45; } .prose .mid-cta b { color: var(--ink); }
+.prose .mid-cta img { margin: 0; border-radius: 10px; box-shadow: none; flex: none; }
+.mid-cta .pillbtn { flex: none; margin-left: auto; text-decoration: none; }
+@media (max-width: 560px) { .mid-cta { flex-wrap: wrap; } .mid-cta .pillbtn { margin-left: 0; } }
+.related-cards { margin: 0; max-width: none; }
+
+/* The blog home: headline, the featured article beside three to start with, then every article in a grid */
+.subnav-inner a:first-child { color: var(--ink); font-weight: 700; }
+.blog-home { max-width: 980px; margin: 0 auto; padding-bottom: 24px; }
+.blog-h1 { margin: 44px 0 22px; font: 700 clamp(1.7rem, 3.4vw, 2.3rem)/1.15 var(--display); letter-spacing: -0.025em; text-wrap: balance; }
+.blog-top { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 44px; align-items: start; }
+.feature-card { display: block; border-radius: 14px; overflow: hidden; background: var(--tile); box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.35); text-decoration: none; }
+.feature-img, .grid-img { display: grid; place-items: center; aspect-ratio: 1.9; background: #131315; overflow: hidden; }
+.feature-img { padding: 22px; } .grid-img { padding: 14px; border-radius: 12px; }
+.feature-img > img, .grid-img > img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 8px; }
+.thumb-none { display: grid; justify-items: center; gap: 8px; color: #b4b4b9; font-size: .85rem; font-weight: 600; } .thumb-none img { border-radius: 10px; }
+.feature-text { display: block; padding: 18px 24px 22px; }
+.card-label { display: block; font-size: .8rem; font-weight: 500; color: var(--soft); }
+.feature-title { display: block; margin-top: 6px; font: 700 1.5rem/1.25 var(--display); letter-spacing: -0.02em; color: var(--ink); }
+.feature-card:hover .feature-title, .grid-card:hover .grid-title, .picks a:hover .pick-title { color: var(--bondi-ink); }
+.picks h2 { display: flex; align-items: center; gap: 10px; margin: 6px 0 22px; font: 700 1.4rem/1.2 var(--display); letter-spacing: -0.02em; }
+.picks h2 svg { width: 22px; height: 22px; color: var(--bondi); }
+.picks ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 26px; }
+.picks a { display: block; text-decoration: none; }
+.pick-label { display: block; font-weight: 700; color: var(--ink); font-size: 1rem; }
+.pick-title { display: block; margin-top: 2px; color: var(--ink); font-size: 1.05rem; line-height: 1.4; }
+.blog-grid { list-style: none; margin: 56px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 44px 28px; }
+.blog-grid li[hidden] { display: none; }
+.grid-card { display: block; text-decoration: none; }
+.grid-card .card-label { margin: 16px 0 6px; }
+.grid-title { display: block; color: var(--ink); font-size: 1.08rem; line-height: 1.4; font-weight: 500; }
+.read-more { margin: 48px 0 56px; text-align: center; }
+@media (max-width: 860px) { .blog-top { grid-template-columns: minmax(0, 1fr); gap: 36px; } .blog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .blog-grid { grid-template-columns: minmax(0, 1fr); gap: 34px; } .blog-h1 { margin-top: 30px; } }
+
+/* The guide home: find a process, A to Z */
+.az { max-width: 760px; margin: 8px auto 64px; }
+.az-search input { width: 100%; height: 50px; padding: 0 18px; border-radius: 12px; border: 1px solid var(--line); background: var(--tile); color: var(--ink); font: 400 1rem/1 var(--sans); }
+.az-search input:focus { outline: none; border-color: var(--bondi); box-shadow: 0 0 0 3px var(--bondi-soft); }
+.az-list { list-style: none; margin: 14px 0 0; padding: 0; }
+.az-list li[hidden] { display: none; }
+.az-list a { display: grid; gap: 2px; padding: 14px 4px; border-bottom: 1px solid var(--line); text-decoration: none; }
+.az-list b { color: var(--ink); font-size: 1.05rem; } .az-list span { color: var(--soft); font-size: .92rem; line-height: 1.45; }
+.az-list a:hover b { color: var(--bondi-ink); }
+.az-none { color: var(--faint); }
+
+/* Phones: only the calculator link stays in the header (the topic bar has the rest); the share sheet replaces the network buttons */
+.nav-right .pillbtn { white-space: nowrap; }
+@media (max-width: 640px) { nav.links a:not(.calc-link) { display: none; } nav.links { margin-left: auto; } .nav-inner { gap: 14px; } }
+@media (pointer: coarse) { .share.has-native a.share-btn { display: none; } }
+@media (pointer: coarse) { .share.has-native .share-label { display: none; } }
+/* Thumbnails (dev/blog-thumbs.mjs) fill their card */
+.feature-img.is-thumb, .grid-img.is-thumb { padding: 0; background: var(--tile-2); }
+.feature-img.is-thumb > img, .grid-img.is-thumb > img { width: 100%; height: 100%; max-height: none; object-fit: cover; border-radius: 0; }
+.grid-img.is-thumb { border: 1px solid var(--line); }
+/* Each thumbnail comes in light and dark; show the one that matches the page */
+.thumb-dark { display: none !important; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .thumb-dark { display: block !important; } :root:not([data-theme="light"]) .thumb-light { display: none !important; } }
+:root[data-theme="dark"] .thumb-dark { display: block !important; } :root[data-theme="dark"] .thumb-light { display: none !important; }
+:root[data-theme="light"] .thumb-dark { display: none !important; } :root[data-theme="light"] .thumb-light { display: block !important; }

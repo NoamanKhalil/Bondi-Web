@@ -371,6 +371,7 @@
   .foot-cols a { color: var(--soft); } .foot-cols p { max-width: 22rem; margin-top: 10px; line-height: 1.5; }
   .foot-line { border-top: 1px solid var(--line); padding-top: 16px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 22px; }
 
+  @media (max-width: 1200px) { nav.links a[href="#ai"], nav.links a[href="#app"] { display: none; } } /* room for the calculator link */
   @media (max-width: 1000px) {
     nav.links { display: none; }
     .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); } .step:nth-of-type(2)::after { display: none; }
@@ -656,6 +657,7 @@
       <a href="#faq">FAQ</a>
       <a href="/blog/">Blog</a>
       <a href="/guide/">Guide</a>
+      <a href="/can-my-mac-run-it/">LLM calculator</a>
     </nav>
     <div class="nav-right">
       <a class="left launching" href="/beta/"><span>Beta launching soon</span></a>
