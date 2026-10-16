@@ -5,7 +5,7 @@ description: Pick your Mac's memory and chip to see which local AI models it can
 answer: A local AI model needs about its download size in memory, plus up to 20% for the conversation. An 8 GB Mac runs models up to about 7B parameters, 16 GB up to 14B, 32 GB up to about 30B, and 64 GB runs 70B models, tightly. How fast it writes depends on the chip's memory bandwidth.
 checked: 2026-10-15
 checkednote: Model sizes checked against Ollama's library
-updated: 2026-10-15
+updated: 2026-10-16
 layout: wide
 ---
 <!-- web -->
