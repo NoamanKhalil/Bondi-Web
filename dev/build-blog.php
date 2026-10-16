@@ -705,6 +705,7 @@ if ($guideLive) {
     }
     $llms = rtrim($llms) . "\n\n$section<!-- /guide -->\n";
 }
+$llms = preg_replace("~\n{3,}~", "\n\n", $llms); // taking the sections out and back in left a blank line each run
 file_put_contents("$root/public_html/llms.txt", $llms);
 $written[] = "$root/public_html/llms.txt";
 
