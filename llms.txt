@@ -47,6 +47,12 @@ Checked against each app's own website (apple.com, bjango.com, github.com/exelba
 
 
 
+
+
+
+
+
+
 <!-- blog -->
 ## Guides: Why is my Mac slow?
 - [Why is my Mac so slow? How to find the real cause](https://trybondi.app/blog/why-is-my-mac-slow.md): Mac running slow? It usually comes down to one of a handful of causes. Here's how to tell which one it is, with real readings from a real MacBook Pro.
