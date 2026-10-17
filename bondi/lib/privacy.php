@@ -146,7 +146,8 @@ function holds_data_for(string $email): bool
 function person_data(string $email): array
 {
     $signup = one('SELECT name, email, country, country_source, time_zone, ip, created_at, updated_at, '
-                . (signups_have_page() ? 'page, ' : '') . 'unsubscribed_at FROM signups WHERE email = ?', [$email]);
+                . (signups_have_page() ? 'page, ' : '') . (signups_have_via() ? 'via, ' : '')
+                . 'unsubscribed_at FROM signups WHERE email = ?', [$email]);
     $customer = one('SELECT id, email, created_at FROM customers WHERE email = ?', [$email]);
     $licenses = [];
     if ($customer !== null) {

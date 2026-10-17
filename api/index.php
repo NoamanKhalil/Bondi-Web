@@ -13,7 +13,7 @@
 //   POST recover      email a new key to the buyer's address
 //   POST paddle       Paddle's payment and refund notifications
 //   POST signup       the website's "Sign up for updates": name and email (plus the visitor's IP and country),
-//                     and page: "beta" from the beta page
+//                     page: "beta" from the beta page, and via: the invite link's short name, if they used one
 //   GET  interest     how many people have signed up, and how many on the beta page (shown on that page)
 //   POST unsubscribe  mail apps' own one-click Unsubscribe button (RFC 8058): ?id=<sign-up>&s=<signature>
 
@@ -245,18 +245,22 @@ function signup(): never
     $timeZone = mb_substr(trim((string)(input()['time_zone'] ?? '')), 0, 64) ?: null;
     [$country, $source] = signup_country($timeZone);
     $values = [$email, $name, signup_ip(), $country, $source, $timeZone];
-    if (signups_have_page()) {
-        // Someone who ever signed up on the beta page stays marked as beta.
+    // Signing up again updates the name and address. A beta-page sign-up stays beta, and the first invite
+    // link stays: a later visit doesn't wipe where they came from. Signing up again is a fresh yes to email.
+    $touch = 'name = VALUES(name), ip = VALUES(ip), country = VALUES(country),
+                 country_source = VALUES(country_source), time_zone = VALUES(time_zone), updated_at = CURRENT_TIMESTAMP'
+                 . (privacy_ready() ? ', unsubscribed_at = NULL' : '');
+    if (signups_have_page() && signups_have_via()) {
+        run("INSERT INTO signups (email, name, ip, country, country_source, time_zone, page, via) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+             ON DUPLICATE KEY UPDATE $touch, page = IF(VALUES(page) = 'beta', 'beta', page), via = COALESCE(via, VALUES(via))",
+            [...$values, (input()['page'] ?? '') === 'beta' ? 'beta' : 'home', signup_via(input()['via'] ?? null)]);
+    } elseif (signups_have_page()) {
         run("INSERT INTO signups (email, name, ip, country, country_source, time_zone, page) VALUES (?, ?, ?, ?, ?, ?, ?)
-             ON DUPLICATE KEY UPDATE name = VALUES(name), ip = VALUES(ip), country = VALUES(country),
-                 country_source = VALUES(country_source), time_zone = VALUES(time_zone),
-                 page = IF(VALUES(page) = 'beta', 'beta', page), updated_at = CURRENT_TIMESTAMP"
-                 . (privacy_ready() ? ', unsubscribed_at = NULL' : ''), // signing up again is a fresh yes
+             ON DUPLICATE KEY UPDATE $touch, page = IF(VALUES(page) = 'beta', 'beta', page)",
             [...$values, (input()['page'] ?? '') === 'beta' ? 'beta' : 'home']);
     } else {
-        run('INSERT INTO signups (email, name, ip, country, country_source, time_zone) VALUES (?, ?, ?, ?, ?, ?)
-             ON DUPLICATE KEY UPDATE name = VALUES(name), ip = VALUES(ip), country = VALUES(country),
-                 country_source = VALUES(country_source), time_zone = VALUES(time_zone), updated_at = CURRENT_TIMESTAMP',
+        run("INSERT INTO signups (email, name, ip, country, country_source, time_zone) VALUES (?, ?, ?, ?, ?, ?)
+             ON DUPLICATE KEY UPDATE $touch",
             $values);
     }
     try {
