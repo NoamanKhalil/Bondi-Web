@@ -365,6 +365,7 @@ function signups_page(array $filters, ?string $flash): never
     } else {
         echo '<p class="muted">To tell beta-page sign-ups apart, import sql/005_signup_page.sql in phpMyAdmin.</p>';
     }
+    invite_links();
     countries_table();
     filters_form($filters);
     $matching = signups_matching($filters);
@@ -377,12 +378,14 @@ function signups_page(array $filters, ?string $flash): never
     welcome_box();
     if (!$rows) { echo '<p class="muted">None.</p>'; page_end(); }
     $hasPage = signups_have_page();
-    echo '<table><tr><th>Name</th><th>Email</th>' . ($hasPage ? '<th>Page</th>' : '') . '<th>Country</th><th>IP</th><th>Signed up</th><th></th></tr>';
+    $hasVia = signups_have_via();
+    echo '<table><tr><th>Name</th><th>Email</th>' . ($hasPage ? '<th>Page</th>' : '') . ($hasVia ? '<th>Link</th>' : '') . '<th>Country</th><th>IP</th><th>Signed up</th><th></th></tr>';
     foreach ($rows as $row) {
         $source = $row['country_source'] === 'timezone' ? ' <span class="muted" title="From the browser\'s time zone: ' . h($row['time_zone']) . '">(time zone)</span>' : '';
         $off = ($row['unsubscribed_at'] ?? null) !== null ? ' <span class="status revoked" title="Unsubscribed ' . h($row['unsubscribed_at']) . ' UTC">unsubscribed</span>' : '';
         echo '<tr><td>' . h($row['name']) . $off . '</td><td>' . h($row['email']) . '</td>'
            . ($hasPage ? '<td>' . ($row['page'] === 'beta' ? '<span class="status active">Beta</span>' : 'Homepage') . '</td>' : '')
+           . ($hasVia ? '<td>' . ($row['via'] !== null && $row['via'] !== '' ? h($row['via']) : '<span class="muted">—</span>') . '</td>' : '')
            . '<td title="' . h($row['country'] ?? '') . '">' . h(country_name($row['country'])) . $source . '</td>'
            . '<td class="mono">' . h($row['ip']) . '</td><td>' . h($row['created_at']) . ' UTC</td><td>'
            . '<form method="post" onsubmit="return confirm(' . h(json_encode('Delete everything we hold about ' . $row['email'] . '? They get a confirmation number by email. Purchase records stay.')) . ')">' . csrf_field()
@@ -393,7 +396,7 @@ function signups_page(array $filters, ?string $flash): never
     page_end();
 }
 
-/** The sign-ups filters, from the address or a form: search words, page, country, and subscribed or not. */
+/** The sign-ups filters, from the address or a form: search words, page, invite link, country, and subscribed or not. */
 function signup_filters(array $in): array
 {
     $page = (string)($in['page'] ?? '');
@@ -402,9 +405,30 @@ function signup_filters(array $in): array
     return [
         'q' => trim((string)($in['q'] ?? '')),
         'page' => in_array($page, ['home', 'beta'], true) ? $page : '',
+        'via' => signup_via($in['via'] ?? '') ?? '',
         'country' => $country === 'NONE' ? 'none' : (preg_match('/^[A-Z]{2}$/', $country) ? $country : ''),
         'status' => in_array($status, ['subscribed', 'unsubscribed'], true) ? $status : '',
     ];
+}
+
+/** Invite links (/w/name) and how many sign-ups each one brought. */
+function invite_links(): void
+{
+    if (!signups_have_via()) {
+        echo '<p class="muted">To count invite links, import sql/008_signup_via.sql in phpMyAdmin. A link looks like https://trybondi.app/w/whatsapp-mac-devs</p>';
+        return;
+    }
+    $links = all("SELECT via, COUNT(*) AS n FROM signups WHERE via IS NOT NULL AND via <> '' GROUP BY via ORDER BY n DESC, via");
+    echo '<p class="muted">Invite link: https://trybondi.app/w/<em>name</em>';
+    if ($links) {
+        echo ' · ' . implode(' · ', array_map(
+            fn($link) => '<a href="?signups&via=' . h($link['via']) . '">' . h($link['via']) . '</a> ' . (int)$link['n'],
+            $links
+        ));
+    } else {
+        echo ' — nobody from a link yet';
+    }
+    echo '</p>';
 }
 
 function filtering(array $filters): bool
@@ -426,6 +450,16 @@ function filters_form(array $filters): void
     if (signups_have_page()) {
         echo '<select name="page" aria-label="Page">' . $option('', 'Every page', $filters['page']) . $option('home', 'Homepage', $filters['page'])
            . $option('beta', 'Beta page', $filters['page']) . '</select>';
+    }
+    if (signups_have_via()) {
+        $vias = all("SELECT via, COUNT(*) AS n FROM signups WHERE via IS NOT NULL AND via <> '' GROUP BY via ORDER BY n DESC, via");
+        if ($vias) {
+            echo '<select name="via" aria-label="Invite link">' . $option('', 'Every link', $filters['via']);
+            foreach ($vias as $link) {
+                echo $option($link['via'], $link['via'] . ' (' . (int)$link['n'] . ')', $filters['via']);
+            }
+            echo '</select>';
+        }
     }
     echo '<select name="country" aria-label="Country">' . $option('', 'Every country', $filters['country']);
     foreach (all('SELECT country, COUNT(*) AS n FROM signups GROUP BY country ORDER BY n DESC, country') as $row) {
@@ -540,6 +574,10 @@ function signups_matching(array $filters): array
         $where[] = 'page = ?';
         $args[] = $filters['page'];
     }
+    if ($filters['via'] !== '' && signups_have_via()) {
+        $where[] = 'via = ?';
+        $args[] = $filters['via'];
+    }
     if ($filters['country'] === 'none') {
         $where[] = 'country IS NULL';
     } elseif ($filters['country'] !== '') {
@@ -580,12 +618,12 @@ function signups_csv(array $filters): never
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="bondi-signups-' . (filtering($filters) ? 'filtered-' : '') . gmdate('Y-m-d') . '.csv"');
     $out = fopen('php://output', 'w');
-    fputcsv($out, ['name', 'email', 'country', 'country_name', 'country_source', 'time_zone', 'page', 'ip', 'created_at_utc', 'updated_at_utc', 'unsubscribed_at_utc'], ',', '"', '');
+    fputcsv($out, ['name', 'email', 'country', 'country_name', 'country_source', 'time_zone', 'page', 'ip', 'created_at_utc', 'updated_at_utc', 'unsubscribed_at_utc', 'via'], ',', '"', '');
     foreach (array_reverse(signups_matching($filters)) as $row) { // oldest first
         // A leading = + - @ would run as a formula in Excel or Numbers, so it gets a ' in front.
         $safe = fn($value) => is_string($value) && preg_match('/^[=+\-@]/', $value) ? "'" . $value : $value;
         fputcsv($out, array_map($safe, [$row['name'], $row['email'], $row['country'], $row['country'] === null ? null : country_name($row['country']), $row['country_source'], $row['time_zone'], $row['page'] ?? 'home',
-                                          $row['ip'], $row['created_at'], $row['updated_at'], $row['unsubscribed_at'] ?? null]), ',', '"', '');
+                                          $row['ip'], $row['created_at'], $row['updated_at'], $row['unsubscribed_at'] ?? null, $row['via'] ?? null]), ',', '"', '');
     }
     exit;
 }

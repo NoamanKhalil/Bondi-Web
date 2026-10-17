@@ -8,6 +8,23 @@ function signups_have_page(): bool
     return $has ??= one("SHOW COLUMNS FROM signups LIKE 'page'") !== null;
 }
 
+/** True once sql/008_signup_via.sql has been imported (signups.via exists). */
+function signups_have_via(): bool
+{
+    static $has = null;
+    return $has ??= one("SHOW COLUMNS FROM signups LIKE 'via'") !== null;
+}
+
+/**
+ * The short name of an invite link, or null when it isn't one. Letters, numbers and hyphens, 1 to 40
+ * characters, so /w/whatsapp-mac-devs is the whole thing. Anything else is ignored.
+ */
+function signup_via(mixed $raw): ?string
+{
+    $via = strtolower(trim((string)$raw));
+    return preg_match('/^[a-z0-9](?:[a-z0-9-]{0,38}[a-z0-9])?$/', $via) === 1 ? $via : null;
+}
+
 /**
  * The real numbers for the beta page: everyone on the update list, and those who signed up on the beta page
  * (null until sql/005 is imported).

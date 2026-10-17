@@ -102,7 +102,9 @@ if ($data['sign_up'] === null) {
     $s = $data['sign_up'];
     echo '<dl><dt>Name</dt><dd>' . $h($s['name']) . '</dd><dt>Email</dt><dd>' . $h($s['email']) . '</dd>'
        . '<dt>Country</dt><dd>' . $h(country_name($s['country'])) . ($s['country_source'] === 'timezone' ? ' (from your time zone)' : ($s['country'] ? ' (from your IP address)' : '')) . '</dd>'
-       . '<dt>IP address</dt><dd>' . $h($s['ip']) . '</dd><dt>Signed up</dt><dd>' . $h($s['created_at']) . ' UTC</dd>'
+       . '<dt>IP address</dt><dd>' . $h($s['ip']) . '</dd>'
+       . (!empty($s['via']) ? '<dt>Came from</dt><dd>' . $h($s['via']) . '</dd>' : '')
+       . '<dt>Signed up</dt><dd>' . $h($s['created_at']) . ' UTC</dd>'
        . '<dt>Emails</dt><dd>' . ($s['unsubscribed_at'] === null ? 'Subscribed' : 'Unsubscribed on ' . $h($s['unsubscribed_at']) . ' UTC') . '</dd></dl>';
     echo '<form method="post" class="row">' . $tokenField . ($s['unsubscribed_at'] === null
         ? '<input type="hidden" name="do" value="unsubscribe"><button class="btn quiet">Unsubscribe from emails</button>'

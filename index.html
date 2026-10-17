@@ -560,7 +560,19 @@
   })();
 
   // Sign up for updates: name and email to the license server, with the browser's time zone for the
-  // country when the server can't tell it from the IP.
+  // country when the server can't tell it from the IP. An invite link (/w/name, or ?via=name) is
+  // remembered in this tab and sent with the form. Nothing is stored until they submit, and it isn't a cookie.
+  const inviteVia = () => {
+    const ok = /^[a-z0-9](?:[a-z0-9-]{0,38}[a-z0-9])?$/;
+    let via = '';
+    try {
+      const fromLink = (new URLSearchParams(location.search).get('via') || '').toLowerCase();
+      if (ok.test(fromLink)) sessionStorage.setItem('bondi-via', fromLink);
+      via = sessionStorage.getItem('bondi-via') || '';
+    } catch (e) {}
+    return ok.test(via) ? via : '';
+  };
+  inviteVia();
   const signup = $('[data-signup]');
   if (signup) signup.addEventListener('submit', async event => {
     event.preventDefault();
@@ -576,7 +588,7 @@
     try { timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
     try {
       const response = await fetch('/api/signup', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, time_zone: timeZone, website: fields.website.value }) });
+        body: JSON.stringify({ name, email, time_zone: timeZone, website: fields.website.value, via: inviteVia() }) });
       const answer = await response.json().catch(() => ({}));
       if (response.ok) {
         say(`Thanks, ${name}. We'll email you when the beta opens.`, true);

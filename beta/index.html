@@ -178,7 +178,19 @@
     .then(data => data && showCounts(data, animate)).catch(() => {});
   loadCounts(true);
 
-  // Join: the same sign-up list as the homepage, marked as the beta page.
+  // Join: the same sign-up list as the homepage, marked as the beta page. An invite link (/w/name, or
+  // ?via=name) is remembered in this tab and sent with the form. Nothing is stored until they submit.
+  const inviteVia = () => {
+    const ok = /^[a-z0-9](?:[a-z0-9-]{0,38}[a-z0-9])?$/;
+    let via = '';
+    try {
+      const fromLink = (new URLSearchParams(location.search).get('via') || '').toLowerCase();
+      if (ok.test(fromLink)) sessionStorage.setItem('bondi-via', fromLink);
+      via = sessionStorage.getItem('bondi-via') || '';
+    } catch (e) {}
+    return ok.test(via) ? via : '';
+  };
+  inviteVia();
   const form = $('[data-signup]');
   form.addEventListener('submit', async event => {
     event.preventDefault();
@@ -194,7 +206,7 @@
     try { timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
     try {
       const response = await fetch('/api/signup', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, time_zone: timeZone, page: 'beta', website: fields.website.value }) });
+        body: JSON.stringify({ name, email, time_zone: timeZone, page: 'beta', website: fields.website.value, via: inviteVia() }) });
       const answer = await response.json().catch(() => ({}));
       if (response.ok) {
         if (!reduced) {

@@ -23,7 +23,7 @@ mysqld --initialize-insecure --datadir=$T/data --log-error=$T/init.log >/dev/nul
 mysqld --datadir=$T/data --socket=$SOCK --port=33098 --mysqlx=OFF --log-error=$T/err.log --pid-file=$T/pid >/dev/null 2>&1 &
 for i in $(seq 1 30); do mysql -uroot --socket=$SOCK -e 'select 1' >/dev/null 2>&1 && break; sleep 1; done
 mysql -uroot --socket=$SOCK -e "create database bondi; create user 'bondi'@'localhost' identified by 'test'; grant all on bondi.* to 'bondi'@'localhost';"
-for f in sql/001_schema.sql sql/002_one_mac_per_license.sql sql/003_checkout_claims.sql sql/004_signups.sql sql/005_signup_page.sql sql/006_privacy.sql sql/007_audit_log.sql; do mysql -uroot --socket=$SOCK bondi < $f; done
+for f in sql/001_schema.sql sql/002_one_mac_per_license.sql sql/003_checkout_claims.sql sql/004_signups.sql sql/005_signup_page.sql sql/006_privacy.sql sql/007_audit_log.sql sql/008_signup_via.sql; do mysql -uroot --socket=$SOCK bondi < $f; done
 mysql -uroot --socket=$SOCK bondi -e "update price_tiers set paddle_price_id='pri_launch' where tier='launch'; update price_tiers set paddle_price_id='pri_regular' where tier='regular';"
 cat > $T/config.php <<CONF
 <?php
@@ -238,12 +238,28 @@ expect "admin shows beta sign-ups" "$(curl -s -c $J -b $J "$BASE/admin/?signups"
 expect "admin search beta lists only them" "$(curl -s -c $J -b $J "$BASE/admin/?signups&q=beta")" 'Write to the 1 shown by this search'
 expect "filter: beta page" "$(curl -s -c $J -b $J "$BASE/admin/?signups&page=beta")" 'Write to the 1 shown by this search'
 expect "filtered CSV has only them" "$(curl -s -c $J -b $J "$BASE/admin/?signups&csv&page=beta" | tail -n +2 | tr '\n' '|')" '^"Bea T.",bea@example.com,[^|]*|$'
+
+# Invite links: /w/name opens the beta page, and a sign-up keeps the first link's name.
+# The sign-up form allows 10 saves an hour from one address; these are a fresh hour so the later checks still fit.
+mysql -uroot --socket=$SOCK bondi -e "delete from rate_limits"
+expect "invite link opens the beta page" "$(curl -s -o /dev/null -D - "$BASE/w/WhatsApp-Mac-Devs")" '302 Found'
+expect "invite link keeps the name" "$(curl -s -o /dev/null -D - "$BASE/w/WhatsApp-Mac-Devs")" 'Location: /beta/?via=whatsapp-mac-devs'
+expect "a bad invite link is not a page" "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/w/has_underscore")" '404'
+post signup '{"name":"Wes","email":"wes@example.com","page":"beta","via":"whatsapp-mac-devs"}' >/dev/null
+post signup '{"name":"Wes T.","email":"wes@example.com","page":"beta","via":"other-group"}' >/dev/null
+post signup '{"name":"No Link","email":"nolink@example.com","via":"../etc/passwd"}' >/dev/null
+expect "first invite link stays" "$(mysql -uroot --socket=$SOCK bondi -N -e "select concat_ws('|', name, ifnull(via,'-')) from signups where email='wes@example.com'")" 'Wes T.|whatsapp-mac-devs'
+expect "a link name that is not a name is ignored" "$(mysql -uroot --socket=$SOCK bondi -N -e "select ifnull(via,'-') from signups where email='nolink@example.com'")" '^-$'
+expect "admin lists invite links" "$(curl -s -c $J -b $J "$BASE/admin/?signups")" 'whatsapp-mac-devs</a> 1'
+expect "filter: one invite link" "$(curl -s -c $J -b $J "$BASE/admin/?signups&via=whatsapp-mac-devs")" '1 of [0-9]* match.*wes@example.com'
 expect "activity keeps no email addresses" "$(mysql -uroot --socket=$SOCK bondi -N -e "select count(*) from audit_log where detail like '%@%'")" '^0$'
 expect "activity records emails sent" "$(curl -s -c $J -b $J "$BASE/admin/?activity")" 'Sent the thank-you to 1 person.*Sent &quot;Beta for {name}&quot; to 2 people'
 [ -n "${SNAP:-}" ] && curl -s -c $J -b $J "$BASE/admin/?activity" > "$SNAP/admin-activity.html"
 mysql -uroot --socket=$SOCK bondi -e "drop table audit_log"
 expect "admin works before sql/007" "$(curl -s -c $J -b $J "$BASE/admin/")" 'Launch licenses sold'
 expect "activity explains sql/007" "$(curl -s -c $J -b $J "$BASE/admin/?activity")" 'Import sql/007_audit_log.sql'
+mysql -uroot --socket=$SOCK bondi -e "alter table signups drop column via"
+expect "sign-ups still work before sql/008" "$(post signup '{"name":"No Via","email":"novia@example.com","page":"beta","via":"whatsapp-mac-devs"}')" '"status":"ok"'
 mysql -uroot --socket=$SOCK bondi -e "alter table signups drop column page"
 expect "sign-ups still work before sql/005" "$(post signup '{"name":"Old DB","email":"olddb@example.com","page":"beta"}')" '"status":"ok"'
 expect "counts without sql/005" "$(curl -s $BASE/api/interest)" '"beta":null'
